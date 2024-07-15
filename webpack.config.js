@@ -42,7 +42,10 @@ module.exports = (_, argv) => ({
     new ModuleFederationPlugin({
       name: "core",
       filename: "core.js",
-      remotes: {},
+      remotes: {
+        common: "common@http://localhost:8081/common.js",
+        lookups: "lookups@http://localhost:8082/lookups.js",
+      },
       exposes: {},
       shared: {
         ...deps,
