@@ -2,12 +2,37 @@ const HtmlWebPackPlugin = require("html-webpack-plugin");
 const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
 const Dotenv = require("dotenv-webpack");
 const deps = require("./package.json").dependencies;
-
+const { FederatedTypesPlugin } = require("@module-federation/typescript");
+const mfeConfig = {
+  name: "core",
+  filename: "core.js",
+  remotes: {
+    common: "common@http://localhost:3003/remoteEntry.js",
+    lookups: "lookups@http://localhost:3004/remoteEntry.js",
+  },
+  shared: {
+    ...deps,
+    react: {
+      singleton: true,
+      requiredVersion: deps.react,
+    },
+    "react-dom": {
+      singleton: true,
+      requiredVersion: deps["react-dom"],
+    },
+  },
+};
 module.exports = (_, argv) => ({
   entry: "./src/index",
   mode: "development",
   output: {
     publicPath: "http://localhost:3000/",
+  },
+  optimization: {
+    splitChunks: {
+      chunks: "all",
+    },
+    runtimeChunk: "single",
   },
   resolve: {
     extensions: [".tsx", ".ts", ".jsx", ".js", ".json"],
@@ -39,26 +64,8 @@ module.exports = (_, argv) => ({
     ],
   },
   plugins: [
-    new ModuleFederationPlugin({
-      name: "core",
-      filename: "core.js",
-      remotes: {
-        common: "common@http://localhost:8081/common.js",
-        lookups: "lookups@http://localhost:8082/lookups.js",
-      },
-      exposes: {},
-      shared: {
-        ...deps,
-        react: {
-          singleton: true,
-          requiredVersion: deps.react,
-        },
-        "react-dom": {
-          singleton: true,
-          requiredVersion: deps["react-dom"],
-        },
-      },
-    }),
+    new ModuleFederationPlugin(mfeConfig),
+    new FederatedTypesPlugin({ federationConfig: mfeConfig }),
     new HtmlWebPackPlugin({
       template: "./src/index.html",
     }),
