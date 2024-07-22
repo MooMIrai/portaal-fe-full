@@ -4,13 +4,33 @@ import {
   Link,
   Outlet,
   Route,
-  Routes,
+
   useNavigate,
 } from "react-router-dom";
 
+
 const Drawer = React.lazy(() => import("common/Drawer"));
 const Theme = React.lazy(() => import("common/Theme"));
-const LookUps = React.lazy(() => import("lookups/Index"));
+//const LookUps = React.lazy(() => import("lookups/Index"));
+import initLookups from 'lookups/Index';
+//@ts-ignore
+import LookupsRoutes from 'lookups/Routes';
+
+let routes:any=[];
+
+const lookupsRoutes = initLookups();
+lookupsRoutes.forEach((r:any)=>{
+  routes.push( {
+    id: r.id,
+    text: "Dashboard",
+    ////svgIcon: graphIcon,
+    route: "/lookups"+r.route,
+    
+    //element: React.lazy(()=>import("/lookups/"+r.element)),
+  })
+})
+
+
 
 export const App = () => {
   const navigate = useNavigate();
@@ -106,7 +126,7 @@ export const App = () => {
         selected: currentRoute === "/vendita/commesse" || savedId === "6",
         element: <div>commesse</div>,
       },
-      {
+      /* {
         id: 19,
         text: "Lookups",
         //svgIcon: gridLayoutIcon,
@@ -114,6 +134,15 @@ export const App = () => {
         selected: currentRoute === "/lookups" || savedId === "19",
         element: <LookUps />,
       },
+      {
+        id: 20,
+        text: "Lookups",
+        //svgIcon: gridLayoutIcon,
+        route: "/lookups/nonmain",
+        selected: currentRoute === "/lookups/nonmain" || savedId === "19",
+        element: <LookUps />,
+      }, */
+      ...routes
     ];
     /* Assicuro che i genitori siano espansi se i figli sono selezionati se non sono selezionati li chiudo */
     initialItems.forEach((item: any) => {
@@ -264,12 +293,13 @@ export const App = () => {
           onOverlayClick={handleClick}
           className={"drawerStyle"}
         ></Drawer>
-
+          <LookupsRoutes />
         {/* <Routes >
           <Route path={"/"} element={<div>dashboard</div>} />
           <Route path={"lookups/*"} element={<RemoteApp />} />
         </Routes> */}
       </Theme>
+      {JSON.stringify(routes)}
     </Suspense>
   );
 };

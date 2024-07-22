@@ -8,7 +8,7 @@ const mfeConfig = {
   filename: "core.js",
   remotes: {
     common: "common@http://localhost:3003/remoteEntry.js",
-    lookups: "lookups@http://localhost:3004/remoteEntry.js",
+    lookups: "lookups@http://localhost:3005/remoteEntry.js",
   },
   shared: {
     ...deps,
