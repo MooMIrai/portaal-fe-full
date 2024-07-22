@@ -2,15 +2,43 @@ const HtmlWebPackPlugin = require("html-webpack-plugin");
 const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
 const Dotenv = require("dotenv-webpack");
 const deps = require("./package.json").dependencies;
+const { FederatedTypesPlugin } = require("@module-federation/typescript");
+
+const mfeConfig = {
+  name: "lookups",
+  filename: "remoteEntry.js",
+  remotes: {
+    common: "common@http://localhost:3003/remoteEntry.js",
+  },
+  exposes: {
+    "./Index": "./src/MfeInit",
+    "./Routes": "./src/App",
+  },
+  shared: {
+    ...deps,
+    common:{
+      singleton:true
+    },
+    react: {
+      singleton: true,
+      requiredVersion: deps.react,
+    },
+    "react-dom": {
+      singleton: true,
+      requiredVersion: deps["react-dom"],
+    },
+  },
+};
+
 module.exports = (_, argv) => ({
   output: {
-    publicPath: "http://localhost:3004/",
+    publicPath: "http://localhost:3005/",
   },
   resolve: {
     extensions: [".tsx", ".ts", ".jsx", ".js", ".json"],
   },
   devServer: {
-    port: 3004,
+    port: 3005,
     historyApiFallback: true,
   },
   module: {
@@ -36,26 +64,8 @@ module.exports = (_, argv) => ({
     ],
   },
   plugins: [
-    new ModuleFederationPlugin({
-      name: "lookups",
-      filename: "remoteEntry.js",
-      remotes: {},
-      exposes: {
-        "./Index": "./src/App",
-       
-      },
-      shared: {
-        ...deps,
-        react: {
-          singleton: true,
-          requiredVersion: deps.react,
-        },
-        "react-dom": {
-          singleton: true,
-          requiredVersion: deps["react-dom"],
-        },
-      },
-    }),
+    new ModuleFederationPlugin(mfeConfig),
+    new FederatedTypesPlugin({ federationConfig: mfeConfig }),
     new HtmlWebPackPlugin({
       template: "./src/index.html",
     }),

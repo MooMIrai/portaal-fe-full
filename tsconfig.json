@@ -22,6 +22,9 @@
     "incremental": true, // Enable incremental compilation by reading/writing information from prior compilations to a file on disk
     "noFallthroughCasesInSwitch": true // Report errors for fallthrough cases in switch statement
   },
+  "paths": {
+      "*": ["./@mf-types/*"]
+  },
   "include": [
     "src/**/*" // *** The files TypeScript should type check ***
   ],
