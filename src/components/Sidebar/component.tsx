@@ -64,7 +64,7 @@ const Sidebar = ({ children, items }: SidebarPros) => {
     if (items) {
       setList(updateItems(items));
     }
-  }, []);
+  }, [items]);
 
   const handleClick = () => {
     setDrawerExpanded(!drawerExpanded);

@@ -9,7 +9,7 @@ const mfeConfig = {
   filename: "remoteEntry.js",
   remotes: {},
   exposes: {
-    "./Drawer": "./src/components/Drawer/component",
+    "./Drawer": "./src/components/Sidebar/component",
     "./Theme":"./src/components/Theme/component",
   },
   shared: {
