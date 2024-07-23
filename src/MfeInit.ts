@@ -1,17 +1,21 @@
 export default function(){
-    return [
+
+  return {
+    menuItems:[
+      {
+          id:11,
+          text:'Lookups',
+          level:0,
+          route:'/'
+        },
         {
-            element:"main",
-            id:11,
-            text:'Lookups',
-            route:'/'
-          },
-          {
-            parentid:11,
-            element:"NonMain",
-            id:12,
-            text:'nonMain',
-            route:'/nonmain'
-          }
+          parentId:11,
+          id:12,
+          level:2,
+          text:'nonMain',
+          route:'/nonmain'
+        }
     ]
+  }
+
 }
