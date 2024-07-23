@@ -8,6 +8,7 @@ const mfeConfig = {
   filename: "core.js",
   remotes: {
     common: "common@http://localhost:3003/remoteEntry.js",
+    auth: "auth@http://localhost:3006/remoteEntry.js",
     lookups: "lookups@http://localhost:3005/remoteEntry.js",
   },
   shared: {
@@ -65,7 +66,7 @@ module.exports = (_, argv) => ({
   },
   plugins: [
     new ModuleFederationPlugin(mfeConfig),
-    new FederatedTypesPlugin({ federationConfig: mfeConfig }),
+    //new FederatedTypesPlugin({ federationConfig: mfeConfig }),
     new HtmlWebPackPlugin({
       template: "./src/index.html",
     }),
