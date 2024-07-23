@@ -4,7 +4,7 @@ import { Card } from '@progress/kendo-react-layout';
 import  styles from './styles.module.css'
 
 
-const LoginComponent = () => {
+const LoginGoogleComponent = () => {
   const handleGoogleLogin = async () => {
     try {
 
@@ -31,4 +31,4 @@ const LoginComponent = () => {
   );
 };
 
-export default LoginComponent;
+export default LoginGoogleComponent;
