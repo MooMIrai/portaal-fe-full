@@ -1,0 +1,58 @@
+/* styles.module.css */
+
+.loginContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+/*   background: linear-gradient(135deg, #2A4B7C 0%, #0497B8 100%); */
+  /* background: linear-gradient(135deg, #4CAF50 0%, #F2811D 100%); */
+
+  background: linear-gradient(135deg, #3e6eb6 0%, #E1F5FE 100%);
+}
+
+.loginCard {
+  padding: 30px;
+  text-align: center;
+  background: #F1F1F1;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.loginContent {
+  padding: 20px;
+}
+
+.logo {
+  width: 150px;
+  margin-bottom: 20px;
+}
+
+h1 {
+  margin-bottom: 10px;
+  font-size: 24px;
+  color: #2A4B7C;
+}
+
+p {
+  margin-bottom: 20px;
+  font-size: 16px;
+  color: #6C757D;
+}
+
+.kButton {
+  margin-top: 20px;
+  /* background-color: #4CAF50; */ /* Primary button color */
+  background-color: #3e6eb6;
+  border: none;
+  color: white;
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.kButton:hover {
+  background-color: #456ca7;
+}
