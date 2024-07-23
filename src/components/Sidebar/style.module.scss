@@ -1,0 +1,23 @@
+.parentButtonHamburgerText {
+  display: flex;
+  align-items: center;
+  margin: 20px;
+}
+
+.sidebarContainer {
+  :global(.k-drawer-container) {
+    height: calc(100vh - 43px) !important;
+  }
+  :global(.k-drawer-item) {
+    user-select: none !important;
+  }
+  :global(.k-drawer-item .k-icon) {
+    font-size: 20px !important;
+  }
+  :global(.k-drawer-content) {
+    padding: 10px !important;
+  }
+  :global(.k-drawer-item.sub-item) {
+    padding-left: 20px !important;
+  }
+}
