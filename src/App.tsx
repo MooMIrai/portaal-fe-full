@@ -34,8 +34,8 @@ console.log('lookups init')
 */
 const App = () => {
   return (<Routes >     
-        <Route  path="/login/" element={<LoginComponent></LoginComponent>}></Route>
-        <Route path="/auth-success" element={<SuccessPage></SuccessPage>}></Route>
+        <Route  path="/login" element={<LoginComponent/>}></Route>
+        <Route path="/auth-success" element={<SuccessPage />}></Route>
         </Routes>
   );
 };

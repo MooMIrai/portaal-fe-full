@@ -65,7 +65,7 @@ module.exports = (_, argv) => ({
   },
   plugins: [
     new ModuleFederationPlugin(mfeConfig),
-    new FederatedTypesPlugin({ federationConfig: mfeConfig }),
+    //new FederatedTypesPlugin({ federationConfig: mfeConfig }),
     new HtmlWebPackPlugin({
       template: "./src/index.html",
     }),
