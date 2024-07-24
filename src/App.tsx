@@ -2,8 +2,6 @@ import React, { Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import NonMain from "./pages/nonMain";
 import Main from "./pages/main";
-import LoginComponent from "./pages/LoginGoogle/component";
-import SuccessPage from "./pages/SuccessPage/component";
 
 /*
 import DrawerService, {DrawerEventService as DrawerEventServiceType,DRAWER_EVENT_TYPE as DRAWER_EVENT_TYPE_enum} from "../@mf-types/common/DrawerService";
@@ -34,8 +32,6 @@ console.log('lookups init')
 */
 const App = () => {
   return (<Routes >     
-        <Route  path="/login" element={<LoginComponent/>}></Route>
-        <Route path="/auth-success" element={<SuccessPage />}></Route>
         </Routes>
   );
 };
