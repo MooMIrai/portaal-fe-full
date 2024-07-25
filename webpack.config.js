@@ -11,6 +11,9 @@ const mfeConfig = {
   exposes: {
     "./Drawer": "./src/components/Sidebar/component",
     "./Theme":"./src/components/Theme/component",
+    "./Tab":"./src/components/Tab/component",
+    "./Form":"./src/components/DynamicForm/component",
+    "./tokenService": "./src/services/tokenService", 
   },
   shared: {
     ...deps,
