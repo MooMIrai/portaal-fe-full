@@ -32,13 +32,13 @@ const mfeConfig = {
 
 module.exports = (_, argv) => ({
   output: {
-    publicPath: "http://localhost:3007/",
+    publicPath: "http://localhost:3008/",
   },
   resolve: {
     extensions: [".tsx", ".ts", ".jsx", ".js", ".json"],
   },
   devServer: {
-    port: 3007,
+    port: 3008,
     historyApiFallback: true,
   },
   module: {
