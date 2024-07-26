@@ -23,6 +23,7 @@ const TabComponent = (props:TabComponentProps) => {
         </TabStripTab>
       ))}
     </TabStrip>
+    
     {props.button && (
       <div className={styles.parentButton }>
         <Button
