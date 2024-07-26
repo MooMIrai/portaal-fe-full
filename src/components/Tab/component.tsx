@@ -16,9 +16,9 @@ import styles from "./style.module.scss"
 
 const TabComponent = (props:TabComponentProps) => {
   return<div className={styles.containerTab}> 
-    <TabStrip selected={props.selected} onSelect={props.onSelect}>
+    <TabStrip selected={props.selected} onSelect={props.onSelect} renderAllContent={true} animation={false} >
       {props.tabs.map((tab,index)=>(
-        <TabStripTab key={index} title={tab.title}>
+        <TabStripTab key={"tab_el"+tab.title} title={tab.title}>
           {tab.children}
         </TabStripTab>
       ))}

@@ -120,57 +120,69 @@ const DynamicField = ({
   );
 };
 
-const DynamicForm = ({
-  fields,
-  formData,
-  onSubmit,
-  showSubmit,
-  extraButton,
-  extraBtnAction,
-  description,
-  children,
-  customDisabled,
-  submitText,
-}: DynamicFormProps) => (
-  <Form
-    initialValues={formData}
-    onSubmit={(dataItem) => onSubmit(dataItem)}
-    render={(formRenderProps: FormRenderProps) => (
-      <FormElement style={{ maxWidth: 650 }}>
-        {children === undefined && (
-          <fieldset className={"k-form-fieldset"}>
-            <legend className={"k-form-legend"}>{description}</legend>
-            {fields.map((field, index) => (
-              <FieldWrapper key={index}>
-                <div className="k-form-field-wrap">
-                  <DynamicField
-                    field={field}
-                    formRenderProps={formRenderProps}
-                  />
-                </div>
-              </FieldWrapper>
-            ))}
-          </fieldset>
+const DynamicForm = React.forwardRef<any,DynamicFormProps>((props,ref)=>{
+  
+  const {
+    fields,
+    formData,
+    onSubmit,
+    showSubmit,
+    extraButton,
+    extraBtnAction,
+    description,
+    children,
+    customDisabled,
+    submitText
+  } = props;
+
+
+  React.useEffect(()=>{
+    console.log(props.description + ' init')
+    return ()=> console.log(props.description + ' destroy')
+  },[])
+
+  return <Form
+  initialValues={formData}
+  onSubmit={(dataItem) => onSubmit(dataItem)}
+  ref={ref}
+  render={(formRenderProps: FormRenderProps) => (
+    <FormElement style={{ maxWidth: 650 }}>
+      {children === undefined && (
+        <fieldset className={"k-form-fieldset"}>
+          <legend className={"k-form-legend"}>{description}</legend>
+          {fields.map((field, index) => (
+            <FieldWrapper key={index}>
+              <div className="k-form-field-wrap">
+                <DynamicField
+                  field={field}
+                  formRenderProps={formRenderProps}
+                />
+              </div>
+            </FieldWrapper>
+          ))}
+        </fieldset>
+      )}
+      {children}
+      <div className="k-form-buttons">
+        {extraButton && <Button onClick={extraBtnAction}>Cancel</Button>}
+        {showSubmit && (
+          <Button
+            themeColor={"primary"}
+            disabled={
+              children !== undefined || customDisabled === true
+                ? false
+                : !formRenderProps.allowSubmit
+            }
+          >
+            {submitText}
+          </Button>
         )}
-        {children}
-        <div className="k-form-buttons">
-          {extraButton && <Button onClick={extraBtnAction}>Cancel</Button>}
-          {showSubmit && (
-            <Button
-              themeColor={"primary"}
-              disabled={
-                children !== undefined || customDisabled === true
-                  ? false
-                  : !formRenderProps.allowSubmit
-              }
-            >
-              {submitText}
-            </Button>
-          )}
-        </div>
-      </FormElement>
-    )}
-  />
-);
+      </div>
+    </FormElement>
+  )}
+/>
+})
+
+
 
 export default DynamicForm;
