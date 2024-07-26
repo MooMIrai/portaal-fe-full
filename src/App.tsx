@@ -1,6 +1,7 @@
 import React, { Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import PersonaleSection from "./pages/Personale/component";
+import Theme from "common/Theme";
 
 /*
 import DrawerService, {DrawerEventService as DrawerEventServiceType,DRAWER_EVENT_TYPE as DRAWER_EVENT_TYPE_enum} from "../@mf-types/common/DrawerService";
@@ -30,9 +31,10 @@ DrawerEventService.fire(DRAWER_EVENT_TYPE.ADD_ITEMS,{detail:{list:[
 console.log('lookups init')
 */
 const App = () => {
-  return (<Routes >
+  return (<Theme><Routes >
     <Route path={"/personale"} element={<PersonaleSection></PersonaleSection>}></Route>
   </Routes>
+  </Theme>
   );
 };
 

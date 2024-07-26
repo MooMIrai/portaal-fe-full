@@ -1,0 +1,16 @@
+.parentTab:first-child > :first-child > * {
+   display: flex;
+   justify-content: center;
+ }
+
+ .parentForm:first-child {
+  max-width:none;
+}
+
+.parentForm:first-child > :first-child > * {
+   display: grid;
+   grid-template-rows: repeat(6, 1fr);
+   grid-template-columns: repeat(3, 1fr);
+   gap: 2% 10%;
+}
+
