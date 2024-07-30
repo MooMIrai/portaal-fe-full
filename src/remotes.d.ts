@@ -1,5 +1,6 @@
 declare module "common/Drawer"
 declare module "common/Theme"
+declare module "common/services/AuthService"
 
 declare module 'auth/Routes'
 
