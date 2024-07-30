@@ -13,6 +13,9 @@ const mfeConfig = {
     "./Theme":"./src/components/Theme/component",
     "./Tab":"./src/components/Tab/component",
     "./Form":"./src/components/DynamicForm/component",
+    "./Table":"./src/components/GridTable/component",
+
+
     "./services/AuthService":"./src/services/AuthService",
     "./services/BEService":"./src/services/BEService"
   },
