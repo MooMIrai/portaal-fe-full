@@ -1,17 +1,16 @@
 import React, { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom';
+import authService from 'common/services/AuthService';
 
 function SuccessPage() {
 
-  const navigate= useNavigate()
 
 useEffect(()=>{
      const queryParams = new URLSearchParams(window.location.search);
      const token = queryParams.get('token');
  
      if (token) {
-       localStorage.setItem('authToken', token);
-       navigate('/');
+      authService.login(token);
+      window.location.href = "/";
      } else {
        console.error('Token not found in the URL');
      }

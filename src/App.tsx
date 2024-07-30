@@ -1,7 +1,5 @@
 import React, { Suspense } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import NonMain from "./pages/nonMain";
-import Main from "./pages/main";
+import { Route, Routes } from "react-router-dom";
 import LoginComponent from "./pages/LoginGoogle/component";
 import SuccessPage from "./pages/SuccessPage/component";
 
