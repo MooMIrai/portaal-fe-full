@@ -1,4 +1,7 @@
 export interface TableColumn {
+  editable?: boolean;
+  editor?: "boolean" | "text" | "numeric" | "date";
+  format?: string;
   key: string;
   label: string;
   sortable: boolean;
