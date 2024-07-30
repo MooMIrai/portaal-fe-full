@@ -6,7 +6,7 @@ import authService from "common/services/AuthService";
 import AuthRoutes from 'auth/Routes';
 import LookupsRoutes from 'lookups/Routes';
 import initLookupFn from 'lookups/Index';
-import { useNavigate } from "react-router-dom";
+import { Routes, useNavigate } from "react-router-dom";
 
 
 export const App = () => {
@@ -43,13 +43,16 @@ export const App = () => {
   }, [token])
 
 
+  if(!token){
+    return <AuthRoutes></AuthRoutes>
+  }
+
   return (
     <>
       
         <Theme>
           <Drawer items={routes} >
-            {token && <LookupsRoutes />}
-            <AuthRoutes></AuthRoutes>
+            <LookupsRoutes />
           </Drawer>
         </Theme>
       
