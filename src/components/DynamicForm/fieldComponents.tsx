@@ -13,25 +13,42 @@ import React from "react";
 const TextInput = (
   fieldRenderProps: FieldRenderProps & { disabled?: boolean }
 ) => {
-  const { validationMessage, visited, disabled, required, ...others } =
+  const { validationMessage, visited, disabled, required, value, ...others } =
     fieldRenderProps;
   return (
     <div className="k-form-field-wrap">
-      <Input {...others} required={required} disabled={disabled} />
+      <Input
+        {...others}
+        value={value ?? ""}
+        required={required}
+        disabled={disabled}
+      />
       {visited && validationMessage && <Error>{validationMessage}</Error>}
     </div>
   );
 };
 
 const DateInput = (
-  fieldRenderProps: FieldRenderProps & { disabled?: boolean , label?:string,}
+  fieldRenderProps: FieldRenderProps & { disabled?: boolean; label?: string }
 ) => {
-  const { validationMessage, visited, disabled, required, label ,...others } =
-    fieldRenderProps;
+  const {
+    validationMessage,
+    visited,
+    disabled,
+    required,
+    value,
+    label,
+    ...others
+  } = fieldRenderProps;
   return (
     <div className="k-form-field-wrap">
       <label>{label}</label>
-      <DatePicker {...others} required={required} disabled={disabled} />
+      <DatePicker
+        {...others}
+        value={value ?? null}
+        required={required}
+        disabled={disabled}
+      />
       {visited && validationMessage && <Error>{validationMessage}</Error>}
     </div>
   );
@@ -40,11 +57,17 @@ const DateInput = (
 const EmailInput = (
   fieldRenderProps: FieldRenderProps & { disabled?: boolean }
 ) => {
-  const { validationMessage, visited, disabled, required, ...others } =
+  const { validationMessage, visited, disabled, required, value, ...others } =
     fieldRenderProps;
   return (
     <div className="k-form-field-wrap">
-      <Input type="email" {...others} required={required} disabled={disabled} />
+      <Input
+        type="email"
+        {...others}
+        value={value ?? ""}
+        required={required}
+        disabled={disabled}
+      />
       {visited && validationMessage && <Error>{validationMessage}</Error>}
     </div>
   );
@@ -53,13 +76,14 @@ const EmailInput = (
 const PasswordInput = (
   fieldRenderProps: FieldRenderProps & { disabled?: boolean }
 ) => {
-  const { validationMessage, visited, disabled, required, ...others } =
+  const { validationMessage, visited, disabled, required, value, ...others } =
     fieldRenderProps;
   return (
     <div className="k-form-field-wrap">
       <Input
         type="password"
         {...others}
+        value={value ?? ""}
         required={required}
         disabled={disabled}
       />
@@ -69,14 +93,26 @@ const PasswordInput = (
 };
 
 const TextAreaInput = (
-  fieldRenderProps: FieldRenderProps & { disabled?: boolean, label?: string }
+  fieldRenderProps: FieldRenderProps & { disabled?: boolean; label?: string }
 ) => {
-  const { validationMessage, visited, disabled, required, label, ...others } =
-    fieldRenderProps;
+  const {
+    validationMessage,
+    visited,
+    disabled,
+    required,
+    value,
+    label,
+    ...others
+  } = fieldRenderProps;
   return (
     <div className="k-form-field-wrap">
       <div>{label}</div>
-      <TextArea {...others} required={required} disabled={disabled} />
+      <TextArea
+        {...others}
+        value={value ?? ""}
+        required={required}
+        disabled={disabled}
+      />
       {visited && validationMessage && <Error>{validationMessage}</Error>}
     </div>
   );
@@ -85,13 +121,21 @@ const TextAreaInput = (
 const SelectInput = (
   fieldRenderProps: FieldRenderProps & { disabled?: boolean }
 ) => {
-  const { validationMessage, visited, options, disabled, required, ...others } =
-    fieldRenderProps;
+  const {
+    validationMessage,
+    visited,
+    options,
+    disabled,
+    required,
+    value,
+    ...others
+  } = fieldRenderProps;
   return (
     <div className="k-form-field-wrap">
       <DropDownList
         data={options}
         {...others}
+        value={value ?? undefined}
         required={required}
         disabled={disabled}
       />
@@ -101,14 +145,26 @@ const SelectInput = (
 };
 
 const RadioGroupInput = (
-  fieldRenderProps: FieldRenderProps & { disabled?: boolean,label?:string }
+  fieldRenderProps: FieldRenderProps & { disabled?: boolean; label?: string }
 ) => {
-  const { validationMessage, visited, options, disabled, label, ...others } =
-    fieldRenderProps;
+  const {
+    validationMessage,
+    visited,
+    options,
+    disabled,
+    value,
+    label,
+    ...others
+  } = fieldRenderProps;
   return (
     <div className="k-form-field-wrap">
       <div>{label}</div>
-      <RadioGroup data={options} {...others} disabled={disabled} />
+      <RadioGroup
+        data={options}
+        {...others}
+        value={value ?? undefined}
+        disabled={disabled}
+      />
       {visited && validationMessage && <Error>{validationMessage}</Error>}
     </div>
   );
@@ -117,11 +173,16 @@ const RadioGroupInput = (
 const CheckboxInput = (
   fieldRenderProps: FieldRenderProps & { disabled?: boolean }
 ) => {
-  const { validationMessage, visited, disabled, required, ...others } =
+  const { validationMessage, visited, disabled, required, value, ...others } =
     fieldRenderProps;
   return (
     <div className="k-form-field-wrap">
-      <Checkbox {...others} required={required} disabled={disabled} />
+      <Checkbox
+        {...others}
+        value={value ?? false}
+        required={required}
+        disabled={disabled}
+      />
       {visited && validationMessage && <Error>{validationMessage}</Error>}
     </div>
   );

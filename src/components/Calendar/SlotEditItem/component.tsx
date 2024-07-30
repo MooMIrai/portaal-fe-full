@@ -1,18 +1,20 @@
+// src/components/CustomEditSlot.tsx
+
 import React, { useState } from "react";
 import {
-  SchedulerEditItem,
-  SchedulerEditItemProps,
+  SchedulerEditSlotProps,
+  SchedulerEditSlot,
 } from "@progress/kendo-react-scheduler";
 import CustomContent from "../CustomContent/CustomContent";
 
-interface EditItemProps extends SchedulerEditItemProps {
+interface EditItemProps extends SchedulerEditSlotProps {
   render?: (
     slot: Record<string, any> | undefined,
     closeModalCallback: () => void
   ) => JSX.Element;
 }
 
-const EditItem = (props: EditItemProps) => {
+const EditSlot: React.FC<EditItemProps> = (props) => {
   const [show, setShow] = useState(false);
 
   const handleOpenCloseModal = () => {
@@ -20,7 +22,7 @@ const EditItem = (props: EditItemProps) => {
   };
 
   return (
-    <SchedulerEditItem
+    <SchedulerEditSlot
       {...props}
       onDoubleClick={handleOpenCloseModal}
       form={(formConfig) => (
@@ -35,4 +37,4 @@ const EditItem = (props: EditItemProps) => {
   );
 };
 
-export default EditItem;
+export default EditSlot;

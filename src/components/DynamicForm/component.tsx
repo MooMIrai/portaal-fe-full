@@ -25,7 +25,7 @@ const getFieldComponent = (type: FieldType) => {
     case "time":
       return TextInput;
     case "date":
-    return DateInput;
+      return DateInput;
     case "email":
       return EmailInput;
     case "password":
@@ -89,7 +89,6 @@ export interface DynamicFormProps {
   customDisabled?: boolean;
   submitText: string;
 }
-
 
 const DynamicField = ({
   field,
