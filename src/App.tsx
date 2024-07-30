@@ -16,12 +16,16 @@ export const App = () => {
   const navigate = useNavigate();
 
   useEffect(()=>{
-    setToken(authService.getToken());
+    try{
+      setToken(authService.getToken())
+    }catch{
+      
+    }
+   
   },[])
 
 
   useEffect(() => {
-
     let r: Array<any> = [];
     if(token){
       
@@ -41,15 +45,14 @@ export const App = () => {
 
   return (
     <>
-      {token !== null ? (
+      
         <Theme>
           <Drawer items={routes} >
-            <LookupsRoutes />
+            {token && <LookupsRoutes />}
+            <AuthRoutes></AuthRoutes>
           </Drawer>
         </Theme>
-      ) : (
-        <AuthRoutes></AuthRoutes>
-      )}
+      
     </>
 
 
