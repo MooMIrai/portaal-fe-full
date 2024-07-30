@@ -4,7 +4,9 @@ interface DecodedToken {
     [key: string]: any;
   }
   
- const decodeToken = (token: string | null): DecodedToken | null => {
+class TService{
+
+ decodeToken(token: string | null): DecodedToken | null {
     if (!token) return null;
     try {
       const base64Url = token.split('.')[1];
@@ -27,14 +29,9 @@ interface DecodedToken {
   };
 
 
-  const checkAndSetToken = (): string | null => {
-    const authToken = window.localStorage.getItem("authToken");
-    const validToken = decodeToken(authToken);
-    if (!validToken) {
-      window.localStorage.removeItem("authToken");
-      return null;
-    }
-    return authToken;
-  };
   
-export default checkAndSetToken
+}
+
+ 
+  
+export default new TService();

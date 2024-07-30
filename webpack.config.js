@@ -13,7 +13,7 @@ const mfeConfig = {
     "./Theme":"./src/components/Theme/component",
     "./Tab":"./src/components/Tab/component",
     "./Form":"./src/components/DynamicForm/component",
-    "./tokenService": "./src/services/tokenService", 
+    "./services/AuthService":"./src/services/AuthService"
   },
   shared: {
     ...deps,
