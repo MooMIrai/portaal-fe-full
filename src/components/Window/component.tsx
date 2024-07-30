@@ -1,7 +1,7 @@
 import React from "react";
-import { Window } from "@progress/kendo-react-dialogs";
+import { Window, WindowProps } from "@progress/kendo-react-dialogs";
 
-interface CustomWindowProps {
+interface CustomWindowProps extends WindowProps {
   show: boolean;
   title: string;
   onClose: () => void;
@@ -13,13 +13,16 @@ const CustomWindow = ({
   title,
   onClose,
   children,
+  width,
+  height,
 }: CustomWindowProps) => {
   return show ? (
     <Window
+      width={width}
+      height={height}
       doubleClickStageChange={false}
       modal={true}
       title={title}
-      initialHeight={350}
       onClose={onClose}
       draggable={false}
       minimizeButton={() => <div></div>}
