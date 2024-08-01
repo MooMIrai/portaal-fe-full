@@ -1,6 +1,6 @@
 // formFields.ts
-import { companyOption, contractTypeOption, RoleOption, WokeScopeOption } from '../../adapters/personaleAdapters';
-import { AnagraficaData, TrattamentoEconomicoData, RuoliData, PermessiData, Permesso } from './modelForms';
+import { ActivityTypeOption, companyOption, contractTypeOption, RoleOption, WokeScopeOption } from '../../adapters/personaleAdapters';
+import { AnagraficaData, TrattamentoEconomicoData, RuoliData, PermessiData} from './modelForms';
 
 
 
@@ -152,7 +152,7 @@ export const getFormTrattamentoEconomicoFields = (formData: TrattamentoEconomico
             label: "Società",
             type: "select",
             value: formData.societa || "",
-            options: companyOptions
+            options: contractTypeOptions
         },
         tipoAmbitoLavorativo: {
             name: "tipoAmbitoLavorativo",
@@ -264,7 +264,7 @@ export const getFormTrattamentoEconomicoFields = (formData: TrattamentoEconomico
 
 
 export const getFormRuoliFields = (formData: RuoliData, roles: RoleOption[]) => {
-
+    console.log('formData:', formData);
     const fields = {
         ADM: {
             name: "ADM",
@@ -336,29 +336,68 @@ export const getFormRuoliFields = (formData: RuoliData, roles: RoleOption[]) => 
 
     return fields;
 };
-
-
-export const getFormPermessiFields = (formData: PermessiData) => {
-    const permessi: { label: string; value: Permesso }[] = [
-        { label: "Malattia", value: "malattia" },
-        { label: "Permesso", value: "permesso" },
-        { label: "Ferie", value: "ferie" },
-        { label: "Permesso 104", value: "permesso104" },
-        { label: "Maternità", value: "maternita" },
-        { label: "Congedo Paternità", value: "congedoPaternita" },
-        { label: "Permessi per lutto", value: "permessiPerLutto" }
-    ];
-
-    const fields = permessi.reduce((acc, permesso) => {
-        acc[permesso.value] = {
-            name: permesso.value,
-            label: permesso.label,
-            type: "checkbox",
-            value: formData[permesso.value] || false,
-            required: false
-        };
-        return acc;
-    }, {} as { [key in Permesso]: any });
-
+export const getFormPermessiFields = (formData: PermessiData, permessiOptions: ActivityTypeOption[]) => {
+    console.log('formData:', formData);
+    console.log('permessiOptions:', permessiOptions);
+    const fields = {
+      HMA: {
+        name: "HMA",
+        label: permessiOptions.find(permesso => permesso.code === 'HMA')?.label || "Malattia",
+        type: "checkbox",
+        value: formData.HMA || false,
+        required: false
+      },
+      HPE: {
+        name: "HPE",
+        label: permessiOptions.find(permesso => permesso.code === 'HPE')?.label || "Permesso",
+        type: "checkbox",
+        value: formData.HPE || false,
+        required: false
+      },
+      HFE: {
+        name: "HFE",
+        label: permessiOptions.find(permesso => permesso.code === 'HFE')?.label || "Ferie",
+        type: "checkbox",
+        value: formData.HFE || false,
+        required: false
+      },
+      HPE_104: {
+        name: "HPE_104",
+        label: permessiOptions.find(permesso => permesso.code === 'HPE_104')?.label || "Permesso 104",
+        type: "checkbox",
+        value: formData.HPE_104 || false,
+        required: false
+      },
+      MAT: {
+        name: "MAT",
+        label: permessiOptions.find(permesso => permesso.code === 'MAT')?.label || "Maternità",
+        type: "checkbox",
+        value: formData.MAT || false,
+        required: false
+      },
+      HCPT: {
+        name: "HCPT",
+        label: permessiOptions.find(permesso => permesso.code === 'HCPT')?.label || "Congedo Paternità",
+        type: "checkbox",
+        value: formData.HCPT || false,
+        required: false
+      },
+      LUT: {
+        name: "LUT",
+        label: permessiOptions.find(permesso => permesso.code === 'LUT')?.label || "Permessi per lutto",
+        type: "checkbox",
+        value: formData.LUT || false,
+        required: false
+      },
+      CMATR: {
+        name: "CMATR",
+        label: permessiOptions.find(permesso => permesso.code === 'CMATR')?.label || "Congedo Matrimoniale",
+        type: "checkbox",
+        value: formData.CMATR || false,
+        required: false
+      }
+    };
+    console.log('fields:', fields);
     return fields;
-};
+  };
+  

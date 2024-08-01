@@ -61,18 +61,6 @@ export interface RuoliData {
    TESTROLE2?:any;
 }
 
-/* export const roleMap: { [key: number]: keyof RuoliData } = {
-    1: 'admin',
-    2: 'amministrazione',
-    3: 'commerciale',
-    4: 'dipendente',
-    5: 'capo_progetto',
-    6: 'recruiter',
-    7: 'resp_personale',
-    8: 'segreteria',
-    9: 'risorsa_esterna',
-    10: 'addetto_censimento'
-}; */
 
 export interface PermessiData {
     [key: string]: boolean;
@@ -82,9 +70,7 @@ export interface PermessiData {
     HPE_104?: any;    // Permesso 104
     MAT?: any;        // Maternità
     HCPT?: any;       // Congedo Paternità
-    LUT?: any;        // Permessi per lutto
+    LUT?: any;        // Permessi per lutt
     CMATR?:any;      // Congedo Matrimoniale
   }
   
-
-export type Permesso = 'malattia' | 'permesso' | 'ferie' | 'permesso104' | 'maternita' | 'congedoPaternita' | 'permessiPerLutto';

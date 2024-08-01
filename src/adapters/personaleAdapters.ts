@@ -119,8 +119,8 @@ export const transformUserData = (data: any[]) => {
     trattamentoEconomico: mapToTrattamentoEconomicoData(user.Person?.EmploymentContract?.[0] || {}),
     ruoli: mapToRuoliData(user.Roles || []),
     roleIds: getRoleIds(user.Roles || []),
-    permessi: mapToPermessiData(user.Person.ActivityType || []),
-    permessiId:  getPermessiIds(user.Person.ActivityType || [])
+    permessi: mapToPermessiData(user.Person?.ActivityType || []),
+    permessiId:  getPermessiIds(user.Person?.ActivityType || [])
   }));
 };
 
@@ -128,7 +128,6 @@ export const transformUserData = (data: any[]) => {
 export const dataAdapter = (row: Record<string, any>) => {
   const person = row.Person || {};
   const employmentContract = person.EmploymentContract?.[0] || {};
-
   const anagraficaData: AnagraficaData = {
     person_id: row.anagrafica.person_id || "",
     sede: mapSedeToValue(row.anagrafica.sede) || "",
@@ -189,15 +188,16 @@ export const dataAdapter = (row: Record<string, any>) => {
 
 
   const permessiData: PermessiData = {
-    malattia: row.malattia || false,
-    permesso: row.permesso || false,
-    ferie: row.ferie || false,
-    permesso104: row.permesso104 || false,
-    maternita: row.maternita || false,
-    congedoPaternita: row.congedoPaternita || false,
-    permessiPerLutto: row.permessiPerLutto || false,
+    HMA: row.permessi.HMA || false,
+    HPE: row.permessi.HPE || false,
+    HFE: row.permessi.HFE || false,
+    HPE_104: row.permessi.HPE_104 || false,
+    MAT: row.permessi.MAT || false,
+    LUT: row.permessi.LUT || false,
+    CMATR: row.permessi.CMATR || false,
   };
   return {
+
     id: row.id || "",
     anagrafica: anagraficaData,
     trattamentoEconomico: trattamentoEconomicoData,
@@ -360,7 +360,7 @@ const generateRandomVATNumber = (): string => {
 };
 
 const mapRoleNamesToIDs = (ruoli: RuoliData, idRuoli: RoleOption[]): number[] => {
-  const roles_id = [];
+  const roles_id : number[]=[];
   for (const [key, value] of Object.entries(ruoli)) {
     if (value) {
       const role = idRuoli.find(role => role.name === key);
@@ -372,8 +372,8 @@ const mapRoleNamesToIDs = (ruoli: RuoliData, idRuoli: RoleOption[]): number[] =>
   return roles_id;
 };
 
-const mapPermessiNamesToIDs = (permessi: PermessiData, permessiOptions:ActivityTypeOption[]): number[] => {
-  const permessi_id = [];
+const mapPermessiNamesToIDs = (permessi: PermessiData, permessiOptions: ActivityTypeOption[]): number[] => {
+  const permessi_id: number[] = [];
   for (const [key, value] of Object.entries(permessi)) {
     if (value) {
       const permesso = permessiOptions.find(perm => perm.code === key);
@@ -403,6 +403,7 @@ const mapCompanyToID = (label: string, company: companyOption[]): number | undef
 export const reverseAdapter = (combinedData: {
   id:any;
   idRuoli:any[],
+  idPermessi:any[],
   wokescope: WokeScopeOption[],
   contractType: contractTypeOption[],
   company: companyOption[],
@@ -442,7 +443,7 @@ export const reverseAdapter = (combinedData: {
       data: JSON.stringify(combinedData),  // Ensure data is a JSON string
       gender_id: mapGenderToValue(combinedData.anagrafica.sesso) ?? 1,
      /*  sede: mapSedeToValue(combinedData.anagrafica.sede) ?? 1, */ // Map sede to its corresponding value
-      activityTypes_id:  mapPermessiNamesToIDs, 
+      activityTypes_id:  mapPermessiNamesToIDs(combinedData.permessi, combinedData.idPermessi), 
       EmploymentContract: [
         {
           workScope_id: mapWorkScopeToID(combinedData.trattamentoEconomico.tipoAmbitoLavorativo, combinedData.wokescope), 

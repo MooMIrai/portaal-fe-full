@@ -89,6 +89,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
     const combinedData = {
       id: row.id,
       idRuoli: roles,
+      idPermessi:activity,
       wokescope: wokeScope,
       contractType: contractType,
       company: company,
@@ -126,98 +127,33 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
   }, [selected]);
 
   useEffect(() => {
-    //serve per la creazione del form dei ruoli (label e value è l'id)
-    const fetchRoles = async () => {
+    const fetchData = async () => {
       try {
-        const response = await CrudGenericService.fetchResources("role");
-        const adaptedRoles = roleAdapter(response);
+        const roleResponse = await CrudGenericService.fetchResources("role");
+        const adaptedRoles = roleAdapter(roleResponse);
         setRoles(adaptedRoles);
+
+        const workScopeResponse = await CrudGenericService.fetchResources("WorkScope");
+        const adaptedWokeScope = wokeScopeAdapter(workScopeResponse);
+        setWokeScope(adaptedWokeScope);
+
+        const contractTypeResponse = await CrudGenericService.fetchResources("ContractType");
+        const adaptedContractType = contractTypeAdapter(contractTypeResponse);
+        setContractType(adaptedContractType);
+
+        const companyResponse = await CrudGenericService.fetchResources("Company");
+        const adaptedCompany = companyAdapter(companyResponse);
+        setCompany(adaptedCompany);
+
+        const activityTypeResponse = await CrudGenericService.fetchResources("ActivityType");
+        const adaptedActivities = permessiAdapter(activityTypeResponse);
+        setActivity(adaptedActivities);
       } catch (error) {
-        console.error("Error fetching roles:", error);
+        console.error("Error fetching data:", error);
       }
     };
 
-    fetchRoles();
-  }, []);
-
-  useEffect(() => {
-    //serve per la creazione del form dei ruoli (label e value è l'id)
-    const fetchWorkScope = async () => {
-      try {
-        const response = await CrudGenericService.fetchResources("WorkScope");
-        console.log("resworkscope", response);
-        const adaptedWokeScope = wokeScopeAdapter(response);
-        setWokeScope(adaptedWokeScope)
-        console.log("wokescope", adaptedWokeScope)
-      } catch (error) {
-        console.error("Error fetching roles:", error);
-      }
-    };
-
-    fetchWorkScope();
-  }, []);
-
-  useEffect(() => {
-    //serve per la creazione del form dei ruoli (label e value è l'id)
-    const fetchGender = async () => {
-      try {
-        const response = await CrudGenericService.fetchResources("Gender");
-        console.log("Gender", response);
-      } catch (error) {
-        console.error("Error fetching roles:", error);
-      }
-    };
-
-    fetchGender();
-  }, []);
-
-  useEffect(() => {
-    //serve per la creazione del form dei ruoli (label e value è l'id)
-    const fetchContractType = async () => {
-      try {
-        const response = await CrudGenericService.fetchResources("ContractType");
-        console.log("ContractType", response);
-        const adaptedContractType = contractTypeAdapter(response)
-        setContractType(adaptedContractType)
-        console.log(adaptedContractType)
-      } catch (error) {
-        console.error("Error fetching roles:", error);
-      }
-    };
-
-    fetchContractType();
-  }, []);
-
-  useEffect(() => {
-    //serve per la creazione del form dei ruoli (label e value è l'id)
-    const fetchContractType = async () => {
-      try {
-        const response = await CrudGenericService.fetchResources("Company");
-        console.log("Company", response);
-        const adaptedCompany= companyAdapter(response)
-        setCompany(adaptedCompany)
-      } catch (error) {
-        console.error("Error fetching roles:", error);
-      }
-    };
-
-    fetchContractType();
-  }, []);
-
-  useEffect(() => {
-    //serve per la creazione del form dei ruoli (label e value è l'id)
-    const fetchContractType = async () => {
-      try {
-        const response = await CrudGenericService.fetchResources("ActivityType");
-        console.log("ActivityType", response);
-        const adaptedActivities= permessiAdapter(response)
-        setActivity(adaptedActivities)
-      } catch (error) {
-        console.error("Error fetching roles:", error);
-      }
-    };
-
-    fetchContractType();
+    fetchData();
   }, []);
 
 
@@ -276,7 +212,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
           <div className={styles.checkboxContainer}>
             <Form
               ref={formPermessi}
-              fields={Object.values(getFormPermessiFields(formPermessiData,))}
+              fields={Object.values(getFormPermessiFields(formPermessiData,activity))}
               formData={formPermessiData}
               onSubmit={(data: PermessiData) => setFormPermessiData(data)}
               description="per"

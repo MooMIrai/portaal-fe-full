@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import GridTable from "common/GridTable";
+import GridTable from "common/Table";
 import { FORM_TYPE, Fields } from "./formModel";
 import { TABLE_ACTION_TYPE, TABLE_COLUMN_TYPE, TableColumn } from "./tableModel";
 import { PaginationModel } from "./gridModel";
