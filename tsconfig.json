@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "noImplicitAny": false,
     "target": "ES6", // Specify ECMAScript target version
     "outDir": "dist",
     "lib": ["dom", "dom.iterable", "esnext"], // List of library files to be included in the compilation
@@ -23,7 +24,7 @@
     "noFallthroughCasesInSwitch": true // Report errors for fallthrough cases in switch statement
   },
   "paths": {
-      "*": ["./@mf-types/*"]
+    "*": ["./@mf-types/*"]
   },
   "include": [
     "src/**/*" // *** The files TypeScript should type check ***
