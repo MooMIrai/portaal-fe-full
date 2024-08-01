@@ -3,6 +3,7 @@ import CustomWindow from "../../Window/component";
 
 interface CustomWindowEditSlotProps {
   show: boolean;
+  defaultTitle: string;
   dataItem: Record<string, any>;
   handleOpenCloseModal: () => void;
   render?: (
@@ -12,6 +13,7 @@ interface CustomWindowEditSlotProps {
 }
 
 const CustomContent = ({
+  defaultTitle,
   show,
   dataItem,
   handleOpenCloseModal,
@@ -22,7 +24,7 @@ const CustomContent = ({
       height={500}
       width={600}
       show={show}
-      title={dataItem.title}
+      title={dataItem.title?.length ? dataItem.title : defaultTitle}
       onClose={handleOpenCloseModal}
     >
       {render?.(dataItem, handleOpenCloseModal)}
@@ -31,3 +33,5 @@ const CustomContent = ({
 };
 
 export default CustomContent;
+
+ 

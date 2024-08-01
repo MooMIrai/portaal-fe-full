@@ -13,6 +13,7 @@ import CustomViewSlot from "./SlotViewItem/component";
 import EditSlot from "./SlotEditItem/component";
 
 interface CustomCalendarProps {
+  defaultModalTitle: string;
   timezone?: string;
   defaultDate: Date;
   data: Array<Record<string, any>>;
@@ -39,10 +40,18 @@ export default function CustomCalendar(props: Readonly<CustomCalendarProps>) {
       onDataChange={props.handleDataChange}
       viewSlot={CustomViewSlot}
       editSlot={(config) => (
-        <EditSlot {...config} render={props.contentModal} />
+        <EditSlot
+          defaultTitle={props.defaultModalTitle}
+          {...config}
+          render={props.contentModal}
+        />
       )}
       editItem={(config) => (
-        <EditItem {...config} render={props.contentModal} />
+        <EditItem
+          defaultTitle={props.defaultModalTitle}
+          {...config}
+          render={props.contentModal}
+        />
       )}
       editable={{
         add: true,

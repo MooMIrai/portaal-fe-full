@@ -6,6 +6,7 @@ import {
 import CustomContent from "../CustomContent/CustomContent";
 
 interface EditItemProps extends SchedulerEditItemProps {
+  defaultTitle: string;
   render?: (
     slot: Record<string, any> | undefined,
     closeModalCallback: () => void
@@ -25,6 +26,7 @@ const EditItem = (props: EditItemProps) => {
       onDoubleClick={handleOpenCloseModal}
       form={(formConfig) => (
         <CustomContent
+          defaultTitle={props.defaultTitle}
           show={show}
           handleOpenCloseModal={handleOpenCloseModal}
           dataItem={formConfig.dataItem}

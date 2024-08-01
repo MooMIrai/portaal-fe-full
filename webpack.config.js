@@ -10,14 +10,17 @@ const mfeConfig = {
   remotes: {},
   exposes: {
     "./Drawer": "./src/components/Sidebar/component",
-    "./Theme":"./src/components/Theme/component",
-    "./Tab":"./src/components/Tab/component",
-    "./Form":"./src/components/DynamicForm/component",
-    "./Table":"./src/components/GridTable/component",
+    "./Theme": "./src/components/Theme/component",
+    "./Tab": "./src/components/Tab/component",
+    "./Form": "./src/components/DynamicForm/component",
+    "./Table": "./src/components/GridTable/component",
+    "./Calendar": "./src/components/Calendar/component",
+    "./InlineEditTable": "./src/components/InlineEditTable/component",
+    "./Window": "./src/components/Window/component",
+    "./Button": "./src/components/Button/component",
 
-
-    "./services/AuthService":"./src/services/AuthService",
-    "./services/BEService":"./src/services/BEService"
+    "./services/AuthService": "./src/services/AuthService",
+    "./services/BEService": "./src/services/BEService",
   },
   shared: {
     ...deps,
