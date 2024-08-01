@@ -3,3 +3,6 @@ declare module "common/Theme"
 declare module "common/DrawerService";
 declare module "common/Tab"
 declare module "common/Form"
+declare module "common/GridTable"
+declare module "common/Modal"
+declare module "common/services/BEService"

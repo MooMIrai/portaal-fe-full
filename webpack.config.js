@@ -5,7 +5,7 @@ const deps = require("./package.json").dependencies;
 const { FederatedTypesPlugin } = require("@module-federation/typescript");
 
 const mfeConfig = {
-  name: "auth",
+  name: "hr",
   filename: "remoteEntry.js",
   remotes: {
     common: "common@http://localhost:3003/remoteEntry.js",
@@ -13,6 +13,7 @@ const mfeConfig = {
   exposes: {
     "./Index": "./src/MfeInit",
     "./Routes": "./src/App",
+    "./Personale":"./src/pages/Personale/component",
   },
   shared: {
     ...deps,

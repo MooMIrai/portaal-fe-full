@@ -1,151 +1,155 @@
-import React, { useRef, useState } from "react";
-import Tab from "common/Tab";
-import { TabStripSelectEventArguments } from '@progress/kendo-react-layout';
-import Form from "common/Form";
-import styles from "./style.module.scss";
-import {
-    getFormAnagraficaFields,
-    getFormTrattamentoEconomicoFields,
-    getFormRuoliFields
-} from "./FormFields";
-import { AnagraficaData, TrattamentoEconomicoData, RuoliData } from './modelForms';
+import React, { useState, useEffect } from "react";
+import GridTable from "common/GridTable";
+import { FORM_TYPE, Fields } from "./formModel";
+import { TABLE_ACTION_TYPE, TABLE_COLUMN_TYPE, TableColumn } from "./tableModel";
+import { PaginationModel } from "./gridModel";
+import { CompositeFilterDescriptor, SortDescriptor } from "@progress/kendo-data-query";
+import { Button } from "@progress/kendo-react-buttons";
+import PersonaleSection from "./../../component/TabPersonaleHR/component";
+import { Loader } from "@progress/kendo-react-indicators"; 
+import { CrudGenericService } from "../../services/personaleServices";
+import { transformUserData } from "../../adapters/personaleAdapters";
 
-const PersonaleSection: React.FC = () => {
-    const [selected, setSelected] = useState(0);
+
+// To do gestire workscope e contracttype e  poi gestire l'update femmina maschio e stile e il trattamento economuco ovvero che su edit è disabled e 
+//se bisogna cambiarlo si crea uno nuovo ma si salva rimane una sopra,rimane chiuso gestire il loading e view deve essere disabled
+
+const columns: TableColumn[] = [
+  { key: "societa", label: "Società", type: TABLE_COLUMN_TYPE.string, sortable: true, filter: "text" },
+  { key: "cognome", label: "Cognome", type: TABLE_COLUMN_TYPE.string, sortable: true, filter: "text" },
+  { key: "email", label: "Email", type: TABLE_COLUMN_TYPE.string, sortable: true, filter: "text" },
+  { key: "tipoContratto", label: "Tipo di Contratto", type: TABLE_COLUMN_TYPE.string, sortable: true, filter: "text" },
+  { key: "costoAnnuale", label: "Costo Annuale", type:TABLE_COLUMN_TYPE.string, sortable: true, filter: "numeric" },
+  { key: "costoGiornaliero", label: "Costo Giornaliero", type: TABLE_COLUMN_TYPE.string, sortable: true, filter: "numeric" },
+];
+
+const PersonalPage = () => {
+  const [data, setData] = useState<any>();
+  const [termValue, setTermValue] = useState<string>("");
+  const [filter, setFilter] = useState<CompositeFilterDescriptor>({ logic: "and", filters: [] });
+  const [sorting, setSorting] = useState<SortDescriptor[]>([]);
+  const [pagination, setPagination] = useState<PaginationModel>({ currentPage: 1, pageSize: 10 });
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const loadData = async (
+    pagination: PaginationModel,
+    filter: CompositeFilterDescriptor,
+    sorting: SortDescriptor[],
+    term?: string
+  ) => {
    
-    //const [formTrattamentoEconomicoData, setFormTrattamentoEconomicoData] = useState<TrattamentoEconomicoData>({});
-    //const [formTrattamentoEconomicoData, setFormTrattamentoEconomicoData] = useState<TrattamentoEconomicoData>({});
-    //const [formRuoliData, setFormRuoliData] = useState<RuoliData>({});
-
-    const formAnagrafica = useRef<any>();
-    const formTrattamentoEconomico = useRef<any>();
-    const formRuoli = useRef<any>();
-
-    const handleSelect = (e: TabStripSelectEventArguments) => {
-        setSelected(e.selected);
-    };
-
-    const handleSubmit = () => {
-
-        let hasError=false
-
-        let formAnagraficaData:AnagraficaData={};
-        formAnagrafica.current?.onSubmit();
-        if(formAnagrafica.current?.isValid()){
-            formAnagraficaData=formAnagrafica.current.values;
-        }else{
-            hasError=true
-        }
-
-        let formTrattamentoEconomicoData:TrattamentoEconomicoData={};
-        formTrattamentoEconomico.current?.onSubmit();
-        if(formTrattamentoEconomico.current?.isValid()){
-            formTrattamentoEconomicoData=formTrattamentoEconomico.current.values;
-        }else{
-            hasError=true
-        }
-
-        let formRuoliData:RuoliData={};
-        formRuoli.current?.onSubmit();
-        if(formRuoli.current?.isValid()){
-            formRuoliData=formRuoli.current.values;
-        }else{
-            hasError=true;
-        }
-        
-        const combinedData = {
-            anagrafica: formAnagraficaData,
-            trattamentoEconomico: formTrattamentoEconomicoData,
-            ruoli: formRuoliData
-        };
-
-        console.log('Combined Data:', combinedData);
-
-        if(!hasError){
-            //TODO chiamata al BE
-        }
-    };
-
-    const getFormFields = () => {
-        switch (selected) {
-            case 0:
-                return { fields: getFormAnagraficaFields({}), formData: {} };
-            case 1:
-                return { fields: getFormTrattamentoEconomicoFields({}), formData: {} };
-            case 2:
-                return { fields: getFormRuoliFields({}), formData: {} };
-            default:
-                return { fields: {}, formData: {} };
-        }
-    };
-
-    const { fields, formData } = getFormFields();
-
-    return (
-        <div className={styles.parentTab}>
-            <Tab
-                tabs={[
-                    {
-                        title: "Anagrafica", children: <div className={styles.parentForm}>
-                            <Form
-                                ref={formAnagrafica}
-                                fields={Object.values(fields)}
-                                formData={formData}
-                                onSubmit={(data:AnagraficaData)=>data }
-                                description="Ana"
-                            />
-                        </div>
-                    },
-                    {
-                        title: "Trattamento Economico", children: <div className={styles.parentForm}>
-                            <Form
-                                fields={Object.values(fields)}
-                                formData={formData}
-                                ref={formTrattamentoEconomico}
-                                onSubmit={(data:TrattamentoEconomicoData)=>data }
-                                description="TE"
-                            />
-                        </div>
-                    },
-                    {
-                        title: "Assegna Profilo", children: <div className={styles.parentForm}>
-                            <Form
-                                ref={formRuoli}
-                                fields={Object.values(fields)}
-                                formData={formData}
-                                onSubmit={(data:RuoliData)=>data }
-                                description="PR"
-                            />
-                        </div>
-                    },
-                    {
-                        title: "Assegna Tipologia Ferie e Permessi", children: <div className={styles.parentForm}>
-                            <Form
-
-                                fields={Object.values(fields)}
-                                formData={formData}
-                                description="per"
-                             
-                            />
-                        </div>
-                    }
-                ]}
-                selected={selected}
-                onSelect={handleSelect}
-                button={{ label: 'Salva', onClick: handleSubmit }}
-            />
-            {/*   <div className={styles.parentForm}>
-                <Form
-
-                    fields={Object.values(fields)}
-                    formData={formData}
-                    showSubmit={true}
-                    submitText={"Salva"}
-                    onSubmit={handleSubmit}
-                />
-            </div> */}
-        </div>
+    const include= true;
+    const resources = await CrudGenericService.getAccounts(
+      pagination.currentPage,
+      pagination.pageSize,
+      filter,
+      sorting,
+      term,
+      include,
     );
+    const transformedData = transformUserData(resources.data);
+    console.log("resources",resources)
+    console.log("resources total",resources.meta.total)
+    console.log("transformedData",transformedData)
+    setData(transformedData);
+  
+    return{ 
+      data:transformedData,
+      meta: {
+        total:resources.meta.total
+      }
+    }
+    
+  };
+
+
+  useEffect(() => {
+    setLoading(true);
+    loadData(pagination, filter, sorting, termValue).finally(() => {
+      setLoading(false);
+    });
+  }, [pagination, filter, sorting, termValue]);
+
+  const handleInputSearch = (e: any) => {
+    const value = e.target.value || "";
+    setTermValue(value);
+  };
+
+
+  const handleFormSubmit = async (type: FORM_TYPE, formData: any,  refreshTable: any,id?:any,) => {
+
+    if (type === FORM_TYPE.create) {
+      await CrudGenericService.createResource(formData);
+    } else if (type === FORM_TYPE.edit) {
+      await CrudGenericService.updateResource(id,formData);
+    } else if (type === FORM_TYPE.delete) {
+      await CrudGenericService.deleteResource(id);
+    }
+    refreshTable();
+  };
+  return (
+<div>
+      {loading ? ( 
+        <Loader type="infinite-spinner" />
+      ) : (
+      <GridTable
+        inputSearchConfig={{
+          inputSearch: termValue,
+          handleInputSearch: handleInputSearch,
+          debouncedSearchTerm: termValue,
+        }}
+        filter={filter}
+        setFilter={setFilter}
+        filterable={true}
+        initialPagination={pagination}
+        sortable={true}
+        setSorting={setSorting}
+        sorting={sorting}
+        getData={loadData}
+        columns={columns}
+        resizable={true}
+        actions={[
+          TABLE_ACTION_TYPE.create,
+          TABLE_ACTION_TYPE.delete,
+          TABLE_ACTION_TYPE.edit,
+          TABLE_ACTION_TYPE.show,
+        ]}
+        formCrud={(row: any, type: FORM_TYPE, closeModalCallback: any, refreshTable: any) => (
+          <>
+            {type === FORM_TYPE.delete ? (
+              <>
+                <div style={{ padding: "20px" }}>
+                  <span>{"Sei sicuro di voler eliminare il record?"}</span>
+                </div>
+                <div className="k-form-buttons">
+                  <Button onClick={closeModalCallback}>Cancel</Button>
+                  <Button
+                    themeColor="primary"
+                    onClick={async () => {
+                      await handleFormSubmit(type,null, refreshTable, row?.id,);
+                      console.log("row id ",row.id)
+                      closeModalCallback();
+                    }}
+                  >
+                    {"Elimina"}
+                  </Button>
+                </div>
+              </>
+            ) : (
+              <PersonaleSection
+                row={row}
+                type={type}
+                closeModalCallback={closeModalCallback}
+                refreshTable={refreshTable}
+                onSubmit={handleFormSubmit}
+              />
+            )}
+          </>
+        )}
+      />
+      )}
+    </div>
+  );
 };
 
-export default PersonaleSection;
+export default PersonalPage;

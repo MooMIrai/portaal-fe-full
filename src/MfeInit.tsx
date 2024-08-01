@@ -1,13 +1,21 @@
-import React from 'react';
-import {MfeInitProps} from '../@mf-types/common/MfeInitService';
-
-
-let Init: MfeInitProps = {
-  routes:[
-    
-  ]
-}
-
 export default function(){
-  return Init;
+
+  return {
+    menuItems:[
+      {
+          id:5,
+          text:'HR',
+          level:0,
+          route:'/HR'
+        },
+        {
+          parentId:5,
+          id:5,
+          level:2,
+          text:'Personale',
+          route:'/personale'
+        }
+    ]
+  }
+
 }
