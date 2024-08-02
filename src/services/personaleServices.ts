@@ -56,6 +56,19 @@ class CrudGenericServiceC {
     }
   };
 
+    
+  fetchmodel = async (
+  ) => {
+    try {
+
+      const response = await client.get(`api/v1/accounts/models`);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching resources:", error);
+      throw error;
+    }
+  };
+
 
   createResource = async (resourceData: any) => {
     try {

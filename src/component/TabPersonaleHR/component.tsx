@@ -11,7 +11,7 @@ import {
 } from "./FormFields";
 import { AnagraficaData, TrattamentoEconomicoData, RuoliData, PermessiData } from "./modelForms";
 import { FORM_TYPE } from "../../pages/Personale/formModel";
-import { ActivityTypeOption, companyAdapter, companyOption, contractTypeAdapter, contractTypeOption, dataAdapter, permessiAdapter, reverseAdapter, roleAdapter, RoleOption, wokeScopeAdapter, WokeScopeOption } from "../../adapters/personaleAdapters";
+import { ActivityTypeOption, companyAdapter, companyOption, contractTypeAdapter, contractTypeOption, dataAdapter, genderAdapter, genderOption, permessiAdapter, reverseAdapter, roleAdapter, RoleOption, wokeScopeAdapter, WokeScopeOption } from "../../adapters/personaleAdapters";
 import { CrudGenericService } from "../../services/personaleServices";
 type PersonaleSectionProps = {
   row: Record<string, any>;
@@ -37,6 +37,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
   const [roles, setRoles] = useState<RoleOption[]>([]);
   const [wokeScope, setWokeScope] = useState<WokeScopeOption[]>([])
   const [company,setCompany]=useState<companyOption[]>([])
+  const [gender,setGender]=useState<genderOption[]>([])
   const [contractType, setContractType] = useState<contractTypeOption[]>([])
   const [activity,setActivity]= useState<ActivityTypeOption[]>([])
   const formAnagrafica = useRef<HTMLFormElement>(null);
@@ -50,50 +51,53 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
   const handleSubmit = () => {
     let hasError = false;
 
-    if (formAnagrafica.current) {
-      formAnagrafica.current.onSubmit();
-      if (formAnagrafica.current.isValid()) {
-        setFormAnagraficaData(formAnagrafica.current.values);
-      } else {
-        hasError = true;
+    if (type === FORM_TYPE.create || type === FORM_TYPE.edit) {
+      if (formAnagrafica.current) {
+        formAnagrafica.current.onSubmit();
+        if (formAnagrafica.current.isValid()) {
+          setFormAnagraficaData(formAnagrafica.current.values);
+        } else {
+          hasError = true;
+        }
       }
-    }
 
-    if (formTrattamentoEconomico.current) {
-      formTrattamentoEconomico.current.onSubmit();
-      if (formTrattamentoEconomico.current.isValid()) {
-        setFormTrattamentoEconomicoData(formTrattamentoEconomico.current.values);
-      } else {
-        hasError = true;
+      if (formTrattamentoEconomico.current) {
+        formTrattamentoEconomico.current.onSubmit();
+        if (formTrattamentoEconomico.current.isValid()) {
+          setFormTrattamentoEconomicoData(formTrattamentoEconomico.current.values);
+        } else {
+          hasError = true;
+        }
       }
-    }
 
-    if (formRuoli.current) {
-      formRuoli.current.onSubmit();
-      if (formRuoli.current.isValid()) {
-        setFormRuoliData(formRuoli.current.values);
-      } else {
-        hasError = true;
+      if (formRuoli.current) {
+        formRuoli.current.onSubmit();
+        if (formRuoli.current.isValid()) {
+          setFormRuoliData(formRuoli.current.values);
+        } else {
+          hasError = true;
+        }
       }
-    }
 
-    if (formPermessi.current) {
-      formPermessi.current.onSubmit();
-      if (!formPermessi.current.isValid()) {
-        hasError = true;
-      } else {
-        setFormPermessiData(formPermessi.current.values);
+      if (formPermessi.current) {
+        formPermessi.current.onSubmit();
+        if (!formPermessi.current.isValid()) {
+          hasError = true;
+        } else {
+          setFormPermessiData(formPermessi.current.values);
+        }
       }
     }
 
     const combinedData = {
       id: row.id,
       idRuoli: roles,
-      idPermessi:activity,
+      idPermessi: activity,
       wokescope: wokeScope,
       contractType: contractType,
       company: company,
-      anagrafica: { ...formAnagraficaData },
+      gender: gender,
+      anagrafica: formAnagraficaData ,
       trattamentoEconomico: formTrattamentoEconomicoData,
       ruoli: formRuoliData,
       permessi: formPermessiData,
@@ -103,7 +107,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
 
     if (!hasError) {
       const formattedData = reverseAdapter(combinedData);
-      console.log("formattedData", formattedData)
+      console.log("formattedData", formattedData);
       const idrow = row.id;
       onSubmit(type, formattedData, refreshTable, idrow);
       refreshTable();
@@ -144,10 +148,14 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
         const companyResponse = await CrudGenericService.fetchResources("Company");
         const adaptedCompany = companyAdapter(companyResponse);
         setCompany(adaptedCompany);
+        const genderResponse = await CrudGenericService.fetchResources("Gender");
+        const adaptedGender = genderAdapter(genderResponse);
+        setGender(adaptedGender);
 
         const activityTypeResponse = await CrudGenericService.fetchResources("ActivityType");
         const adaptedActivities = permessiAdapter(activityTypeResponse);
         setActivity(adaptedActivities);
+       
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -164,7 +172,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
         <div className={styles.parentForm}>
           <Form
             ref={formAnagrafica}
-            fields={Object.values(getFormAnagraficaFields(formAnagraficaData))}
+            fields={Object.values(getFormAnagraficaFields(formAnagraficaData,gender,type))}
             formData={formAnagraficaData}
             onSubmit={(data: AnagraficaData) => setFormAnagraficaData(data)}
             description="Ana"
@@ -172,57 +180,51 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
         </div>
       ),
     },
+    {
+      title: "Trattamento Economico",
+      children: (
+        <div className={styles.parentForm}>
+          <Form
+            ref={formTrattamentoEconomico}
+            fields={Object.values(getFormTrattamentoEconomicoFields(formTrattamentoEconomicoData, wokeScope, contractType,company,type))}
+            formData={formTrattamentoEconomicoData}
+            onSubmit={(data: TrattamentoEconomicoData) => setFormTrattamentoEconomicoData(data)}
+            description="TE"
+          />
+        </div>
+      ),
+    },
+    {
+      title: "Assegna Profilo",
+      children: (
+        <div className={styles.checkboxContainer}>
+          <Form
+            ref={formRuoli}
+            fields={Object.values(getFormRuoliFields(formRuoliData, roles,type))}
+            formData={formRuoliData}
+            onSubmit={(data: RuoliData) => setFormRuoliData(data)}
+            description="PR"
+      
+          />
+        </div>
+      ),
+    },
+    {
+      title: "Assegna Tipologia Ferie e Permessi",
+      children: (
+        <div className={styles.checkboxContainer}>
+          <Form
+            ref={formPermessi}
+            fields={Object.values(getFormPermessiFields(formPermessiData,activity,type))}
+            formData={formPermessiData}
+            onSubmit={(data: PermessiData) => setFormPermessiData(data)}
+            description="per"
+          />
+        </div>
+      ),
+    }
   ];
 
-  if (type === FORM_TYPE.edit || type === FORM_TYPE.create || type === FORM_TYPE.view) {
-    tabs.push(
-      {
-        title: "Trattamento Economico",
-        children: (
-          <div className={styles.parentForm}>
-            <Form
-              ref={formTrattamentoEconomico}
-              fields={Object.values(getFormTrattamentoEconomicoFields(formTrattamentoEconomicoData, wokeScope, contractType,company))}
-              formData={formTrattamentoEconomicoData}
-              onSubmit={(data: TrattamentoEconomicoData) => setFormTrattamentoEconomicoData(data)}
-              description="TE"
-              disabled={type === FORM_TYPE.view}
-            />
-          </div>
-        ),
-      },
-      {
-        title: "Assegna Profilo",
-        children: (
-          <div className={styles.checkboxContainer}>
-            <Form
-              ref={formRuoli}
-              fields={Object.values(getFormRuoliFields(formRuoliData, roles))}
-              formData={formRuoliData}
-              onSubmit={(data: RuoliData) => setFormRuoliData(data)}
-              description="PR"
-              disabled={type === FORM_TYPE.view}
-            />
-          </div>
-        ),
-      },
-      {
-        title: "Assegna Tipologia Ferie e Permessi",
-        children: (
-          <div className={styles.checkboxContainer}>
-            <Form
-              ref={formPermessi}
-              fields={Object.values(getFormPermessiFields(formPermessiData,activity))}
-              formData={formPermessiData}
-              onSubmit={(data: PermessiData) => setFormPermessiData(data)}
-              description="per"
-              disabled={type === FORM_TYPE.view}
-            />
-          </div>
-        ),
-      }
-    );
-  }
 
   return (
     <div className={styles.parentTab}>
@@ -230,7 +232,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
         tabs={tabs}
         selected={selected}
         onSelect={handleSelect}
-        button={{ label: "Salva", onClick: handleSubmit }}
+        button={{ label: type === FORM_TYPE.view ? "Esci" : "Salva", onClick: handleSubmit }}
       />
     </div>
   );

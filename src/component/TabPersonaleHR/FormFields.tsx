@@ -1,140 +1,162 @@
 // formFields.ts
-import { ActivityTypeOption, companyOption, contractTypeOption, RoleOption, WokeScopeOption } from '../../adapters/personaleAdapters';
-import { AnagraficaData, TrattamentoEconomicoData, RuoliData, PermessiData} from './modelForms';
+import { ActivityTypeOption, companyOption, contractTypeOption, genderOption, RoleOption, WokeScopeOption } from '../../adapters/personaleAdapters';
+import { FORM_TYPE } from '../../pages/Personale/formModel';
+import { AnagraficaData, TrattamentoEconomicoData, RuoliData, PermessiData } from './modelForms';
 
 
 
-export const getFormAnagraficaFields = (formData: AnagraficaData) => ({
+export const getFormAnagraficaFields = (formData: AnagraficaData, gender: genderOption[],type:FORM_TYPE) => {
+    const genderOptions = gender.map(company => company.label)
+    const fields = {
+        sede: {
+            name: "sede",
+            label: "Sede",
+            type: "select",
+            value: formData.sede || "",
+            required: true,
+            disabled:type === FORM_TYPE.view,
+            options: ["Barletta", "Milano", "Roma"],
+            validator: (value: any) => value ? "" : "Il campo sede è obbligatorio",
+        },
+        nome: {
+            name: "nome",
+            label: "Nome",
+            type: "text",
+            value: formData.nome || "",
+            required: true,
+            disabled:type === FORM_TYPE.view,
+            validator: (value: any) => value ? "" : "Il campo Nome è obbligatorio",
+        },
+        cognome: {
+            name: "cognome",
+            label: "Cognome",
+            type: "text",
+            value: formData.cognome || "",
+            required: true,
+            validator: (value: any) => value ? "" : "Il campo Cognome è obbligatorio",
+        },
+        email: {
+            name: "email",
+            label: "Email Aziendale",
+            type: "email",
+            value: formData.email || "",
+            required: true,
+            disabled:type === FORM_TYPE.view,
+            validator: (value: any) => value ? "" : "Il campo Email Aziendale è obbligatorio",
+        },
+        matricola: {
+            name: "matricola",
+            label: "Matricola",
+            type: "text",
+            disabled:type === FORM_TYPE.view,
+            value: formData.matricola || "",
+        },
+        sesso: {
+            name: "sesso",
+            label: "Sesso",
+            type: "select",
+            disabled:type === FORM_TYPE.view,
+            value: formData.sesso || "",
+            options: genderOptions,
+        },
+        Provincianascita: {
+            name: "Provincianascita",
+            label: "Provincia di Nascita",
+            type: "text",
+            disabled:type === FORM_TYPE.view,
+            value: formData.Provincianascita || "",
+        },
+        comuneNascita: {
+            name: "comuneNascita",
+            label: "Comune di Nascita",
+            type: "text",
+            disabled:type === FORM_TYPE.view,
+            value: formData.comuneNascita || "",
+        },
+        residenza: {
+            name: "residenza",
+            label: "Provincia di Residenza",
+            type: "text",
+            disabled:type === FORM_TYPE.view,
+            value: formData.residenza || "",
+        },
+        comuneResidenza: {
+            name: "comuneResidenza",
+            label: "Comune di Residenza",
+            type: "text",
+            value: formData.comuneResidenza || "",
+        },
+        indirizzoResidenza: {
+            name: "indirizzoResidenza",
+            label: "Indirizzo di Residenza",
+            type: "text",
+            disabled:type === FORM_TYPE.view,
+            value: formData.indirizzoResidenza || "",
+        },
+        dataNascita: {
+            name: "dataNascita",
+            label: "Data di Nascita",
+            type: "date",
+            disabled:type === FORM_TYPE.view,
+            value: formData.dataNascita || "",
+        },
+        cap: {
+            name: "cap",
+            label: "CAP di Residenza",
+            type: "number",
+            spinners: false,
+            disabled:type === FORM_TYPE.view,
+            value: formData.cap || 0,
+        },
+        cellulare: {
+            name: "cellulare",
+            label: "Cellulare",
+            type: "number",
+            disabled:type === FORM_TYPE.view,
+            value: formData.cellulare || 0,
+        },
+        telefonoCasa: {
+            name: "telefonoCasa",
+            label: "Telefono di Casa",
+            type: "number",
+            inputType: "tel",
+            disabled:type === FORM_TYPE.view,
+            value: formData.telefonoCasa || 0,
+        },
+        telefonoLavoro: {
+            name: "telefonoLavoro",
+            label: "Telefono di Lavoro",
+            type: "number",
+            disabled:type === FORM_TYPE.view,
+            value: formData.telefonoLavoro || 0,
+        },
+        emailPrivata: {
+            name: "emailPrivata",
+            label: "Email Privata",
+            type: "email",
+            disabled:type === FORM_TYPE.view,
+            value: formData.emailPrivata || "",
+        },
+        iban: {
+            name: "iban",
+            label: "IBAN",
+            type: "text",
+            disabled:type === FORM_TYPE.view,
+            value: formData.iban || "",
+        },
+        codiceFiscale: {
+            name: "codiceFiscale",
+            label: "Codice Fiscale",
+            type: "text",
+            disabled:type === FORM_TYPE.view,
+            value: formData.codiceFiscale || "",
+        },
+    }
+    return fields
 
-    sede: {
-        name: "sede",
-        label: "Sede",
-        type: "select",
-        value: formData.sede || "",
-        required: true,
-        options: ["Barletta", "Milano", "Roma"],
-        validator: (value: any) => value ? "" : "Il campo sede è obbligatorio",
-    },
-    nome: {
-        name: "nome",
-        label: "Nome",
-        type: "text",
-        value: formData.nome || "",
-        required: true,
-        validator: (value: any) => value ? "" : "Il campo Nome è obbligatorio",
-    },
-    cognome: {
-        name: "cognome",
-        label: "Cognome",
-        type: "text",
-        value: formData.cognome || "",
-        required: true,
-        validator: (value: any) => value ? "" : "Il campo Cognome è obbligatorio",
-    },
-    email: {
-        name: "email",
-        label: "Email Aziendale",
-        type: "email",
-        value: formData.email || "",
-        required: true,
-        validator: (value: any) => value ? "" : "Il campo Email Aziendale è obbligatorio",
-    },
-    matricola: {
-        name: "matricola",
-        label: "Matricola",
-        type: "text",
-        value: formData.matricola || "",
-    },
-    sesso: {
-        name: "sesso",
-        label: "Sesso",
-        type: "select",
-        value: formData.sesso || "",
-        options: ["Femmina", "Maschio"],
-    },
-    Provincianascita: {
-        name: "Provincianascita",
-        label: "Provincia di Nascita",
-        type: "text",
-        value: formData.Provincianascita || "",
-    },
-    comuneNascita: {
-        name: "comuneNascita",
-        label: "Comune di Nascita",
-        type: "text",
-        value: formData.comuneNascita || "",
-    },
-    residenza: {
-        name: "residenza",
-        label: "Provincia di Residenza",
-        type: "text",
-        value: formData.residenza || "",
-    },
-    comuneResidenza: {
-        name: "comuneResidenza",
-        label: "Comune di Residenza",
-        type: "text",
-        value: formData.comuneResidenza || "",
-    },
-    indirizzoResidenza: {
-        name: "indirizzoResidenza",
-        label: "Indirizzo di Residenza",
-        type: "text",
-        value: formData.indirizzoResidenza || "",
-    },
-    dataNascita: {
-        name: "dataNascita",
-        label: "Data di Nascita",
-        type: "date",
-        value: formData.dataNascita || "",
-    },
-    cap: {
-        name: "cap",
-        label: "CAP di Residenza",
-        type: "number",
-        spinners: false,
-        value: formData.cap || 0,
-    },
-    cellulare: {
-        name: "cellulare",
-        label: "Cellulare",
-        type: "number",
-        value: formData.cellulare || 0,
-    },
-    telefonoCasa: {
-        name: "telefonoCasa",
-        label: "Telefono di Casa",
-        type: "number",
-        inputType: "tel",
-        value: formData.telefonoCasa || 0,
-    },
-    telefonoLavoro: {
-        name: "telefonoLavoro",
-        label: "Telefono di Lavoro",
-        type: "number",
-        value: formData.telefonoLavoro || 0,
-    },
-    emailPrivata: {
-        name: "emailPrivata",
-        label: "Email Privata",
-        type: "email",
-        value: formData.emailPrivata || "",
-    },
-    iban: {
-        name: "iban",
-        label: "IBAN",
-        type: "text",
-        value: formData.iban || "",
-    },
-    codiceFiscale: {
-        name: "codiceFiscale",
-        label: "Codice Fiscale",
-        type: "text",
-        value: formData.codiceFiscale || "",
-    },
-});
+};
 
-export const getFormTrattamentoEconomicoFields = (formData: TrattamentoEconomicoData, wokeScope:WokeScopeOption[],contractType:contractTypeOption[],company: companyOption[]) => {
+export const getFormTrattamentoEconomicoFields = (formData: TrattamentoEconomicoData, wokeScope: WokeScopeOption[], contractType: contractTypeOption[], company: companyOption[],type:FORM_TYPE) => {
     const wokeScopeOptions = wokeScope.map(scope => scope.label);
     const contractTypeOptions = contractType.map(contract => contract.label);
     const companyOptions = company.map(company => company.label);
@@ -144,6 +166,7 @@ export const getFormTrattamentoEconomicoFields = (formData: TrattamentoEconomico
             name: "tipologiaContratto",
             label: "Tipologia di Contratto di Lavoro",
             type: "select",
+            disabled:type === FORM_TYPE.view,
             value: formData.tipologiaContratto || "",
             options: contractTypeOptions
         },
@@ -151,13 +174,15 @@ export const getFormTrattamentoEconomicoFields = (formData: TrattamentoEconomico
             name: "societa",
             label: "Società",
             type: "select",
+            disabled:type === FORM_TYPE.view,
             value: formData.societa || "",
-            options: contractTypeOptions
+            options: companyOptions
         },
         tipoAmbitoLavorativo: {
             name: "tipoAmbitoLavorativo",
             label: "Ambito Lavorativo",
             type: "select",
+            disabled:type === FORM_TYPE.view,
             value: formData.tipoAmbitoLavorativo || "",
             options: wokeScopeOptions,
         },
@@ -165,6 +190,7 @@ export const getFormTrattamentoEconomicoFields = (formData: TrattamentoEconomico
             name: "dataInizioTrattamento",
             label: "Data di Inizio del Trattamento",
             type: "date",
+            disabled:type === FORM_TYPE.view,
             value: formData.dataInizioTrattamento || "",
         },
         costoGiornaliero: {
@@ -172,54 +198,63 @@ export const getFormTrattamentoEconomicoFields = (formData: TrattamentoEconomico
             label: "Costo Giornaliero",
             type: "number",
             spinners: false,
+            disabled:type === FORM_TYPE.view,
             value: formData.costoGiornaliero || 0,
         },
         dataAssunzione: {
             name: "dataAssunzione",
             label: "Data Assunzione",
             type: "date",
+            disabled:type === FORM_TYPE.view,
             value: formData.dataAssunzione || "",
         },
         scadenzaEffettiva: {
             name: "scadenzaEffettiva",
             label: "Scadenza Effettiva",
             type: "date",
+            disabled:type === FORM_TYPE.view,
             value: formData.scadenzaEffettiva || "",
         },
         dataRecesso: {
             name: "dataRecesso",
             label: "Data del Recesso",
             type: "date",
+            disabled:type === FORM_TYPE.view,
             value: formData.dataRecesso || "",
         },
         motivazioneCessazione: {
             name: "motivazioneCessazione",
             label: "Motivazione della Cessazione",
             type: "textarea",
+            disabled:type === FORM_TYPE.view,
             value: formData.motivazioneCessazione || "",
         },
         trasformazioni: {
             name: "trasformazioni",
             label: "Trasformazioni",
             type: "textarea",
+            disabled:type === FORM_TYPE.view,
             value: formData.trasformazioni || "",
         },
         ccnl: {
             name: "ccnl",
             label: "CCNL",
             type: "text",
+            disabled:type === FORM_TYPE.view,
             value: formData.ccnl || "",
         },
         ral: {
             name: "ral",
             label: "RAL",
             type: "number",
+            disabled:type === FORM_TYPE.view,
             value: formData.ral || 0,
         },
         trasferta: {
             name: "trasferta",
             label: "Trasferta",
             type: "number",
+            disabled:type === FORM_TYPE.view,
             spinners: false,
             value: formData.trasferta || 0,
         },
@@ -228,18 +263,21 @@ export const getFormTrattamentoEconomicoFields = (formData: TrattamentoEconomico
             label: "Buoni Pasto",
             type: "number",
             spinners: false,
+            disabled:type === FORM_TYPE.view,
             value: formData.buoniPasto || 0,
         },
         nettoMese: {
             name: "nettoMese",
             label: "Netto del mese",
             type: "number",
+            disabled:type === FORM_TYPE.view,
             spinners: false,
             value: formData.nettoMese || 0,
         },
         costoAnnuale: {
             name: "costoAnnuale",
             label: "Costo Annuo",
+            disabled:type === FORM_TYPE.view,
             type: "number",
             spinners: false,
             value: formData.costoAnnuale || 0,
@@ -248,11 +286,13 @@ export const getFormTrattamentoEconomicoFields = (formData: TrattamentoEconomico
             name: "tariffaVendita",
             label: "Tariffa di Vendita",
             type: "number",
+            disabled:type === FORM_TYPE.view,
             spinners: false,
             value: formData.tariffaVendita || 0,
         },
         note: {
             name: "note",
+            disabled:type === FORM_TYPE.view,
             label: "Note",
             type: "textarea",
             value: formData.note || "",
@@ -263,37 +303,42 @@ export const getFormTrattamentoEconomicoFields = (formData: TrattamentoEconomico
 };
 
 
-export const getFormRuoliFields = (formData: RuoliData, roles: RoleOption[]) => {
+export const getFormRuoliFields = (formData: RuoliData, roles: RoleOption[],type:FORM_TYPE) => {
     console.log('formData:', formData);
     const fields = {
         ADM: {
             name: "ADM",
             label: roles.find(role => role.name === 'ADM')?.label || 'Admin',
             type: "checkbox",
+            disabled:type === FORM_TYPE.view,
             value: formData.ADM || false,
         },
         AMMI: {
             name: "AMMI",
             label: roles.find(role => role.name === 'AMMI')?.label || 'Amministrazione',
             type: "checkbox",
+            disabled:type === FORM_TYPE.view,
             value: formData.AMMI || false,
         },
         COM: {
             name: "COM",
             label: roles.find(role => role.name === 'COM')?.label || 'Commerciale',
             type: "checkbox",
+            disabled:type === FORM_TYPE.view,
             value: formData.COM || false,
         },
         DIP: {
             name: "DIP",
             label: roles.find(role => role.name === 'DIP')?.label || 'Dipendente',
             type: "checkbox",
+            disabled:type === FORM_TYPE.view,
             value: formData.DIP || false,
         },
         LEA: {
             name: "LEA",
             label: roles.find(role => role.name === 'LEA')?.label || 'Capo Progetto',
             type: "checkbox",
+            disabled:type === FORM_TYPE.view,
             value: formData.LEA || false,
         },
         REC: {
@@ -306,98 +351,107 @@ export const getFormRuoliFields = (formData: RuoliData, roles: RoleOption[]) => 
             name: "RP",
             label: roles.find(role => role.name === 'RP')?.label || 'Resp. Personale',
             type: "checkbox",
+            disabled:type === FORM_TYPE.view,
             value: formData.RP || false,
         },
         SEG: {
             name: "SEG",
             label: roles.find(role => role.name === 'SEG')?.label || 'Segreteria',
             type: "checkbox",
+            disabled:type === FORM_TYPE.view,
             value: formData.SEG || false,
         },
         RISEXT: {
             name: "RISEXT",
             label: roles.find(role => role.name === 'RISEXT')?.label || 'Risorsa esterna',
             type: "checkbox",
+            disabled:type === FORM_TYPE.view,
             value: formData.RISEXT || false,
         },
         ADD_CENS: {
             name: "ADD_CENS",
             label: roles.find(role => role.name === 'ADD_CENS')?.label || 'Addetto censimento',
             type: "checkbox",
+            disabled:type === FORM_TYPE.view,
             value: formData.ADD_CENS || false,
         },
         TESTROLE2: {
             name: "TESTROLE2",
             label: roles.find(role => role.name === 'TESTROLE2')?.label || 'TestEditUpdateThird',
             type: "checkbox",
+            disabled:type === FORM_TYPE.view,
             value: formData.TESTROLE2 || false,
         }
     };
 
     return fields;
 };
-export const getFormPermessiFields = (formData: PermessiData, permessiOptions: ActivityTypeOption[]) => {
-    console.log('formData:', formData);
-    console.log('permessiOptions:', permessiOptions);
+export const getFormPermessiFields = (formData: PermessiData, permessiOptions: ActivityTypeOption[],type:FORM_TYPE) => {
     const fields = {
-      HMA: {
-        name: "HMA",
-        label: permessiOptions.find(permesso => permesso.code === 'HMA')?.label || "Malattia",
-        type: "checkbox",
-        value: formData.HMA || false,
-        required: false
-      },
-      HPE: {
-        name: "HPE",
-        label: permessiOptions.find(permesso => permesso.code === 'HPE')?.label || "Permesso",
-        type: "checkbox",
-        value: formData.HPE || false,
-        required: false
-      },
-      HFE: {
-        name: "HFE",
-        label: permessiOptions.find(permesso => permesso.code === 'HFE')?.label || "Ferie",
-        type: "checkbox",
-        value: formData.HFE || false,
-        required: false
-      },
-      HPE_104: {
-        name: "HPE_104",
-        label: permessiOptions.find(permesso => permesso.code === 'HPE_104')?.label || "Permesso 104",
-        type: "checkbox",
-        value: formData.HPE_104 || false,
-        required: false
-      },
-      MAT: {
-        name: "MAT",
-        label: permessiOptions.find(permesso => permesso.code === 'MAT')?.label || "Maternità",
-        type: "checkbox",
-        value: formData.MAT || false,
-        required: false
-      },
-      HCPT: {
-        name: "HCPT",
-        label: permessiOptions.find(permesso => permesso.code === 'HCPT')?.label || "Congedo Paternità",
-        type: "checkbox",
-        value: formData.HCPT || false,
-        required: false
-      },
-      LUT: {
-        name: "LUT",
-        label: permessiOptions.find(permesso => permesso.code === 'LUT')?.label || "Permessi per lutto",
-        type: "checkbox",
-        value: formData.LUT || false,
-        required: false
-      },
-      CMATR: {
-        name: "CMATR",
-        label: permessiOptions.find(permesso => permesso.code === 'CMATR')?.label || "Congedo Matrimoniale",
-        type: "checkbox",
-        value: formData.CMATR || false,
-        required: false
-      }
+        HMA: {
+            name: "HMA",
+            label: permessiOptions.find(permesso => permesso.code === 'HMA')?.label || "Malattia",
+            type: "checkbox",
+            value: formData.HMA || false,
+            required: false,
+            disabled:type === FORM_TYPE.view
+        },
+        HPE: {
+            name: "HPE",
+            label: permessiOptions.find(permesso => permesso.code === 'HPE')?.label || "Permesso",
+            type: "checkbox",
+            value: formData.HPE || false,
+            disabled:type === FORM_TYPE.view,
+            required: false
+        },
+        HFE: {
+            name: "HFE",
+            label: permessiOptions.find(permesso => permesso.code === 'HFE')?.label || "Ferie",
+            type: "checkbox",
+            value: formData.HFE || false,
+            disabled:type === FORM_TYPE.view,
+            required: false
+        },
+        HPE_104: {
+            name: "HPE_104",
+            label: permessiOptions.find(permesso => permesso.code === 'HPE_104')?.label || "Permesso 104",
+            type: "checkbox",
+            value: formData.HPE_104 || false,
+            disabled:type === FORM_TYPE.view,
+            required: false
+        },
+        MAT: {
+            name: "MAT",
+            label: permessiOptions.find(permesso => permesso.code === 'MAT')?.label || "Maternità",
+            type: "checkbox",
+            value: formData.MAT || false,
+            disabled:type === FORM_TYPE.view,
+            required: false
+        },
+        HCPT: {
+            name: "HCPT",
+            label: permessiOptions.find(permesso => permesso.code === 'HCPT')?.label || "Congedo Paternità",
+            type: "checkbox",
+            value: formData.HCPT || false,
+            disabled:type === FORM_TYPE.view,
+            required: false
+        },
+        LUT: {
+            name: "LUT",
+            label: permessiOptions.find(permesso => permesso.code === 'LUT')?.label || "Permessi per lutto",
+            type: "checkbox",
+            value: formData.LUT || false,
+            disabled:type === FORM_TYPE.view,
+            required: false
+        },
+        CMATR: {
+            name: "CMATR",
+            label: permessiOptions.find(permesso => permesso.code === 'CMATR')?.label || "Congedo Matrimoniale",
+            type: "checkbox",
+            value: formData.CMATR || false,
+            disabled:type === FORM_TYPE.view,
+            required: false
+        }
     };
-    console.log('fields:', fields);
     return fields;
-  };
-  
+};

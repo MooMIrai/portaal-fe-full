@@ -11,22 +11,22 @@ import { CrudGenericService } from "../../services/personaleServices";
 import { transformUserData } from "../../adapters/personaleAdapters";
 
 
-// To do gestire workscope e contracttype e  poi gestire l'update femmina maschio e stile e il trattamento economuco ovvero che su edit è disabled e 
-//se bisogna cambiarlo si crea uno nuovo ma si salva rimane una sopra,rimane chiuso gestire il loading e view deve essere disabled
+// TO Do gestire bene gli input, cotrolli ad esempio no numeri nel nome e cognome, capire il bug del patch, cambiare stile, mettere
+//disabled a view, e capire bag della doppia modale, levare select
 
 const columns: TableColumn[] = [
-  { key: "societa", label: "Società", type: TABLE_COLUMN_TYPE.string, sortable: true, filter: "text" },
-  { key: "cognome", label: "Cognome", type: TABLE_COLUMN_TYPE.string, sortable: true, filter: "text" },
+  { key: "company", label: "Società", type: TABLE_COLUMN_TYPE.string, sortable: true, filter: "text" },
+  { key: "lastName", label: "Cognome", type: TABLE_COLUMN_TYPE.string, sortable: true, filter: "text" },
   { key: "email", label: "Email", type: TABLE_COLUMN_TYPE.string, sortable: true, filter: "text" },
-  { key: "tipoContratto", label: "Tipo di Contratto", type: TABLE_COLUMN_TYPE.string, sortable: true, filter: "text" },
-  { key: "costoAnnuale", label: "Costo Annuale", type:TABLE_COLUMN_TYPE.string, sortable: true, filter: "numeric" },
-  { key: "costoGiornaliero", label: "Costo Giornaliero", type: TABLE_COLUMN_TYPE.string, sortable: true, filter: "numeric" },
+  { key: "ContractType", label: "Tipo di Contratto", type: TABLE_COLUMN_TYPE.string, sortable: true, filter: "text" },
+  { key: "annualCost", label: "Costo Annuale", type:TABLE_COLUMN_TYPE.string, sortable: true, filter: "numeric" },
+  { key: "dailyCost", label: "Costo Giornaliero", type: TABLE_COLUMN_TYPE.string, sortable: true, filter: "numeric" },
 ];
 
 const PersonalPage = () => {
   const [data, setData] = useState<any>();
   const [termValue, setTermValue] = useState<string>("");
-  const [filter, setFilter] = useState<CompositeFilterDescriptor>({ logic: "and", filters: [] });
+  const [filter, setFilter] = useState<CompositeFilterDescriptor>({ logic: "or", filters: [] });
   const [sorting, setSorting] = useState<SortDescriptor[]>([]);
   const [pagination, setPagination] = useState<PaginationModel>({ currentPage: 1, pageSize: 10 });
   const [loading, setLoading] = useState<boolean>(false);
@@ -37,7 +37,6 @@ const PersonalPage = () => {
     sorting: SortDescriptor[],
     term?: string
   ) => {
-   
     const include= true;
     const resources = await CrudGenericService.getAccounts(
       pagination.currentPage,
@@ -49,7 +48,6 @@ const PersonalPage = () => {
     );
     const transformedData = transformUserData(resources.data);
     console.log("resources",resources)
-    console.log("resources total",resources.meta.total)
     console.log("transformedData",transformedData)
     setData(transformedData);
   
@@ -64,10 +62,9 @@ const PersonalPage = () => {
 
 
   useEffect(() => {
-    setLoading(true);
-    loadData(pagination, filter, sorting, termValue).finally(() => {
-      setLoading(false);
-    });
+   
+
+    loadData(pagination, filter, sorting, termValue)
   }, [pagination, filter, sorting, termValue]);
 
   const handleInputSearch = (e: any) => {
@@ -127,7 +124,6 @@ const PersonalPage = () => {
                     themeColor="primary"
                     onClick={async () => {
                       await handleFormSubmit(type,null, refreshTable, row?.id,);
-                      console.log("row id ",row.id)
                       closeModalCallback();
                     }}
                   >

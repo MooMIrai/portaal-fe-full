@@ -15,20 +15,12 @@ const mapValueToSede = (sedeValue:any) => {
   const option = sedeOptions.find(option => option.value === sedeValue);
   return option ? option.label : "";
 };
-const genderOptions = [
-  { label: "Maschio", value: 1 },
-  { label: "Femmina", value: 0 },
-];
 
-const mapGenderToValue = (genderLabel: string) => {
-  const option = genderOptions.find(option => option.label === genderLabel);
-  return option ? option.value : null;
-};
 
-const mapValueToGender = (genderValue: any) => {
-  const option = genderOptions.find(option => option.value === genderValue);
-  return option ? option.label : "";
-};
+
+
+
+// map dal be al fe 
 const mapToAnagraficaData = (Person: any): AnagraficaData => ({
   person_id: Person?.id,
   accountStatus_id:Person?.accountStatus_id,
@@ -36,7 +28,7 @@ const mapToAnagraficaData = (Person: any): AnagraficaData => ({
   cognome: Person?.lastName || "",
   email: Person?.privateEmail || "",
   matricola: Person?.employee_id || "",
-  sesso: mapValueToGender(Person?.gender_id) || 1,
+  sesso: Person?.Gender?.code,
   Provincianascita: Person?.provinceBirth || "",
   comuneNascita: Person?.cityBirth || "",
   residenza: Person?.provinceRes || "",
@@ -53,6 +45,7 @@ const mapToAnagraficaData = (Person: any): AnagraficaData => ({
 });
 
 const mapToTrattamentoEconomicoData = (employmentContract: any): TrattamentoEconomicoData => ({
+  id: employmentContract?.id,
   tipologiaContratto: employmentContract?.ContractType?.description || "",
   societa: employmentContract?.Company?.name || "",
   tipoAmbitoLavorativo: employmentContract?.WorkScope?.description || "",
@@ -103,18 +96,18 @@ const getPermessiIds = (permessi: any[]): number[] => {
   return permessi.map(permessi => permessi.id);
 };
 
-
+//per la tabella sia per le cllonne che per gestire tutto
 export const transformUserData = (data: any[]) => {
   return data.map(user => ({
     
     id: user.id,
     person_id:user.person_id,
-    societa: user?.Person?.EmploymentContract?.[0]?.Company.name ?? "",
-    cognome: user?.Person?.lastName ?? "",
+    company: user?.Person?.EmploymentContract?.[0]?.Company.name ?? "",
+    lastName: user?.Person?.lastName ?? "",
     email: user.email ?? "",
-    tipoContratto: user?.Person?.EmploymentContract?.[0]?.ContractType?.description ?? "",
-    costoAnnuale: user?.Person?.EmploymentContract?.[0]?.annualCost ?? "",
-    costoGiornaliero: user?.Person?.EmploymentContract?.[0]?.dailyCost ?? "",
+    ContractType: user?.Person?.EmploymentContract?.[0]?.ContractType?.description ?? "",
+    annualCost: user?.Person?.EmploymentContract?.[0]?.annualCost ?? "",
+    dailyCost: user?.Person?.EmploymentContract?.[0]?.dailyCost ?? "",
     anagrafica: mapToAnagraficaData(user.Person),
     trattamentoEconomico: mapToTrattamentoEconomicoData(user.Person?.EmploymentContract?.[0] || {}),
     ruoli: mapToRuoliData(user.Roles || []),
@@ -124,7 +117,7 @@ export const transformUserData = (data: any[]) => {
   }));
 };
 
-
+// adapter per le row per le modali
 export const dataAdapter = (row: Record<string, any>) => {
   const person = row.Person || {};
   const employmentContract = person.EmploymentContract?.[0] || {};
@@ -135,7 +128,7 @@ export const dataAdapter = (row: Record<string, any>) => {
     cognome: row.anagrafica.cognome || "",
     email: row.email || "",
     matricola: row.anagrafica.matricola || "",
-    sesso: mapValueToGender(person.gender_id) || 1,
+    sesso: row.anagrafica.sesso,
     Provincianascita: row.anagrafica.Provincianascita || "",
     comuneNascita: row.anagrafica.comuneNascita || "",
     residenza: row.anagrafica.residenza || "",
@@ -151,6 +144,7 @@ export const dataAdapter = (row: Record<string, any>) => {
   };
 
   const trattamentoEconomicoData: TrattamentoEconomicoData = {
+    id:row.trattamentoEconomico.id,
     tipologiaContratto: row.trattamentoEconomico?.tipologiaContratto.toString() || "",
     societa:  row.trattamentoEconomico.societa?.toString() || "",
     tipoAmbitoLavorativo:  row.trattamentoEconomico?.tipoAmbitoLavorativo.toString() || "",
@@ -206,11 +200,21 @@ export const dataAdapter = (row: Record<string, any>) => {
   };
 };
 
+//adapter per gestire le select ruoli e permessi
 type RoleApiResponse = {
   data: Array<{
     id: number;
     role: string;
     description: string;
+  }>;
+  meta: {
+    total: number;
+  };
+};
+type GenderApiResponse = {
+  data: Array<{
+    id: number;
+    code:string;
   }>;
   meta: {
     total: number;
@@ -277,6 +281,12 @@ export type WokeScopeOption = {
   value: number;
   name?:string;
 };
+export type genderOption = {
+  label: string;
+  value: number;
+  name?:string;
+};
+
 
 export type contractTypeOption = {
   label: string;
@@ -327,9 +337,14 @@ export const permessiAdapter = (apiResponse: ActivityTypeApiResponse): ActivityT
     code: permesso.code,
   }));
 };
+export const genderAdapter = (apiResponse: GenderApiResponse): genderOption[] => {
+  return apiResponse.data.map((permesso) => ({
+    label: permesso.code,
+    value: permesso.id,
+  }));
+};
 
-/* type RoleMap = typeof roleMap; */
-/* type RoleKeys = keyof RoleMap; */
+//funzione che genera vat Number
 const generateRandomVATNumber = (): string => {
   const getRandomDigit = () => Math.floor(Math.random() * 10).toString();
 
@@ -358,6 +373,8 @@ const generateRandomVATNumber = (): string => {
   vatNumber += calculateCheckDigit(vatNumber);
   return vatNumber;
 };
+
+//funzioni per mandare gli id al be
 
 const mapRoleNamesToIDs = (ruoli: RuoliData, idRuoli: RoleOption[]): number[] => {
   const roles_id : number[]=[];
@@ -395,10 +412,16 @@ const mapContractTypeToID = (label: string, contractTypes:contractTypeOption[]):
   return scope ? scope.value : undefined;
 };
 
-const mapCompanyToID = (label: string, company: companyOption[]): number | undefined=> {
+const mapCompanyToID = (label: string, company: companyOption[]): number | undefined => {
   const scope = company.find(scope => scope.label === label);
   return scope ? scope.value : undefined;
 };
+
+const mapGenderToID = (label: string, gender: genderOption[]): number | undefined => {
+  const scope = gender.find(scope => scope.label === label);
+  return scope ? scope.value : undefined;
+};
+//reverse adpter per mandare i dati al be
 
 export const reverseAdapter = (combinedData: {
   id:any;
@@ -407,14 +430,13 @@ export const reverseAdapter = (combinedData: {
   wokescope: WokeScopeOption[],
   contractType: contractTypeOption[],
   company: companyOption[],
+  gender: genderOption[],
   anagrafica: AnagraficaData;
   trattamentoEconomico: TrattamentoEconomicoData;
   ruoli: RuoliData;
   permessi: PermessiData;
 }) => {
   return {
-    id:combinedData.id,
-    person_id:combinedData.anagrafica.person_id,
     email: combinedData.anagrafica.email ?? "defaultEmail",
     password: "defaultPassword",
     accountStatus_id: combinedData.anagrafica.accountStatus_id,
@@ -441,11 +463,12 @@ export const reverseAdapter = (combinedData: {
       employee_id: combinedData.anagrafica.matricola ?? "12343",
       note: combinedData.anagrafica.note ?? "",
       data: JSON.stringify(combinedData),  // Ensure data is a JSON string
-      gender_id: mapGenderToValue(combinedData.anagrafica.sesso) ?? 1,
+      gender_id: mapGenderToID(combinedData.anagrafica.sesso, combinedData.gender),
      /*  sede: mapSedeToValue(combinedData.anagrafica.sede) ?? 1, */ // Map sede to its corresponding value
-      activityTypes_id:  mapPermessiNamesToIDs(combinedData.permessi, combinedData.idPermessi), 
+      activityTypes_id:  mapPermessiNamesToIDs(combinedData.permessi, combinedData.idPermessi) || [], 
       EmploymentContract: [
         {
+          id: combinedData.trattamentoEconomico.id,
           workScope_id: mapWorkScopeToID(combinedData.trattamentoEconomico.tipoAmbitoLavorativo, combinedData.wokescope), 
           contractType_id: mapContractTypeToID(combinedData.trattamentoEconomico.tipologiaContratto,combinedData.contractType),
           company_id: mapCompanyToID(combinedData.trattamentoEconomico.societa,combinedData.company),
