@@ -7,6 +7,39 @@ import { AnagraficaData, TrattamentoEconomicoData, RuoliData, PermessiData } fro
 
 export const getFormAnagraficaFields = (formData: AnagraficaData, gender: genderOption[],type:FORM_TYPE) => {
     const genderOptions = gender.map(company => company.label)
+    const onlyLettersValidator = (value: any) => /^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/.test(value) ? "" : "Il campo deve contenere solo lettere";
+
+    const dateValidator = (value: any) => {
+        if (!value) return "Il campo Data di Nascita è obbligatorio";
+        const selectedDate = new Date(value);
+        const currentDate = new Date();
+        const adultDate = new Date();
+        adultDate.setFullYear(currentDate.getFullYear() - 18);
+
+        if (selectedDate >= currentDate) {
+            return "La data di nascita non può essere una data futura o la data di oggi";
+        }
+        if (selectedDate > adultDate) {
+            return "L'età deve essere maggiore di 18 anni";
+        }
+        return "";
+    };
+
+
+    const optionalCapValidator = (value: any) => {
+        if (!value) return true;
+        return /^[0-9]{5}$/.test(value);
+    };
+
+    const optionalCellulareValidator = (value: any) => {
+        if (!value) return true;
+        return /^(\+39\s?[0-9]{10}|\+39[0-9]{10}|[0-9]{10})$/.test(value);
+    };
+
+    const optionalTelefonoCasaValidator = (value: any) => {
+        if (!value) return true;
+        return /^(06[0-9]{8,9}|\+06\s?[0-9]{8,9}|\+06[0-9]{8,9})$/.test(value);
+    };
     const fields = {
         sede: {
             name: "sede",
@@ -25,7 +58,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             value: formData.nome || "",
             required: true,
             disabled:type === FORM_TYPE.view,
-            validator: (value: any) => value ? "" : "Il campo Nome è obbligatorio",
+            validator: (value: any) => value ? onlyLettersValidator(value) : "Il campo Nome è obbligatorio",
         },
         cognome: {
             name: "cognome",
@@ -33,7 +66,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             type: "text",
             value: formData.cognome || "",
             required: true,
-            validator: (value: any) => value ? "" : "Il campo Cognome è obbligatorio",
+            validator: (value: any) => value ? onlyLettersValidator(value) : "Il campo Cognome è obbligatorio",
         },
         email: {
             name: "email",
@@ -57,7 +90,16 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             type: "select",
             disabled:type === FORM_TYPE.view,
             value: formData.sesso || "",
+            require:true,
             options: genderOptions,
+            validator: (value: any) => value ? "" : "Il campo sesso è obbligatorio",
+        },
+        stato:{
+            name:"stato",
+            label:"Stato",
+            type:"text",
+            disabled:type === FORM_TYPE.view,
+            value: formData.stato || "",
         },
         Provincianascita: {
             name: "Provincianascita",
@@ -99,36 +141,41 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             type: "date",
             disabled:type === FORM_TYPE.view,
             value: formData.dataNascita || "",
+            required:true,
+            validator: dateValidator,
         },
         cap: {
             name: "cap",
             label: "CAP di Residenza",
-            type: "number",
-            spinners: false,
+            type: "text",
             disabled:type === FORM_TYPE.view,
             value: formData.cap || 0,
+            validator: (value: any) => optionalCapValidator(value) ? "" : "Il campo CAP deve contenere solo 5 numeri",
         },
         cellulare: {
             name: "cellulare",
             label: "Cellulare",
-            type: "number",
+            type: "text",
             disabled:type === FORM_TYPE.view,
             value: formData.cellulare || 0,
+            validator: (value: any) => optionalCellulareValidator(value) ? "" : "Il campo Cellulare deve essere nel formato +39XXXXXXXXXX o XXXXXXXXXX",
         },
         telefonoCasa: {
             name: "telefonoCasa",
             label: "Telefono di Casa",
-            type: "number",
-            inputType: "tel",
+            type: "text",
             disabled:type === FORM_TYPE.view,
             value: formData.telefonoCasa || 0,
+            validator: (value: any) => optionalTelefonoCasaValidator(value) ? "" : "Il campo Telefono di Casa deve essere nel formato +0XXXXXXXXX",
         },
         telefonoLavoro: {
             name: "telefonoLavoro",
             label: "Telefono di Lavoro",
-            type: "number",
+            type: "text",
+            spinners:false,
             disabled:type === FORM_TYPE.view,
             value: formData.telefonoLavoro || 0,
+            validator: (value: any) => optionalCellulareValidator(value) ? "" : "Il campo Telefono di Lavoro deve essere nel formato +39XXXXXXXXXX o XXXXXXXXXX",
         },
         emailPrivata: {
             name: "emailPrivata",
@@ -151,6 +198,13 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             disabled:type === FORM_TYPE.view,
             value: formData.codiceFiscale || "",
         },
+        partitaIva:{
+            name: "partitaIva",
+            label: "Partita Iva",
+            type: "text",
+            disabled:type === FORM_TYPE.view,
+            value: formData.partitaIva || "",
+        }
     }
     return fields
 
@@ -161,6 +215,18 @@ export const getFormTrattamentoEconomicoFields = (formData: TrattamentoEconomico
     const contractTypeOptions = contractType.map(contract => contract.label);
     const companyOptions = company.map(company => company.label);
 
+    const optionalDateValidator = (field: string) => (value: any, formData: TrattamentoEconomicoData) => {
+        if (!value) return true; 
+        const selectedDate = new Date(value);
+        const hireDate = new Date(formData.dataAssunzione);
+        const startDate = new Date(formData.dataInizioTrattamento);
+
+        if (selectedDate <= hireDate || selectedDate <= startDate) {
+            return false;  
+        }
+        return true;
+    };
+
     const fields = {
         tipologiaContratto: {
             name: "tipologiaContratto",
@@ -168,6 +234,8 @@ export const getFormTrattamentoEconomicoFields = (formData: TrattamentoEconomico
             type: "select",
             disabled:type === FORM_TYPE.view,
             value: formData.tipologiaContratto || "",
+            required: true,
+            validator: (value: any) => value ? "" : "Il campo Tipologia di Contratto è obbligatorio",
             options: contractTypeOptions
         },
         societa: {
@@ -176,6 +244,8 @@ export const getFormTrattamentoEconomicoFields = (formData: TrattamentoEconomico
             type: "select",
             disabled:type === FORM_TYPE.view,
             value: formData.societa || "",
+            required:true,
+            validator: (value: any) => value ? "" : "Il campo Società è obbligatorio",
             options: companyOptions
         },
         tipoAmbitoLavorativo: {
@@ -184,6 +254,8 @@ export const getFormTrattamentoEconomicoFields = (formData: TrattamentoEconomico
             type: "select",
             disabled:type === FORM_TYPE.view,
             value: formData.tipoAmbitoLavorativo || "",
+            required:true,
+            validator: (value: any) => value ? "" : "Il campo Ambito Lavorativo è obbligatorio",
             options: wokeScopeOptions,
         },
         dataInizioTrattamento: {
@@ -191,6 +263,8 @@ export const getFormTrattamentoEconomicoFields = (formData: TrattamentoEconomico
             label: "Data di Inizio del Trattamento",
             type: "date",
             disabled:type === FORM_TYPE.view,
+            required:true,
+            validator: (value: any) => value ? "" : "Il campo Data Inizio Trattamento è obbligatorio",
             value: formData.dataInizioTrattamento || "",
         },
         costoGiornaliero: {
@@ -199,6 +273,8 @@ export const getFormTrattamentoEconomicoFields = (formData: TrattamentoEconomico
             type: "number",
             spinners: false,
             disabled:type === FORM_TYPE.view,
+            required:true,
+            validator: (value: any) => value ? "" : "Il campo Costo Giornaliero è obbligatorio",
             value: formData.costoGiornaliero || 0,
         },
         dataAssunzione: {
@@ -214,6 +290,7 @@ export const getFormTrattamentoEconomicoFields = (formData: TrattamentoEconomico
             type: "date",
             disabled:type === FORM_TYPE.view,
             value: formData.scadenzaEffettiva || "",
+            validator: (value: any) => optionalDateValidator("Scadenza Effettiva")(value, formData) ? "" : "Il campo Scadenza Effettiva non può essere lo stesso giorno o prima della Data di Assunzione o della Data di Inizio del Trattamento",
         },
         dataRecesso: {
             name: "dataRecesso",
@@ -221,6 +298,7 @@ export const getFormTrattamentoEconomicoFields = (formData: TrattamentoEconomico
             type: "date",
             disabled:type === FORM_TYPE.view,
             value: formData.dataRecesso || "",
+            validator: (value: any) => optionalDateValidator("Data del Recesso")(value, formData) ? "" : "Il campo Data del Recesso non può essere lo stesso giorno o prima della Data di Assunzione o della Data di Inizio del Trattamento",
         },
         motivazioneCessazione: {
             name: "motivazioneCessazione",
@@ -247,6 +325,7 @@ export const getFormTrattamentoEconomicoFields = (formData: TrattamentoEconomico
             name: "ral",
             label: "RAL",
             type: "number",
+            spinners:false,
             disabled:type === FORM_TYPE.view,
             value: formData.ral || 0,
         },
@@ -261,10 +340,10 @@ export const getFormTrattamentoEconomicoFields = (formData: TrattamentoEconomico
         buoniPasto: {
             name: "buoniPasto",
             label: "Buoni Pasto",
-            type: "number",
-            spinners: false,
+            type: "select",
             disabled:type === FORM_TYPE.view,
-            value: formData.buoniPasto || 0,
+            options: ["SI", "NO"],
+            value: formData.buoniPasto,
         },
         nettoMese: {
             name: "nettoMese",

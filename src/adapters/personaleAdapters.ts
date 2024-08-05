@@ -40,6 +40,8 @@ const mapToAnagraficaData = (Person: any): AnagraficaData => ({
   telefonoCasa: Person?.phoneNumber2 ? parseInt(Person.phoneNumber2, 10) : 0,
   emailPrivata: Person?.privateEmail || "",
   iban: Person?.bankAddress || "",
+  stato:Person.state || "",
+  partitaIva: Person.vatNumber || 0,
  /*  sede: mapValueToSede(Person?.sede) || ""  , */
   codiceFiscale: Person?.taxCode || ""
 });
@@ -59,7 +61,7 @@ const mapToTrattamentoEconomicoData = (employmentContract: any): TrattamentoEcon
   ccnl: employmentContract?.collectiveAgreement || "",
   ral: employmentContract?.annualGrossSalary || 0,
   trasferta: employmentContract?.travelAllowance || 0,
-  buoniPasto: employmentContract?.mealVouchers === "Yes" ? 1 : 0,
+  buoniPasto: employmentContract?.mealVouchers,
   nettoMese: employmentContract?.netMonthly || 0,
   costoAnnuale: employmentContract?.annualCost || 0,
   tariffaVendita: employmentContract?.salesRate || 0,
@@ -140,6 +142,8 @@ export const dataAdapter = (row: Record<string, any>) => {
     telefonoCasa: row.anagrafica.telefonoCasa ? parseInt(row.anagrafica.telefonoCasa, 10) : 0,
     emailPrivata: row.anagrafica.emailPrivata || "",
     iban:  row.anagrafica.iban || "",
+    stato:row.anagrafica.stato || " ",
+    partitaIva: row.anagrafica.partitaIva || 0,
     codiceFiscale:  row.anagrafica.codiceFiscale || ""
   };
 
@@ -158,7 +162,7 @@ export const dataAdapter = (row: Record<string, any>) => {
     ccnl:  row.trattamentoEconomico.ccnl|| "",
     ral:  row.trattamentoEconomico.ral || 0,
     trasferta:  row.trattamentoEconomico.trasferta || 0,
-    buoniPasto:  row.trattamentoEconomico.buoniPasto === "Yes" ? 1 : 0,
+    buoniPasto:  row.trattamentoEconomico.buoniPasto,
     nettoMese:  row.trattamentoEconomico.nettoMese || 0,
     costoAnnuale:  row.trattamentoEconomico.costoAnnuale || 0,
     tariffaVendita:  row.trattamentoEconomico.tariffaVendita || 0,
@@ -344,36 +348,6 @@ export const genderAdapter = (apiResponse: GenderApiResponse): genderOption[] =>
   }));
 };
 
-//funzione che genera vat Number
-const generateRandomVATNumber = (): string => {
-  const getRandomDigit = () => Math.floor(Math.random() * 10).toString();
-
-  // Generate the first 10 digits
-  let vatNumber = '';
-  for (let i = 0; i < 10; i++) {
-    vatNumber += getRandomDigit();
-  }
-
-  // Calculate the check digit
-  const calculateCheckDigit = (number: string): string => {
-    let sum = 0;
-    for (let i = 0; i < number.length; i++) {
-      const digit = parseInt(number[i], 10);
-      if (i % 2 === 0) {
-        sum += digit;
-      } else {
-        const doubled = digit * 2;
-        sum += doubled > 9 ? doubled - 9 : doubled;
-      }
-    }
-    const checkDigit = (10 - (sum % 10)) % 10;
-    return checkDigit.toString();
-  };
-
-  vatNumber += calculateCheckDigit(vatNumber);
-  return vatNumber;
-};
-
 //funzioni per mandare gli id al be
 
 const mapRoleNamesToIDs = (ruoli: RuoliData, idRuoli: RoleOption[]): number[] => {
@@ -436,56 +410,56 @@ export const reverseAdapter = (combinedData: {
   ruoli: RuoliData;
   permessi: PermessiData;
 }) => {
+  const permessiIDs = mapPermessiNamesToIDs(combinedData.permessi, combinedData.idPermessi) || []
   return {
-    email: combinedData.anagrafica.email ?? "defaultEmail",
-    password: "defaultPassword",
+    email: combinedData.anagrafica.email,
     accountStatus_id: combinedData.anagrafica.accountStatus_id,
-    roles_id: mapRoleNamesToIDs(combinedData.ruoli, combinedData.idRuoli),
+    roles_id: mapRoleNamesToIDs(combinedData.ruoli, combinedData.idRuoli) || [],
     Person: {
-      firstName: combinedData.anagrafica.nome ?? "defaultFirstName",
-      lastName: combinedData.anagrafica.cognome ?? "defaultLastName",
+      firstName: combinedData.anagrafica.nome,
+      lastName: combinedData.anagrafica.cognome,
       id:combinedData.anagrafica.person_id,
-      phoneNumber: combinedData.anagrafica.cellulare?.toString() ?? "0000000000",
-      phoneNumber2: combinedData.anagrafica.telefonoCasa?.toString() ?? "0000000000",
-      address: combinedData.anagrafica.indirizzoResidenza ?? "defaultAddress",
+      phoneNumber: combinedData.anagrafica.cellulare?.toString(),
+      phoneNumber2: combinedData.anagrafica.telefonoCasa?.toString(),
+      address: combinedData.anagrafica.indirizzoResidenza,
       privateEmail: (!combinedData.anagrafica.emailPrivata || combinedData.anagrafica.emailPrivata === "") ? null :combinedData.anagrafica.emailPrivata,
-      city: combinedData.anagrafica.comuneResidenza ?? "defaultCity",
-      provinceRes: combinedData.anagrafica.residenza ?? "defaultProvinceRes",
-      provinceBirth: combinedData.anagrafica.Provincianascita ?? "defaultProvinceBirth",
-      cityRes: combinedData.anagrafica.comuneResidenza ?? "defaultCityRes",
-      cityBirth: combinedData.anagrafica.comuneNascita ?? "defaultCityBirth",
-      dateBirth: (!combinedData.anagrafica.dataNascita || combinedData.anagrafica.dataNascita === "") ? "2024-07-30T14:40:24.119Z": combinedData.anagrafica.dataNascita,
+      city: combinedData.anagrafica.comuneResidenza,
+      provinceRes: combinedData.anagrafica.residenza,
+      provinceBirth: combinedData.anagrafica.Provincianascita,
+      cityRes: combinedData.anagrafica.comuneResidenza,
+      cityBirth: combinedData.anagrafica.comuneNascita,
+      dateBirth: combinedData.anagrafica.dataNascita,
       bankAddress: (!combinedData.anagrafica.iban || combinedData.anagrafica.iban === "" )? null : combinedData.anagrafica.iban,
-      state: "IT",
-      zipCode: combinedData.anagrafica.cap?.toString() ?? "00000",
+      state: combinedData.anagrafica.stato || " ",
+      zipCode: combinedData.anagrafica.cap ?? " ",
       taxCode: (!combinedData.anagrafica.codiceFiscale || combinedData.anagrafica.codiceFiscale === "" )? null :combinedData.anagrafica.codiceFiscale,
-      vatNumber: generateRandomVATNumber(),
-      employee_id: combinedData.anagrafica.matricola ?? "12343",
-      note: combinedData.anagrafica.note ?? "",
-      data: JSON.stringify(combinedData),  // Ensure data is a JSON string
+      vatNumber: combinedData.anagrafica.partitaIva || null,
+      employee_id: combinedData.anagrafica.matricola || " ",
+      note: combinedData.anagrafica.note ?? " ",
+      data: JSON.stringify(combinedData),  
       gender_id: mapGenderToID(combinedData.anagrafica.sesso, combinedData.gender),
      /*  sede: mapSedeToValue(combinedData.anagrafica.sede) ?? 1, */ // Map sede to its corresponding value
-      activityTypes_id:  mapPermessiNamesToIDs(combinedData.permessi, combinedData.idPermessi) || [], 
+     activityTypes_id: permessiIDs.length > 0 ? permessiIDs : [2, 3],
       EmploymentContract: [
         {
           id: combinedData.trattamentoEconomico.id,
-          workScope_id: mapWorkScopeToID(combinedData.trattamentoEconomico.tipoAmbitoLavorativo, combinedData.wokescope), 
-          contractType_id: mapContractTypeToID(combinedData.trattamentoEconomico.tipologiaContratto,combinedData.contractType),
-          company_id: mapCompanyToID(combinedData.trattamentoEconomico.societa,combinedData.company),
-          startDate: combinedData.trattamentoEconomico.dataInizioTrattamento || "2024-07-30T14:40:24.119Z",
-          endDate: combinedData.trattamentoEconomico.dataRecesso || "2024-07-30T14:40:24.119Z",
-          effectiveEndDate: combinedData.trattamentoEconomico.scadenzaEffettiva || "2024-07-30T14:40:24.119Z",
-          hireDate: combinedData.trattamentoEconomico.dataAssunzione || "2024-07-30T14:40:24.119Z",
-          cessationMotivation: combinedData.trattamentoEconomico.motivazioneCessazione || "",
-          transformations: combinedData.trattamentoEconomico.trasformazioni || "",
-          collectiveAgreement: combinedData.trattamentoEconomico.ccnl || "defaultcollectiveagreement",
-          mealVouchers: combinedData.trattamentoEconomico.buoniPasto ? "Yes" : "No",
-          salesRate: combinedData.trattamentoEconomico.tariffaVendita || 0,
-          dailyCost: combinedData.trattamentoEconomico.costoGiornaliero || 0,
-          annualGrossSalary: combinedData.trattamentoEconomico.ral || 0,
-          travelAllowance: combinedData.trattamentoEconomico.trasferta || 0,
-          netMonthly: combinedData.trattamentoEconomico.nettoMese || 0,
-          annualCost: combinedData.trattamentoEconomico.costoAnnuale || 0,
+          workScope_id: mapWorkScopeToID(combinedData.trattamentoEconomico.tipoAmbitoLavorativo, combinedData.wokescope) || 1, 
+          contractType_id: mapContractTypeToID(combinedData.trattamentoEconomico.tipologiaContratto,combinedData.contractType) || 1,
+          company_id: mapCompanyToID(combinedData.trattamentoEconomico.societa,combinedData.company) || 1,
+          startDate: combinedData.trattamentoEconomico.dataInizioTrattamento,
+          endDate: combinedData.trattamentoEconomico.dataRecesso || combinedData.trattamentoEconomico.dataInizioTrattamento,
+          effectiveEndDate: combinedData.trattamentoEconomico.scadenzaEffettiva || combinedData.trattamentoEconomico.dataInizioTrattamento,
+          hireDate: combinedData.trattamentoEconomico.dataAssunzione || combinedData.trattamentoEconomico.dataInizioTrattamento,
+          cessationMotivation: combinedData.trattamentoEconomico.motivazioneCessazione || " ",
+          transformations: combinedData.trattamentoEconomico.trasformazioni || " ",
+          collectiveAgreement: combinedData.trattamentoEconomico.ccnl || " ",
+          mealVouchers: combinedData.trattamentoEconomico.buoniPasto || "NO",
+          salesRate: Number(combinedData.trattamentoEconomico.tariffaVendita) || 0,
+          dailyCost: Number(combinedData.trattamentoEconomico.costoGiornaliero) || 0,
+          annualGrossSalary: Number(combinedData.trattamentoEconomico.ral) || 0,
+          travelAllowance: Number(combinedData.trattamentoEconomico.trasferta) || 0,
+          netMonthly: Number(combinedData.trattamentoEconomico.nettoMese) || 0,
+          annualCost: Number(combinedData.trattamentoEconomico.costoAnnuale) || 0,
           notes: combinedData.trattamentoEconomico.note || "",
         },
       ],

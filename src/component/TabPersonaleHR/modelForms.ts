@@ -7,6 +7,7 @@ export interface AnagraficaData {
     email?: string;
     matricola?: string;
     sesso?: any;
+    stato?:string;
     Provincianascita?: string;
     comuneNascita?: string;
     residenza?: string;
@@ -22,6 +23,7 @@ export interface AnagraficaData {
     note?:string;
     codiceFiscale?: string;
     accountStatus_id?:any;
+    partitaIva?:number;
 }
 
 export interface TrattamentoEconomicoData {

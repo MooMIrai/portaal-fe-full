@@ -11,8 +11,8 @@ import { CrudGenericService } from "../../services/personaleServices";
 import { transformUserData } from "../../adapters/personaleAdapters";
 
 
-// TO Do gestire bene gli input, cotrolli ad esempio no numeri nel nome e cognome, capire il bug del patch, cambiare stile, mettere
-//disabled a view, e capire bag della doppia modale, levare select
+// TO DO  cambiare stile aggiungere icone e fare sorting filtering a gestire il form trattamento (aggiungere button Nuovo)
+
 
 const columns: TableColumn[] = [
   { key: "company", label: "Società", type: TABLE_COLUMN_TYPE.string, sortable: true, filter: "text" },
@@ -104,6 +104,10 @@ const PersonalPage = () => {
         sorting={sorting}
         getData={loadData}
         columns={columns}
+        resizableWindow={true}
+        initialHeightWindow={800}
+        draggableWindow={true}
+        initialWidthWindow={900}
         resizable={true}
         actions={[
           TABLE_ACTION_TYPE.create,
@@ -111,6 +115,7 @@ const PersonalPage = () => {
           TABLE_ACTION_TYPE.edit,
           TABLE_ACTION_TYPE.show,
         ]}
+
         formCrud={(row: any, type: FORM_TYPE, closeModalCallback: any, refreshTable: any) => (
           <>
             {type === FORM_TYPE.delete ? (
