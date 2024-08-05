@@ -23,6 +23,7 @@ import { DropDownList } from "@progress/kendo-react-dropdowns";
 import styles from "./styles.module.scss";
 import { plusIcon } from "@progress/kendo-svg-icons";
 import { TableColumn, TABLE_ACTION_TYPE } from "../../models/tableModel";
+import CustomWindow from "../Window/component";
 
 type TablePaginatedProps = {
   pageSizeOptions?: number[];
@@ -43,6 +44,7 @@ type TablePaginatedProps = {
   customIcon?: string;
   customHeader?: string;
   resizable?: boolean;
+  dropListLookup?:boolean;
 
   //generic crud search
   inputSearchConfig?: {
@@ -71,6 +73,15 @@ type TablePaginatedProps = {
     refreshTable: () => void
   ) => JSX.Element;
   initialPagination: PaginationModel;
+
+  //props for window Modal
+  resizableWindow?:boolean,
+  draggableWindow?:boolean,
+  minHeightWindow?:number,
+  minWidthWindow?:number,
+  initialHeightWindow?:number,
+  initialWidthWindow?:number
+
 };
 
 const MyPager = (props: PagerProps) => (
@@ -203,23 +214,26 @@ export default function GenericGrid(props: TablePaginatedProps) {
         )}
       >
         <GridToolbar className={styles.toolBarContainer}>
-          <DropDownList
-            style={{ height: "38px" }}
-            data={[
-              "Role",
-              "ProjectType",
-              "ActivityType",
-              "AccountStatus",
-              "WorkScope",
-              "ContractType",
-            ]}
-            required={false}
-            disabled={false}
-            onChange={(e) => {
-              props.typological?.setType(e.target.value);
-            }}
-            value={props.typological?.type}
-          />
+          {props.dropListLookup && (
+             <DropDownList
+             style={{ height: "38px" }}
+             data={[
+               "Role",
+               "ProjectType",
+               "ActivityType",
+               "AccountStatus",
+               "WorkScope",
+               "ContractType",
+             ]}
+             required={false}
+             disabled={false}
+             onChange={(e) => {
+               props.typological?.setType(e.target.value);
+             }}
+             value={props.typological?.type}
+           />
+          )}
+         
 
           <Input
             placeholder="Cerca"
@@ -319,11 +333,14 @@ export default function GenericGrid(props: TablePaginatedProps) {
                       )}
                   </div>
                   {modal.open && (
-                    <Modal
-                      showModalFooter={false}
+                    <CustomWindow
                       onClose={handleCloseModal}
                       title={title}
-                      isOpen={modal.open}
+                      show={modal.open}
+                      resizable={props.resizableWindow}
+                      draggable={props.draggableWindow}
+                      initialHeight={props.initialHeightWindow}
+                      initialWidth={props.initialWidthWindow}
                       callToAction={callToAction}
                     >
                       {props.formCrud && modal.open
@@ -340,7 +357,7 @@ export default function GenericGrid(props: TablePaginatedProps) {
                               )
                           )
                         : null}
-                    </Modal>
+                    </CustomWindow>
                   )}
                 </td>
               );

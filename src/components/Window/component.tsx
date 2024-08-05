@@ -5,7 +5,11 @@ interface CustomWindowProps extends WindowProps {
   show: boolean;
   title: string;
   onClose: () => void;
+  onSubmit?: () => void;
   children: React.ReactNode;
+  callToAction: string;
+  draggable?:boolean;
+  resizable?:boolean
 }
 
 const CustomWindow = ({
@@ -15,6 +19,13 @@ const CustomWindow = ({
   children,
   width,
   height,
+  draggable,
+  resizable,
+  minHeight,
+  minWidth,
+  initialHeight,
+  initialWidth
+
 }: CustomWindowProps) => {
   return show ? (
     <Window
@@ -22,12 +33,16 @@ const CustomWindow = ({
       height={height}
       doubleClickStageChange={false}
       modal={true}
+      minHeight={minHeight}
+      minWidth={minWidth}
       title={title}
+      initialHeight={initialHeight}
+      initialWidth={initialWidth}
       onClose={onClose}
-      draggable={false}
+      draggable={draggable}
       minimizeButton={() => <div></div>}
       maximizeButton={() => <div></div>}
-      resizable={false}
+      resizable={resizable}
     >
       {children}
     </Window>
