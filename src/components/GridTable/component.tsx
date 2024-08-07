@@ -10,7 +10,6 @@ import {
 } from "@progress/kendo-react-grid";
 import { Button } from "@progress/kendo-react-buttons";
 import { FORM_TYPE } from "../../models/formModel";
-import Modal from "../Modal/component";
 import { TableToFormTypeAdapter } from "../../adapters/tableToFormTypeAdapter";
 import { Pager, PagerProps } from "@progress/kendo-react-data-tools";
 import { PaginationModel } from "../../models/gridModel";
@@ -258,11 +257,11 @@ export default function GenericGrid(props: TablePaginatedProps) {
           )}
          
 
-          <Input
+          {/* <Input
             placeholder="Cerca"
             value={props.inputSearchConfig?.inputSearch}
             onChange={props.inputSearchConfig?.handleInputSearch}
-          />
+          /> */}
 
           {hasActionCreate() && (
             <div>
@@ -289,7 +288,7 @@ export default function GenericGrid(props: TablePaginatedProps) {
         ))}
 
         {hasActionInColumn() && (
-          
+
           <GridColumn
             filterable={false}
             field="action"

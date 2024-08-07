@@ -11,14 +11,14 @@ export interface TableColumn {
 }
 
 export enum TABLE_COLUMN_TYPE {
-  "string",
-  "custom",
+  "string"="string",
+  "custom"="custom",
 }
 
 export enum TABLE_ACTION_TYPE {
-  "show",
-  "edit",
-  "delete",
-  "create",
-  "custom",
+  "show"="show",
+  "edit"="edit",
+  "delete"="delete",
+  "create"="create",
+  "custom"="custom",
 }

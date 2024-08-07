@@ -1,9 +1,9 @@
 export enum FORM_TYPE {
-  "view",
-  "edit",
-  "delete",
-  "create",
-  "custom",
+  "view"="view",
+  "edit"="edit",
+  "delete"="delete",
+  "create"="create",
+  "custom"="custom",
 }
 
 export type Fields = Record<string, FieldConfig>;
