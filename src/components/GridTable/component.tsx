@@ -151,6 +151,7 @@ export default function GenericGrid(props: TablePaginatedProps) {
     type: TABLE_ACTION_TYPE,
     currentData?: Record<string, any>
   ) => {
+    
     setRow(currentData || {});
     setModal({
       open: true,
@@ -184,6 +185,28 @@ export default function GenericGrid(props: TablePaginatedProps) {
   const handleSortChange = (e: GridSortChangeEvent) => {
     props.setSorting(e.sort);
   };
+
+  let title =
+                modal.type === TABLE_ACTION_TYPE.create
+                  ? "Aggiungi"
+                  : modal.type === TABLE_ACTION_TYPE.show
+                  ? "Visualizza"
+                  : modal.type === TABLE_ACTION_TYPE.delete
+                  ? "Elimina"
+                  : modal.type === TABLE_ACTION_TYPE.edit
+                  ? "Modifica"
+                  : "";
+
+              let callToAction =
+                modal.type === TABLE_ACTION_TYPE.create
+                  ? "Salva"
+                  : modal.type === TABLE_ACTION_TYPE.show
+                  ? "Esci"
+                  : modal.type === TABLE_ACTION_TYPE.delete
+                  ? "Elimina"
+                  : modal.type === TABLE_ACTION_TYPE.edit
+                  ? "Salva modifica"
+                  : "";
 
   return (
     <div className={styles.gridContainer}>
@@ -266,32 +289,11 @@ export default function GenericGrid(props: TablePaginatedProps) {
         ))}
 
         {hasActionInColumn() && (
+          
           <GridColumn
             filterable={false}
             field="action"
             cell={(cellGrid: GridCellProps) => {
-              let title =
-                modal.type === TABLE_ACTION_TYPE.create
-                  ? "Aggiungi"
-                  : modal.type === TABLE_ACTION_TYPE.show
-                  ? "Visualizza"
-                  : modal.type === TABLE_ACTION_TYPE.delete
-                  ? "Elimina"
-                  : modal.type === TABLE_ACTION_TYPE.edit
-                  ? "Modifica"
-                  : "";
-
-              let callToAction =
-                modal.type === TABLE_ACTION_TYPE.create
-                  ? "Salva"
-                  : modal.type === TABLE_ACTION_TYPE.show
-                  ? "Esci"
-                  : modal.type === TABLE_ACTION_TYPE.delete
-                  ? "Elimina"
-                  : modal.type === TABLE_ACTION_TYPE.edit
-                  ? "Salva modifica"
-                  : "";
-
               return (
                 <td>
                   <div className={styles.commandButtons}>
@@ -332,39 +334,40 @@ export default function GenericGrid(props: TablePaginatedProps) {
                         </Button>
                       )}
                   </div>
-                  {modal.open && (
-                    <CustomWindow
-                      onClose={handleCloseModal}
-                      title={title}
-                      show={modal.open}
-                      resizable={props.resizableWindow}
-                      draggable={props.draggableWindow}
-                      initialHeight={props.initialHeightWindow}
-                      initialWidth={props.initialWidthWindow}
-                      callToAction={callToAction}
-                    >
-                      {props.formCrud && modal.open
-                        ? props.formCrud(
-                            row,
-                            new TableToFormTypeAdapter().adapt(modal.type),
-                            handleCloseModal,
-                            () =>
-                              refreshTable(
-                                pagination,
-                                props.filter,
-                                props.sorting,
-                                props.inputSearchConfig?.inputSearch
-                              )
-                          )
-                        : null}
-                    </CustomWindow>
-                  )}
+                  
+                    
                 </td>
               );
             }}
           />
         )}
       </Grid>
+      <CustomWindow
+          onClose={handleCloseModal}
+          title={title}
+          show={modal.open}
+          resizable={props.resizableWindow}
+          draggable={props.draggableWindow}
+          initialHeight={props.initialHeightWindow}
+          initialWidth={props.initialWidthWindow}
+          callToAction={callToAction}
+          >
+            {props.formCrud && modal.open
+              ? props.formCrud(
+                  row,
+                  new TableToFormTypeAdapter().adapt(modal.type),
+                  handleCloseModal,
+                  () =>
+                    refreshTable(
+                      pagination,
+                      props.filter,
+                      props.sorting,
+                      props.inputSearchConfig?.inputSearch
+                    )
+                )
+              : null}
+          </CustomWindow>
+                  
     </div>
   );
 }
