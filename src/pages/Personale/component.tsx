@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import GridTable from "common/Table";
 import { FORM_TYPE, Fields } from "./formModel";
-import { TABLE_ACTION_TYPE, TABLE_COLUMN_TYPE, TableColumn } from "./tableModel";
+import { TableColumn } from "./tableModel";
 import { PaginationModel } from "./gridModel";
 import { CompositeFilterDescriptor, SortDescriptor } from "@progress/kendo-data-query";
 import { Button } from "@progress/kendo-react-buttons";
@@ -15,12 +15,12 @@ import { transformUserData } from "../../adapters/personaleAdapters";
 
 
 const columns: TableColumn[] = [
-  { key: "company", label: "Società", type: TABLE_COLUMN_TYPE.string, sortable: true, filter: "text" },
-  { key: "lastName", label: "Cognome", type: TABLE_COLUMN_TYPE.string, sortable: true, filter: "text" },
-  { key: "email", label: "Email", type: TABLE_COLUMN_TYPE.string, sortable: true, filter: "text" },
-  { key: "ContractType", label: "Tipo di Contratto", type: TABLE_COLUMN_TYPE.string, sortable: true, filter: "text" },
-  { key: "annualCost", label: "Costo Annuale", type:TABLE_COLUMN_TYPE.string, sortable: true, filter: "numeric" },
-  { key: "dailyCost", label: "Costo Giornaliero", type: TABLE_COLUMN_TYPE.string, sortable: true, filter: "numeric" },
+  { key: "company", label: "Società", type: "string", sortable: true, filter: "text" },
+  { key: "lastName", label: "Cognome", type: "string", sortable: true, filter: "text" },
+  { key: "email", label: "Email", type: "string", sortable: true, filter: "text" },
+  { key: "ContractType", label: "Tipo di Contratto", type: "string", sortable: true, filter: "text" },
+  { key: "annualCost", label: "Costo Annuale", type:"string", sortable: true, filter: "numeric" },
+  { key: "dailyCost", label: "Costo Giornaliero", type: "string", sortable: true, filter: "numeric" },
 ];
 
 const PersonalPage = () => {
@@ -110,10 +110,10 @@ const PersonalPage = () => {
         initialWidthWindow={900}
         resizable={true}
         actions={[
-          TABLE_ACTION_TYPE.create,
-          TABLE_ACTION_TYPE.delete,
-          TABLE_ACTION_TYPE.edit,
-          TABLE_ACTION_TYPE.show,
+          "create",
+          "delete",
+          "edit",
+          "show",
         ]}
 
         formCrud={(row: any, type: FORM_TYPE, closeModalCallback: any, refreshTable: any) => (

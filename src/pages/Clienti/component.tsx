@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import GridTable from "common/Table";
-import { TABLE_ACTION_TYPE, TableColumn } from "../Personale/tableModel";
 import { FORM_TYPE } from "../Personale/formModel";
 
 
@@ -86,7 +85,7 @@ function Clienti(){
           },
           {
             codicecliente:'AEMMEX8',
-            ragioneSociale:""+TABLE_ACTION_TYPE.create,
+            ragioneSociale:"",
             piva:'01111111',
             sitoweb:'kkk.kkk.ii',
             email:'kkk@kkk.it'
@@ -129,10 +128,10 @@ function Clienti(){
     initialWidthWindow={900}
     resizable={true}
     actions={[
-      3,
-      2,
-      1,
-      0,
+      "show",
+      "edit",
+      "delete",
+      "create",
     ]}
 
     formCrud={(row: any, type: FORM_TYPE, closeModalCallback: any, refreshTable: any) => (
