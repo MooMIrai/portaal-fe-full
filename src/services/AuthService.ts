@@ -1,5 +1,5 @@
 import CookieRepo from "../repositories/CookieRepo";
-import tokenService from "./tokenService";
+import tokenService from "./TokenService";
 
 
 class AuthService {
