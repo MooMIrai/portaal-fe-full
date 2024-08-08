@@ -20,7 +20,12 @@ import {
 import { Input } from "@progress/kendo-react-inputs";
 import { DropDownList } from "@progress/kendo-react-dropdowns";
 import styles from "./styles.module.scss";
-import { plusIcon,pencilIcon,trashIcon,eyeIcon } from "@progress/kendo-svg-icons";
+import {
+  plusIcon,
+  pencilIcon,
+  trashIcon,
+  eyeIcon,
+} from "@progress/kendo-svg-icons";
 import { TableColumn, TABLE_ACTION_TYPE } from "../../models/tableModel";
 import CustomWindow from "../Window/component";
 
@@ -43,7 +48,7 @@ type TablePaginatedProps = {
   customIcon?: string;
   customHeader?: string;
   resizable?: boolean;
-  dropListLookup?:boolean;
+  dropListLookup?: boolean;
 
   //generic crud search
   inputSearchConfig?: {
@@ -74,13 +79,12 @@ type TablePaginatedProps = {
   initialPagination: PaginationModel;
 
   //props for window Modal
-  resizableWindow?:boolean,
-  draggableWindow?:boolean,
-  minHeightWindow?:number,
-  minWidthWindow?:number,
-  initialHeightWindow?:number,
-  initialWidthWindow?:number
-
+  resizableWindow?: boolean;
+  draggableWindow?: boolean;
+  minHeightWindow?: number;
+  minWidthWindow?: number;
+  initialHeightWindow?: number;
+  initialWidthWindow?: number;
 };
 
 const MyPager = (props: PagerProps) => (
@@ -150,7 +154,6 @@ export default function GenericGrid(props: TablePaginatedProps) {
     type: TABLE_ACTION_TYPE,
     currentData?: Record<string, any>
   ) => {
-    
     setRow(currentData || {});
     setModal({
       open: true,
@@ -186,26 +189,26 @@ export default function GenericGrid(props: TablePaginatedProps) {
   };
 
   let title =
-                modal.type === TABLE_ACTION_TYPE.create
-                  ? "Aggiungi"
-                  : modal.type === TABLE_ACTION_TYPE.show
-                  ? "Visualizza"
-                  : modal.type === TABLE_ACTION_TYPE.delete
-                  ? "Elimina"
-                  : modal.type === TABLE_ACTION_TYPE.edit
-                  ? "Modifica"
-                  : "";
+    modal.type === TABLE_ACTION_TYPE.create
+      ? "Aggiungi"
+      : modal.type === TABLE_ACTION_TYPE.show
+      ? "Visualizza"
+      : modal.type === TABLE_ACTION_TYPE.delete
+      ? "Elimina"
+      : modal.type === TABLE_ACTION_TYPE.edit
+      ? "Modifica"
+      : "";
 
-              let callToAction =
-                modal.type === TABLE_ACTION_TYPE.create
-                  ? "Salva"
-                  : modal.type === TABLE_ACTION_TYPE.show
-                  ? "Esci"
-                  : modal.type === TABLE_ACTION_TYPE.delete
-                  ? "Elimina"
-                  : modal.type === TABLE_ACTION_TYPE.edit
-                  ? "Salva modifica"
-                  : "";
+  let callToAction =
+    modal.type === TABLE_ACTION_TYPE.create
+      ? "Salva"
+      : modal.type === TABLE_ACTION_TYPE.show
+      ? "Esci"
+      : modal.type === TABLE_ACTION_TYPE.delete
+      ? "Elimina"
+      : modal.type === TABLE_ACTION_TYPE.edit
+      ? "Salva modifica"
+      : "";
 
   return (
     <div className={styles.gridContainer}>
@@ -237,31 +240,30 @@ export default function GenericGrid(props: TablePaginatedProps) {
       >
         <GridToolbar className={styles.toolBarContainer}>
           {props.dropListLookup && (
-             <DropDownList
-             style={{ height: "38px" }}
-             data={[
-               "Role",
-               "ProjectType",
-               "ActivityType",
-               "AccountStatus",
-               "WorkScope",
-               "ContractType",
-             ]}
-             required={false}
-             disabled={false}
-             onChange={(e) => {
-               props.typological?.setType(e.target.value);
-             }}
-             value={props.typological?.type}
-           />
+            <DropDownList
+              style={{ height: "38px" }}
+              data={[
+                "Role",
+                "ProjectType",
+                "ActivityType",
+                "AccountStatus",
+                "WorkScope",
+                "ContractType",
+              ]}
+              required={false}
+              disabled={false}
+              onChange={(e) => {
+                props.typological?.setType(e.target.value);
+              }}
+              value={props.typological?.type}
+            />
           )}
-         
 
-          {/* <Input
+          <Input
             placeholder="Cerca"
             value={props.inputSearchConfig?.inputSearch}
             onChange={props.inputSearchConfig?.handleInputSearch}
-          /> */}
+          />
 
           {hasActionCreate() && (
             <div>
@@ -288,7 +290,6 @@ export default function GenericGrid(props: TablePaginatedProps) {
         ))}
 
         {hasActionInColumn() && (
-
           <GridColumn
             filterable={false}
             field="action"
@@ -305,9 +306,7 @@ export default function GenericGrid(props: TablePaginatedProps) {
                           onClick={() =>
                             openModal(TABLE_ACTION_TYPE.show, cellGrid.dataItem)
                           }
-                        >
-                          
-                        </Button>
+                        ></Button>
                       )}
                     {props.actions &&
                       props.actions.includes(TABLE_ACTION_TYPE.edit) && (
@@ -318,9 +317,7 @@ export default function GenericGrid(props: TablePaginatedProps) {
                           onClick={() =>
                             openModal(TABLE_ACTION_TYPE.edit, cellGrid.dataItem)
                           }
-                        >
-                          
-                        </Button>
+                        ></Button>
                       )}
                     {props.actions &&
                       props.actions.includes(TABLE_ACTION_TYPE.delete) && (
@@ -334,12 +331,9 @@ export default function GenericGrid(props: TablePaginatedProps) {
                               cellGrid.dataItem
                             )
                           }
-                        >
-                        </Button>
+                        ></Button>
                       )}
                   </div>
-                  
-                    
                 </td>
               );
             }}
@@ -347,31 +341,31 @@ export default function GenericGrid(props: TablePaginatedProps) {
         )}
       </Grid>
       <CustomWindow
-          onClose={handleCloseModal}
-          title={title}
-          show={modal.open}
-          resizable={props.resizableWindow}
-          draggable={props.draggableWindow}
-          initialHeight={props.initialHeightWindow}
-          initialWidth={props.initialWidthWindow}
-          callToAction={callToAction}
-          >
-            {props.formCrud && modal.open
-              ? props.formCrud(
-                  row,
-                  new TableToFormTypeAdapter().adapt(modal.type),
-                  handleCloseModal,
-                  () =>
-                    refreshTable(
-                      pagination,
-                      props.filter,
-                      props.sorting,
-                      props.inputSearchConfig?.inputSearch
-                    )
+        showModalFooter={false}
+        onClose={handleCloseModal}
+        title={title}
+        show={modal.open}
+        resizable={props.resizableWindow}
+        draggable={props.draggableWindow}
+        initialHeight={props.initialHeightWindow}
+        initialWidth={props.initialWidthWindow}
+        callToAction={callToAction}
+      >
+        {props.formCrud && modal.open
+          ? props.formCrud(
+              row,
+              new TableToFormTypeAdapter().adapt(modal.type),
+              handleCloseModal,
+              () =>
+                refreshTable(
+                  pagination,
+                  props.filter,
+                  props.sorting,
+                  props.inputSearchConfig?.inputSearch
                 )
-              : null}
-          </CustomWindow>
-                  
+            )
+          : null}
+      </CustomWindow>
     </div>
   );
 }

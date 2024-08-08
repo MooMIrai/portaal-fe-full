@@ -9,7 +9,7 @@ interface CustomWindowEditSlotProps {
   render?: (
     slot: Record<string, any> | undefined,
     closeModalCallback: () => void
-  ) => JSX.Element;
+  ) => { component: JSX.Element; title: string };
 }
 
 const CustomContent = ({
@@ -19,19 +19,19 @@ const CustomContent = ({
   handleOpenCloseModal,
   render,
 }: CustomWindowEditSlotProps) => {
+  const renderData = render?.(dataItem, handleOpenCloseModal);
   return (
     <CustomWindow
+      showModalFooter={false}
       height={500}
       width={600}
       show={show}
-      title={dataItem.title?.length ? dataItem.title : defaultTitle}
+      title={renderData ? renderData.title : defaultTitle}
       onClose={handleOpenCloseModal}
     >
-      {render?.(dataItem, handleOpenCloseModal)}
+      {renderData?.component}
     </CustomWindow>
   );
 };
 
 export default CustomContent;
-
- 

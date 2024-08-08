@@ -9,10 +9,15 @@ import CustomContent from "../CustomContent/CustomContent";
 
 interface EditItemProps extends SchedulerEditSlotProps {
   defaultTitle: string;
+  model:
+    | {
+        [name: string]: any;
+      }
+    | undefined;
   render?: (
     slot: Record<string, any> | undefined,
     closeModalCallback: () => void
-  ) => JSX.Element;
+  ) => { component: JSX.Element; title: string };
 }
 
 const EditSlot: React.FC<EditItemProps> = (props) => {
@@ -27,16 +32,24 @@ const EditSlot: React.FC<EditItemProps> = (props) => {
   return (
     <SchedulerEditSlot
       {...props}
-      onDoubleClick={handleOpenCloseModal}
-      form={(formConfig) => (
-        <CustomContent
-          defaultTitle={props.defaultTitle}
-          show={show}
-          handleOpenCloseModal={handleOpenCloseModal}
-          dataItem={formConfig.dataItem}
-          render={props.render}
-        />
-      )}
+      onClick={handleOpenCloseModal}
+      form={(formConfig) => {
+        const initialValues = props.model;
+        const newFormConfig = {
+          ...formConfig.dataItem,
+          ...initialValues,
+        };
+
+        return (
+          <CustomContent
+            defaultTitle={props.defaultTitle}
+            show={show}
+            handleOpenCloseModal={handleOpenCloseModal}
+            dataItem={newFormConfig}
+            render={props.render}
+          />
+        );
+      }}
     />
   );
 };

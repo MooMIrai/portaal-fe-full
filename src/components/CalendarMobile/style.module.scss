@@ -1,0 +1,33 @@
+.container {
+  height: 100vh !important;
+  :global(.k-calendar-view.k-vstack.k-calendar-monthview) {
+    box-shadow: none !important;
+    height: auto !important;
+  }
+
+  :global(.k-calendar-infinite.k-calendar-view::after) {
+    box-shadow: none !important;
+  }
+  .eventDot {
+    width: 6px;
+    height: 6px;
+    background-color: red;
+    border-radius: 50%;
+    margin-top: 2px;
+  }
+
+  .calendarDay {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* .container {
+  height: 640px !important;
+}
+
+.container .k-calendar-view.k-vstack.k-calendar-monthview {
+  height: auto !important;
+}
+ */

@@ -1,5 +1,10 @@
 import React from "react";
-import { Window, WindowProps } from "@progress/kendo-react-dialogs";
+import {
+  DialogActionsBar,
+  Window,
+  WindowProps,
+} from "@progress/kendo-react-dialogs";
+import { Button } from "@progress/kendo-react-buttons";
 
 interface CustomWindowProps extends WindowProps {
   show: boolean;
@@ -7,9 +12,10 @@ interface CustomWindowProps extends WindowProps {
   onClose: () => void;
   onSubmit?: () => void;
   children: React.ReactNode;
-  callToAction: string;
-  draggable?:boolean;
-  resizable?:boolean
+  callToAction?: string;
+  draggable?: boolean;
+  resizable?: boolean;
+  showModalFooter: boolean;
 }
 
 const CustomWindow = ({
@@ -24,8 +30,10 @@ const CustomWindow = ({
   minHeight,
   minWidth,
   initialHeight,
-  initialWidth
-
+  initialWidth,
+  showModalFooter,
+  onSubmit,
+  callToAction,
 }: CustomWindowProps) => {
   return show ? (
     <Window
@@ -45,6 +53,14 @@ const CustomWindow = ({
       resizable={resizable}
     >
       {children}
+      {showModalFooter && (
+        <DialogActionsBar>
+          <Button onClick={onClose}>Cancel</Button>
+          <Button themeColor={"primary"} onClick={onSubmit}>
+            {callToAction}
+          </Button>
+        </DialogActionsBar>
+      )}
     </Window>
   ) : null;
 };

@@ -7,10 +7,15 @@ import CustomContent from "../CustomContent/CustomContent";
 
 interface EditItemProps extends SchedulerEditItemProps {
   defaultTitle: string;
+  model:
+    | {
+        [name: string]: any;
+      }
+    | undefined;
   render?: (
     slot: Record<string, any> | undefined,
     closeModalCallback: () => void
-  ) => JSX.Element;
+  ) => { component: JSX.Element; title: string };
 }
 
 const EditItem = (props: EditItemProps) => {
@@ -23,16 +28,24 @@ const EditItem = (props: EditItemProps) => {
   return (
     <SchedulerEditItem
       {...props}
-      onDoubleClick={handleOpenCloseModal}
-      form={(formConfig) => (
-        <CustomContent
-          defaultTitle={props.defaultTitle}
-          show={show}
-          handleOpenCloseModal={handleOpenCloseModal}
-          dataItem={formConfig.dataItem}
-          render={props.render}
-        />
-      )}
+      onClick={handleOpenCloseModal}
+      form={(formConfig) => {
+        const initialValues = props.model;
+        const newFormConfig = {
+          ...formConfig.dataItem,
+          ...initialValues,
+        };
+
+        return (
+          <CustomContent
+            defaultTitle={props.defaultTitle}
+            show={show}
+            handleOpenCloseModal={handleOpenCloseModal}
+            dataItem={newFormConfig}
+            render={props.render}
+          />
+        );
+      }}
     />
   );
 };

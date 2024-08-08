@@ -1,7 +1,39 @@
 import React, { PropsWithChildren } from "react";
 import "@progress/kendo-theme-bootstrap/dist/all.css";
-import "./theme.css"
+import "./theme.css";
+import {
+  IntlProvider,
+  load,
+  loadMessages,
+  LocalizationProvider,
+} from "@progress/kendo-react-intl";
+
+import likelySubtags from "cldr-core/supplemental/likelySubtags.json";
+import currencyData from "cldr-core/supplemental/currencyData.json";
+import weekData from "cldr-core/supplemental/weekData.json";
+
+import itNumbers from "cldr-numbers-full/main/it/numbers.json";
+import itLocalCurrency from "cldr-numbers-full/main/it/currencies.json";
+import itCaGregorian from "cldr-dates-full/main/it/ca-gregorian.json";
+import itDateFields from "cldr-dates-full/main/it/dateFields.json";
+
+load(
+  likelySubtags,
+  currencyData,
+  weekData,
+  itNumbers,
+  itLocalCurrency,
+  itCaGregorian,
+  itDateFields
+);
+
+import esMessages from "./it-language.json";
+loadMessages(esMessages, "it-IT");
 
 export default function Theme(props: PropsWithChildren<any>) {
-  return props.children;
+  return (
+    <LocalizationProvider language="it-IT">
+      <IntlProvider locale="it">{props.children}</IntlProvider>
+    </LocalizationProvider>
+  );
 }

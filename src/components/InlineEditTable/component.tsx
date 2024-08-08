@@ -9,10 +9,10 @@ import { TableColumn } from "../../models/tableModel";
 import { Button } from "@progress/kendo-react-buttons";
 
 type InlineEditTableProps = {
-  getData: () => Promise<{ data: Array<Record<string, any>> }>;
+  getData: () => Promise<any> /* { data: Array<Record<string, any>> } */;
   columns: TableColumn[];
   list: Array<Record<string, any>>;
-  setList: React.Dispatch<any>;
+  setList: (res: any) => void;
   className?: string;
   resizable?: boolean;
   onItemChange: (event: GridItemChangeEvent) => void;
@@ -55,9 +55,7 @@ const CustomFooter = (props: CustomFooterProps) => {
 export default function InlineEditTable(props: InlineEditTableProps) {
   const refreshTable = async () => {
     const res = await props.getData();
-    props.setList(
-      res?.data.map((item) => Object.assign({ inEdit: true }, item))
-    );
+    props.setList(res);
   };
 
   useEffect(() => {

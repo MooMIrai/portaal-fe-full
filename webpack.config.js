@@ -15,6 +15,7 @@ const mfeConfig = {
     "./Form": "./src/components/DynamicForm/component",
     "./Table": "./src/components/GridTable/component",
     "./Calendar": "./src/components/Calendar/component",
+    "./CalendarMobile": "./src/components/CalendarMobile/component",
     "./InlineEditTable": "./src/components/InlineEditTable/component",
     "./Window": "./src/components/Window/component",
     "./Button": "./src/components/Button/component",
@@ -59,10 +60,17 @@ module.exports = (_, argv) => ({
         use: ["style-loader", "css-loader", "postcss-loader"],
       },
       {
+        test: /\.json$/,
+        type: "json",
+      },
+      {
         test: /\.(ts|tsx|js|jsx)$/,
         exclude: /node_modules/,
         use: {
           loader: "babel-loader",
+          options: {
+            presets: ["@babel/preset-react", "@babel/preset-env"],
+          },
         },
       },
     ],
