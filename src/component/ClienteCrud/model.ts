@@ -1,6 +1,6 @@
 export interface CustomerModel{
     id?:number,
-    code:string;
+    customer_code:string;
     name?:string;
     vatNumber?:string;
     website?:string;

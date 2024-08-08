@@ -4,7 +4,7 @@ import { CustomerBEModel, CustomerModel } from "../component/ClienteCrud/model";
 export function adaptToCustomerModel(customer: CustomerBEModel): CustomerModel {
     return {
       id:customer.id,
-      code: customer.customer_code, // Mappiamo 'customer_code' a 'code'
+      customer_code: customer.customer_code, // Mappiamo 'customer_code' a 'code'
        name: customer.name,
       vatNumber: customer.vatNumber || customer.taxCode, // Mappiamo 'taxCode' a 'vatNumber' se 'vatNumber' è assente
       website: customer.web_site,
@@ -21,7 +21,7 @@ export function adaptToCustomerModel(customer: CustomerBEModel): CustomerModel {
  export function convertToCustomerBE(customerModel: CustomerModel): CustomerBEModel {
     return {
       id:customerModel.id,
-      customer_code: customerModel.code, // Mappiamo 'code' a 'customer_code'
+      customer_code: customerModel.customer_code, // Mappiamo 'code' a 'customer_code'
       name: customerModel.name,
       phoneNumber: customerModel.phone,
       web_site: customerModel.website,

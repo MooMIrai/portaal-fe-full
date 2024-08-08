@@ -6,7 +6,7 @@ import { adaptToCustomerModel } from "../../adapters/clienteAdapters";
 import NotificationProviderActions from "common/providers/NotificationProvider";
 
 const columns = [
-    { key: "code", label: "Codice", type: "string", sortable: true, filter: "text" },
+    { key: "customer_code", label: "Codice", type: "string", sortable: true, filter: "text" },
     { key: "name", label: "Ragione sociale", type: "string", sortable: true, filter: "text" },
     { key: "email", label: "Email", type: "string", sortable: true, filter: "text" },
     { key: "website", label: "Sito web", type: "string", sortable: true, filter: "text" },
