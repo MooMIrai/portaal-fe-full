@@ -9,3 +9,4 @@ declare module "common/Calendar";
 declare module "common/InlineEditTable";
 declare module "common/Window";
 declare module "common/Button";
+declare module "common/providers/NotificationProvider"

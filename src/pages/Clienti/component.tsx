@@ -3,7 +3,7 @@ import GridTable from "common/Table";
 import { customerService } from "../../services/clienteService";
 import { ClienteCrud } from "../../component/ClienteCrud/component";
 import { adaptToCustomerModel } from "../../adapters/clienteAdapters";
-
+import NotificationProviderActions from "common/providers/NotificationProvider";
 
 const columns = [
     { key: "code", label: "Codice", type: "string", sortable: true, filter: "text" },
@@ -59,7 +59,8 @@ function Clienti(){
 
 
     const handleFormSubmit = (type: string, formData: any, refreshTable: any, id: any, closeModal:()=>void)=>{
-        let promise:Promise<any> = Promise.reject()
+        let promise:Promise<any> | undefined=undefined;
+        
         if (type === "create") {
           promise = customerService.createResource(formData);
         } else if (type === "edit") {
@@ -68,14 +69,14 @@ function Clienti(){
           promise = customerService.deleteResource(id);
         }
 
-        promise.then(()=>{
-          refreshTable();
-          closeModal();
-        }).catch((e)=>{
-          alert('errore ' + e.message)
-        })
-        
-      
+        if(promise){
+          promise.then(()=>{
+            NotificationProviderActions.openModal({icon:true,style:'success'},"Operazione avvenuta con successo");
+            refreshTable();
+            closeModal();
+          })
+        }
+
     }
 
     return <GridTable

@@ -3,9 +3,10 @@ import Form from "common/Form";
 import { CustomerModel } from "./model";
 import Tab from "common/Tab";
 import { getFormCustomerFields } from "./form";
+import { convertToCustomerBE } from "../../adapters/clienteAdapters";
+import Button from "common/Button";
 
 import styles from "./style.module.scss";
-import { convertToCustomerBE } from "../../adapters/clienteAdapters";
 
 type ClienteCrudProps = {
     row: CustomerModel;
@@ -56,17 +57,18 @@ export function ClienteCrud(props:PropsWithRef<ClienteCrudProps>){
     }
     if(props.type==='delete'){
       return (
-        <>
-          <div style={{ padding: "20px" }}>
+        
+          <div className={styles.formDelete}>
             <span>{"Sei sicuro di voler eliminare il record?"}</span>
-          </div>
-          <div className="k-form-buttons">
-            <button onClick={()=>props.closeModalCallback()}>Cancel</button>
-            <button onClick={handleSubmit}>
+          
+          <div >
+            <Button onClick={()=>props.closeModalCallback()}>Cancel</Button>
+            <Button themeColor={"error"} onClick={handleSubmit}>
               Elimina
-            </button>
+            </Button>
           </div>
-        </>
+          </div>
+        
       )
     }
 
