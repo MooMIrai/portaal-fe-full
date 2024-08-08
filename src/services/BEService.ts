@@ -3,7 +3,8 @@ import axios from 'axios';
 import AuthService from './AuthService';
 
 const client = axios.create({
-    baseURL:'https://localhost:3001'
+    //baseURL:'http://localhost:3001'
+    baseURL:'https://portaaldev.azurewebsites.net'
 });
 
 client.interceptors.request.use((config)=>{

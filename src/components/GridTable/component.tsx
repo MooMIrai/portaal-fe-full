@@ -20,7 +20,7 @@ import {
 import { Input } from "@progress/kendo-react-inputs";
 import { DropDownList } from "@progress/kendo-react-dropdowns";
 import styles from "./styles.module.scss";
-import { plusIcon } from "@progress/kendo-svg-icons";
+import { plusIcon,pencilIcon,trashIcon,eyeIcon } from "@progress/kendo-svg-icons";
 import { TableColumn, TABLE_ACTION_TYPE } from "../../models/tableModel";
 import CustomWindow from "../Window/component";
 
@@ -299,29 +299,35 @@ export default function GenericGrid(props: TablePaginatedProps) {
                     {props.actions &&
                       props.actions.includes(TABLE_ACTION_TYPE.show) && (
                         <Button
-                          themeColor={"primary"}
+                          svgIcon={eyeIcon}
+                          fillMode={"link"}
+                          themeColor={"info"}
                           onClick={() =>
                             openModal(TABLE_ACTION_TYPE.show, cellGrid.dataItem)
                           }
                         >
-                          <span className="k-icon k-font-icon k-i-preview"></span>
+                          
                         </Button>
                       )}
                     {props.actions &&
                       props.actions.includes(TABLE_ACTION_TYPE.edit) && (
                         <Button
-                          themeColor={"primary"}
+                          svgIcon={pencilIcon}
+                          fillMode={"link"}
+                          themeColor={"warning"}
                           onClick={() =>
                             openModal(TABLE_ACTION_TYPE.edit, cellGrid.dataItem)
                           }
                         >
-                          <span className="k-icon k-font-icon k-i-edit" />
+                          
                         </Button>
                       )}
                     {props.actions &&
                       props.actions.includes(TABLE_ACTION_TYPE.delete) && (
                         <Button
-                          themeColor={"primary"}
+                          svgIcon={trashIcon}
+                          fillMode={"link"}
+                          themeColor={"error"}
                           onClick={() =>
                             openModal(
                               TABLE_ACTION_TYPE.delete,
@@ -329,7 +335,6 @@ export default function GenericGrid(props: TablePaginatedProps) {
                             )
                           }
                         >
-                          <span className="k-icon k-font-icon k-i-delete"></span>
                         </Button>
                       )}
                   </div>
