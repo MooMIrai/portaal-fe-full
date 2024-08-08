@@ -28,12 +28,18 @@ load(
 );
 
 import esMessages from "./it-language.json";
+import { NotificationProvider } from "../Notification/provider";
+
 loadMessages(esMessages, "it-IT");
 
 export default function Theme(props: PropsWithChildren<any>) {
   return (
     <LocalizationProvider language="it-IT">
-      <IntlProvider locale="it">{props.children}</IntlProvider>
+      <IntlProvider locale="it">
+        <NotificationProvider>
+          {props.children}
+        </NotificationProvider>
+        </IntlProvider>
     </LocalizationProvider>
   );
 }

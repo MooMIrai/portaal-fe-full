@@ -1,6 +1,7 @@
 
 import axios from 'axios';
 import AuthService from './AuthService';
+import NotificationProviderActions from '../components/Notification/provider';
 
 const client = axios.create({
     //baseURL:'http://localhost:3001'
@@ -13,11 +14,18 @@ client.interceptors.request.use((config)=>{
     return config;
 });
 client.interceptors.response.use((response)=>{
-    if(response.status===401){
+
+    return response;
+},(error)=>{
+    if(error.response.status===401){
         window.dispatchEvent(new CustomEvent("LOGOUT"));
         window.location.href='/';
+    } else if (error.response.status === 409){
+        
+        NotificationProviderActions.openModal({icon:true,style:'error'},error.response.data.message);
+        throw new Error(error.response.data.message);
     }
-    return response;
+    return error;
 })
 
 export default client;
