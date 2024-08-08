@@ -10,6 +10,7 @@ const mfeConfig = {
     common: "common@http://localhost:3003/remoteEntry.js",
     auth: "auth@http://localhost:3006/remoteEntry.js",
     lookups: "lookups@http://localhost:3005/remoteEntry.js",
+    hr: "hr@http://localhost:3008/remoteEntry.js",
   },
   shared: {
     ...deps,
