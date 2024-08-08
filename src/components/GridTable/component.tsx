@@ -258,12 +258,14 @@ export default function GenericGrid(props: TablePaginatedProps) {
               value={props.typological?.type}
             />
           )}
-
+{
+  props.inputSearchConfig && (
           <Input
             placeholder="Cerca"
             value={props.inputSearchConfig?.inputSearch}
             onChange={props.inputSearchConfig?.handleInputSearch}
           />
+)}
 
           {hasActionCreate() && (
             <div>
