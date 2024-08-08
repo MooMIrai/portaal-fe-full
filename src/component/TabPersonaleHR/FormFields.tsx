@@ -33,12 +33,13 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
 
     const optionalCellulareValidator = (value: any) => {
         if (!value) return true;
-        return /^(\+39\s?[0-9]{10}|\+39[0-9]{10}|[0-9]{10})$/.test(value);
+        return /^(\+?\d{1,4}\s?\d{7,15}|00\d{1,4}\s?\d{7,15})$/.test(value);
+
     };
 
     const optionalTelefonoCasaValidator = (value: any) => {
         if (!value) return true;
-        return /^(06[0-9]{8,9}|\+06\s?[0-9]{8,9}|\+06[0-9]{8,9})$/.test(value);
+        return /^(0\d{1,4}\d{5,9}|\+39\s?0\d{1,4}\d{5,9})$/.test(value);
     };
     const fields = {
         sede: {
