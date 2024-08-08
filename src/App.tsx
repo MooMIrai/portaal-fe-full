@@ -48,11 +48,14 @@ export const App = () => {
 
   }, [token])
 
-
- /*  if(!token){
-    return <AuthRoutes></AuthRoutes>
+   if(!token && location.pathname!='/login'){
+    
+    location.href='/login';
   }
- */
+  if(!token){
+    return <AuthRoutes />
+  }
+ 
   return (
     <>
       
