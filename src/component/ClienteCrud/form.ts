@@ -6,17 +6,6 @@ export const getFormCustomerFields = (formData: CustomerModel, type:string) => {
     
     const partitaIVAValidator = (value: any) => /^\d{11}$/.test(value) ? "" : "Il campo deve contenere una partita IVA valida (11 cifre)";
 
-
-    const optionalCapValidator = (value: any) => {
-        if (!value) return true;
-        return /^[0-9]{5}$/.test(value);
-    };
-
-    const optionalCellulareValidator = (value: any) => {
-        if (!value) return true;
-        return /^(\+?\d{1,4}\s?\d{7,15}|00\d{1,4}\s?\d{7,15})$/.test(value);
-    };
-
     const optionalTelefonoCasaValidator = (value: any) => {
         if (!value) return true;
         return /^(0\d{1,4}\d{5,9}|\+39\s?0\d{1,4}\d{5,9})$/.test(value);
@@ -29,11 +18,11 @@ export const getFormCustomerFields = (formData: CustomerModel, type:string) => {
     }
 
     const fields = {
-        code: {
-            name: "code",
+        customer_code: {
+            name: "customer_code",
             label: "Codice cliente",
             type: "text",
-            value: formData.code || "",
+            value: formData.customer_code || "",
             required: true,
             disabled:type === "view",
             validator: (value: any) => value ? "" : "Il campo sede è obbligatorio",

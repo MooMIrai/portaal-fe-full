@@ -16,15 +16,11 @@ const columns = [
   
 
 function Clienti(){
-    const [termValue, setTermValue] = useState<string>("");
+    
     const [filter, setFilter] = useState();
     const [sorting, setSorting] = useState([]);
-    const [pagination, setPagination] = useState({ currentPage: 1, pageSize: 10 });
+    const [pagination] = useState({ currentPage: 1, pageSize: 10 });
 
-    const handleInputSearch = (e: any) => {
-        const value = e.target.value || "";
-        setTermValue(value);
-    };
 
     const loadData = async (
         pagination: any,
@@ -54,8 +50,8 @@ function Clienti(){
       };
 
     useEffect(() => {
-        loadData(pagination, filter, sorting, termValue)
-    }, [pagination, filter, sorting, termValue]);
+        loadData(pagination, filter, sorting)
+    }, [pagination, filter, sorting]);
 
 
     const handleFormSubmit = (type: string, formData: any, refreshTable: any, id: any, closeModal:()=>void)=>{
@@ -80,11 +76,11 @@ function Clienti(){
     }
 
     return <GridTable
-    inputSearchConfig={{
+   /*  inputSearchConfig={{
       inputSearch: termValue,
       handleInputSearch: handleInputSearch,
       debouncedSearchTerm: termValue,
-    }}
+    }} */
     filter={filter}
     setFilter={setFilter}
     filterable={true}
