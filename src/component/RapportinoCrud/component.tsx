@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import InlineEditTable from "common/InlineEditTable";
+import { TimesheetsService } from "../../services/rapportinoService";
 
 interface RapportinoCrudProps {
+  activitiesHours: any;
   item: any;
   onClose: () => void;
 }
@@ -9,48 +11,67 @@ interface RapportinoCrudProps {
 const RapportinoCrud = (props: RapportinoCrudProps) => {
   const [list, setList] = useState<any>();
 
-  const mockLoadData = () => {
-    return new Promise<{
-      data: Record<string, any>[];
-    }>((resolve) => {
-      const mockData = [
-        { id: 1, commesse: "Item 1", ore: 0, date: new Date() },
-        { id: 2, commesse: "Item 2", ore: 4, date: new Date() },
-        { id: 3, commesse: "Item 3", ore: 0, date: new Date() },
-      ];
-      resolve({ data: mockData });
-    });
+  const mockLoadData = (date: Date, timesheetId: number) => {
+    return TimesheetsService.getActivitiesByDate(date, timesheetId);
   };
 
   const loadData = async () => {
     try {
-      const resources = await mockLoadData();
+      const resources = await mockLoadData(
+        props.item.start,
+        props.item.timeSheetsId
+      );
       return resources;
     } catch (error) {
       console.error("Error loading data:", error);
-      return { data: [], meta: { total: 0 } };
+      return [];
     }
   };
 
   const itemChange = (event) => {
     let newData = list?.map((item: any) => {
-      if (item.id === event.dataItem.id) {
+      if (item.activityId === event.dataItem.activityId) {
         item[event.field || ""] = event.value;
       }
       return item;
     });
+
     setList(newData);
   };
+
+  console.log("list: ", list);
 
   return (
     <InlineEditTable
       getData={loadData}
       list={list}
-      setList={setList}
+      setList={(res) => {
+        console.log("res: ", res);
+        setList(
+          res?.map((item: any) => {
+            let hour = 0;
+
+            const foundElementInserted = props.activitiesHours.find(
+              (el) => el.id === item.id
+            );
+
+            if (foundElementInserted) {
+              hour = foundElementInserted.hours;
+            }
+
+            return {
+              hours: hour,
+              activityId: item.id,
+              code: item.code,
+              inEdit: true,
+            };
+          })
+        );
+      }}
       onItemChange={itemChange}
       columns={[
         {
-          key: "commesse",
+          key: "code",
           label: "Commesse",
           editable: false,
           type: "string",
@@ -58,7 +79,7 @@ const RapportinoCrud = (props: RapportinoCrudProps) => {
           editor: "text",
         },
         {
-          key: "ore",
+          key: "hours",
           label: "Ore",
           editable: true,
           type: "string",

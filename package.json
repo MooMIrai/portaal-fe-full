@@ -41,6 +41,8 @@
     "@progress/kendo-react-indicators": "^8.1.1",
     "@progress/kendo-react-layout": "^8.1.1",
     "@progress/kendo-react-common": "^8.1.1",
+    "@progress/kendo-react-scheduler": "^8.1.1",
+    "@uidotdev/usehooks": "^2.4.1",
     "axios": "^1.7.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

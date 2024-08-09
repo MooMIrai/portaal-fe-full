@@ -1,5 +1,5 @@
-import React, { Suspense } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import React from "react";
+import { Route, Routes } from "react-router-dom";
 import PersonaleSection from "./pages/Personale/component";
 import Rapportino from "./pages/Rapportino/component";
 import Clienti from "./pages/Clienti/component";
