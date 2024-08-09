@@ -7,7 +7,7 @@ import {
   FieldWrapper,
   Field,
 } from "@progress/kendo-react-form";
-import {
+import AutocompleteInput, {
   TextInput,
   EmailInput,
   PasswordInput,
@@ -38,6 +38,8 @@ const getFieldComponent = (type: FieldType) => {
       return RadioGroupInput;
     case "checkbox":
       return CheckboxInput;
+      case "autocomplete":
+        return AutocompleteInput;
     default:
       return TextInput;
   }
@@ -63,7 +65,8 @@ export type FieldType =
   | "password"
   | "checkbox"
   | "radio"
-  | "select";
+  | "select"
+  |"autocomplete";
 
 export interface FieldConfig {
   name: string;

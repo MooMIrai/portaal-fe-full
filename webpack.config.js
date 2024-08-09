@@ -20,10 +20,9 @@ const mfeConfig = {
     "./Window": "./src/components/Window/component",
     "./Button": "./src/components/Button/component",
     "./CustomListView": "./src/components/CustomListView/component",
-    
     "./services/AuthService": "./src/services/AuthService",
     "./services/BEService": "./src/services/BEService",
-
+     "./AutoComplete":"./src/components/AutoComplete/component",
     "./providers/NotificationProvider" : "./src/components/Notification/provider"
   },
   shared: {

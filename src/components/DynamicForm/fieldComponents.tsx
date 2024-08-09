@@ -1,4 +1,4 @@
-import { DropDownList } from "@progress/kendo-react-dropdowns";
+import { AutoComplete, AutoCompleteProps, DropDownList } from "@progress/kendo-react-dropdowns";
 import { FieldRenderProps } from "@progress/kendo-react-form";
 import {
   Input,
@@ -53,6 +53,32 @@ const DateInput = (
     </div>
   );
 };
+
+type AutocompleteInputProps = {
+  label?: string;
+  placeHolder?: string;
+  style?: React.CSSProperties;
+} & AutoCompleteProps; 
+
+const AutocompleteInput: React.FC<AutocompleteInputProps> = (props) => {
+  const { label, placeHolder, style, data, value, onChange, ...autoCompleteProps } = props;
+
+  return (
+      <div>
+          {label && <div>{label}</div>}
+          <AutoComplete
+              data={data}
+              value={value}
+              onChange={onChange}
+              placeholder={placeHolder}
+              style={style}
+              {...autoCompleteProps} 
+          />
+      </div>
+  );
+};
+
+export default AutocompleteInput;
 
 const EmailInput = (
   fieldRenderProps: FieldRenderProps & { disabled?: boolean }
@@ -197,4 +223,5 @@ export {
   SelectInput,
   RadioGroupInput,
   CheckboxInput,
+  AutocompleteInput
 };
