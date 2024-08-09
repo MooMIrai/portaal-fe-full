@@ -75,5 +75,8 @@
     "scheduler.editorValidationStart": "L'orario di inizio deve essere prima dell'orario di fine.",
     "scheduler.editorValidationEnd": "L'orario di fine deve essere dopo l'orario di inizio.",
     "scheduler.noEvents": "nessun evento",
-    "scheduler.moreEvents": "Più eventi"
+    "scheduler.moreEvents": "Più eventi",
+    "calendar": {
+        "today": "Oggi"
+    }
 }
