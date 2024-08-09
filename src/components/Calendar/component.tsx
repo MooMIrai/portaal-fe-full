@@ -10,7 +10,7 @@ import EditItem from "./EditItem/component";
 import CustomViewSlot from "./SlotViewItem/component";
 import EditSlot from "./SlotEditItem/component";
 import CustomHeader from "./CustomHeader/component";
-import '@progress/kendo-date-math/tz/Europe/Rome';
+import "@progress/kendo-date-math/tz/Europe/Rome";
 interface CustomCalendarProps {
   defaultModalTitle: string;
   model:
@@ -39,6 +39,7 @@ interface CustomCalendarProps {
 export default function CustomCalendar(props: Readonly<CustomCalendarProps>) {
   return (
     <Scheduler
+      height={"100%"}
       date={props.date}
       data={props.data}
       defaultView={props.defaultView}
@@ -75,7 +76,7 @@ export default function CustomCalendar(props: Readonly<CustomCalendarProps>) {
         edit: true,
       }}
     >
-      <WeekView />
+      {/* <WeekView /> */}
       <MonthView />
     </Scheduler>
   );

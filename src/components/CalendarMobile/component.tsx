@@ -57,7 +57,7 @@ export default function CalendarMobile(props: CalendarMobileProps) {
         cell={renderCell}
         {...props}
       />
-      <div>{props?.content?.({ day: 2 }, closeModal).component}</div>
+      {props?.content?.({ day: 2 }, closeModal).component}
     </div>
   );
 }
