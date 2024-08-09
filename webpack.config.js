@@ -19,6 +19,7 @@ const mfeConfig = {
     "./InlineEditTable": "./src/components/InlineEditTable/component",
     "./Window": "./src/components/Window/component",
     "./Button": "./src/components/Button/component",
+    "./CustomListView": "./src/components/CustomListView/component",
     
     "./services/AuthService": "./src/services/AuthService",
     "./services/BEService": "./src/services/BEService",
