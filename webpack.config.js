@@ -12,8 +12,7 @@ const mfeConfig = {
   },
   exposes: {
     "./Index": "./src/MfeInit",
-    "./Routes": "./src/App",
-    "./Personale":"./src/pages/Personale/component",
+    "./Routes": "./src/App"
   },
   shared: {
     ...deps,
