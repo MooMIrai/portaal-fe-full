@@ -10,4 +10,6 @@ declare module "common/InlineEditTable";
 declare module "common/Window";
 declare module "common/Button";
 declare module "common/CustomListView";
+declare module "common/ListBox"
+declare module "common/AutoComplete"
 declare module "common/providers/NotificationProvider"

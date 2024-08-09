@@ -41,3 +41,66 @@
    padding: 0.5rem !important;
    border-radius: 4px !important;
 } */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.storicoItem {
+  background-color: #E1F5FE;
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.storicoItem h4 {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.col {
+  flex-basis: 48%;
+  margin-bottom: 10px;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 20px;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+}
+
+
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.confirmButton {
+  background-color: #2a4b7c !important;
+  color: white !important;
+  margin-left: 5px !important;
+  padding-left:1rem !important;
+  padding-right:1rem !important;
+  transition: background-color 0.3s ease !important;
+
+  &:hover {
+    background-color: darken(#2a4b7c, 10%) !important;
+  }
+}
+
+.cancelButton {
+  background-color: #f44336 !important;
+  color: white !important;
+  transition: background-color 0.3s ease !important;
+
+  &:hover {
+    background-color: darken(#f44336, 10%) !important;
+  }
+}

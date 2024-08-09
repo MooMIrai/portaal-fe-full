@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import Tab from "common/Tab";
+import { TabStripSelectEventArguments } from "@progress/kendo-react-layout";
 import Form from "common/Form";
+import Window from "common/Window";
 import styles from "./style.module.scss";
+import AutoComplete from "common/AutoComplete"
 import {
   getFormAnagraficaFields,
   getFormTrattamentoEconomicoFields,
@@ -9,9 +12,9 @@ import {
   getFormPermessiFields,
 } from "./FormFields";
 import { AnagraficaData, TrattamentoEconomicoData, RuoliData, PermessiData } from "./modelForms";
-import { ActivityTypeOption, cityAdapter, cityTypeOption, companyAdapter, companyOption, contractTypeAdapter, contractTypeOption, countryAdapter, countryOption, dataAdapter, genderAdapter, genderOption, permessiAdapter, reverseAdapter, roleAdapter, RoleOption, wokeScopeAdapter, WokeScopeOption } from "../../adapters/personaleAdapters";
+import { ActivityTypeOption, cityAdapter, cityTypeOption, companyAdapter, companyOption, contractTypeAdapter, contractTypeOption, countryAdapter, countryOption, dataAdapter, genderAdapter, genderOption, locationOption, permessiAdapter, reverseAdapter, roleAdapter, RoleOption, sedeAdapter, wokeScopeAdapter, WokeScopeOption } from "../../adapters/personaleAdapters";
 import { CrudGenericService } from "../../services/personaleServices";
-import Window from "common/Window";
+import Button from "common/Button";
 
 type PersonaleSectionProps = {
   row: Record<string, any>;
@@ -20,21 +23,21 @@ type PersonaleSectionProps = {
   refreshTable: () => void;
   onSubmit: (type: any, formData: any, refreshTable: () => void, id: any) => void;
 };
-
-//Capire perché il form principale non funziona capito uesto penso che si risolve tutto
+// migliorare l'aspetto dello storico e poi capire come rendere più fluido la transiciton quando clicco su si 
 const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeModalCallback, refreshTable, onSubmit }) => {
   const isCreate = type === "create";
+  const [newForm, setNewForm] = useState<boolean>(false);
+  const [country, setCountry] = useState<countryOption[]>([]);
   const { anagrafica, trattamentoEconomico, ruoli, permessi } = isCreate ? {
     anagrafica: {},
-    trattamentoEconomico: [],
+    trattamentoEconomico: {},
     ruoli: {},
     permessi: {},
   } : dataAdapter(row);
-
   const [selected, setSelected] = useState(0);
   const [formAnagraficaData, setFormAnagraficaData] = useState<AnagraficaData>(anagrafica);
-  const [formTrattamentoEconomicoData, setFormTrattamentoEconomicoData] = useState<TrattamentoEconomicoData[]>(trattamentoEconomico);
-  const [formTrattamentoEconomicoDataSingle,setFormTrattamentoEconomicoDataSingle]=useState<TrattamentoEconomicoData>({});
+  const [formTrattamentoEconomicoData, setFormTrattamentoEconomicoData] = useState<TrattamentoEconomicoData>(!newForm ? trattamentoEconomico : {});
+  const [storicoTrattamentoData, setStoricoTrattamentoData] = useState<any>(row.trattamentoEconomicoArray);
   const [formRuoliData, setFormRuoliData] = useState<RuoliData>(ruoli);
   const [formPermessiData, setFormPermessiData] = useState<PermessiData>(permessi);
   const [roles, setRoles] = useState<RoleOption[]>([]);
@@ -43,27 +46,17 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
   const [gender, setGender] = useState<genderOption[]>([]);
   const [contractType, setContractType] = useState<contractTypeOption[]>([]);
   const [activity, setActivity] = useState<ActivityTypeOption[]>([]);
-  const [city, setCity] = useState<cityTypeOption[]>([]);
-  const [country, setCountry] = useState<countryOption[]>([]);
-
   const formAnagrafica = useRef<HTMLFormElement>(null);
-  const formLatestTrattamento = useRef<HTMLFormElement>(null); // Riferimento del form più recente come oggetto
-  const formOtherTrattamenti = useRef<(HTMLFormElement | null)[]>([]); //riferimento a quelli storici
-  const formNewTrattamento = useRef<HTMLFormElement>(null); // Riferimento del nuovo form
+  const formTrattamentoEconomico = useRef<HTMLFormElement>(null);
   const formRuoli = useRef<HTMLFormElement>(null);
   const formPermessi = useRef<HTMLFormElement>(null);
-
-  const [expanded, setExpanded] = useState<string | null>(null);
+  const [city, setCity] = useState<cityTypeOption[]>([]);
+  const [sede,setSede]=useState<locationOption[]>([])
+  
   const [showNewContractModal, setShowNewContractModal] = useState(false);
   const [confirmNewContractStep, setConfirmNewContractStep] = useState(false);
-  const [newContractData, setNewContractData] = useState<TrattamentoEconomicoData | null>(null);
-  const [newFormContract, setNewFormContract] = useState<boolean>(false);
-  const [latestContractState, setLatestContractState] = useState<TrattamentoEconomicoData>({});
-  const [idLatest,setIdLatest]=useState<any| null>(null)
-
-  console.log("row", row);
-
-  const handleSelect = (e: any) => {
+  console.log("row", row.anagrafica)
+  const handleSelect = (e: TabStripSelectEventArguments) => {
     setSelected(e.selected);
   };
 
@@ -79,30 +72,16 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
           hasError = true;
         }
       }
-/* 
-      if (formLatestTrattamento.current) {
-        formLatestTrattamento.current.onSubmit();
-        if (formLatestTrattamento.current.isValid()) {
-          setFormTrattamentoEconomicoData((prevState) =>
-            prevState.map((contract) => (contract.id === idLatest ? { ...contract, ...formLatestTrattamento?.current.values } : contract))
-          );
+
+      if (formTrattamentoEconomico.current) {
+        formTrattamentoEconomico.current.onSubmit();
+        if (formTrattamentoEconomico.current.isValid()) {
+          setFormTrattamentoEconomicoData(formTrattamentoEconomico.current.values);
         } else {
           hasError = true;
         }
       }
- */
-      formOtherTrattamenti.current.forEach((form, index) => {
-        if (form) {
-          form.onSubmit();
-          if (form.isValid()) {
-            setFormTrattamentoEconomicoData((prevState) =>
-              prevState.map((contract, i) => (i === index ? { ...contract, ...form.values } : contract))
-            );
-          } else {
-            hasError = true;
-          }
-        }
-      });
+
       if (formRuoli.current) {
         formRuoli.current.onSubmit();
         if (formRuoli.current.isValid()) {
@@ -135,7 +114,8 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
       ruoli: formRuoliData,
       permessi: formPermessiData,
       city: city,
-      country: country
+      country: country,
+      sede:sede,
     };
 
     console.log("Combined Data:", combinedData);
@@ -154,17 +134,12 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
     if (formAnagrafica.current) {
       setFormAnagraficaData(formAnagrafica.current.values);
     }
-
-    if (formLatestTrattamento.current && idLatest !== null) {
-      const form = formLatestTrattamento.current;
-      const contract = formTrattamentoEconomicoData.find(contract => contract.id === idLatest);
-      if (contract) {
-        const updatedContract = { ...contract, ...form.values };
-        setFormTrattamentoEconomicoData((prevState) =>
-          prevState.map(c => c.id === idLatest ? updatedContract : c)
-        );
-        setLatestContractState(updatedContract);
-        console.log("Latest Contract State:", updatedContract);
+    if (formTrattamentoEconomico.current) {
+      if (!newForm) {
+        setFormTrattamentoEconomicoData(formTrattamentoEconomico.current.values);
+      } else {
+        formTrattamentoEconomico.current.values = {}
+        setFormTrattamentoEconomicoData(formTrattamentoEconomico.current.values)
       }
     }
     if (formRuoli.current) {
@@ -173,7 +148,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
     if (formPermessi.current) {
       setFormPermessiData(formPermessi.current.values);
     }
-  }, [selected]);
+  }, [selected, newForm]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -209,7 +184,11 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
         const countryResponse = await CrudGenericService.fetchResources("country");
         const adaptedCountry = countryAdapter(countryResponse);
         setCountry(adaptedCountry);
-        console.log(countryResponse);
+       
+        const sedeResponse = await CrudGenericService.fetchResources("location");
+        const adaptedLocation = sedeAdapter(sedeResponse)
+        setSede(adaptedLocation)
+
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -218,58 +197,67 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (newForm) {
+      setStoricoTrattamentoData([...storicoTrattamentoData, formTrattamentoEconomicoData]);
+      setNewForm(false);
+    }
+  }, [newForm]);
+
+  const renderStoricoTrattamento = () => {
+    return (
+      <div>
+        <h3>Storico Trattamenti Economici</h3>
+        <div className={styles.container}>
+          {storicoTrattamentoData.length > 0 ? (
+            storicoTrattamentoData.map((storico: TrattamentoEconomicoData, index: number) => (
+              <div key={index} className={styles.storicoItem}>
+                <h4>Trattamento Economico {index + 1}</h4>
+                <div className={styles.col}><strong>Tipologia Contratto:</strong> {storico.tipologiaContratto}</div>
+                <div className={styles.col}><strong>Società:</strong> {storico.societa}</div>
+                <div className={styles.col}><strong>Tipo Ambito Lavorativo:</strong> {storico.tipoAmbitoLavorativo}</div>
+                <div className={styles.col}><strong>Data Inizio Trattamento:</strong> {storico.dataInizioTrattamento ? new Date(storico.dataInizioTrattamento).toLocaleDateString() : 'N/A'}</div>
+                <div className={styles.col}><strong>Costo Giornaliero:</strong> {storico.costoGiornaliero}</div>
+                <div className={styles.col}><strong>Data Assunzione:</strong> {storico.dataAssunzione ? new Date(storico.dataAssunzione).toLocaleDateString() : 'N/A'}</div>
+                <div className={styles.col}><strong>Scadenza Effettiva:</strong> {storico.scadenzaEffettiva ? new Date(storico.scadenzaEffettiva).toLocaleDateString() : 'N/A'}</div>
+                <div className={styles.col}><strong>Data Recesso:</strong> {storico.dataRecesso ? new Date(storico.dataRecesso).toLocaleDateString() : 'N/A'}</div>
+                <div className={styles.col}><strong>Motivazione Cessazione:</strong> {storico.motivazioneCessazione}</div>
+                <div className={styles.col}><strong>Trasformazioni:</strong> {storico.trasformazioni}</div>
+                <div className={styles.col}><strong>CCNL:</strong> {storico.ccnl}</div>
+                <div className={styles.col}><strong>RAL:</strong> {storico.ral}</div>
+                <div className={styles.col}><strong>Trasferta:</strong> {storico.trasferta}</div>
+                <div className={styles.col}><strong>Buoni Pasto:</strong> {storico.buoniPasto}</div>
+                <div className={styles.col}><strong>Netto Mese:</strong> {storico.nettoMese}</div>
+                <div className={styles.col}><strong>Costo Annuale:</strong> {storico.costoAnnuale}</div>
+                <div className={styles.col}><strong>Tariffa Vendita:</strong> {storico.tariffaVendita}</div>
+                <div className={styles.col}><strong>Note:</strong> {storico.note}</div>
+              </div>
+            ))
+          ) : (
+            <div className={styles.emptyState}>
+              <h5>Nessun Trattamento Economico Precedente</h5>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+
   const handleNewContract = () => {
     setShowNewContractModal(true);
     setConfirmNewContractStep(true);
   };
 
   const confirmNewContract = () => {
-    setConfirmNewContractStep(false);
-    setNewFormContract(true);
+    setNewForm(true);
+    setShowNewContractModal(false);
   };
 
   const closeNewContractModal = () => {
     setShowNewContractModal(false);
     setConfirmNewContractStep(false);
-    setNewFormContract(false);
-    setNewContractData(null);
   };
-
-  const handleFormSubmit = (data: TrattamentoEconomicoData) => {
-    setNewContractData(data);
-    saveNewContract(data);
-  };
-
-  const saveNewContract = (data: TrattamentoEconomicoData) => {
-    let hasError = false;
-    if (!hasError && data) {
-      setLatestContractState(data);
-      const updatedContracts = [...formTrattamentoEconomicoData, data];
-      const sortedContracts = updatedContracts.sort((a, b) => new Date(a.dataInizioTrattamento).getTime() - new Date(b.dataInizioTrattamento).getTime());
-      setFormTrattamentoEconomicoData(sortedContracts);
-      setNewContractData(null);
-      setNewFormContract(false);
-      closeNewContractModal();
-    }
-  };
-
-  useEffect(() => {
-    const latestContract = formTrattamentoEconomicoData.length > 0
-      ? formTrattamentoEconomicoData.reduce((latest, current) => {
-        return new Date(latest.dataInizioTrattamento) > new Date(current.dataInizioTrattamento) ? latest : current;
-      })
-      : {};
-      console.log("latest", latestContract);
-      setIdLatest(()=>latestContract.id)
-      console.log("idlatest",idLatest)
-      setLatestContractState(() => latestContract);
-      console.log("latestContractState", latestContract);
-  }, [formTrattamentoEconomicoData]);
-
-  const olderContracts = formTrattamentoEconomicoData.length > 0
-    ? formTrattamentoEconomicoData.filter(contract => contract !== latestContractState)
-      .sort((a, b) => new Date(a.dataInizioTrattamento).getTime() - new Date(b.dataInizioTrattamento).getTime())
-    : [];
 
   const tabs = [
     {
@@ -278,11 +266,20 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
         <div className={styles.parentForm}>
           <Form
             ref={formAnagrafica}
-            fields={Object.values(getFormAnagraficaFields(formAnagraficaData, gender, type, city, country))}
+            fields={Object.values(getFormAnagraficaFields(formAnagraficaData, gender, type, city, country,sede))}
             formData={formAnagraficaData}
             onSubmit={(data: AnagraficaData) => setFormAnagraficaData(data)}
             description="Ana"
           />
+           <AutoComplete
+               ref={formAnagrafica}
+                data={country.map((c) => c.label)}
+                value={formAnagraficaData.stato || ""}
+                placeholder={"Stato"}
+                style={{ width: "200px" }}
+                onChange={(e) => setFormAnagraficaData({ ...formAnagraficaData, stato: e.value })}
+               />
+          
         </div>
       ),
     },
@@ -291,26 +288,20 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
       children: (
         <div className={styles.parentForm}>
           <Form
-            ref={formLatestTrattamento}
-            fields={Object.values(getFormTrattamentoEconomicoFields(latestContractState, wokeScope, contractType, company, type))}
-            formData={latestContractState}
-            onSubmit={(data: TrattamentoEconomicoData) => setFormTrattamentoEconomicoData([data])}
+            ref={formTrattamentoEconomico}
+            fields={Object.values(getFormTrattamentoEconomicoFields(formTrattamentoEconomicoData, wokeScope, contractType, company, type))}
+            formData={formTrattamentoEconomicoData}
+            onSubmit={(data: TrattamentoEconomicoData) => setFormTrattamentoEconomicoData(data)}
             description="TE"
           />
-          {olderContracts.map((contract, index) => (
-            <div key={`contract-${index}`}>
-              <h3>Previous Contract {index + 1}</h3>
-              <Form
-                ref={el => { formOtherTrattamenti.current[index] = el; }}
-                fields={Object.values(getFormTrattamentoEconomicoFields(contract, wokeScope, contractType, company, type))}
-                formData={contract}
-                description={`Previous Contract ${index + 1}`}
-                disabled
-              />
-            </div>
-          ))}
-             {type === "edit" && (
-            <button onClick={handleNewContract}>Nuovo Trattamento</button>
+            
+          {type === "edit" && (
+            <>
+              <Button onClick={handleNewContract}>Nuovo Trattamento</Button>
+              <div className={styles.listBoxContainer}>
+                {renderStoricoTrattamento()}
+              </div>
+            </>
           )}
         </div>
       ),
@@ -345,6 +336,8 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
     }
   ];
 
+  
+
   return (
     <div className={styles.parentTab}>
       <Tab
@@ -361,31 +354,27 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
           callToAction="Salva"
           draggable
           resizable
-          initialHeight={800}
-          initialWidth={900}
+          initialHeight={250}
+          initialWidth={600}
         >
           {confirmNewContractStep ? (
             <>
               <p>
                 Se procedi con la modifica il trattamento corrente verrà interrotto al giorno precedente alla nuova data di inizio trattamento. Per rendere effettiva la modifica premi il tasto salva. Vuoi procedere?
               </p>
-              <button onClick={confirmNewContract}>Si</button>
-              <button onClick={closeNewContractModal}>No</button>
+              <div className={styles.buttonContainer}>
+                <Button className={styles.cancelButton} onClick={closeNewContractModal}>
+                  No
+                </Button>
+                <Button className={styles.confirmButton} onClick={confirmNewContract}>
+                  Sì
+                </Button>
+              </div>
             </>
-          ) : (
-            <div className={styles.parentForm}>
-                <Form
-                ref={formNewTrattamento}
-                fields={Object.values(getFormTrattamentoEconomicoFields(newContractData, wokeScope, contractType, company, type, newFormContract))}
-                formData={newContractData}
-                onSubmit={handleFormSubmit}
-                description="TE"
-              />
-              <button onClick={() => formNewTrattamento.current?.onSubmit()}>Salva</button>
-            </div>
-          )}
+          ) : null}
         </Window>
       )}
+
     </div>
   );
 };

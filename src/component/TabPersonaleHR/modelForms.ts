@@ -14,6 +14,7 @@ export interface AnagraficaData {
     comuneResidenza?: string;
     indirizzoResidenza?: string;
     dataNascita?: any;
+    cittaNascita?:any;
     cap?: number;
     cellulare?: number;
     telefonoCasa?: number;
