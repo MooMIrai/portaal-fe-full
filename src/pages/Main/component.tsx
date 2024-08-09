@@ -72,9 +72,7 @@ const LookUps = () => {
 
   const loadModel = async (type: string) => {
     try {
-      const resources = await LookupsService.getGridModel(
-        type.toLowerCase()
-      );
+      const resources = await LookupsService.getGridModel(type.toLowerCase());
       if (!resources) {
         throw new Error("No resources found");
       }
@@ -141,11 +139,7 @@ const LookUps = () => {
     if (type === "create") {
       await LookupsService.createResource(selectedData, dataItem);
     } else if (type === "edit") {
-      await LookupsService.updateResource(
-        selectedData,
-        dataItem?.id,
-        dataItem
-      );
+      await LookupsService.updateResource(selectedData, dataItem?.id, dataItem);
     } else if (type === "delete") {
       await LookupsService.deleteResource(selectedData, dataItem);
     }
@@ -161,6 +155,7 @@ const LookUps = () => {
   return (
     <div>
       <GenericGrid
+        dropListLookup={true}
         inputSearchConfig={{
           inputSearch: termValue,
           debouncedSearchTerm: debouncedSearchTerm,
@@ -181,12 +176,7 @@ const LookUps = () => {
         getData={loadData}
         columns={columns}
         resizable={true}
-        actions={[
-          "create",
-          "delete",
-          "edit",
-          "show"        
-        ]}
+        actions={["create", "delete", "edit", "show"]}
         formCrud={(row, type, closeModalCallback, refreshTable) => {
           const crudCondition = type === "view";
           const handleFields = Object.values(fields).map((el: any) => {
