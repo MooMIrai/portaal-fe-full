@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import PersonaleSection from "./pages/Personale/component";
 import Rapportino from "./pages/Rapportino/component";
 import Clienti from "./pages/Clienti/component";
+import GestioneFeriePermessi from "./pages/GestioneFeriePermessi/component";
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
       ></Route>
       <Route path={"/rapportino"} element={<Rapportino />}></Route>
       <Route path={"/clienti"} element={<Clienti />}></Route>
+      <Route path={"/gestioneFeriePermessi"} element={<GestioneFeriePermessi />}></Route>
     </Routes>
   );
 };
