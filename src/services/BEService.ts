@@ -8,7 +8,11 @@ const client = axios.create({
 });
 
 client.interceptors.request.use((config)=>{
-    config.headers.Authorization='Bearer '+ AuthService.getToken();
+    try{
+        config.headers.Authorization='Bearer '+ AuthService.getToken();
+    }catch{
+
+    }
 
     return config;
 });
@@ -16,15 +20,16 @@ client.interceptors.response.use((response)=>{
 
     return response;
 },(error)=>{
-    if(error.response.status===401){
+    debugger;
+    if(error.reponse && error.response.status===401){
         window.dispatchEvent(new CustomEvent("LOGOUT"));
         window.location.href='/';
-    } else if (error.response.status === 409){
+    } else if (error.reponse && error.response.status === 409){
         
         NotificationProviderActions.openModal({icon:true,style:'error'},error.response.data.message);
-        throw new Error(error.response.data.message);
+       
     }
-    return error;
+    throw new Error(error);
 })
 
 export default client;

@@ -78,7 +78,7 @@ const AutocompleteInput: React.FC<AutocompleteInputProps> = (props) => {
   );
 };
 
-export default AutocompleteInput;
+
 
 const EmailInput = (
   fieldRenderProps: FieldRenderProps & { disabled?: boolean }

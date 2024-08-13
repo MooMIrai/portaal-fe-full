@@ -1,23 +1,19 @@
 import * as React from "react";
-import { AutoComplete, AutoCompleteProps } from "@progress/kendo-react-dropdowns";
+import { ComboBox, ComboBoxProps } from "@progress/kendo-react-dropdowns";
 
 type AutocompleteInputProps = {
     label?: string;
     style?: React.CSSProperties;
-} & AutoCompleteProps; 
+} & ComboBoxProps; 
 
 const AutocompleteInput: React.FC<AutocompleteInputProps> = (props) => {
-    const { label, style, data, value, onChange, ...autoCompleteProps } = props;
+    const { label } = props;
 
     return (
         <div>
             {label && <div>{label}</div>}
-            <AutoComplete
-                data={data}
-                value={value}
-                onChange={onChange}
-                style={style}
-                {...autoCompleteProps} 
+            <ComboBox
+                {...props} 
             />
         </div>
     );
