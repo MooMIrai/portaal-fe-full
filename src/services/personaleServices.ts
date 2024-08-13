@@ -118,6 +118,11 @@ class CrudGenericServiceC {
       throw error;
     }
   };
+  
+  searchCommerciale = (text:string) =>{
+    return client.get(`api/v1/accounts/findCOM?search=${text}`).then(res=>res.data); 
+  }
+
 }
 
 export const CrudGenericService = new CrudGenericServiceC();

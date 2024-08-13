@@ -1,27 +1,28 @@
-import React, { PropsWithRef, useRef, useState } from "react";
+import { PropsWithRef, useRef, useState } from "react";
+import { OfferModel } from "./model";
+import Button from 'common/Button';
 import Form from "common/Form";
-import { CustomerModel } from "./model";
 import Tab from "common/Tab";
-import { getFormCustomerFields } from "./form";
-import { convertToCustomerBE } from "../../adapters/clienteAdapters";
-import Button from "common/Button";
+import React from "react";
+
 
 import styles from "./style.module.scss";
 
-type ClienteCrudProps = {
-    row: CustomerModel;
+
+type OffertaCrudProps = {
+    row: OfferModel;
     type: string;
     closeModalCallback: () => void;
     refreshTable: () => void;
     onSubmit: (type: string, formData: any, refreshTable: () => void, id: any,closeModal:()=>void) => void;
   };
 
-export function ClienteCrud(props:PropsWithRef<ClienteCrudProps>){
+export function OffertaCrud(props:PropsWithRef<OffertaCrudProps>){
 
     const formCustomer = useRef<any>();
     const [selected, setSelected] = useState(0);
 
-    const [formCustomerData,setformCustomerData] = useState<CustomerModel>(props.row);
+    const [formCustomerData,setformCustomerData] = useState<OfferModel>(props.row);
 
     const handleSelect = (e: any) => {
         setSelected(e.selected);
@@ -42,19 +43,17 @@ export function ClienteCrud(props:PropsWithRef<ClienteCrudProps>){
   
     
         if (!hasError) {
-          const formattedData = convertToCustomerBE(formCustomer.current.values);
-          //console.log("formattedData", formattedData);
-          props.onSubmit(props.type, formattedData, props.refreshTable,  props.row.id,props.closeModalCallback);
-          //props.refreshTable();
-          //props.closeModalCallback();
+          //const formattedData = convertToCustomerBE(formCustomer.current.values);
+          //props.onSubmit(props.type, formattedData, props.refreshTable,  props.row.id,props.closeModalCallback);
         }
       }
+
       if(props.type==='delete'){
           props.onSubmit(props.type, {}, props.refreshTable,  props.row.id,props.closeModalCallback);
-          //props.refreshTable();
-          //props.closeModalCallback();
+
       }
     }
+    
     
     if(props.type==='delete'){
       return (
@@ -80,13 +79,13 @@ export function ClienteCrud(props:PropsWithRef<ClienteCrudProps>){
                         title: "Dati Cliente",
                         children: (
                           <div className={styles.parentForm} >
-                            <Form
+                            {/* <Form
                                 ref={formCustomer}
                                 fields={Object.values(getFormCustomerFields(formCustomerData,props.type))}
                                 formData={formCustomerData}
-                                onSubmit={(data: CustomerModel) => setformCustomerData(data)}
+                                onSubmit={(data: OfferModel) => setformCustomerData(data)}
                                
-                            />
+                            /> */}
                           </div>
                         ),
                       },
