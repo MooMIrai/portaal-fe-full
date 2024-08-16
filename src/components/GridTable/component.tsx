@@ -26,7 +26,7 @@ import {
   trashIcon,
   eyeIcon,
 } from "@progress/kendo-svg-icons";
-import { TableColumn, TABLE_ACTION_TYPE } from "../../models/tableModel";
+import { TableColumn, TABLE_ACTION_TYPE, TABLE_COLUMN_TYPE } from "../../models/tableModel";
 import CustomWindow from "../Window/component";
 
 type TablePaginatedProps = {
@@ -282,14 +282,27 @@ export default function GenericGrid(props: TablePaginatedProps) {
           )}
         </GridToolbar>
 
-        {props.columns.map((column, idx) => (
-          <GridColumn
+        {props.columns.map((column, idx) => 
+          {
+            let cell:React.ComponentType<GridCellProps> | undefined;
+            if(column.type===TABLE_COLUMN_TYPE.date){
+              cell=(cellGrid: GridCellProps) => {
+
+                const date = new Date(cellGrid.dataItem[column.key]);
+                const day = String(date.getDate()).padStart(2, '0'); // Ottieni il giorno e aggiungi lo 0 se necessario
+                const month = String(date.getMonth() + 1).padStart(2, '0'); // Ottieni il mese (i mesi partono da 0, quindi aggiungi 1)
+                const year = date.getFullYear(); // Ottieni l'anno
+                return <td><strong><i>{`${day}/${month}/${year}`}</i></strong></td>
+              };
+            }
+          return <GridColumn
             key={idx}
             field={column.key}
             title={column.label}
             filter={column.filter}
-          />
-        ))}
+            cell = {cell}
+          />}
+        )}
 
         {hasActionInColumn() && (
           <GridColumn
