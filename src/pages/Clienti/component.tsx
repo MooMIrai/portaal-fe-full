@@ -30,7 +30,7 @@ function Clienti(){
       ) => {
         const include= true;
        
-       const tableResponse= await customerService.getCustomers(
+       const tableResponse= await customerService.search(
           pagination.currentPage,
           pagination.pageSize,
           filter,
