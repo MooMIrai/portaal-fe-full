@@ -1,15 +1,15 @@
 import AutoComplete from 'common/AutoComplete';
 import React, { useCallback, useEffect, useState } from 'react';
-import { CrudGenericService } from '../../services/personaleServices';
 import { useDebounce } from '@uidotdev/usehooks';
+import { customerService } from '../../services/clienteService';
 
-export type CommercialeSelectorProps={
+export type ClienteSelectorProps={
     onChange:(value:any)=>void;
     value:any
 }
 
 
-export default function(props:CommercialeSelectorProps){
+export default function(props:ClienteSelectorProps){
 
     const [data, setData] = useState<Array<any>>([]);
     const [value, setValue] = useState<any>();
@@ -24,9 +24,11 @@ export default function(props:CommercialeSelectorProps){
     }
 
     const getData= (filterP:string)=>{
-        CrudGenericService.searchCommerciale(filterP).then((res)=>{
-            if(res){
-                setData(res)
+        customerService.search(1,20,
+            {"logic":"or","filters":[{"field":"name","operator":"contains","value":filterP}]
+        }).then((res)=>{
+            if(res ){
+                setData(res.data)
             }
         });
     }

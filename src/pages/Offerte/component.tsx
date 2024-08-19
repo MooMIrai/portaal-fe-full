@@ -4,10 +4,11 @@ import NotificationProviderActions from "common/providers/NotificationProvider";
 import GridTable from "common/Table";
 import { offertaService } from "../../services/offertaService";
 import { fromOfferBEModelToOfferModel } from "../../adapters/offertaAdapters";
+import { OffertaCrud } from "../../component/OffertaCrud/component";
 
 const columns = [
     { key: "customer_name", label: "Cliente", type: "string", sortable: true, filter: "text" },
-    { key: "accountManager_name", label: "Commerciale", type: "string", sortable: true, filter: "text" },
+    { key: "accountManager.name", label: "Commerciale", type: "string", sortable: true, filter: "text" },
     { key: "protocol", label: "Protocollo", type: "string", sortable: true, filter: "text" },
     { key: "title", label: "Titolo", type: "string", sortable: true, filter: "text" },
     { key: "description", label: "Descrizione", type: "string", sortable: true, filter: "text" },
@@ -109,13 +110,13 @@ export default function OffertePage(){
  
      formCrud={(row: any, type: string, closeModalCallback: any, refreshTable: any) => (
        <>
-         {/* <ClienteCrud
+          <OffertaCrud
                  row={row}
                  type={type}
                  closeModalCallback={closeModalCallback}
                  refreshTable={refreshTable}
                  onSubmit={handleFormSubmit}
-               /> */}
+               /> 
        </>
      )}
    />

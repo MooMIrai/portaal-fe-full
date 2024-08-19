@@ -7,6 +7,9 @@ import React from "react";
 
 
 import styles from "./style.module.scss";
+import { getFormOfferFields } from "./form";
+import { commercialeFormField } from "../CommercialeSelector/field";
+import { clienteFormField } from "../ClienteSelector/field";
 
 
 type OffertaCrudProps = {
@@ -76,16 +79,16 @@ export function OffertaCrud(props:PropsWithRef<OffertaCrudProps>){
             tabs={
                 [
                     {
-                        title: "Dati Cliente",
+                        title: "Dati Offerta",
                         children: (
                           <div className={styles.parentForm} >
-                            {/* <Form
+                             <Form
                                 ref={formCustomer}
-                                fields={Object.values(getFormCustomerFields(formCustomerData,props.type))}
+                                fields={Object.values(getFormOfferFields(formCustomerData,props.type))}
                                 formData={formCustomerData}
                                 onSubmit={(data: OfferModel) => setformCustomerData(data)}
-                               
-                            /> */}
+                                addedFields={{...commercialeFormField,...clienteFormField}}
+                            /> 
                           </div>
                         ),
                       },
