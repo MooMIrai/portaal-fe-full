@@ -5,6 +5,7 @@ import {
   ListViewFooter,
 } from "@progress/kendo-react-listview";
 import { PageChangeEvent, Pager, PagerProps } from "@progress/kendo-react-data-tools";
+import { Loader } from '@progress/kendo-react-indicators';
 import styles from "./style.module.scss";
 
 interface ListViewProps {
@@ -13,6 +14,7 @@ interface ListViewProps {
   header: ReactNode;
   footer: ReactNode;
   style: React.CSSProperties;
+  loading?: boolean;
   paginate?: PagerProps;
   containerClassName?: string;
 }
@@ -38,7 +40,6 @@ export default function CustomListView(props: ListViewProps) {
     return (
       <ListViewHeader
         style={{ color: "rgb(160, 160, 160)", fontSize: 14 }}
-        className="pl-3 pb-2 pt-2"
       >
         {props.header}
       </ListViewHeader>
@@ -50,13 +51,17 @@ export default function CustomListView(props: ListViewProps) {
 
     return <ListViewFooter
       style={{ color: "rgb(160, 160, 160)", fontSize: 14 }}
-      className="pl-3 pb-2 pt-2"
     >
       {props.footer}
     </ListViewFooter>
   }
 
   return <div className={styles.container + (props.containerClassName ? " " + props.containerClassName : "")}>
+    {
+      props.loading
+        ? <div className={styles.loaderContainer}><Loader size="large" /></div>
+        : null
+    }
     <ListView
       data={props.data}
       item={props.item}
