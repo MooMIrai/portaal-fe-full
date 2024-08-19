@@ -20,7 +20,6 @@ client.interceptors.response.use((response)=>{
 
     return response;
 },(error)=>{
-    debugger;
     if(error.reponse && error.response.status===401){
         window.dispatchEvent(new CustomEvent("LOGOUT"));
         window.location.href='/';
