@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import {
   ListView,
   ListViewHeader,
@@ -8,13 +8,13 @@ import { PageChangeEvent, Pager, PagerProps } from "@progress/kendo-react-data-t
 import styles from "./style.module.scss";
 
 interface ListViewProps {
-  data: any[] | undefined;
-  itemRender: React.ComponentType<{ dataItem: any; index?: number }> | undefined;
-  headerRender: React.ReactNode;
-  footerRender: React.ReactNode;
+  data?: any[];
+  item: React.ComponentType<{ dataItem: any; index?: number }>;
+  header: ReactNode;
+  footer: ReactNode;
   style: React.CSSProperties;
-  paginate: PagerProps | undefined;
-  containerClassName: string | undefined;
+  paginate?: PagerProps;
+  containerClassName?: string;
 }
 
 export default function CustomListView(props: ListViewProps) {
@@ -33,33 +33,33 @@ export default function CustomListView(props: ListViewProps) {
   };
 
   const Header = () => {
-    if (!props.headerRender) return null;
+    if (!props.header) return null;
 
     return (
       <ListViewHeader
         style={{ color: "rgb(160, 160, 160)", fontSize: 14 }}
         className="pl-3 pb-2 pt-2"
       >
-        {props.headerRender}
+        {props.header}
       </ListViewHeader>
     );
   };
 
   const Footer = () => {
-    if (!props.footerRender) return null;
+    if (!props.footer) return null;
 
     return <ListViewFooter
       style={{ color: "rgb(160, 160, 160)", fontSize: 14 }}
       className="pl-3 pb-2 pt-2"
     >
-      {props.footerRender}
+      {props.footer}
     </ListViewFooter>
   }
 
   return <div className={styles.container + (props.containerClassName ? " " + props.containerClassName : "")}>
     <ListView
       data={props.data}
-      item={props.itemRender}
+      item={props.item}
       style={props.style}
       header={Header}
       footer={Footer}
