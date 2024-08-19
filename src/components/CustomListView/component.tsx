@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import {
   ListView,
   ListViewHeader,
@@ -8,13 +8,13 @@ import { PageChangeEvent, Pager, PagerProps } from "@progress/kendo-react-data-t
 import styles from "./style.module.scss";
 
 interface ListViewProps {
-  data: any[] | undefined;
-  itemRender: React.ComponentType<{ dataItem: any; index?: number }> | undefined;
-  headerRender: React.ReactNode;
-  footerRender: React.ReactNode;
+  data?: any[];
+  itemRender: React.ComponentType<{ dataItem: any; index?: number }>;
+  headerRender: ReactNode;
+  footerRender: ReactNode;
   style: React.CSSProperties;
-  paginate: PagerProps | undefined;
-  containerClassName: string | undefined;
+  paginate?: PagerProps;
+  containerClassName?: string;
 }
 
 export default function CustomListView(props: ListViewProps) {
