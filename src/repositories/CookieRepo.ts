@@ -1,7 +1,6 @@
 class CRepo{
 
     write(key:string,value:string,exp?:Date){
-        debugger;
         let expires="";
         if (exp) {
             expires = "; expires="+exp.toUTCString();

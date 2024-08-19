@@ -6,17 +6,18 @@ import {
   RadioGroup,
   Checkbox,
 } from "@progress/kendo-react-inputs";
-import { DatePicker } from "@progress/kendo-react-dateinputs";
+import { Calendar, CalendarProps, DatePicker } from "@progress/kendo-react-dateinputs";
 import { Error, Label } from "@progress/kendo-react-labels";
 import React from "react";
 
 const TextInput = (
   fieldRenderProps: FieldRenderProps & { disabled?: boolean }
 ) => {
-  const { validationMessage, visited, disabled, required, value, ...others } =
+  const { validationMessage, visited, disabled, required, value, label, ...others } =
     fieldRenderProps;
   return (
-    <div className="k-form-field-wrap">
+    <>
+       <label>{label}</label>
       <Input
         {...others}
         value={value ?? ""}
@@ -24,7 +25,7 @@ const TextInput = (
         disabled={disabled}
       />
       {visited && validationMessage && <Error>{validationMessage}</Error>}
-    </div>
+    </>
   );
 };
 
@@ -214,6 +215,38 @@ const CheckboxInput = (
   );
 };
 
+const CalendarOnlyYear=(props:CalendarProps<any>)=>{
+  return <Calendar {...props} topView="decade" bottomView="decade"  />
+}
+
+const YearInput = (
+  fieldRenderProps: FieldRenderProps & { disabled?: boolean; label?: string }
+) => {
+  const {
+    validationMessage,
+    visited,
+    disabled,
+    required,
+    value,
+    label,
+    ...others
+  } = fieldRenderProps;
+  return (
+    <div className="k-form-field-wrap">
+      <label>{label}</label>
+      <DatePicker
+        {...others}
+        format={'yyyy'}
+        calendar={CalendarOnlyYear}
+        value={value ?? null}
+        required={required}
+        disabled={disabled}
+      />
+      {visited && validationMessage && <Error>{validationMessage}</Error>}
+    </div>
+  );
+};
+
 export {
   TextInput,
   DateInput,
@@ -223,5 +256,5 @@ export {
   SelectInput,
   RadioGroupInput,
   CheckboxInput,
-  AutocompleteInput
+  YearInput
 };

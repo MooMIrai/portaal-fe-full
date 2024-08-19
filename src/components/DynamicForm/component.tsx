@@ -16,7 +16,7 @@ import {
   RadioGroupInput,
   CheckboxInput,
   DateInput,
-  AutocompleteInput
+  YearInput
 } from "./fieldComponents";
 
 const getFieldComponent = (type: FieldType) => {
@@ -39,8 +39,8 @@ const getFieldComponent = (type: FieldType) => {
       return RadioGroupInput;
     case "checkbox":
       return CheckboxInput;
-      case "autocomplete":
-        return AutocompleteInput;
+    case 'year':
+      return YearInput
     default:
       return TextInput;
   }
@@ -67,7 +67,7 @@ export type FieldType =
   | "checkbox"
   | "radio"
   | "select"
-  |"autocomplete";
+  | "year";
 
 export interface FieldConfig {
   name: string;
@@ -92,17 +92,27 @@ export interface DynamicFormProps {
   extraBtnAction?: () => void;
   customDisabled?: boolean;
   submitText: string;
+  addedFields?: Record<string, React.JSX.Element>
 }
 
 const DynamicField = ({
   field,
   formRenderProps,
+  addedFields
 }: {
   field: FieldConfig;
   formRenderProps: FormRenderProps;
+  addedFields?:Record<string,React.JSX.Element>
 }) => {
+
   const { name, type, label, validator, options, disabled } = field;
-  const Component = getFieldComponent(type);
+  let Component:any = getFieldComponent(type);
+
+  if(addedFields && Object.keys(addedFields).some(s=>s===type)){
+    Component = addedFields[type];
+  }
+ 
+
 
   return (
     <Field
@@ -135,7 +145,8 @@ const DynamicForm = React.forwardRef<any,DynamicFormProps>((props,ref)=>{
     description,
     children,
     customDisabled,
-    submitText
+    submitText,
+    addedFields
   } = props;
 
 
@@ -153,16 +164,19 @@ const DynamicForm = React.forwardRef<any,DynamicFormProps>((props,ref)=>{
       {children === undefined && (
         <fieldset className={"k-form-fieldset"}>
           <legend className={"k-form-legend"}>{description}</legend>
-          {fields.map((field, index) => (
+          {fields.map((field, index) => {
+            return (
             <FieldWrapper key={index}>
-              <div className="k-form-field-wrap">
+              
                 <DynamicField
+                  addedFields={addedFields}
                   field={field}
                   formRenderProps={formRenderProps}
                 />
-              </div>
+              
             </FieldWrapper>
-          ))}
+          )}
+          )}
         </fieldset>
       )}
       {children}
