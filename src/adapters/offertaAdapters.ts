@@ -10,11 +10,16 @@ export function fromOfferBEModelToOfferModel(offerBE: OfferBEModel): OfferModel 
         description: offerBE.other_details, // mapping other_details to description
         rate: offerBE.rate, 
         amount: offerBE.amount,
+
         customer_id: offerBE.customer_id,
         customer_name: offerBE.Customer?.name + ' '+offerBE.Customer?.name,
+        customer: {id:offerBE.customer_id,name:offerBE.Customer?offerBE.Customer.name:''},
+        
         creation_date:offerBE.date_created,
+        
         accountManager_id: offerBE.accountManager_id,
-        accountManager_name:offerBE.AccountManager?.email,
+        accountManager: {id:offerBE.accountManager_id,name:offerBE.AccountManager?.Person.firstName + ' ' +offerBE.AccountManager?.Person.lastName},
+
         project_type_id: offerBE.project_type_id,
         billing_type_id: parseBillingType(offerBE.billing_type) // hypothetical method for billing type conversion
     };

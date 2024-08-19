@@ -21,6 +21,13 @@ export default function(){
           level:2,
           text:'Clienti',
           route:'/clienti'
+        },
+        {
+          parentId:5,
+          id:52,
+          level:2,
+          text:'Rapportino',
+          route:'/rapportino'
         }
     ]
   }

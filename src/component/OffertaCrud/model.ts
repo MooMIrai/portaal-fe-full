@@ -27,8 +27,10 @@ export interface OfferBEModel {
         account_status_id: number,
         email: string,
         id: string,
-        person_id: string
+        person_id: string,
+        Person:any
     }
+    
 }
 
 export interface OfferModel {
@@ -43,8 +45,11 @@ export interface OfferModel {
     amount: number,
     customer_id: number,
     customer_name?: string,
+    customer?:{id:number,name:string},
+
     accountManager_id: number,
     accountManager_name?: string,
+    accountManager?:{id:number,name:string}
     project_type_id: number,
     billing_type_id: number
     

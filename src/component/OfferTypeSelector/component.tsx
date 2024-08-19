@@ -3,13 +3,13 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { CrudGenericService } from '../../services/personaleServices';
 import { useDebounce } from '@uidotdev/usehooks';
 
-export type CommercialeSelectorProps={
+export type OfferTypeSelectorProps={
     onChange:(value:any)=>void;
     value:any
 }
 
 
-export default function(props:CommercialeSelectorProps){
+export default function(props:OfferTypeSelectorProps){
 
     const [data, setData] = useState<Array<any>>([]);
     const [value, setValue] = useState<any>();
@@ -24,11 +24,14 @@ export default function(props:CommercialeSelectorProps){
     }
 
     const getData= (filterP:string)=>{
-        CrudGenericService.searchCommerciale(filterP).then((res)=>{
+        /*CrudGenericService.searchCommerciale(filterP).then((res)=>{
             if(res){
-                setData(res)
+                setData(res.map(d=>({
+                    id:d.id,
+                    name:d.Person.firstName + ' ' + d.Person.lastName
+                })))
             }
-        });
+        });*/
     }
 
     const onFilterChange = useCallback(
