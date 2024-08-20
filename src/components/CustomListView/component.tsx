@@ -73,9 +73,8 @@ export default function CustomListView(props: ListViewProps) {
       {...props.paginate}
       skip={page.skip}
       take={page.take}
-      className="k-listview-pager"
+      className={"k-listview-pager " + (props.paginate.className || "")}
       onPageChange={handlePageChange}
-      total={props.data?.length || 0}
     /> : null}
   </div>
 }
