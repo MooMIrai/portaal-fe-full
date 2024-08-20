@@ -6,9 +6,8 @@ class PFMServiceC {
     filters?: any,
   ) => {
     try {
-      const response = await client.post(`api/v1/leave_requests/type/${leaveType}`, filters ? {
-        ...filters
-      } : {});
+      let params = filters ? `?pageNum=${filters.pageNum + 1}&pageSize=${filters.pageSize}` : "";
+      const response = await client.post(`api/v1/leave_requests/type/${leaveType}${params || ""}`);
       return response.data;
     } catch (error) {
       console.error("Error fetching resources:", error);

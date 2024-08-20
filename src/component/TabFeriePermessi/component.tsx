@@ -9,29 +9,69 @@ import { PFMService } from "../../services/pfmService";
 const FeriePermessiSection = () => {
 
   const [selectedTab, setSelectedTab] = useState<number>(0);
-  const [newRequests, setNewRequests] = useState<PFMData[]>();
-  const [archived, setArchived] = useState<PFMData[]>();
+  const [newRequests, setNewRequests] = useState<{ data: PFMData[], meta: any }>();
+  const [archived, setArchived] = useState<{ data: PFMData[], meta: any }>();
   const [loadingRequests, setLoadingRequests] = useState<boolean>(true);
   const [loadingArchive, setLoadingArchive] = useState<boolean>(true);
+  const [requestsPage, setRequestsPage] = useState({
+    skip: 0,
+    take: 10,
+    total: 0,
+  });
+  const [archivePage, setArchivePage] = useState({
+    skip: 0,
+    take: 10,
+    total: 0,
+  });
+
+  const handleRequestsPageChange = (e: any) => {
+    setRequestsPage({
+      skip: e.skip,
+      take: e.take,
+      total: newRequests?.meta.total
+    });
+    getData({ pageNum: e.skip, pageSize: e.take });
+  };
+
+  const handleArchivePageChange = (e: any) => {
+    setArchivePage({
+      skip: e.skip,
+      take: e.take,
+      total: archived?.meta.total
+    });
+    getData({ pageNum: e.skip, pageSize: e.take });
+  };
 
   const handleSelect = (e: any) => {
     setSelectedTab(e.selected);
   };
 
-  const getData = () => {
+  const getData = (pagination: { pageNum: number, pageSize: number }) => {
     if (selectedTab === 0) {
       setLoadingRequests(true);
     } else {
       setLoadingArchive(true);
     }
 
-    PFMService.getRequests(selectedTab === 0 ? "new" : "archived").then(res => {
+    PFMService.getRequests(selectedTab === 0 ? "new" : "archived", pagination).then(res => {
       if (selectedTab === 0) {
-        setNewRequests(res.data);
+        setNewRequests(res);
         setLoadingRequests(false);
+        setRequestsPage(prev => {
+          return {
+            ...prev,
+            total: res.meta.total,
+          }
+        })
       } else {
-        setArchived(res.data);
+        setArchived(res);
         setLoadingArchive(false);
+        setArchivePage(prev => {
+          return {
+            ...prev,
+            total: res.meta.total,
+          }
+        })
       }
     }).catch(err => {
       console.error("An error occurred while fetching data:", err);
@@ -39,7 +79,11 @@ const FeriePermessiSection = () => {
   }
 
   useEffect(() => {
-    getData();
+    let pagination = {
+      pageNum: selectedTab === 0 ? requestsPage.skip : archivePage.skip,
+      pageSize: selectedTab === 0 ? requestsPage.take : archivePage.take
+    }
+    getData(pagination);
   }, [selectedTab]);
 
   const MyHeader = () => {
@@ -48,16 +92,14 @@ const FeriePermessiSection = () => {
     </div>
   };
 
-  const MyFooter = () => {
-    return <div className={styles.footer}>
-      {selectedTab === 0 ? newRequests?.length || 0 : archived?.length || 0} Richieste totali
-    </div>
-  };
-
   const handleAction = (id: number, approve: boolean) => {
     setLoadingRequests(true);
     PFMService.approveRejectRequest(id, approve).then(res => {
-      getData();
+      let pagination = {
+        pageNum: requestsPage.skip,
+        pageSize: requestsPage.take
+      }
+      getData(pagination);
     }).catch(err => {
       console.error("An error occurred while processing the action:", err);
     });
@@ -66,7 +108,11 @@ const FeriePermessiSection = () => {
   const handleUndo = (id: number) => {
     setLoadingArchive(true);
     PFMService.undoApproveReject(id).then(res => {
-      getData();
+      let pagination = {
+        pageNum: archivePage.skip,
+        pageSize: archivePage.take
+      }
+      getData(pagination);
     }).catch(err => {
       console.error("An error occurred while processing the action:", err);
     });
@@ -220,14 +266,18 @@ const FeriePermessiSection = () => {
         title: "Richieste",
         children: <div className={styles.container + (loadingRequests ? " " + styles.loading : "")}>
           <CustomListView
-            data={newRequests}
+            data={newRequests?.data}
             item={MyItemRender}
             style={{
               width: "100%",
             }}
             header={MyHeader()}
-            footer={MyFooter()}
             loading={loadingRequests}
+            paginate={{
+              ...requestsPage,
+              onPageChange: handleRequestsPageChange,
+              className: styles.paginationContainer
+            }}
           />
         </div>,
         contentClassName: styles.tabConten,
@@ -236,14 +286,18 @@ const FeriePermessiSection = () => {
         title: "Storico",
         children: <div className={styles.container + (loadingArchive ? " " + styles.loading : "")}>
           <CustomListView
-            data={archived}
+            data={archived?.data}
             item={MyItemRender}
             style={{
               width: "100%",
             }}
             header={MyHeader()}
-            footer={MyFooter()}
             loading={loadingArchive}
+            paginate={{
+              ...archivePage,
+              onPageChange: handleArchivePageChange,
+              className: styles.paginationContainer
+            }}
           />
         </div>,
         contentClassName: styles.tabConten,
