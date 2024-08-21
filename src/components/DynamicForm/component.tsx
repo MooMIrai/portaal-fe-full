@@ -105,7 +105,7 @@ const DynamicField = ({
   addedFields?:Record<string,React.JSX.Element>
 }) => {
 
-  const { name, type, label, validator, options, disabled } = field;
+  const { name, type, label, validator, options, disabled,required } = field;
   let Component:any = getFieldComponent(type);
 
   if(addedFields && Object.keys(addedFields).some(s=>s===type)){
@@ -118,7 +118,7 @@ const DynamicField = ({
     <Field
       name={name}
       component={Component}
-      label={label}
+      label={label + (required?'*':'')}
       validator={validator}
       options={options}
       type={type}

@@ -21,6 +21,7 @@ const mfeConfig = {
     "./Button": "./src/components/Button/component",
     "./CustomListView": "./src/components/CustomListView/component",
     "./AutoComplete":"./src/components/AutoComplete/component",
+    "./CountrySelector":"./src/components/CountrySelector/component",
 
     "./services/AuthService": "./src/services/AuthService",
     "./services/BEService": "./src/services/BEService",

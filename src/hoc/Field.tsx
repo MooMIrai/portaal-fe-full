@@ -22,7 +22,7 @@ const withField = (WrappedComponent:any) => {
 
       return <div onFocus={onFocus} onBlur={onBlur}>
         <Label id={others.id}>
-          {others.label}
+          {others.label} {others.required?<span style={{color:'red',fontSize:20}}>*</span>:''}
         </Label>
         <WrappedComponent onChange={onChange}  value={value} {...others}/>
         {
