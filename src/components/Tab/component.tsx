@@ -4,37 +4,37 @@ import { Button } from '@progress/kendo-react-buttons';
 import styles from "./style.module.scss"
 
 
-  interface TabComponentProps extends TabStripProps {
-    tabs:TabStripTabProps [];
-    button?: {
-      label: string;
-      classNameButton?:string;
-      onClick?: React.MouseEventHandler<HTMLButtonElement>;
-      onSubmit?: React.FormEventHandler<HTMLButtonElement>;
-    };
-  }
+interface TabComponentProps extends TabStripProps {
+  tabs: TabStripTabProps[];
+  button?: {
+    label: string;
+    classNameButton?: string;
+    onClick?: React.MouseEventHandler<HTMLButtonElement>;
+    onSubmit?: React.FormEventHandler<HTMLButtonElement>;
+  };
+}
 
-const TabComponent = (props:TabComponentProps) => {
-  return<div className={styles.containerTab}> 
+const TabComponent = (props: TabComponentProps) => {
+  return <div className={styles.containerTab}>
     <TabStrip selected={props.selected} onSelect={props.onSelect} renderAllContent={true} animation={false} >
-      {props.tabs.map((tab,index)=>(
-        <TabStripTab key={"tab_el"+tab.title} title={tab.title}>
+      {props.tabs.map((tab, index) => (
+        <TabStripTab key={"tab_el" + tab.title} title={tab.title}>
           {tab.children}
         </TabStripTab>
       ))}
     </TabStrip>
-    
+
     {props.button && (
-      <div className={styles.parentButton }>
+      <div className={styles.parentButton}>
         <Button
-        className={styles.button }
+          className={styles.button}
           onClick={props.button.onClick}
           onSubmit={props.button.onSubmit}
         >
           {props.button.label}
         </Button>
-        </div>
-      )}
-    </div>
+      </div>
+    )}
+  </div>
 };
 export default TabComponent;
