@@ -1,4 +1,5 @@
-import { AutoComplete, AutoCompleteProps, DropDownList } from "@progress/kendo-react-dropdowns";
+import React from "react";
+import { DropDownList } from "@progress/kendo-react-dropdowns";
 import { FieldRenderProps } from "@progress/kendo-react-form";
 import {
   Input,
@@ -7,29 +8,24 @@ import {
   Checkbox,
 } from "@progress/kendo-react-inputs";
 import { Calendar, CalendarProps, DatePicker } from "@progress/kendo-react-dateinputs";
-import { Error, Label } from "@progress/kendo-react-labels";
-import React from "react";
 
-const TextInput = (
+import withField from "../../hoc/Field";
+
+const TextInputC = (
   fieldRenderProps: FieldRenderProps & { disabled?: boolean }
 ) => {
   const { validationMessage, visited, disabled, required, value, label, ...others } =
     fieldRenderProps;
-  return (
-    <>
-       <label>{label}</label>
-      <Input
-        {...others}
-        value={value ?? ""}
-        required={required}
-        disabled={disabled}
-      />
-      {visited && validationMessage && <Error>{validationMessage}</Error>}
-    </>
-  );
-};
+ 
+  return <Input
+  {...others}
+  value={value ?? ""}
+  required={required}
+  disabled={disabled}
+/>
+}
 
-const DateInput = (
+const DateInputC = (
   fieldRenderProps: FieldRenderProps & { disabled?: boolean; label?: string }
 ) => {
   const {
@@ -41,53 +37,21 @@ const DateInput = (
     label,
     ...others
   } = fieldRenderProps;
-  return (
-    <div className="k-form-field-wrap">
-      <label>{label}</label>
-      <DatePicker
-        {...others}
-        value={value ?? null}
-        required={required}
-        disabled={disabled}
-      />
-      {visited && validationMessage && <Error>{validationMessage}</Error>}
-    </div>
-  );
+  return <DatePicker
+  {...others}
+  value={value ?? null}
+  required={required}
+  disabled={disabled}
+/>
 };
 
-type AutocompleteInputProps = {
-  label?: string;
-  placeHolder?: string;
-  style?: React.CSSProperties;
-} & AutoCompleteProps; 
-
-const AutocompleteInput: React.FC<AutocompleteInputProps> = (props) => {
-  const { label, placeHolder, style, data, value, onChange, ...autoCompleteProps } = props;
-
-  return (
-      <div>
-          {label && <div>{label}</div>}
-          <AutoComplete
-              data={data}
-              value={value}
-              onChange={onChange}
-              placeholder={placeHolder}
-              style={style}
-              {...autoCompleteProps} 
-          />
-      </div>
-  );
-};
-
-
-
-const EmailInput = (
+const EmailInputC = (
   fieldRenderProps: FieldRenderProps & { disabled?: boolean }
 ) => {
   const { validationMessage, visited, disabled, required, value, ...others } =
     fieldRenderProps;
   return (
-    <div className="k-form-field-wrap">
+    
       <Input
         type="email"
         {...others}
@@ -95,18 +59,16 @@ const EmailInput = (
         required={required}
         disabled={disabled}
       />
-      {visited && validationMessage && <Error>{validationMessage}</Error>}
-    </div>
+      
   );
 };
 
-const PasswordInput = (
+const PasswordInputC = (
   fieldRenderProps: FieldRenderProps & { disabled?: boolean }
 ) => {
   const { validationMessage, visited, disabled, required, value, ...others } =
     fieldRenderProps;
   return (
-    <div className="k-form-field-wrap">
       <Input
         type="password"
         {...others}
@@ -114,12 +76,10 @@ const PasswordInput = (
         required={required}
         disabled={disabled}
       />
-      {visited && validationMessage && <Error>{validationMessage}</Error>}
-    </div>
   );
 };
 
-const TextAreaInput = (
+const TextAreaInputC = (
   fieldRenderProps: FieldRenderProps & { disabled?: boolean; label?: string }
 ) => {
   const {
@@ -132,20 +92,18 @@ const TextAreaInput = (
     ...others
   } = fieldRenderProps;
   return (
-    <div className="k-form-field-wrap">
-      <div>{label}</div>
+    
       <TextArea
         {...others}
         value={value ?? ""}
         required={required}
         disabled={disabled}
       />
-      {visited && validationMessage && <Error>{validationMessage}</Error>}
-    </div>
+      
   );
 };
 
-const SelectInput = (
+const SelectInputC = (
   fieldRenderProps: FieldRenderProps & { disabled?: boolean }
 ) => {
   const {
@@ -158,7 +116,7 @@ const SelectInput = (
     ...others
   } = fieldRenderProps;
   return (
-    <div className="k-form-field-wrap">
+   
       <DropDownList
         data={options}
         {...others}
@@ -166,12 +124,11 @@ const SelectInput = (
         required={required}
         disabled={disabled}
       />
-      {visited && validationMessage && <Error>{validationMessage}</Error>}
-    </div>
+
   );
 };
 
-const RadioGroupInput = (
+const RadioGroupInputC = (
   fieldRenderProps: FieldRenderProps & { disabled?: boolean; label?: string }
 ) => {
   const {
@@ -184,34 +141,31 @@ const RadioGroupInput = (
     ...others
   } = fieldRenderProps;
   return (
-    <div className="k-form-field-wrap">
-      <div>{label}</div>
+   
       <RadioGroup
         data={options}
         {...others}
         value={value ?? undefined}
         disabled={disabled}
       />
-      {visited && validationMessage && <Error>{validationMessage}</Error>}
-    </div>
+
   );
 };
 
-const CheckboxInput = (
+const CheckboxInputC = (
   fieldRenderProps: FieldRenderProps & { disabled?: boolean }
 ) => {
   const { validationMessage, visited, disabled, required, value, ...others } =
     fieldRenderProps;
   return (
-    <div className="k-form-field-wrap">
+   
       <Checkbox
         {...others}
         value={value ?? false}
         required={required}
         disabled={disabled}
       />
-      {visited && validationMessage && <Error>{validationMessage}</Error>}
-    </div>
+      
   );
 };
 
@@ -219,7 +173,7 @@ const CalendarOnlyYear=(props:CalendarProps<any>)=>{
   return <Calendar {...props} topView="decade" bottomView="decade"  />
 }
 
-const YearInput = (
+const YearInputC = (
   fieldRenderProps: FieldRenderProps & { disabled?: boolean; label?: string }
 ) => {
   const {
@@ -232,8 +186,7 @@ const YearInput = (
     ...others
   } = fieldRenderProps;
   return (
-    <div className="k-form-field-wrap">
-      <label>{label}</label>
+    
       <DatePicker
         {...others}
         format={'yyyy'}
@@ -242,19 +195,17 @@ const YearInput = (
         required={required}
         disabled={disabled}
       />
-      {visited && validationMessage && <Error>{validationMessage}</Error>}
-    </div>
+      
   );
 };
 
-export {
-  TextInput,
-  DateInput,
-  EmailInput,
-  PasswordInput,
-  TextAreaInput,
-  SelectInput,
-  RadioGroupInput,
-  CheckboxInput,
-  YearInput
-};
+export const TextInput = withField(TextInputC);
+export const DateInput = withField(DateInputC);
+export const EmailInput = withField(EmailInputC);
+export const PasswordInput = withField(PasswordInputC);
+export const TextAreaInput = withField(TextAreaInputC);
+export const SelectInput = withField(SelectInputC);
+export const RadioGroupInput = withField(RadioGroupInputC);
+export const CheckboxInput = withField(CheckboxInputC);
+export const YearInput = withField(YearInputC);
+
