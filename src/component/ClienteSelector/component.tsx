@@ -2,6 +2,7 @@ import AutoComplete from 'common/AutoComplete';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDebounce } from '@uidotdev/usehooks';
 import { customerService } from '../../services/clienteService';
+import withField from "common/hoc/Field"
 
 export type ClienteSelectorProps={
     onChange:(value:any)=>void;
@@ -9,7 +10,7 @@ export type ClienteSelectorProps={
 }
 
 
-export default function(props:ClienteSelectorProps){
+export default function ClienteSelector(props:ClienteSelectorProps){
 
     const [data, setData] = useState<Array<any>>([]);
     const [value, setValue] = useState<any>();
@@ -66,3 +67,5 @@ export default function(props:ClienteSelectorProps){
         
 
 }
+
+export const clienteFormField = {"customer-selector":withField(ClienteSelector)}

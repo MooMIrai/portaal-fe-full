@@ -15,7 +15,7 @@ export function fromOfferBEModelToOfferModel(offerBE: OfferBEModel): OfferModel 
         customer_name: offerBE.Customer?.name + ' '+offerBE.Customer?.name,
         customer: {id:offerBE.customer_id,name:offerBE.Customer?offerBE.Customer.name:''},
         
-        creation_date:offerBE.date_created,
+        creation_date:offerBE.date_created?new Date(offerBE.date_created):undefined,
         
         accountManager_id: offerBE.accountManager_id,
         accountManager: {id:offerBE.accountManager_id,name:offerBE.AccountManager?.Person.firstName + ' ' +offerBE.AccountManager?.Person.lastName},

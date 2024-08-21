@@ -8,8 +8,9 @@ import React from "react";
 
 import styles from "./style.module.scss";
 import { getFormOfferFields } from "./form";
-import { commercialeFormField } from "../CommercialeSelector/field";
-import { clienteFormField } from "../ClienteSelector/field";
+import { commercialeFormField } from "../CommercialeSelector/component";
+import { clienteFormField } from "../ClienteSelector/component";
+
 
 
 type OffertaCrudProps = {

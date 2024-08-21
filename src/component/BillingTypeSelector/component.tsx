@@ -2,14 +2,14 @@ import AutoComplete from 'common/AutoComplete';
 import React, { useCallback, useEffect, useState } from 'react';
 import { CrudGenericService } from '../../services/personaleServices';
 import { useDebounce } from '@uidotdev/usehooks';
-import withField from "common/hoc/Field";
 
-export type CommercialeSelectorProps={
+export type BillingTypeSelectorProps={
     onChange:(value:any)=>void;
     value:any
 }
 
-export default function CommercialeSelector(props:CommercialeSelectorProps){
+
+export default function(props:BillingTypeSelectorProps){
 
     const [data, setData] = useState<Array<any>>([]);
     const [value, setValue] = useState<any>();
@@ -24,11 +24,11 @@ export default function CommercialeSelector(props:CommercialeSelectorProps){
     }
 
     const getData= (filterP:string)=>{
-        CrudGenericService.searchCommerciale(filterP).then((res)=>{
-            if(res ){
-                setData(res.map(r=>({id:r.id,name:r.Person.firstName+ ' '+r.Person.lastName})))
+        /*CrudGenericService.searchCommerciale(filterP).then((res)=>{
+            if(res){
+                setData(res)
             }
-        });
+        });*/
     }
 
     const onFilterChange = useCallback(
@@ -64,5 +64,3 @@ export default function CommercialeSelector(props:CommercialeSelectorProps){
         
 
 }
-
-export const commercialeFormField = {"commerciale-selector": withField(CommercialeSelector)}

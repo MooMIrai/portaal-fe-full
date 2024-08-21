@@ -39,7 +39,7 @@ export interface OfferModel {
     title: string,
     start_date: string,
     end_date?: string,
-    creation_date?:string,
+    creation_date?:Date,
     description: string,
     rate: number,
     amount: number,

@@ -64,6 +64,15 @@ export const getFormOfferFields = (formData: OfferModel, type:string) => {
             disabled:type === "view",
             validator: (value: any) => value ? "" : "Il campo Titolo è obbligatorio"
         },
+        creation_date: {
+            name: "creation_date",
+            label: "Data creazione",
+            type: "date",
+            value: formData.creation_date,
+            required: true,
+            disabled:type === "view",
+            validator: (value: any) => value ? "" : "Il campo Data creazione è obbligatorio"
+        },
         
     }
     return fields

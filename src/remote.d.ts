@@ -17,3 +17,5 @@ declare module "common/providers/NotificationProvider";
 
 declare module "common/services/BEService";
 declare module "common/services/BaseHTTPService";
+
+declare module "common/hoc/Field"
