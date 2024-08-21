@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import CommercialeSelector from '../../component/CommercialeSelector/component';
 import NotificationProviderActions from "common/providers/NotificationProvider";
 import GridTable from "common/Table";
 import { offertaService } from "../../services/offertaService";
 import { fromOfferBEModelToOfferModel } from "../../adapters/offertaAdapters";
 import { OffertaCrud } from "../../component/OffertaCrud/component";
+import CountrySelector from 'common/CountrySelector';
 
 const columns = [
     { key: "customer_name", label: "Cliente", type: "string", sortable: true, filter: "text" },
@@ -81,7 +81,9 @@ export default function OffertePage(){
     }
 
 
-    return <GridTable
+    return <>
+    <CountrySelector />
+    <GridTable
     /*  inputSearchConfig={{
        inputSearch: termValue,
        handleInputSearch: handleInputSearch,
@@ -120,5 +122,5 @@ export default function OffertePage(){
        </>
      )}
    />
-
+</>
 }
