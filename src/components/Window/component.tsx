@@ -41,6 +41,9 @@ const CustomWindow = ({
       height={height}
       doubleClickStageChange={false}
       modal={true}
+      style={{
+        height:'fit-content',
+      }}
       minHeight={minHeight}
       minWidth={minWidth}
       title={title}

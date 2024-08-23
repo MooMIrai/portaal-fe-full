@@ -30,7 +30,7 @@ const mfeConfig = {
     "./providers/NotificationProvider" : "./src/components/Notification/provider",
 
     "./hoc/Field":"./src/hoc/Field",
-
+    "./hoc/AutoComplete":"./src/hoc/AutoComplete",
   },
   shared: {
     ...deps,

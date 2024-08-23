@@ -199,7 +199,7 @@ export default function CountrySelector(props:any){
             "code": generateString(9),
             "name":  digitCity.city_name
         }).then(res=>{
-            debugger;
+
             handleChangeValue('city',res.data.id,res.data);
             setDigitCity(undefined);
             setModal(false);
@@ -301,6 +301,7 @@ export default function CountrySelector(props:any){
                 placeholder="Digita per iniziare la ricerca"
             />
         </div>
+        
         {modal && (
         <Dialog title={"Aggiungi nuova Città"} onClose={abortInsert} width={350}>
             <p>
