@@ -5,8 +5,8 @@ export function fromOfferBEModelToOfferModel(offerBE: OfferBEModel): OfferModel 
         id: offerBE.id,
         protocol: offerBE.project_code, // mapping project_code to protocol
         title: offerBE.name, // mapping name to title
-        start_date: offerBE.start_date,
-        end_date: offerBE.end_date ?? '', // fallback if end_date is undefined
+        start_date: new Date(offerBE.start_date),
+        end_date: offerBE.end_date?new Date(offerBE.end_date):undefined, // fallback if end_date is undefined
         description: offerBE.other_details, // mapping other_details to description
         rate: offerBE.rate, 
         amount: offerBE.amount,
@@ -21,7 +21,10 @@ export function fromOfferBEModelToOfferModel(offerBE: OfferBEModel): OfferModel 
         accountManager: {id:offerBE.accountManager_id,name:offerBE.AccountManager?.Person.firstName + ' ' +offerBE.AccountManager?.Person.lastName},
 
         project_type_id: offerBE.project_type_id,
-        billing_type_id: parseBillingType(offerBE.billing_type) // hypothetical method for billing type conversion
+        project_type:offerBE.ProjectType?{id:offerBE.ProjectType.id,name:offerBE.ProjectType.description}:undefined,
+
+        billing_type:{id:offerBE.billing_type,name:mapBillingTypeName(offerBE.billing_type)}, // hypothetical method for billing type conversion
+        outcome_type:offerBE.OutcomeType?{id:offerBE.OutcomeType,name:mapOutcomeTypeName(offerBE.OutcomeType)}:undefined
     };
 }
 
@@ -30,42 +33,39 @@ export function fromOfferModelToOfferBEModel(offerModel: OfferModel): OfferBEMod
         id: offerModel.id,
         project_code: offerModel.protocol, // mapping protocol to project_code
         name: offerModel.title, // mapping title to name
-        start_date: offerModel.start_date,
-        end_date: offerModel.end_date || undefined, // fallback to undefined if empty
+        start_date: offerModel.start_date.toISOString(),
+        end_date: offerModel.end_date?.toISOString() || undefined, // fallback to undefined if empty
         other_details: offerModel.description, // mapping description to other_details
         rate: offerModel.rate,
         amount: offerModel.amount,
         customer_id: offerModel.customer_id,
         accountManager_id: offerModel.accountManager_id,
         project_type_id: offerModel.project_type_id,
-        billing_type: parseBillingTypeId(offerModel.billing_type_id) // hypothetical method for billing type conversion
+        billing_type: offerModel.billing_type?offerModel.billing_type.id:"", // hypothetical method for billing type conversion
+        OutcomeType: offerModel.outcome_type?.id
     };
 }
 
-// Metodo ipotetico per convertire billing_type_id numerico in billing_type stringa
-function parseBillingTypeId(billingTypeId: number): string {
-    switch(billingTypeId) {
-        case 1:
-            return 'hourly';
-        case 2:
-            return 'fixed';
-        // aggiungere altre logiche di conversione se necessario
-        default:
-            return 'unknown'; // Default fallback
+export const mapBillingTypeName = (name:string)=>{
+    switch (name){
+        case "Daily":
+            return 'Fatturazione a giornata';
+        case "LumpSum":
+            return 'Fatturazione a corpo';
     }
+    return "Nessuna Fatturazione";
 }
 
-
-// Metodo ipotetico per convertire billing_type stringa in billing_type_id numerico
-function parseBillingType(billingType: string): number {
-    switch(billingType) {
-        case 'hourly':
-            return 1;
-        case 'fixed':
-            return 2;
-        // aggiungere altre logiche di conversione se necessario
-        default:
-            return 0; // Default fallback se non corrisponde
+export const mapOutcomeTypeName = (name:string)=>{
+    switch (name){
+        case "P":
+            return 'Positivo';
+        case "N":
+            return 'Negativo';
+        case "A":
+            return 'Annullato';
+        case "R":
+            return 'Rimandato';
     }
+    return "Nessun esito";
 }
-

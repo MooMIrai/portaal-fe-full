@@ -20,3 +20,4 @@ declare module "common/services/BEService";
 declare module "common/services/BaseHTTPService";
 
 declare module "common/hoc/Field"
+declare module "common/hoc/AutoComplete"

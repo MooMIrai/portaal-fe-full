@@ -8,8 +8,8 @@ import React from "react";
 
 import styles from "./style.module.scss";
 import { getFormOfferFields } from "./form";
-import { commercialeFormField } from "../CommercialeSelector/component";
-import { clienteFormField } from "../ClienteSelector/component";
+import { offertaCustomFields } from "./customfields";
+
 
 
 
@@ -88,7 +88,7 @@ export function OffertaCrud(props:PropsWithRef<OffertaCrudProps>){
                                 fields={Object.values(getFormOfferFields(formCustomerData,props.type))}
                                 formData={formCustomerData}
                                 onSubmit={(data: OfferModel) => setformCustomerData(data)}
-                                addedFields={{...commercialeFormField,...clienteFormField}}
+                                addedFields={offertaCustomFields}
                             /> 
                           </div>
                         ),
