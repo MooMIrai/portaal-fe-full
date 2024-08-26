@@ -82,17 +82,20 @@ const CustomSlot = (props: any) => {
 
 const MultipleSelectionCrud = (props: any) => {
   if (props.renderData && props.show) {
-    const { component, title } = props.renderData(props.timesheetId, props.getDates());
-    return <CustomWindow
-      showModalFooter={false}
-      height={500}
-      width={600}
-      show={props.show}
-      title={title || ""}
-      onClose={props.handleOpenCloseModal}
-    >
-      {component}
-    </CustomWindow>
+    const dates = props.getDates();
+    if (dates.length) {
+      const { component, title } = props.renderData(props.timesheetId, dates);
+      return <CustomWindow
+        showModalFooter={false}
+        height={500}
+        width={600}
+        show={props.show}
+        title={title || ""}
+        onClose={props.handleOpenCloseModal}
+      >
+        {component}
+      </CustomWindow>
+    }
   }
 }
 
@@ -179,9 +182,11 @@ export default function CustomCalendar(props: Readonly<CustomCalendarProps>) {
     if (multiSelect.ended) {
       const dates: Date[] = [];
       let currentDate = multiSelect.start;
-
       while (currentDate <= multiSelect.end) {
         dates.push(new Date(currentDate)); // Add the current date to the array
+        if (currentDate === multiSelect.end) {
+          break;
+        }
         currentDate.setDate(currentDate.getDate() + 1); // Move to the next day
       }
 
