@@ -160,7 +160,6 @@ const CheckboxInputC = (
   return (
    
       <Checkbox
-        {...others}
         value={value ?? false}
         required={required}
         disabled={disabled}

@@ -89,6 +89,7 @@ export default function CountrySelector(props:any){
                     [key]:value
                 }
             });
+            
             setValueToShow((prevState)=>{
                 return {
                     ...prevState,
@@ -100,9 +101,18 @@ export default function CountrySelector(props:any){
     }
 
     useEffect(()=>{
-        if(onChange)
-            onChange(valueTotal);
+        if(onChange){
+            // onChange({value:valueTotal});
+        }
+           
     },[valueTotal])
+
+    useEffect(()=>{
+     
+        if(value){
+            
+        }
+    },[value])
 
     const timeout = useRef<any>();
 
