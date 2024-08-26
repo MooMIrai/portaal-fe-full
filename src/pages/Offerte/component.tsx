@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import CommercialeSelector from '../../component/CommercialeSelector/component';
 import NotificationProviderActions from "common/providers/NotificationProvider";
 import GridTable from "common/Table";
 import { offertaService } from "../../services/offertaService";
 import { fromOfferBEModelToOfferModel } from "../../adapters/offertaAdapters";
 import { OffertaCrud } from "../../component/OffertaCrud/component";
+import CountrySelector from 'common/CountrySelector';
 
 const columns = [
     { key: "customer_name", label: "Cliente", type: "string", sortable: true, filter: "text" },
@@ -61,27 +61,30 @@ export default function OffertePage(){
     const handleFormSubmit = (type: string, formData: any, refreshTable: any, id: any, closeModal:()=>void)=>{
         let promise:Promise<any> | undefined=undefined;
         
-        /*if (type === "create") {
-          promise = customerService.createResource(formData);
+        if (type === "create") {
+          promise = offertaService.createResource(formData);
         } else if (type === "edit") {
-          promise =customerService.updateResource(id,formData);
+          promise =offertaService.updateResource(id,formData);
         } else if (type === "delete") {
-          promise = customerService.deleteResource(id);
-        }*/
-       promise = Promise.resolve('')
+          promise = offertaService.deleteResource(id);
+        }
+      
 
         if(promise){
           promise.then(()=>{
             NotificationProviderActions.openModal({icon:true,style:'success'},"Operazione avvenuta con successo");
             refreshTable();
             closeModal();
+
           })
         }
 
     }
 
 
-    return <GridTable
+    return <>
+    <CountrySelector />
+    <GridTable
     /*  inputSearchConfig={{
        inputSearch: termValue,
        handleInputSearch: handleInputSearch,
@@ -120,5 +123,5 @@ export default function OffertePage(){
        </>
      )}
    />
-
+</>
 }

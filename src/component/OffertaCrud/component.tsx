@@ -8,8 +8,10 @@ import React from "react";
 
 import styles from "./style.module.scss";
 import { getFormOfferFields } from "./form";
-import { commercialeFormField } from "../CommercialeSelector/field";
-import { clienteFormField } from "../ClienteSelector/field";
+import { offertaCustomFields } from "./customfields";
+import { fromOfferModelToOfferBEModel } from "../../adapters/offertaAdapters";
+
+
 
 
 type OffertaCrudProps = {
@@ -46,8 +48,8 @@ export function OffertaCrud(props:PropsWithRef<OffertaCrudProps>){
   
     
         if (!hasError) {
-          //const formattedData = convertToCustomerBE(formCustomer.current.values);
-          //props.onSubmit(props.type, formattedData, props.refreshTable,  props.row.id,props.closeModalCallback);
+          const formattedData = fromOfferModelToOfferBEModel(formCustomer.current.values);
+          props.onSubmit(props.type, formattedData, props.refreshTable,  props.row.id,props.closeModalCallback);
         }
       }
 
@@ -87,7 +89,7 @@ export function OffertaCrud(props:PropsWithRef<OffertaCrudProps>){
                                 fields={Object.values(getFormOfferFields(formCustomerData,props.type))}
                                 formData={formCustomerData}
                                 onSubmit={(data: OfferModel) => setformCustomerData(data)}
-                                addedFields={{...commercialeFormField,...clienteFormField}}
+                                addedFields={offertaCustomFields}
                             /> 
                           </div>
                         ),

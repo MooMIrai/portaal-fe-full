@@ -37,6 +37,15 @@ export const getFormOfferFields = (formData: OfferModel, type:string) => {
             disabled:type === "view",
             validator: (value: any) => value ? "" : "Selezionare un anno valido"
         },
+        project_type:{
+            name: "project_type",
+            label: "Tipo di offerta",
+            type: "projecttype-selector",
+            value: formData.project_type,
+            required: true,
+            disabled:type === "view",
+            validator: (value: any) => value ? "" : "Selezionare un tipo offerta"
+        },
         customer: {
             name: "customer",
             label: "Cliente",
@@ -46,8 +55,17 @@ export const getFormOfferFields = (formData: OfferModel, type:string) => {
             disabled:type === "view",
             validator: (value: any) => value ? "" : "Selezionare un Cliente valido"
         },
+        billing_type: {
+            name: "billing_type",
+            label: "Tipo Fatturazione",
+            type: "billingtype-selector",
+            value: formData.billing_type,
+            required: true,
+            disabled:type === "view",
+            validator: (value: any) => value ? "" : "Selezionare un Cliente valido"
+        },
         protocol: {
-            name: "project_code",
+            name: "protocol",
             label: "Protocollo",
             type: "text",
             value: formData.protocol,
@@ -64,6 +82,80 @@ export const getFormOfferFields = (formData: OfferModel, type:string) => {
             disabled:type === "view",
             validator: (value: any) => value ? "" : "Il campo Titolo è obbligatorio"
         },
+        start_date: {
+            name: "start_date",
+            label: "Data creazione",
+            type: "date",
+            value: formData.start_date,
+            required: true,
+            disabled:type === "view",
+            validator: (value: any) => value ? "" : "Il campo Data creazione è obbligatorio"
+        },
+        end_date: {
+            name: "end_date",
+            label: "Data scadenza",
+            type: "date",
+            value: formData.end_date,
+            required: true,
+            disabled:type === "view",
+            validator: (value: any) => value ? "" : "Il campo Data scadenza è obbligatorio"
+        },
+        outcome_type: {
+            name: "outcome_type",
+            label: "Tipo Esito",
+            type: "outcometype-selector",
+            value: formData.outcome_type,
+            required: true,
+            disabled:type === "view",
+            validator: (value: any) => value ? "" : "Selezionare un esito valido"
+        },
+        rate:{
+            name: "rate",
+            label: "Tariffa",
+            type: "number",
+            value: formData.rate,
+            required: false,
+            disabled:type === "view",
+            conditions:(formData)=>{
+                return formData.billing_type && formData.billing_type.id==="Daily";
+            }
+        },
+        days:{
+            name: "days",
+            label: "Giorni offerti",
+            type: "number",
+            value: formData.days,
+            required: false,
+            disabled:type === "view",
+            conditions:(formData)=>{
+                return formData.billing_type && formData.billing_type.id==="Daily";
+            }
+        },
+        amount:{
+            name: "amount",
+            label: "Importo",
+            type: "number",
+            value: formData.amount,
+            required: false,
+            disabled:type === "view",
+            conditions:(formData)=>{
+                return formData.billing_type && formData.billing_type.id!=="Daily";
+            }
+        },
+        not_in_accord:{
+            name:'not_in_accord',
+            label:'Fuori accordo quadro',
+            type:'checkbox',
+            value:formData.title,
+            disabled:type === "view"
+        },
+        description:{
+            name:'description',
+            label:'Descrizione',
+            type:'textarea',
+            value:formData.description,
+            disabled:type === "view"
+        }
         
     }
     return fields

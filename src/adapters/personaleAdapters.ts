@@ -14,12 +14,16 @@ const mapToAnagraficaData = (Person: any,countryLabel:string,cityBirthLabel:stri
   cognome: Person?.lastName || "",
   matricola: Person?.employee_id || "",
   sesso: Person?.Gender?.code,
-  Provincianascita: Person?.provinceBirth || "",
+
+  residenza:{city:Person.cityRes_id,country:0,province:0},
+
+  /* Provincianascita: Person?.provinceBirth || "",
   comuneNascita: Person?.cityBirth || "",
   città: cityResLabel,
   cittaNascita:cityBirthLabel,
   residenza: Person?.provinceRes || "",
-  comuneResidenza: Person?.cityRes || "",
+  comuneResidenza: Person?.cityRes || "", */
+  
   indirizzoResidenza: Person?.address || "",
   dataNascita: Person?.dateBirth ? new Date(Person.dateBirth) : null,
   cap: Person?.zipCode ? parseInt(Person.zipCode, 10) : 0,
@@ -170,11 +174,12 @@ export const dataAdapter = (row: Record<string, any>) => {
     matricola: row.anagrafica.matricola || "",
     sesso: row.anagrafica.sesso,
     città:row.anagrafica.città || "",
-    cittaNascita:row.anagrafica.cittaNascita || "",
-    Provincianascita: row.anagrafica.Provincianascita || "",
-    comuneNascita: row.anagrafica.comuneNascita || "",
+
+    //cittaNascita:row.anagrafica.cittaNascita || "",
+    //Provincianascita: row.anagrafica.Provincianascita || "",
+    //comuneNascita: row.anagrafica.comuneNascita || "",
     residenza: row.anagrafica.residenza || "",
-    comuneResidenza: row.anagrafica.comuneResidenza || "",
+    //comuneResidenza: row.anagrafica.comuneResidenza || "",
     indirizzoResidenza: row.anagrafica.indirizzoResidenza || "",
     dataNascita: row.anagrafica.dataNascita
       ? new Date(row.anagrafica.dataNascita)
@@ -624,15 +629,16 @@ export const reverseAdapter = (combinedData: {
       phoneNumber2: combinedData.anagrafica.telefonoCasa?.toString(),
       address: combinedData.anagrafica.indirizzoResidenza,
       privateEmail: (!combinedData.anagrafica.emailPrivata || combinedData.anagrafica.emailPrivata === "") ? null :combinedData.anagrafica.emailPrivata,
-      city: combinedData.anagrafica.comuneResidenza,
-      cityRes_id: mapCityToID(combinedData.anagrafica.città,combinedData.city) || null,
-      cityBirth_id:mapCityToID(combinedData.anagrafica.cittaNascita, combinedData.city) || null,
+      //city: combinedData.anagrafica.comuneResidenza,
+      cityRes_id: /* mapCityToID(combinedData.anagrafica.città,combinedData.city) ||  */null,
+      cityBirth_id:/* mapCityToID(combinedData.anagrafica.cittaNascita, combinedData.city) || */ null,
+
       location_id: mapLocatiomToID(combinedData.anagrafica.sede, combinedData.sede) || null,
       provinceRes: combinedData.anagrafica.residenza,
-      provinceBirth: combinedData.anagrafica.Provincianascita,
+      //provinceBirth: combinedData.anagrafica.Provincianascita,
       country_id: mapCountryToID(combinedData.anagrafica.stato, combinedData.country) || 108,
-      cityRes: combinedData.anagrafica.comuneResidenza,
-      cityBirth: combinedData.anagrafica.comuneNascita,
+      //cityRes: combinedData.anagrafica.comuneResidenza,
+      //cityBirth: combinedData.anagrafica.comuneNascita,
       dateBirth: combinedData.anagrafica.dataNascita,
       bankAddress: (!combinedData.anagrafica.iban || combinedData.anagrafica.iban === "" )? null : combinedData.anagrafica.iban,
       zipCode: combinedData.anagrafica.cap?.toString() ?? " ",

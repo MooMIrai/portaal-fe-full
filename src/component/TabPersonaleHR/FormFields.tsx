@@ -108,12 +108,19 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             data: country.map((c) => c.label),
             filterable: true, 
           }, */
+        residenzaTest:{
+            name: "residenza",
+            label: "Residenza",
+            type: "country",
+            disabled: type === "view",
+            value: formData.residenza,
+        },
         cittanascita: {
             name: "cittananascita",
             label: "Città di Nascita",
             type: "select",
             disabled: type === "view",
-            value: formData.cittaNascita || "",
+            value:  "",
             options: cityOptions
         },
         Provincianascita: {
@@ -121,14 +128,14 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             label: "Provincia di Nascita",
             type: "text",
             disabled: type === "view",
-            value: formData.Provincianascita || "",
+            value:  "",
         },
         comuneNascita: {
             name: "comuneNascita",
             label: "Comune di Nascita",
             type: "text",
             disabled: type === "view",
-            value: formData.comuneNascita || "",
+            value:  "",
         },
         residenza: {
             name: "residenza",
@@ -141,7 +148,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             name: "comuneResidenza",
             label: "Comune di Residenza",
             type: "text",
-            value: formData.comuneResidenza || "",
+            value:  "",
         },
         cittaResidenza: {
             name: "cittàResidenza",

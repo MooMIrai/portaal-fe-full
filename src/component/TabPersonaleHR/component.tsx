@@ -55,11 +55,12 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
   
   const [showNewContractModal, setShowNewContractModal] = useState(false);
   const [confirmNewContractStep, setConfirmNewContractStep] = useState(false);
-  console.log("row", row.anagrafica)
+
   const handleSelect = (e: TabStripSelectEventArguments) => {
     setSelected(e.selected);
   };
 
+  console.log(anagrafica)
   const handleSubmit = () => {
     let hasError = false;
 
@@ -118,7 +119,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
       sede:sede,
     };
 
-    console.log("Combined Data:", combinedData);
+    
 
     if (!hasError) {
       const formattedData = reverseAdapter(combinedData);
