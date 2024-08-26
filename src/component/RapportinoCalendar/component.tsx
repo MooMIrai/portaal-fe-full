@@ -86,6 +86,24 @@ export default function RapportinoCalendar() {
     };
   };
 
+  const renderMultipleSelectModal = (timesheetId: number, dates: Date[], closeModalCallback) => {
+    const title = dates.length >= 2
+      ? dates[0].toISOString().split["T"][0].replaceAll("-", "/") + " - " + dates[dates.length - 1].toISOString().split["T"][0].replaceAll("-", "/")
+      : "";
+
+    return {
+      component: (
+        <RapportinoCrud
+          activitiesHours={[]}
+          timesheetId={timesheetId}
+          dates={dates}
+          onClose={closeModalCallback}
+        />
+      ),
+      title: title,
+    }
+  }
+
   return (
     <>
       {size.width && size.width >= 768 ? (
@@ -97,9 +115,10 @@ export default function RapportinoCalendar() {
           timezone="Europe/Rome"
           handleDateChange={handleDateChange}
           defaultView="month"
-          handleDataChange={() => {}}
+          handleDataChange={() => { }}
           data={data}
           contentModal={renderContent}
+          multipleSelectionModal={renderMultipleSelectModal}
         />
       ) : (
         <CalendarMobile

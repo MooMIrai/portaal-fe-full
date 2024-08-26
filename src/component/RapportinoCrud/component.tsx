@@ -4,7 +4,9 @@ import { TimesheetsService } from "../../services/rapportinoService";
 
 interface RapportinoCrudProps {
   activitiesHours: any;
-  item: any;
+  item?: any;
+  dates?: Date[];
+  timesheetId?: number;
   onClose: () => void;
 }
 
@@ -15,13 +17,26 @@ const RapportinoCrud = (props: RapportinoCrudProps) => {
     return TimesheetsService.getActivitiesByDate(date, timesheetId);
   };
 
+  const mockLoadArrayData = (dates: Date[], timesheetId: number) => {
+    return TimesheetsService.getActivitiesByListDates(dates, timesheetId);
+  }
+
   const loadData = async () => {
     try {
-      const resources = await mockLoadData(
-        props.item.start,
-        props.item.timeSheetsId
-      );
-      return resources;
+      if (props.item && props.item.timeSheetsId) {
+        console.log("rpcrud:", props)
+        const resources = await mockLoadData(
+          props.item.start,
+          props.item.timeSheetsId
+        );
+        return resources;
+      } else if (props.dates?.length && props.timesheetId != null) {
+        const resources = await mockLoadArrayData(
+          props.dates,
+          props.timesheetId
+        );
+        return resources;
+      }
     } catch (error) {
       console.error("Error loading data:", error);
       return [];

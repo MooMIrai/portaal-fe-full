@@ -39,10 +39,29 @@ class TimesheetsServiceC {
   };
 
   getActivitiesByDate = async (date: Date, timesheetId: number) => {
+    console.log("date: " + date + " - timesheetId: " + timesheetId);
     try {
       const response = await client.get(`api/v1/activities/byDate`, {
         params: {
           date: date,
+          timesheet_id: timesheetId,
+        },
+      });
+      return response.data;
+    } catch (error: any) {
+      console.error(
+        "Error fetching resource:",
+        error.response ? error.response.data : error
+      );
+      throw error;
+    }
+  };
+
+  getActivitiesByListDates = async (dates: Date[], timesheetId: number) => {
+    try {
+      const response = await client.get(`api/v1/activities/byListDates`, {
+        params: {
+          dates: dates,
           timesheet_id: timesheetId,
         },
       });
