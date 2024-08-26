@@ -87,9 +87,11 @@ export default function RapportinoCalendar() {
   };
 
   const renderMultipleSelectModal = (timesheetId: number, dates: Date[], closeModalCallback) => {
-    const title = dates.length >= 2
-      ? dates[0].toISOString().split["T"][0].replaceAll("-", "/") + " - " + dates[dates.length - 1].toISOString().split["T"][0].replaceAll("-", "/")
-      : "";
+    const title = dates?.length >= 2
+      ? dates[0].toLocaleDateString() + " - " + dates[dates.length - 1].toLocaleDateString()
+      : dates.length === 1
+        ? dates[0].toLocaleDateString()
+        : "";
 
     return {
       component: (
