@@ -18,6 +18,7 @@ import {
   DateInput,
   YearInput
 } from "./fieldComponents";
+import CountrySelector from "../CountrySelector/component";
 
 const getFieldComponent = (type: FieldType) => {
   switch (type) {
@@ -40,7 +41,9 @@ const getFieldComponent = (type: FieldType) => {
     case "checkbox":
       return CheckboxInput;
     case 'year':
-      return YearInput
+      return YearInput;
+    case 'country':
+      return CountrySelector;
     default:
       return TextInput;
   }
@@ -67,7 +70,8 @@ export type FieldType =
   | "checkbox"
   | "radio"
   | "select"
-  | "year";
+  | "year"
+  | "country";
 
 export interface FieldConfig {
   name: string;
@@ -78,6 +82,7 @@ export interface FieldConfig {
   value: any;
   disabled?: boolean;
   required?: boolean;
+  conditions?:(values:any)=>boolean
   //onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -105,7 +110,7 @@ const DynamicField = ({
   addedFields?:Record<string,React.JSX.Element>
 }) => {
 
-  const { name, type, label, validator, options, disabled } = field;
+  const { name, type, label, validator, options, disabled,required } = field;
   let Component:any = getFieldComponent(type);
 
   if(addedFields && Object.keys(addedFields).some(s=>s===type)){
@@ -118,7 +123,7 @@ const DynamicField = ({
     <Field
       name={name}
       component={Component}
-      label={label}
+      label={label + (required?'*':'')}
       validator={validator}
       options={options}
       type={type}
@@ -126,7 +131,7 @@ const DynamicField = ({
       value={formRenderProps.valueGetter(name)}
       onChange={(event) =>
         formRenderProps.onChange(name, {
-          value: event.value || event.target.value,
+          value: event? (event.value || event.target.value):undefined,
         })
       }
     />
@@ -164,7 +169,10 @@ const DynamicForm = React.forwardRef<any,DynamicFormProps>((props,ref)=>{
       {children === undefined && (
         <fieldset className={"k-form-fieldset"}>
           <legend className={"k-form-legend"}>{description}</legend>
-          {fields.map((field, index) => {
+          {fields.filter((field)=>{
+            const formRef:any = ref; 
+            return !field.conditions || (formRef && formRef.current && field.conditions(formRef.current.values))
+          }).map((field, index) => {
             return (
             <FieldWrapper key={index}>
               

@@ -7,15 +7,12 @@ type AutocompleteInputProps = {
 } & ComboBoxProps; 
 
 const AutocompleteInput: React.FC<AutocompleteInputProps> = (props) => {
-    const { label } = props;
+    
 
-    return (
-        <div>
-            {label && <div>{label}</div>}
-            <ComboBox
+    return (<ComboBox
                 {...props} 
             />
-        </div>
+        
     );
 };
 

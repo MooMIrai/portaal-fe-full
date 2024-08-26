@@ -20,15 +20,18 @@ client.interceptors.response.use((response)=>{
 
     return response;
 },(error)=>{
-    if(error.reponse && error.response.status===401){
+
+    if(error.response && error.response.status===401){
         window.dispatchEvent(new CustomEvent("LOGOUT"));
         window.location.href='/';
-    } else if (error.reponse && error.response.status === 409){
+    } else if (error.response && error.response.status === 409){
         
         NotificationProviderActions.openModal({icon:true,style:'error'},error.response.data.message);
        
+    }else{
+        NotificationProviderActions.openModal({icon:true,style:'error'},"SERVER ERROR");
     }
-    throw new Error(error);
+   
 })
 
 export default client;

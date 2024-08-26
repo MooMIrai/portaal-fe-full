@@ -89,6 +89,7 @@
     "@progress/kendo-theme-bootstrap": "^8.0.1",
     "@progress/kendo-theme-default": "^8.0.1",
     "@progress/kendo-theme-material": "^8.0.1",
+    "@uidotdev/usehooks": "^2.4.1",
     "axios": "^1.7.2",
     "cldr-core": "^45.0.0",
     "cldr-dates-full": "^45.0.0",

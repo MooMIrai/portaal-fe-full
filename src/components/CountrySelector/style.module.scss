@@ -1,0 +1,15 @@
+.container{
+    display: flex;
+    justify-content: space-evenly;
+
+
+    & .add_country_btn{
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-bottom: 10px;
+        padding-top:10px
+    }
+
+}

@@ -46,17 +46,12 @@ export default abstract class BaseHTTPService{
     };
   
   
-    createResource = async (resourceData: any) => {
-      try {
-        const response = await client.post(
-          `/api/v1/${this.getTableName()}/create`,
-          resourceData
-        );
-        return response.data;
-      } catch (error) {
-        console.error("Error creating resource:", error);
-        throw error;
-      }
+    createResource = (resourceData: any) => {
+      return client.post(
+        `/api/v1/${this.getTableName()}/create`,
+        resourceData
+      ).then(res=>res.data)
+      
     };
   
     fetchResource = async ( id: number) => {
