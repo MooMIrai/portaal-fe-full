@@ -8,21 +8,22 @@ export interface OfferTypeBE {
 
 export interface OfferBEModel {
     id?:number,
-    accountManager_id:number,
+    accountManager_id?:number,
     amount:number,
     billing_type:string,
-    customer_id:number
+    customer_id?:number
     date_created?:string,
     end_date?:string,
     name:string,
     other_details:string,
     project_code:string,
-    project_type_id:number,
+    project_type_id?:number,
     rate:number,
     start_date:string,
     OutcomeType?:string,
     ProjectType?:OfferTypeBE,
     Customer?: CustomerBEModel,
+    days?:number,
     AccountManager?: {
         account_status_id: number,
         email: string,
@@ -30,7 +31,7 @@ export interface OfferBEModel {
         person_id: string,
         Person:any
     }
-    
+    year:number,
 }
 
 export interface OfferModel {
@@ -56,5 +57,7 @@ export interface OfferModel {
     project_type?:{id:number,name:string},
     project_type_id: number,
     
-    outcome_type?:{id:string,name:string}
+    outcome_type?:{id:string,name:string},
+    year:Date,
+    days?:number
 }

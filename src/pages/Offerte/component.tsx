@@ -61,20 +61,21 @@ export default function OffertePage(){
     const handleFormSubmit = (type: string, formData: any, refreshTable: any, id: any, closeModal:()=>void)=>{
         let promise:Promise<any> | undefined=undefined;
         
-        /*if (type === "create") {
-          promise = customerService.createResource(formData);
+        if (type === "create") {
+          promise = offertaService.createResource(formData);
         } else if (type === "edit") {
-          promise =customerService.updateResource(id,formData);
+          promise =offertaService.updateResource(id,formData);
         } else if (type === "delete") {
-          promise = customerService.deleteResource(id);
-        }*/
-       promise = Promise.resolve('')
+          promise = offertaService.deleteResource(id);
+        }
+      
 
         if(promise){
           promise.then(()=>{
             NotificationProviderActions.openModal({icon:true,style:'success'},"Operazione avvenuta con successo");
             refreshTable();
             closeModal();
+
           })
         }
 

@@ -9,6 +9,7 @@ import React from "react";
 import styles from "./style.module.scss";
 import { getFormOfferFields } from "./form";
 import { offertaCustomFields } from "./customfields";
+import { fromOfferModelToOfferBEModel } from "../../adapters/offertaAdapters";
 
 
 
@@ -47,8 +48,8 @@ export function OffertaCrud(props:PropsWithRef<OffertaCrudProps>){
   
     
         if (!hasError) {
-          //const formattedData = convertToCustomerBE(formCustomer.current.values);
-          //props.onSubmit(props.type, formattedData, props.refreshTable,  props.row.id,props.closeModalCallback);
+          const formattedData = fromOfferModelToOfferBEModel(formCustomer.current.values);
+          props.onSubmit(props.type, formattedData, props.refreshTable,  props.row.id,props.closeModalCallback);
         }
       }
 

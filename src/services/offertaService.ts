@@ -4,7 +4,7 @@ import { mapBillingTypeName, mapOutcomeTypeName } from "../adapters/offertaAdapt
 class OffertaService extends BaseHttpService{
 
     getTableName(){
-        return 'projects'
+        return 'offers'
     }
 
     getProjectType(term:string){
@@ -13,14 +13,14 @@ class OffertaService extends BaseHttpService{
 
     getBillingType(term:string){
 
-        return client.get('/api/v1/projects/billingTypes').then(res=>{
+        return client.get('/api/v1/offers/billingTypes').then(res=>{
             return res.data.map(p=>({id:p,name:mapBillingTypeName(p)})).filter(p=>!term || !term.length || p.name.toLowerCase().indexOf(term.toLocaleLowerCase())>=0);
         })
     }
 
     getOutcomeType(term:string){
 
-        return client.get('/api/v1/projects/outcomeTypes').then(res=>{
+        return client.get('/api/v1/offers/outcomeTypes').then(res=>{
             return res.data.map(p=>({id:p,name:mapOutcomeTypeName(p)})).filter(p=>!term || !term.length || p.name.toLowerCase().indexOf(term.toLocaleLowerCase())>=0);
         })
     }

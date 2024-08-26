@@ -8,13 +8,16 @@ export interface AnagraficaData {
     matricola?: string;
     sesso?: any;
     stato?:any;
-    Provincianascita?: string;
-    comuneNascita?: string;
-    residenza?: string;
-    comuneResidenza?: string;
+    //Provincianascita?: string;
+    //comuneNascita?: string;
+    //residenza?: string;
+    //comuneResidenza?: string;
     indirizzoResidenza?: string;
     dataNascita?: any;
-    cittaNascita?:any;
+    
+    residenza?:{country:number,province:number,city:number},
+    nascita?:{country:number,province:number,city:number},
+
     cap?: number;
     cellulare?: number;
     telefonoCasa?: number;

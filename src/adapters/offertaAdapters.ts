@@ -11,20 +11,24 @@ export function fromOfferBEModelToOfferModel(offerBE: OfferBEModel): OfferModel 
         rate: offerBE.rate, 
         amount: offerBE.amount,
 
-        customer_id: offerBE.customer_id,
+        customer_id: offerBE.customer_id ||0,
         customer_name: offerBE.Customer?.name + ' '+offerBE.Customer?.name,
-        customer: {id:offerBE.customer_id,name:offerBE.Customer?offerBE.Customer.name:''},
+        customer: {id:offerBE.customer_id||0,name:offerBE.Customer?offerBE.Customer.name:''},
         
         creation_date:offerBE.date_created?new Date(offerBE.date_created):undefined,
         
-        accountManager_id: offerBE.accountManager_id,
-        accountManager: {id:offerBE.accountManager_id,name:offerBE.AccountManager?.Person.firstName + ' ' +offerBE.AccountManager?.Person.lastName},
+        accountManager_id: offerBE.accountManager_id ||0,
+        accountManager: {id:offerBE.accountManager_id||0,name:offerBE.AccountManager?.Person.firstName + ' ' +offerBE.AccountManager?.Person.lastName},
 
-        project_type_id: offerBE.project_type_id,
+        project_type_id: offerBE.project_type_id||0,
         project_type:offerBE.ProjectType?{id:offerBE.ProjectType.id,name:offerBE.ProjectType.description}:undefined,
 
         billing_type:{id:offerBE.billing_type,name:mapBillingTypeName(offerBE.billing_type)}, // hypothetical method for billing type conversion
-        outcome_type:offerBE.OutcomeType?{id:offerBE.OutcomeType,name:mapOutcomeTypeName(offerBE.OutcomeType)}:undefined
+        outcome_type:offerBE.OutcomeType?{id:offerBE.OutcomeType,name:mapOutcomeTypeName(offerBE.OutcomeType)}:undefined,
+
+        year:new Date(offerBE.year,1,1),
+        days:offerBE.days
+        
     };
 }
 
@@ -35,14 +39,16 @@ export function fromOfferModelToOfferBEModel(offerModel: OfferModel): OfferBEMod
         name: offerModel.title, // mapping title to name
         start_date: offerModel.start_date.toISOString(),
         end_date: offerModel.end_date?.toISOString() || undefined, // fallback to undefined if empty
-        other_details: offerModel.description, // mapping description to other_details
-        rate: offerModel.rate,
-        amount: offerModel.amount,
-        customer_id: offerModel.customer_id,
-        accountManager_id: offerModel.accountManager_id,
-        project_type_id: offerModel.project_type_id,
+        other_details: offerModel.description || "", // mapping description to other_details
+        rate: offerModel.rate?parseFloat(offerModel.rate.toString()):0,
+        amount: offerModel.amount?parseFloat(offerModel.amount.toString()):0,
+        customer_id: offerModel.customer?.id,
+        accountManager_id: offerModel.accountManager?.id,
+        project_type_id: offerModel.project_type?.id,
         billing_type: offerModel.billing_type?offerModel.billing_type.id:"", // hypothetical method for billing type conversion
-        OutcomeType: offerModel.outcome_type?.id
+        OutcomeType: offerModel.outcome_type?.id,
+        year:offerModel.year.getFullYear(),
+        days:offerModel.days || 0
     };
 }
 
