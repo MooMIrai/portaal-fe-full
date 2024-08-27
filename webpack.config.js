@@ -65,8 +65,7 @@ module.exports = (_, argv) => ({
             loader: 'file-loader',
             options: {
               name: '[name].[ext]',
-              outputPath: 'fonts/',
-              publicPath: '/fonts/'
+             
             }
           }
         ]
