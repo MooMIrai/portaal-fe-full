@@ -5,6 +5,7 @@ const deps = require("./package.json").dependencies;
 const { FederatedTypesPlugin } = require("@module-federation/typescript");
 const webpack = require("webpack");
 
+
 const mfeConfig = {
   name: "common",
   filename: "remoteEntry.js",
@@ -47,10 +48,16 @@ const mfeConfig = {
   },
 };
 
-module.exports = (_, argv) => ({
+
+module.exports = (_, argv) => {
+
+  require('dotenv').config({path:'./.env.'+argv.mode});
+
+  return {
   output: {
-    publicPath: "http://localhost:3003/",
+    publicPath: process.env.RELEASE_PATH,
     filename: "bundle.js",
+    clean:true
   },
   resolve: {
     extensions: [".tsx", ".ts", ".jsx", ".js", ".json"],
@@ -99,16 +106,6 @@ module.exports = (_, argv) => ({
       },
     ],
   },
-  optimization: {
-    splitChunks: {
-      chunks: "all",
-      cacheGroups: {
-        default: false,
-        defaultVendors: false,
-        commons: false,
-      },
-    },
-  },
   plugins: [
     new ModuleFederationPlugin(mfeConfig),
     //new FederatedTypesPlugin({ federationConfig: mfeConfig }),
@@ -117,9 +114,9 @@ module.exports = (_, argv) => ({
       filename: "index.html",
       chunks: ["bundle"],
     }),
-    new Dotenv(),
+    new Dotenv({path:'./.env.'+argv.mode}),
     new webpack.optimize.LimitChunkCountPlugin({
-      maxChunks: 10,
+      maxChunks: 1,
     }),
   ],
-});
+}};
