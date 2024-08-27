@@ -3,12 +3,13 @@ const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPl
 const Dotenv = require("dotenv-webpack");
 const deps = require("./package.json").dependencies;
 const { FederatedTypesPlugin } = require("@module-federation/typescript");
+const webpack = require("webpack");
 
-const mfeConfig = {
+const mfeConfig = (path,mode)=> ({
   name: "lookups",
   filename: "remoteEntry.js",
   remotes: {
-    common: "common@http://localhost:3003/remoteEntry.js",
+    common: "common@"+path+(mode==='production'?'/common':'')+"/remoteEntry.js",
   },
   exposes: {
     "./Index": "./src/MfeInit",
@@ -28,11 +29,14 @@ const mfeConfig = {
       requiredVersion: deps["react-dom"],
     },
   },
-};
+});
 
-module.exports = (_, argv) => ({
+module.exports = (_, argv) => {
+  require('dotenv').config({path:'./.env.'+argv.mode});
+  return {
   output: {
-    publicPath: "http://localhost:3005/",
+    publicPath: process.env.RELEASE_PATH,
+    clean: true
   },
   resolve: {
     extensions: [".tsx", ".ts", ".jsx", ".js", ".json"],
@@ -64,11 +68,14 @@ module.exports = (_, argv) => ({
     ],
   },
   plugins: [
-    new ModuleFederationPlugin(mfeConfig),
+    new ModuleFederationPlugin(mfeConfig(process.env.REMOTE_PATH,argv.mode)),
     //new FederatedTypesPlugin({ federationConfig: mfeConfig }),
     new HtmlWebPackPlugin({
       template: "./src/index.html",
     }),
-    new Dotenv(),
+    new Dotenv({path:'./.env.'+argv.mode}),
+    new webpack.optimize.LimitChunkCountPlugin({
+      maxChunks: 1,
+    })
   ],
-});
+}};
