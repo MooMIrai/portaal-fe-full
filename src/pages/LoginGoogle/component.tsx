@@ -1,6 +1,4 @@
 import React from "react";
-import { Button } from "@progress/kendo-react-buttons";
-import { Card } from "@progress/kendo-react-layout";
 import client from "common/services/BEService";
 import styles from "./styles.module.css";
 
@@ -15,7 +13,7 @@ const LoginGoogleComponent = () => {
 
   return (
     <div className={styles.loginContainer}>
-      <Card className={styles.loginCard}>
+      {/* <Card className={styles.loginCard}> */}
         <div className={styles.loginContent}>
           <img
             src="/image/logoTaal.png"
@@ -24,15 +22,15 @@ const LoginGoogleComponent = () => {
           />
           <h1>Benvenuto!</h1>
           <p>Accedi al dominio TAAL</p>
-          <Button
+          <button
             onClick={handleGoogleLogin}
             className={`${styles.kButton} k-button`}
-            icon="google"
+            /* icon="google" */
           >
             Accedi con Google
-          </Button>
+          </button>
         </div>
-      </Card>
+      {/* </Card> */}
     </div>
   );
 };
