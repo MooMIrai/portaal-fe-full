@@ -17,6 +17,7 @@ steps:
 
 - script: |
     npm install -g webpack webpack-cli --save-dev
+    npm install --save-dev html-webpack-plugin
     npm install
     npm install --save-dev html-webpack-plugin
     npx webpack --config webpack.config.js
