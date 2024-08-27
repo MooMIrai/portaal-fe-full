@@ -34,6 +34,7 @@ const mfeConfig =(path,mode)=> ({
 module.exports = (_, argv) => {
   require('dotenv').config({path:'./.env.'+argv.mode});
   return{
+    devtool:'source-map',
   output: {
     publicPath: process.env.RELEASE_PATH,
     clean: true
@@ -74,9 +75,9 @@ module.exports = (_, argv) => {
         template: "./src/index.html",
       }),
       new Dotenv({path:'./.env.'+argv.mode}),
-      new webpack.optimize.LimitChunkCountPlugin({
+      ...(argv.mode==='production'?[new webpack.optimize.LimitChunkCountPlugin({
         maxChunks: 1,
-      })
+      })]:[]),
   ],
   }
 };
