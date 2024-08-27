@@ -56,9 +56,9 @@ module.exports = (_, argv) => {
   return {
   output: {
     publicPath: process.env.RELEASE_PATH,
-    filename: "bundle.js",
     clean:true
   },
+  devtool:"source-map",
   resolve: {
     extensions: [".tsx", ".ts", ".jsx", ".js", ".json"],
   },
@@ -115,8 +115,8 @@ module.exports = (_, argv) => {
       chunks: ["bundle"],
     }),
     new Dotenv({path:'./.env.'+argv.mode}),
-    new webpack.optimize.LimitChunkCountPlugin({
+    ...(argv.mode==='production'?[new webpack.optimize.LimitChunkCountPlugin({
       maxChunks: 1,
-    }),
+    })]:[]),
   ],
 }};
