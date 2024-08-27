@@ -1,7 +1,7 @@
 
 export interface AnagraficaData {
     person_id?:any;
-    sede?: any;
+    sede?: any; //sia per il name dell'autocomplete che per la select
     nome?: string;
     cognome?: string;
     email?: string;
@@ -29,13 +29,19 @@ export interface AnagraficaData {
     codiceFiscale?: string;
     accountStatus_id?:any;
     partitaIva?:number;
+    sede_autocomplete_id?:number;
+    sede_autocomplete?:{id:number,name:string},
 }
 
 export interface TrattamentoEconomicoData {
     id?:any;
     tipologiaContratto?: any;
+    tipologiaContratto_autocomplete?:{id:number,name:string},
+    tipologiaContratto_id?:number,
     societa?: any;
-    tipoAmbitoLavorativo?: any;
+    tipoAmbitoLavorativo?: any; //name e per la select
+    tipoAmbitoLavorativo_autocomplete?:{id:number,name:string},
+    tipoAmbitoLavorativo_autocomplete_id?:number,
     dataInizioTrattamento?: any;
     costoGiornaliero?: number;
     dataAssunzione?: any;

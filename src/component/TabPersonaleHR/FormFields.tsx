@@ -1,15 +1,14 @@
 // formFields.ts
-import { ActivityTypeOption, cityTypeOption, companyOption, contractTypeOption, countryOption, genderOption, locationOption, RoleOption, WokeScopeOption } from '../../adapters/personaleAdapters';
+import { ActivityTypeOption, cityTypeOption, companyOption, countryOption, genderOption, RoleOption } from '../../adapters/personaleAdapters';
 import { AnagraficaData, TrattamentoEconomicoData, RuoliData, PermessiData } from './modelForms';
 
 
 
-export const getFormAnagraficaFields = (formData: AnagraficaData, gender: genderOption[], type: any, city: cityTypeOption[], country: countryOption[],sede:locationOption[]) => {
+export const getFormAnagraficaFields = (formData: AnagraficaData, gender: genderOption[], type: any, city: cityTypeOption[], country: countryOption[]) => {
     const genderOptions = gender.map(company => company.label)
     const cityOptions = city.map(city => city.label)
-
     const onlyLettersValidator = (value: any) => /^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/.test(value) ? "" : "Il campo deve contenere solo lettere";
-
+    
     const dateValidator = (value: any) => {
         if (!value) return "Il campo Data di Nascita è obbligatorio";
         const selectedDate = new Date(value);
@@ -46,14 +45,14 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
 
    
     const fields = {
-        sede: {
-            name: "sede",
+        sede_autocomplete: {
+            name: "sede_autocomplete",
             label: "Sede",
-            type: "select",
-            value: formData.sede || "",
+            type: "sede-selector",
+            value: formData.sede_autocomplete|| "",
             required: true,
             disabled: type === "view",
-            options: sede?.map(c => c.label),
+           /*  options: sede?.map(c => c.label), */
             validator: (value: any) => value ? "" : "Il campo sede è obbligatorio",
         },
         nome: {
@@ -78,6 +77,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             name: "email",
             label: "Email Aziendale",
             type: "email",
+            showLabel:false,
             value: formData.email || "",
             required: true,
             disabled: type === "view",
@@ -94,6 +94,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             name: "sesso",
             label: "Sesso",
             type: "select",
+            showLabel:false,
             disabled: type === "view",
             value: formData.sesso || "",
             require: true,
@@ -176,6 +177,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             name: "emailPrivata",
             label: "Email Privata",
             type: "email",
+            showLabel:false,
             disabled: type === "view",
             value: formData.emailPrivata || "",
         },
@@ -205,11 +207,8 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
 
 };
 
-export const getFormTrattamentoEconomicoFields = (formData: TrattamentoEconomicoData | null, wokeScope: WokeScopeOption[], contractType: contractTypeOption[], company: companyOption[], type: any, newFormContract?: boolean) => {
-    const wokeScopeOptions = wokeScope.map(scope => scope.label);
-    const contractTypeOptions = contractType.map(contract => contract.label);
+export const getFormTrattamentoEconomicoFields = (formData: TrattamentoEconomicoData | null,company: companyOption[], type: any) => {
     const companyOptions = company.map(company => company.label);
-
 
     const optionalDateValidator = (field: string) => (value: any, formData: TrattamentoEconomicoData | null) => {
         if (!value) return true;
@@ -224,35 +223,34 @@ export const getFormTrattamentoEconomicoFields = (formData: TrattamentoEconomico
     };
 
     const fields = {
-        tipologiaContratto: {
-            name: "tipologiaContratto",
+        tipologiaContratto_autocomplete: {
+            name: "tipologiaContratto_autocomplete",
             label: "Tipologia di Contratto di Lavoro",
-            type: "select",
+            type: "contract-type",
             disabled: (type === "view"),
-            value: formData?.tipologiaContratto || "",
+            value: formData?.tipologiaContratto_autocomplete || "",
             required: true,
             validator: (value: any) => value ? "" : "Il campo Tipologia di Contratto è obbligatorio",
-            options: contractTypeOptions
         },
         societa: {
             name: "societa",
             label: "Società",
             type: "select",
+            showLabel:false,
             disabled: (type === "view"),
             value: formData?.societa || "",
             required: true,
             validator: (value: any) => value ? "" : "Il campo Società è obbligatorio",
             options: companyOptions
         },
-        tipoAmbitoLavorativo: {
-            name: "tipoAmbitoLavorativo",
+        tipoAmbitoLavorativo_autocomplete: {
+            name: "tipoAmbitoLavorativo_autocomplete",
             label: "Ambito Lavorativo",
-            type: "select",
+            type: "work-scope",
             disabled: (type === "view"),
-            value: formData?.tipoAmbitoLavorativo || "",
+            value: formData?.tipoAmbitoLavorativo_autocomplete || "",
             required: true,
             validator: (value: any) => value ? "" : "Il campo Ambito Lavorativo è obbligatorio",
-            options: wokeScopeOptions,
         },
         dataInizioTrattamento: {
             name: "dataInizioTrattamento",
@@ -337,6 +335,7 @@ export const getFormTrattamentoEconomicoFields = (formData: TrattamentoEconomico
             name: "buoniPasto",
             label: "Buoni Pasto",
             type: "select",
+            showLabel:false,
             disabled: (type === "view"),
             options: ["SI", "NO"],
             value: formData?.buoniPasto,
@@ -384,6 +383,7 @@ export const getFormRuoliFields = (formData: RuoliData, roles: RoleOption[], typ
             name: "ADM",
             label: roles.find(role => role.name === 'ADM')?.label || 'Admin',
             type: "checkbox",
+            showLabel:false,
             disabled: type === "view",
             value: formData.ADM || false,
         },
@@ -391,6 +391,7 @@ export const getFormRuoliFields = (formData: RuoliData, roles: RoleOption[], typ
             name: "AMMI",
             label: roles.find(role => role.name === 'AMMI')?.label || 'Amministrazione',
             type: "checkbox",
+            showLabel:false,
             disabled: type === "view",
             value: formData.AMMI || false,
         },
@@ -398,6 +399,7 @@ export const getFormRuoliFields = (formData: RuoliData, roles: RoleOption[], typ
             name: "COM",
             label: roles.find(role => role.name === 'COM')?.label || 'Commerciale',
             type: "checkbox",
+            showLabel:false,
             disabled: type === "view",
             value: formData.COM || false,
         },
@@ -405,6 +407,7 @@ export const getFormRuoliFields = (formData: RuoliData, roles: RoleOption[], typ
             name: "DIP",
             label: roles.find(role => role.name === 'DIP')?.label || 'Dipendente',
             type: "checkbox",
+            showLabel:false,
             disabled: type === "view",
             value: formData.DIP || false,
         },
@@ -412,6 +415,7 @@ export const getFormRuoliFields = (formData: RuoliData, roles: RoleOption[], typ
             name: "LEA",
             label: roles.find(role => role.name === 'LEA')?.label || 'Capo Progetto',
             type: "checkbox",
+            showLabel:false,
             disabled: type === "view",
             value: formData.LEA || false,
         },
@@ -419,6 +423,7 @@ export const getFormRuoliFields = (formData: RuoliData, roles: RoleOption[], typ
             name: "REC",
             label: roles.find(role => role.name === 'REC')?.label || 'Recruiter',
             type: "checkbox",
+            showLabel:false,
             disabled: type === "view",
             value: formData.REC || false,
         },
@@ -426,6 +431,7 @@ export const getFormRuoliFields = (formData: RuoliData, roles: RoleOption[], typ
             name: "RP",
             label: roles.find(role => role.name === 'RP')?.label || 'Resp. Personale',
             type: "checkbox",
+            showLabel:false,
             disabled: type === "view",
             value: formData.RP || false,
         },
@@ -433,6 +439,7 @@ export const getFormRuoliFields = (formData: RuoliData, roles: RoleOption[], typ
             name: "SEG",
             label: roles.find(role => role.name === 'SEG')?.label || 'Segreteria',
             type: "checkbox",
+            showLabel:false,
             disabled: type === "view",
             value: formData.SEG || false,
         },
@@ -440,6 +447,7 @@ export const getFormRuoliFields = (formData: RuoliData, roles: RoleOption[], typ
             name: "RISEXT",
             label: roles.find(role => role.name === 'RISEXT')?.label || 'Risorsa esterna',
             type: "checkbox",
+            showLabel:false,
             disabled: type === "view",
             value: formData.RISEXT || false,
         },
@@ -447,6 +455,7 @@ export const getFormRuoliFields = (formData: RuoliData, roles: RoleOption[], typ
             name: "ADD_CENS",
             label: roles.find(role => role.name === 'ADD_CENS')?.label || 'Addetto censimento',
             type: "checkbox",
+            showLabel:false,
             disabled: type === "view",
             value: formData.ADD_CENS || false,
         },
@@ -454,6 +463,7 @@ export const getFormRuoliFields = (formData: RuoliData, roles: RoleOption[], typ
             name: "TESTROLE2",
             label: roles.find(role => role.name === 'TESTROLE2')?.label || 'TestEditUpdateThird',
             type: "checkbox",
+            showLabel:false,
             disabled: type === "view",
             value: formData.TESTROLE2 || false,
         }
@@ -467,6 +477,7 @@ export const getFormPermessiFields = (formData: PermessiData, permessiOptions: A
             name: "HMA",
             label: permessiOptions.find(permesso => permesso.code === 'HMA')?.label || "Malattia",
             type: "checkbox",
+            showLabel:false,
             value: formData.HMA || false,
             required: false,
             disabled: type === "view",
@@ -475,6 +486,7 @@ export const getFormPermessiFields = (formData: PermessiData, permessiOptions: A
             name: "HPE",
             label: permessiOptions.find(permesso => permesso.code === 'HPE')?.label || "Permesso",
             type: "checkbox",
+            showLabel:false,
             value: formData.HPE || false,
             disabled: type === "view",
             required: false
@@ -483,6 +495,7 @@ export const getFormPermessiFields = (formData: PermessiData, permessiOptions: A
             name: "HFE",
             label: permessiOptions.find(permesso => permesso.code === 'HFE')?.label || "Ferie",
             type: "checkbox",
+            showLabel:false,
             value: formData.HFE || false,
             disabled: type === "view",
             required: false
@@ -491,6 +504,7 @@ export const getFormPermessiFields = (formData: PermessiData, permessiOptions: A
             name: "HPE_104",
             label: permessiOptions.find(permesso => permesso.code === 'HPE_104')?.label || "Permesso 104",
             type: "checkbox",
+            showLabel:false,
             value: formData.HPE_104 || false,
             disabled: type === "view",
             required: false
@@ -499,6 +513,7 @@ export const getFormPermessiFields = (formData: PermessiData, permessiOptions: A
             name: "MAT",
             label: permessiOptions.find(permesso => permesso.code === 'MAT')?.label || "Maternità",
             type: "checkbox",
+            showLabel:false,
             value: formData.MAT || false,
             disabled: type === "view",
             required: false
@@ -507,6 +522,7 @@ export const getFormPermessiFields = (formData: PermessiData, permessiOptions: A
             name: "HCPT",
             label: permessiOptions.find(permesso => permesso.code === 'HCPT')?.label || "Congedo Paternità",
             type: "checkbox",
+            showLabel:false,
             value: formData.HCPT || false,
             disabled: type === "view",
             required: false
@@ -515,6 +531,7 @@ export const getFormPermessiFields = (formData: PermessiData, permessiOptions: A
             name: "LUT",
             label: permessiOptions.find(permesso => permesso.code === 'LUT')?.label || "Permessi per lutto",
             type: "checkbox",
+            showLabel:false,
             value: formData.LUT || false,
             disabled: type === "view",
             required: false
@@ -523,6 +540,7 @@ export const getFormPermessiFields = (formData: PermessiData, permessiOptions: A
             name: "CMATR",
             label: permessiOptions.find(permesso => permesso.code === 'CMATR')?.label || "Congedo Matrimoniale",
             type: "checkbox",
+            showLabel:false,
             value: formData.CMATR || false,
             disabled: type === "view",
             required: false

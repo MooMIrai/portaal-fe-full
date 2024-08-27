@@ -1,17 +1,28 @@
-.parentTab:first-child > :first-child > * {
-   display: flex;
-   justify-content: center;
- }
 
- .parentForm:first-child {
-  max-width:none;
+
+/*  .parentForm:first-child {
+  max-width:none !important;
+  display: flex;
+  justify-content: center;
+} */
+
+.parentTab:first-child > :first-child > * {
+  display: flex;
+  justify-content: center;
 }
 
-.parentForm:first-child > :first-child > * {
-   display: grid;
-   /*grid-template-rows: repeat(6, 1fr);*/
-   grid-template-columns: repeat(3, 1fr);
-   gap: 2% 10%;
+.parentForm:first-child {
+max-width:none;
+
+& > :first-child > * {
+  display: grid;
+  /*grid-template-rows: repeat(6, 1fr);*/
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2% 10%;
+}
+& form{
+  max-width: 100% !important;
+}
 }
 /* .checkboxContainer:first-child > :first-child > * > input:checked{
    background-color: #E1F5FE;
@@ -19,6 +30,16 @@
    padding: 0.5rem !important;
    border-radius: 4px !important;
  } */
+.buttonTrattamento{
+  margin-top:3rem;
+  display:flex;
+  justify-content: flex-start;
+}
+.checkbox_bg {
+  background-color: #f0f0f0 !important;
+  padding: 10px !important;
+  border-radius: 4px !important;
+}
 
  .checkboxContainer  div[dir="ltr"]  input[aria-checked="true"] {
    background-color: #E1F5FE;
@@ -26,6 +47,10 @@
    padding: 0.5rem !important;
    border-radius: 4px !important;
  }
+
+ .checkboxContainer > * {
+  padding: 1rem !important;
+}
 
 
  .checkboxContainer div[dir="ltr"].checked {
