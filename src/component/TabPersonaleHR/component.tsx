@@ -12,9 +12,10 @@ import {
   getFormPermessiFields,
 } from "./FormFields";
 import { AnagraficaData, TrattamentoEconomicoData, RuoliData, PermessiData } from "./modelForms";
-import { ActivityTypeOption, cityAdapter, cityTypeOption, companyAdapter, companyOption, contractTypeAdapter, contractTypeOption, countryAdapter, countryOption, dataAdapter, genderAdapter, genderOption, locationOption, permessiAdapter, reverseAdapter, roleAdapter, RoleOption, sedeAdapter, wokeScopeAdapter, WokeScopeOption } from "../../adapters/personaleAdapters";
+import { ActivityTypeOption, cityAdapter, cityTypeOption, companyAdapter, companyOption,countryAdapter, countryOption, dataAdapter, genderAdapter, genderOption, permessiAdapter, reverseAdapter, roleAdapter, RoleOption} from "../../adapters/personaleAdapters";
 import { CrudGenericService } from "../../services/personaleServices";
 import Button from "common/Button";
+import { formFields } from "./customfields";
 
 type PersonaleSectionProps = {
   row: Record<string, any>;
@@ -41,26 +42,23 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
   const [formRuoliData, setFormRuoliData] = useState<RuoliData>(ruoli);
   const [formPermessiData, setFormPermessiData] = useState<PermessiData>(permessi);
   const [roles, setRoles] = useState<RoleOption[]>([]);
-  const [wokeScope, setWokeScope] = useState<WokeScopeOption[]>([]);
   const [company, setCompany] = useState<companyOption[]>([]);
   const [gender, setGender] = useState<genderOption[]>([]);
-  const [contractType, setContractType] = useState<contractTypeOption[]>([]);
   const [activity, setActivity] = useState<ActivityTypeOption[]>([]);
   const formAnagrafica = useRef<HTMLFormElement>(null);
   const formTrattamentoEconomico = useRef<HTMLFormElement>(null);
   const formRuoli = useRef<HTMLFormElement>(null);
   const formPermessi = useRef<HTMLFormElement>(null);
   const [city, setCity] = useState<cityTypeOption[]>([]);
-  const [sede,setSede]=useState<locationOption[]>([])
+
   
   const [showNewContractModal, setShowNewContractModal] = useState(false);
   const [confirmNewContractStep, setConfirmNewContractStep] = useState(false);
-
   const handleSelect = (e: TabStripSelectEventArguments) => {
     setSelected(e.selected);
   };
 
-  console.log(anagrafica)
+
   const handleSubmit = () => {
     let hasError = false;
 
@@ -106,8 +104,6 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
       id: row.id,
       idRuoli: roles,
       idPermessi: activity,
-      wokescope: wokeScope,
-      contractType: contractType,
       company: company,
       gender: gender,
       anagrafica: formAnagraficaData,
@@ -116,7 +112,6 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
       permessi: formPermessiData,
       city: city,
       country: country,
-      sede:sede,
     };
 
     
@@ -157,15 +152,6 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
         const roleResponse = await CrudGenericService.fetchResources("role");
         const adaptedRoles = roleAdapter(roleResponse);
         setRoles(adaptedRoles);
-
-        const workScopeResponse = await CrudGenericService.fetchResources("WorkScope");
-        const adaptedWokeScope = wokeScopeAdapter(workScopeResponse);
-        setWokeScope(adaptedWokeScope);
-
-        const contractTypeResponse = await CrudGenericService.fetchResources("ContractType");
-        const adaptedContractType = contractTypeAdapter(contractTypeResponse);
-        setContractType(adaptedContractType);
-
         const companyResponse = await CrudGenericService.fetchResources("Company");
         const adaptedCompany = companyAdapter(companyResponse);
         setCompany(adaptedCompany);
@@ -185,10 +171,6 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
         const countryResponse = await CrudGenericService.fetchResources("country");
         const adaptedCountry = countryAdapter(countryResponse);
         setCountry(adaptedCountry);
-       
-        const sedeResponse = await CrudGenericService.fetchResources("location");
-        const adaptedLocation = sedeAdapter(sedeResponse)
-        setSede(adaptedLocation)
 
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -267,19 +249,12 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
         <div className={styles.parentForm}>
           <Form
             ref={formAnagrafica}
-            fields={Object.values(getFormAnagraficaFields(formAnagraficaData, gender, type, city, country,sede))}
+            fields={Object.values(getFormAnagraficaFields(formAnagraficaData, gender, type, city, country))}
             formData={formAnagraficaData}
             onSubmit={(data: AnagraficaData) => setFormAnagraficaData(data)}
             description="Ana"
+            addedFields={formFields}
           />
-           <AutoComplete
-               ref={formAnagrafica}
-                data={country.map((c) => c.label)}
-                value={formAnagraficaData.stato || ""}
-                placeholder={"Stato"}
-                style={{ width: "200px" }}
-                onChange={(e) => setFormAnagraficaData({ ...formAnagraficaData, stato: e.value })}
-               />
           
         </div>
       ),
@@ -287,24 +262,29 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
     {
       title: "Trattamento Economico",
       children: (
+        <>
         <div className={styles.parentForm}>
           <Form
             ref={formTrattamentoEconomico}
-            fields={Object.values(getFormTrattamentoEconomicoFields(formTrattamentoEconomicoData, wokeScope, contractType, company, type))}
+            fields={Object.values(getFormTrattamentoEconomicoFields(formTrattamentoEconomicoData, company, type))}
             formData={formTrattamentoEconomicoData}
             onSubmit={(data: TrattamentoEconomicoData) => setFormTrattamentoEconomicoData(data)}
             description="TE"
+            addedFields={formFields}
           />
-            
-          {type === "edit" && (
+            </div> 
+          {(type === "edit" || type === "view") && ( (
             <>
-              <Button onClick={handleNewContract}>Nuovo Trattamento</Button>
+            <div className={styles.buttonTrattamento}>
+              <Button disabled={type === "view"}  onClick={handleNewContract}>Nuovo Trattamento</Button>
+              </div>
               <div className={styles.listBoxContainer}>
                 {renderStoricoTrattamento()}
               </div>
+            
             </>
-          )}
-        </div>
+          ))}
+       </>
       ),
     },
     {
@@ -361,14 +341,14 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
           {confirmNewContractStep ? (
             <>
               <p>
-                Se procedi con la modifica il trattamento corrente verrà interrotto al giorno precedente alla nuova data di inizio trattamento. Per rendere effettiva la modifica premi il tasto salva. Vuoi procedere?
+                Se procedi con l'aggiunta di un nuovo trattamento, il trattamento corrente verrà interrotto al giorno precedente alla nuova data di inizio trattamento. Per rendere effettiva la sostituzione premi il tasto salva. Vuoi procedere?
               </p>
               <div className={styles.buttonContainer}>
                 <Button className={styles.cancelButton} onClick={closeNewContractModal}>
                   No
                 </Button>
                 <Button className={styles.confirmButton} onClick={confirmNewContract}>
-                  Sì
+                  Salva
                 </Button>
               </div>
             </>
