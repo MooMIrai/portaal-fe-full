@@ -18,11 +18,9 @@ steps:
 - script: |
     npm install -g webpack webpack-cli --save-dev
     npm install --save-dev html-webpack-plugin
-    npm install common-test@1.0.0
     npm install file-loader@6.2.0
     npm install ttf-loader@1.0.2
     npm install
-    npm install --save-dev html-webpack-plugin
     npx webpack --config webpack.config.js
   displayName: 'npm install, run webpack'
 
