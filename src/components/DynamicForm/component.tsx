@@ -132,10 +132,18 @@ const DynamicField = ({
       type={type}
       disabled={disabled}
       value={formRenderProps.valueGetter(name)}
-      onChange={(event) =>
-        formRenderProps.onChange(name, {
-          value: event? (event.value || event.target.value):undefined,
+      onChange={(event) =>{
+        let value = undefined;
+        if(event.value){
+          value=event.value;
+        }else if(event.target){
+          value=event.target.value
+        }
+        return formRenderProps.onChange(name, {
+          value: value,
         })
+      }
+        
       }
     />
   );
@@ -168,7 +176,7 @@ const DynamicForm = React.forwardRef<any,DynamicFormProps>((props,ref)=>{
   onSubmit={(dataItem) => onSubmit(dataItem)}
   ref={ref}
   render={(formRenderProps: FormRenderProps) => (
-    <FormElement style={{ maxWidth: 650 }}>
+    <FormElement>
       {children === undefined && (
         <fieldset className={"k-form-fieldset"}>
           <legend className={"k-form-legend"}>{description}</legend>
@@ -177,7 +185,7 @@ const DynamicForm = React.forwardRef<any,DynamicFormProps>((props,ref)=>{
             return !field.conditions || (formRef && formRef.current && field.conditions(formRef.current.values))
           }).map((field, index) => {
             return (
-            <FieldWrapper key={index}>
+            <FieldWrapper key={index} style={field.type==='country'?{gridColumn:'span 3'}:undefined}>
               
                 <DynamicField
                   addedFields={addedFields}
