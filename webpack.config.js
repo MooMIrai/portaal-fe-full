@@ -3,6 +3,7 @@ const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPl
 const Dotenv = require("dotenv-webpack");
 const deps = require("./package.json").dependencies;
 const { FederatedTypesPlugin } = require("@module-federation/typescript");
+const webpack = require("webpack");
 
 const mfeConfig = {
   name: "common",
@@ -20,17 +21,18 @@ const mfeConfig = {
     "./Window": "./src/components/Window/component",
     "./Button": "./src/components/Button/component",
     "./CustomListView": "./src/components/CustomListView/component",
-    "./AutoComplete":"./src/components/AutoComplete/component",
-    "./CountrySelector":"./src/components/CountrySelector/component",
+    "./AutoComplete": "./src/components/AutoComplete/component",
+    "./CountrySelector": "./src/components/CountrySelector/component",
 
     "./services/AuthService": "./src/services/AuthService",
     "./services/BEService": "./src/services/BEService",
     "./services/BaseHTTPService": "./src/services/BaseHTTPService",
 
-    "./providers/NotificationProvider" : "./src/components/Notification/provider",
+    "./providers/NotificationProvider":
+      "./src/components/Notification/provider",
 
-    "./hoc/Field":"./src/hoc/Field",
-    "./hoc/AutoComplete":"./src/hoc/AutoComplete",
+    "./hoc/Field": "./src/hoc/Field",
+    "./hoc/AutoComplete": "./src/hoc/AutoComplete",
   },
   shared: {
     ...deps,
@@ -48,6 +50,7 @@ const mfeConfig = {
 module.exports = (_, argv) => ({
   output: {
     publicPath: "http://localhost:3003/",
+    filename: "bundle.js",
   },
   resolve: {
     extensions: [".tsx", ".ts", ".jsx", ".js", ".json"],
@@ -62,13 +65,12 @@ module.exports = (_, argv) => ({
         test: /\.(woff|woff2|eot|ttf|otf)$/,
         use: [
           {
-            loader: 'file-loader',
+            loader: "file-loader",
             options: {
-              name: '[name].[ext]',
-             
-            }
-          }
-        ]
+              name: "[name].[ext]",
+            },
+          },
+        ],
       },
       {
         test: /\.m?js/,
@@ -97,12 +99,27 @@ module.exports = (_, argv) => ({
       },
     ],
   },
+  optimization: {
+    splitChunks: {
+      chunks: "all",
+      cacheGroups: {
+        default: false,
+        defaultVendors: false,
+        commons: false,
+      },
+    },
+  },
   plugins: [
     new ModuleFederationPlugin(mfeConfig),
     //new FederatedTypesPlugin({ federationConfig: mfeConfig }),
     new HtmlWebPackPlugin({
       template: "./src/index.html",
+      filename: "index.html",
+      chunks: ["bundle"],
     }),
     new Dotenv(),
+    new webpack.optimize.LimitChunkCountPlugin({
+      maxChunks: 1,
+    }),
   ],
 });
