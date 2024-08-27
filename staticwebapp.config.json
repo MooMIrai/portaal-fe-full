@@ -1,0 +1,11 @@
+{
+  "routes": [
+    {
+      "route": "/api/v1/*",
+      "forwardTo": "proud-coast-0861a3103.5.azurestaticapps.net"
+    }
+  ],
+  "navigationFallback": {
+    "rewrite": "/index.html"
+  }
+}
