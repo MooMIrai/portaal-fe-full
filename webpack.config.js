@@ -4,7 +4,6 @@ const Dotenv = require("dotenv-webpack");
 const deps = require("./package.json").dependencies;
 const { FederatedTypesPlugin } = require("@module-federation/typescript");
 const webpack = require("webpack");
-const { Path } = require("@progress/kendo-drawing");
 
 const mfeConfig = {
   name: "common",
@@ -120,7 +119,7 @@ module.exports = (_, argv) => ({
     }),
     new Dotenv(),
     new webpack.optimize.LimitChunkCountPlugin({
-      maxChunks: 1,
+      maxChunks: 10,
     }),
   ],
 });
