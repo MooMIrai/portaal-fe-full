@@ -59,14 +59,16 @@ module.exports = (_, argv) => ({
   module: {
     rules: [
       {
-        test: /\.ttf$/,
+        test: /\.(woff|woff2|eot|ttf|otf)$/,
         use: [
           {
-            loader: 'ttf-loader',
+            loader: 'file-loader',
             options: {
-              name: './font/[hash].[ext]',
-            },
-          },
+              name: '[name].[ext]',
+              outputPath: 'fonts/',
+              publicPath: '/fonts/'
+            }
+          }
         ]
       },
       {
