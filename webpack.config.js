@@ -4,6 +4,7 @@ const Dotenv = require("dotenv-webpack");
 const deps = require("./package.json").dependencies;
 const { FederatedTypesPlugin } = require("@module-federation/typescript");
 const webpack = require("webpack");
+const { Path } = require("@progress/kendo-drawing");
 
 const mfeConfig = {
   name: "common",
