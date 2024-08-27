@@ -15,15 +15,18 @@ const withField = (WrappedComponent:any) => {
         onChange,
         onFocus,
         onBlur,
+        showLabel = true, 
         // The custom props that you passed to the Field.
         ...others
       } = props;
       
 
       return <div onFocus={onFocus} onBlur={onBlur}>
-        <Label id={others.id}>
-          {others.label} {others.required?<span style={{color:'red',fontSize:20}}>*</span>:''}
-        </Label>
+        {showLabel && others.label && (
+          <Label id={others.id}>
+            {others.label} {others.required ? <span style={{color:'red', fontSize:20}}>*</span> : ''}
+          </Label>
+        )}
         <WrappedComponent onChange={onChange}  value={value} {...others}/>
         {
             // Display an error message after the "visited" or "touched" field is set to true.
