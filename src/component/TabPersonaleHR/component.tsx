@@ -60,7 +60,6 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
     setSelected(e.selected);
   };
 
-  console.log(anagrafica)
   const handleSubmit = () => {
     let hasError = false;
 
@@ -272,14 +271,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
             onSubmit={(data: AnagraficaData) => setFormAnagraficaData(data)}
             description="Ana"
           />
-           <AutoComplete
-               ref={formAnagrafica}
-                data={country.map((c) => c.label)}
-                value={formAnagraficaData.stato || ""}
-                placeholder={"Stato"}
-                style={{ width: "200px" }}
-                onChange={(e) => setFormAnagraficaData({ ...formAnagraficaData, stato: e.value })}
-               />
+           
           
         </div>
       ),

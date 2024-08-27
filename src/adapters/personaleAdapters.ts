@@ -15,7 +15,43 @@ const mapToAnagraficaData = (Person: any,countryLabel:string,cityBirthLabel:stri
   matricola: Person?.employee_id || "",
   sesso: Person?.Gender?.code,
 
-  residenza:{city:Person.cityRes_id,country:0,province:0},
+  residenza:{
+    city:{
+      id:Person.CityRes?.id,
+      name:Person.CityRes?.name,
+      code:Person.CityRes?.code
+    },
+    country:{
+      id:Person.CityRes?.Country?.id,
+      name:Person.CityRes?.Country?.name,
+      code:Person.CityRes?.Country?.code
+    },
+    province:Person.CityRes && Person.CityRes.Province?
+    {
+      id:Person.CityRes?.Province.id,
+      name:Person.CityRes?.Province.name,
+      code:Person.CityRes?.Province.code
+    }
+    :undefined},
+
+    nascita:{
+      city:{
+        id:Person.CityBirth?.id,
+        name:Person.CityBirth?.name,
+        code:Person.CityBirth?.code
+      },
+      country:{
+        id:Person.CityBirth?.Country?.id,
+        name:Person.CityBirth?.Country?.name,
+        code:Person.CityBirth?.Country?.code
+      },
+      province:Person.CityBirth && Person.CityBirth.Province?
+      {
+        id:Person.CityBirth.Province.id,
+        name:Person.CityBirth.Province.name,
+        code:Person.CityBirth.Province.code
+      }
+      :undefined},
 
   /* Provincianascita: Person?.provinceBirth || "",
   comuneNascita: Person?.cityBirth || "",
@@ -164,7 +200,6 @@ export const dataAdapter = (row: Record<string, any>) => {
 
   const employmentContracts = row.trattamentoEconomicoArray|| [];
 
-
   const anagraficaData: AnagraficaData = {
     person_id: row.anagrafica.person_id || "",
     sede: row.anagrafica.sede || "",
@@ -178,7 +213,8 @@ export const dataAdapter = (row: Record<string, any>) => {
     //cittaNascita:row.anagrafica.cittaNascita || "",
     //Provincianascita: row.anagrafica.Provincianascita || "",
     //comuneNascita: row.anagrafica.comuneNascita || "",
-    residenza: row.anagrafica.residenza || "",
+    residenza: row.anagrafica.residenza || undefined,
+    nascita: row.anagrafica.nascita || undefined,
     //comuneResidenza: row.anagrafica.comuneResidenza || "",
     indirizzoResidenza: row.anagrafica.indirizzoResidenza || "",
     dataNascita: row.anagrafica.dataNascita

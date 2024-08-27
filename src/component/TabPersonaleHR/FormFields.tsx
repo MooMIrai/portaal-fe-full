@@ -43,6 +43,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
         return /^(0\d{1,4}\d{5,9}|\+39\s?0\d{1,4}\d{5,9})$/.test(value);
     };
 
+
    
     const fields = {
         sede: {
@@ -108,61 +109,19 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             data: country.map((c) => c.label),
             filterable: true, 
           }, */
-        residenzaTest:{
+          residenza:{
             name: "residenza",
-            label: "Residenza",
+            label: "Comune di Residenza",
             type: "country",
             disabled: type === "view",
             value: formData.residenza,
         },
-        cittanascita: {
-            name: "cittananascita",
-            label: "Città di Nascita",
-            type: "select",
+        nascita:{
+            name: "nascita",
+            label: "Comune di nascita",
+            type: "country",
             disabled: type === "view",
-            value:  "",
-            options: cityOptions
-        },
-        Provincianascita: {
-            name: "Provincianascita",
-            label: "Provincia di Nascita",
-            type: "text",
-            disabled: type === "view",
-            value:  "",
-        },
-        comuneNascita: {
-            name: "comuneNascita",
-            label: "Comune di Nascita",
-            type: "text",
-            disabled: type === "view",
-            value:  "",
-        },
-        residenza: {
-            name: "residenza",
-            label: "Provincia di Residenza",
-            type: "text",
-            disabled: type === "view",
-            value: formData.residenza || "",
-        },
-        comuneResidenza: {
-            name: "comuneResidenza",
-            label: "Comune di Residenza",
-            type: "text",
-            value:  "",
-        },
-        cittaResidenza: {
-            name: "cittàResidenza",
-            label: "Città di Residenza",
-            type: "select",
-            value: formData.città || "",
-            options: cityOptions,
-        },
-        indirizzoResidenza: {
-            name: "indirizzoResidenza",
-            label: "Indirizzo di Residenza",
-            type: "text",
-            disabled: type === "view",
-            value: formData.indirizzoResidenza || "",
+            value: formData.nascita,
         },
         dataNascita: {
             name: "dataNascita",
@@ -172,6 +131,13 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             value: formData.dataNascita || "",
             required: true,
             validator: dateValidator,
+        },
+        indirizzoResidenza: {
+            name: "indirizzoResidenza",
+            label: "Indirizzo di Residenza",
+            type: "text",
+            disabled: type === "view",
+            value: formData.indirizzoResidenza || "",
         },
         cap: {
             name: "cap",

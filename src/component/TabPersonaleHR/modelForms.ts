@@ -15,8 +15,8 @@ export interface AnagraficaData {
     indirizzoResidenza?: string;
     dataNascita?: any;
     
-    residenza?:{country:number,province:number,city:number},
-    nascita?:{country:number,province:number,city:number},
+    residenza?:{country:{id:number,name:string,code:string},province?:{id:number,name:string,code:string},city:{id:number,name:string,code:string}},
+    nascita?:{country:{id:number,name:string,code:string},province?:{id:number,name:string,code:string},city:{id:number,name:string,code:string}},
 
     cap?: number;
     cellulare?: number;
