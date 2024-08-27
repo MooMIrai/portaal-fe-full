@@ -16,6 +16,8 @@ interface CustomWindowProps extends WindowProps {
   draggable?: boolean;
   resizable?: boolean;
   showModalFooter: boolean;
+  top?:number;
+  left?:number
 }
 
 const CustomWindow = ({
@@ -34,6 +36,8 @@ const CustomWindow = ({
   showModalFooter,
   onSubmit,
   callToAction,
+  top,
+  left
 }: CustomWindowProps) => {
   return show ? (
     <Window
@@ -47,6 +51,8 @@ const CustomWindow = ({
       minHeight={minHeight}
       minWidth={minWidth}
       title={title}
+      left={left}
+      top={top}
       initialHeight={initialHeight}
       initialWidth={initialWidth}
       onClose={onClose}

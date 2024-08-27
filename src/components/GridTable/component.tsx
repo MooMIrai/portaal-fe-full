@@ -79,6 +79,10 @@ type TablePaginatedProps = {
   initialPagination: PaginationModel;
 
   //props for window Modal
+  widthWindow?:number;
+  heightWindow?:number;
+  leftWindow?:number;
+  topWindow?:number;
   resizableWindow?: boolean;
   draggableWindow?: boolean;
   minHeightWindow?: number;
@@ -364,6 +368,10 @@ export default function GenericGrid(props: TablePaginatedProps) {
         draggable={props.draggableWindow}
         initialHeight={props.initialHeightWindow}
         initialWidth={props.initialWidthWindow}
+        left={props.leftWindow}
+        top={props.topWindow}
+        height={props.heightWindow}
+        width={props.widthWindow}
         callToAction={callToAction}
       >
         {props.formCrud && modal.open

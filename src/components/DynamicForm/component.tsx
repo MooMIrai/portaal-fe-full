@@ -82,7 +82,8 @@ export interface FieldConfig {
   value: any;
   disabled?: boolean;
   required?: boolean;
-  conditions?:(values:any)=>boolean
+  conditions?:(values:any)=>boolean;
+  showLabel?:boolean
   //onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -95,6 +96,7 @@ export interface DynamicFormProps {
   showSubmit?: boolean;
   extraButton?: boolean;
   extraBtnAction?: () => void;
+
   customDisabled?: boolean;
   submitText: string;
   addedFields?: Record<string, React.JSX.Element>
@@ -110,7 +112,7 @@ const DynamicField = ({
   addedFields?:Record<string,React.JSX.Element>
 }) => {
 
-  const { name, type, label, validator, options, disabled,required } = field;
+  const { name, type, label, validator, options, disabled,required,showLabel = true } = field;
   let Component:any = getFieldComponent(type);
 
   if(addedFields && Object.keys(addedFields).some(s=>s===type)){
@@ -124,6 +126,7 @@ const DynamicField = ({
       name={name}
       component={Component}
       label={label + (required?'*':'')}
+      showLabel={showLabel}
       validator={validator}
       options={options}
       type={type}

@@ -8,7 +8,7 @@ interface CustomWindowEditSlotProps {
   handleOpenCloseModal: () => void;
   render?: (
     slot: Record<string, any> | undefined,
-    closeModalCallback: () => void
+    closeModalCallback: () => void,
   ) => { component: JSX.Element; title: string };
 }
 
@@ -19,7 +19,7 @@ const CustomContent = ({
   handleOpenCloseModal,
   render,
 }: CustomWindowEditSlotProps) => {
-  const renderData = render?.(dataItem, handleOpenCloseModal);
+  const renderData = render?.(dataItem, handleOpenCloseModal,);
   return (
     <CustomWindow
       showModalFooter={false}

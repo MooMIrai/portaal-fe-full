@@ -158,8 +158,10 @@ const CheckboxInputC = (
   const { validationMessage, visited, disabled, required, value, ...others } =
     fieldRenderProps;
   return (
-   
+
+
       <Checkbox
+        {...others}
         value={value ?? false}
         required={required}
         disabled={disabled}
@@ -167,6 +169,7 @@ const CheckboxInputC = (
       
   );
 };
+
 
 const CalendarOnlyYear=(props:CalendarProps<any>)=>{
   return <Calendar {...props} topView="decade" bottomView="decade"  />

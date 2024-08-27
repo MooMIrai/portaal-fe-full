@@ -8,12 +8,14 @@ import {
 import CustomContent from "../CustomContent/CustomContent";
 
 interface EditItemProps extends SchedulerEditSlotProps {
+  multiSelectEnabled?: boolean;
+  onMultiSelectClick?: () => void;
   defaultTitle: string;
   model:
-    | {
-        [name: string]: any;
-      }
-    | undefined;
+  | {
+    [name: string]: any;
+  }
+  | undefined;
   render?: (
     slot: Record<string, any> | undefined,
     closeModalCallback: () => void
@@ -24,10 +26,14 @@ const EditSlot: React.FC<EditItemProps> = (props) => {
   const [show, setShow] = useState(false);
 
   const handleOpenCloseModal = () => {
-    setShow(!show);
+    if (!props.multiSelectEnabled) {
+      setShow(!show);
+    } else {
+      props.onMultiSelectClick ? props.onMultiSelectClick() : null;
+    }
   };
 
-  console.log("show: ", show);
+  /* console.log("show: ", show); */
 
   return (
     <SchedulerEditSlot
