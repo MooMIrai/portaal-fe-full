@@ -59,6 +59,17 @@ module.exports = (_, argv) => ({
   module: {
     rules: [
       {
+        test: /\.ttf$/,
+        use: [
+          {
+            loader: 'ttf-loader',
+            options: {
+              name: './font/[hash].[ext]',
+            },
+          },
+        ]
+      },
+      {
         test: /\.m?js/,
         type: "javascript/auto",
         resolve: {
