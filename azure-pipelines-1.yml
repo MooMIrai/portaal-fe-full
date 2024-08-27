@@ -32,4 +32,15 @@ steps:
     replaceExistingArchive: true
   displayName: 'Archive files'
 
+
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: 'Taal Static Web'
+    appName: 'portaalfe'
+#    package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+    package: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    appType: 'webApp'
+    #startUpCommand: 'node src/main'
+  displayName: 'Deploy to Azure Web App'
+
   
