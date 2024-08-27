@@ -16,13 +16,10 @@ steps:
   displayName: 'Install Node.js'
 
 - script: |
-    npm install -g webpack webpack-cli --save-dev
-    npm install --save-dev html-webpack-plugin
-    npm install common-test@1.0.0
-    npm install file-loader@6.2.0
-    npm install ttf-loader@1.0.2
-    npm install
-    npm install --save-dev html-webpack-plugin
+    yarn add html-webpack-plugin --dev
+    yarn add file-loader@6.2.0 --dev
+    yarn add ttf-loader@1.0.2 --dev
+    yarn install
     npx webpack --config webpack.config.js
   displayName: 'npm install, run webpack'
 
