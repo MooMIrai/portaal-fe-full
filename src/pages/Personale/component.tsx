@@ -2,11 +2,19 @@ import React, { useState, useEffect, useCallback } from "react";
 import GridTable from "common/Table";
 import PersonaleSection from "./../../component/TabPersonaleHR/component";
 import { CrudGenericService } from "../../services/personaleServices";
-import { cityAdapter, cityTypeOption, countryAdapter, countryOption, locationOption, sedeAdapter, transformUserData } from "../../adapters/personaleAdapters";
+import {
+  cityAdapter,
+  cityTypeOption,
+  countryAdapter,
+  countryOption,
+  locationOption,
+  sedeAdapter,
+  transformUserData,
+} from "../../adapters/personaleAdapters";
 import Button from "common/Button";
 import NotificationProviderActions from "common/providers/NotificationProvider";
 import { useDebounce } from "@uidotdev/usehooks";
-import styles from "./styles.modules.scss"
+import styles from "./styles.modules.scss";
 // Column field mapping
 const columnFieldMap: { [key: string]: string } = {
   company: "Person.EmploymentContract.Company.name",
@@ -23,13 +31,13 @@ const mapFilterFields = (filter: any | null): any => {
     return { logic: "or", filters: [] };
   }
 
-  const mappedFilters = filter.filters.map(f => {
-    if ('field' in f) {
+  const mappedFilters = filter.filters.map((f) => {
+    if ("field" in f) {
       const fd = f as any;
-      console.log("field",fd)
+      console.log("field", fd);
       const isNumericField = typeof fd.value === "string";
-      console.log("ao",isNumericField)
-   /*    const filterValue = isNumericField && !isNaN(Number(debouncedValue)) ? Number(debouncedValue) : debouncedValue; */
+      console.log("ao", isNumericField);
+      /*    const filterValue = isNumericField && !isNaN(Number(debouncedValue)) ? Number(debouncedValue) : debouncedValue; */
 
       return { ...fd, field: columnFieldMap[fd.field as string] || fd.field };
     } else {
@@ -40,19 +48,59 @@ const mapFilterFields = (filter: any | null): any => {
   return { ...filter, filters: mappedFilters };
 };
 const columns: any = [
-  { key: "company", label: "Società", type: "string", sortable: true, filter: "text" },
-  { key: "lastName", label: "Cognome", type: "string", sortable: true, filter: "text" },
-  { key: "email", label: "Email", type: "string", sortable: true, filter: "text" },
-  { key: "ContractType", label: "Tipo di Contratto", type: "string", sortable: true, filter: "text" },
-  { key: "annualCost", label: "Costo Annuale", type: "string", sortable: true, filter: "numeric" },
-  { key: "dailyCost", label: "Costo Giornaliero", type: "string", sortable: true, filter: "numeric" },
+  {
+    key: "company",
+    label: "Società",
+    type: "string",
+    sortable: true,
+    filter: "text",
+  },
+  {
+    key: "lastName",
+    label: "Cognome",
+    type: "string",
+    sortable: true,
+    filter: "text",
+  },
+  {
+    key: "email",
+    label: "Email",
+    type: "string",
+    sortable: true,
+    filter: "text",
+  },
+  {
+    key: "ContractType",
+    label: "Tipo di Contratto",
+    type: "string",
+    sortable: true,
+    filter: "text",
+  },
+  {
+    key: "annualCost",
+    label: "Costo Annuale",
+    type: "string",
+    sortable: true,
+    filter: "numeric",
+  },
+  {
+    key: "dailyCost",
+    label: "Costo Giornaliero",
+    type: "string",
+    sortable: true,
+    filter: "numeric",
+  },
 ];
 
 const PersonalPage = () => {
   const [data, setData] = useState<any>();
   const [filter, setFilter] = useState<any>({ logic: "or", filters: [] });
+  const debouncedFilterColumn = useDebounce(filter, 650);
   const [sorting, setSorting] = useState<any[]>([]);
-  const [pagination, setPagination] = useState<any>({ currentPage: 1, pageSize: 10 });
+  const [pagination, setPagination] = useState<any>({
+    currentPage: 1,
+    pageSize: 10,
+  });
   const [country, setCountry] = useState<countryOption[]>([]);
   const [loading, setLoading] = useState(true);
   const [city, setCity] = useState<cityTypeOption[]>([]);
@@ -61,7 +109,9 @@ const PersonalPage = () => {
 
   useEffect(() => {
     const fetchCountryData = async () => {
-      const countryResponse = await CrudGenericService.fetchResources("country");
+      const countryResponse = await CrudGenericService.fetchResources(
+        "country"
+      );
       const adaptedCountry = countryAdapter(countryResponse);
       setCountry(adaptedCountry);
 
@@ -79,30 +129,20 @@ const PersonalPage = () => {
     fetchCountryData();
   }, []);
 
-
   useEffect(() => {
     const updateWindowSize = () => {
       setWindowSize({
         width: window.innerWidth,
-        height: window.innerHeight
+        height: window.innerHeight,
       });
     };
 
     updateWindowSize();
 
-    window.addEventListener('resize', updateWindowSize);
+    window.addEventListener("resize", updateWindowSize);
 
-    return () => window.removeEventListener('resize', updateWindowSize);
+    return () => window.removeEventListener("resize", updateWindowSize);
   }, []);
-
-  
-    
-  useEffect(() => {
-    if (!loading && country.length > 0 && city.length > 0 && sede.length > 0) {
-      const updatedFilter = mapFilterFields(filter);
-      loadData(pagination, updatedFilter, sorting);
-    }
-  }, [pagination, filter, sorting, country, loading, city, sede]);
 
   const loadData = async (
     pagination: any,
@@ -111,7 +151,7 @@ const PersonalPage = () => {
     term?: string
   ) => {
     const include = true;
- 
+
     const mappedFilter = mapFilterFields(filter);
     const mappedSorting = sorting.map((s) => ({
       ...s,
@@ -126,9 +166,14 @@ const PersonalPage = () => {
       term,
       include
     );
-    const transformedData = transformUserData(resources.data, country, city, sede);
+    const transformedData = transformUserData(
+      resources.data,
+      country,
+      city,
+      sede
+    );
     setData(transformedData);
-    console.log("datatransformed", transformedData)
+    console.log("datatransformed", transformedData);
     return {
       data: transformedData,
       meta: {
@@ -147,11 +192,18 @@ const PersonalPage = () => {
         await CrudGenericService.deleteResource(id);
       }
 
-      NotificationProviderActions.openModal({ icon: true, style: 'success' }, "Operazione avvenuta con successo");
+      NotificationProviderActions.openModal(
+        { icon: true, style: "success" },
+        "Operazione avvenuta con successo"
+      );
       refreshTable();
     } catch (error) {
       console.error("Error during form submission:", error);
     }
+  };
+
+  const handleFilterColumnChange = (e: any) => {
+    setFilter(e.filter);
   };
 
   return (
@@ -160,8 +212,11 @@ const PersonalPage = () => {
         <p>Loading...</p>
       ) : (
         <GridTable
-          filter={filter}
-          setFilter={setFilter}
+          filterColumnConfig={{
+            filter: filter,
+            debouncedFilter: debouncedFilterColumn,
+            handleFilterChange: handleFilterColumnChange,
+          }}
           filterable={true}
           initialPagination={pagination}
           sortable={true}
@@ -180,7 +235,6 @@ const PersonalPage = () => {
           formCrud={(row, type, closeModalCallback, refreshTable) => (
             <>
               {type === "delete" ? (
-
                 <div className={styles.formDelete}>
                   <span>{"Sei sicuro di voler eliminare il record?"}</span>
                   <div>
@@ -188,7 +242,12 @@ const PersonalPage = () => {
                     <Button
                       themeColor={"error"}
                       onClick={async () => {
-                        await handleFormSubmit(type, null, refreshTable, row?.id);
+                        await handleFormSubmit(
+                          type,
+                          null,
+                          refreshTable,
+                          row?.id
+                        );
                         closeModalCallback();
                       }}
                     >
@@ -196,7 +255,6 @@ const PersonalPage = () => {
                     </Button>
                   </div>
                 </div>
-
               ) : (
                 <PersonaleSection
                   row={row}
