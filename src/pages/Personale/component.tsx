@@ -18,7 +18,7 @@ const columnFieldMap: { [key: string]: string } = {
 };
 
 // Filter mapping function
-const mapFilterFields = (filter: any | null, debouncedValue: string): any => {
+const mapFilterFields = (filter: any | null): any => {
   if (!filter || !filter.filters) {
     return { logic: "or", filters: [] };
   }
@@ -26,13 +26,15 @@ const mapFilterFields = (filter: any | null, debouncedValue: string): any => {
   const mappedFilters = filter.filters.map(f => {
     if ('field' in f) {
       const fd = f as any;
-      const isNumericField = fd.filter === "numeric";
-      const filterValue = isNumericField && !isNaN(Number(debouncedValue)) ? Number(debouncedValue) : debouncedValue;
+      console.log("field",fd)
+      const isNumericField = typeof fd.value === "string";
+      console.log("ao",isNumericField)
+   /*    const filterValue = isNumericField && !isNaN(Number(debouncedValue)) ? Number(debouncedValue) : debouncedValue; */
 
-      return { ...fd, field: columnFieldMap[fd.field as string] || fd.field, value: filterValue };
+      return { ...fd, field: columnFieldMap[fd.field as string] || fd.field };
     } else {
       const cf = f as any;
-      return mapFilterFields(cf, debouncedValue);
+      return mapFilterFields(cf);
     }
   });
   return { ...filter, filters: mappedFilters };
@@ -93,23 +95,14 @@ const PersonalPage = () => {
     return () => window.removeEventListener('resize', updateWindowSize);
   }, []);
 
-  // Verifica la presenza di filtri prima di accedere
-  const firstFilter = filter && filter.filters && filter.filters.length > 0 ? filter.filters[0] : null;
-
-  // Controlla se il filtro è per un campo stringa e usa il debounce solo in quel caso
-  const isStringFilter = firstFilter &&( typeof firstFilter.value === "string" );
   
-  const debouncedSearchTerm = isStringFilter
-    ? useDebounce(firstFilter.value, 650)
-    : firstFilter ? firstFilter.value : "";
-    console.log("debounceterm",debouncedSearchTerm)
     
   useEffect(() => {
     if (!loading && country.length > 0 && city.length > 0 && sede.length > 0) {
-      const updatedFilter = mapFilterFields(filter, debouncedSearchTerm);
+      const updatedFilter = mapFilterFields(filter);
       loadData(pagination, updatedFilter, sorting);
     }
-  }, [pagination, filter, sorting, country, loading, city, sede, debouncedSearchTerm]);
+  }, [pagination, filter, sorting, country, loading, city, sede]);
 
   const loadData = async (
     pagination: any,
@@ -118,8 +111,8 @@ const PersonalPage = () => {
     term?: string
   ) => {
     const include = true;
-    console.log("insidefunction", debouncedSearchTerm)
-    const mappedFilter = mapFilterFields(filter, debouncedSearchTerm);
+ 
+    const mappedFilter = mapFilterFields(filter);
     const mappedSorting = sorting.map((s) => ({
       ...s,
       field: columnFieldMap[s.field] || s.field,
