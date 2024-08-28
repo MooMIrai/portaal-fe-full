@@ -648,8 +648,8 @@ export const reverseAdapter = (combinedData: {
       address: combinedData.anagrafica.indirizzoResidenza,
       privateEmail: (!combinedData.anagrafica.emailPrivata || combinedData.anagrafica.emailPrivata === "") ? null :combinedData.anagrafica.emailPrivata,
       //city: combinedData.anagrafica.comuneResidenza,
-      cityRes_id: /* mapCityToID(combinedData.anagrafica.città,combinedData.city) ||  */null,
-      cityBirth_id:/* mapCityToID(combinedData.anagrafica.cittaNascita, combinedData.city) || */ null,
+      cityRes_id: combinedData.anagrafica.residenza?.city.id/* mapCityToID(combinedData.anagrafica.città,combinedData.city) ||  */,
+      cityBirth_id:combinedData.anagrafica.nascita?.city.id/* mapCityToID(combinedData.anagrafica.cittaNascita, combinedData.city) || */ ,
 
       location_id: combinedData.anagrafica.sede_autocomplete?.id,
       provinceRes: combinedData.anagrafica.residenza,

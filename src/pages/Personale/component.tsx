@@ -95,7 +95,7 @@ const PersonalPage = () => {
 
   // Verifica la presenza di filtri prima di accedere
   const firstFilter = filter && filter.filters && filter.filters.length > 0 ? filter.filters[0] : null;
-console.log("filter")
+
   // Controlla se il filtro è per un campo stringa e usa il debounce solo in quel caso
   const isStringFilter = firstFilter &&( typeof firstFilter.value === "string" );
   
