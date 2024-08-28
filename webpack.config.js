@@ -88,6 +88,6 @@ module.exports = (_, argv) => {
     })]:[]), */
   ],
 
-  devtool: "source-map",
+  //devtool: "source-map",
 }
 };
