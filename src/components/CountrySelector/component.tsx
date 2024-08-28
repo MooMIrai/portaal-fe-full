@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ComboBoxFilterChangeEvent, MultiColumnComboBox } from "@progress/kendo-react-dropdowns";
 import client from '../../services/BEService';
-import { Label } from "@progress/kendo-react-labels";
 import { Button } from "@progress/kendo-react-buttons";
+import { Dialog, DialogActionsBar } from "@progress/kendo-react-dialogs";
+import { Error, Label } from '@progress/kendo-react-labels';
 
 import styles from './style.module.scss';
-import { Dialog, DialogActionsBar } from "@progress/kendo-react-dialogs";
 
 const characters ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
@@ -102,15 +102,15 @@ export default function CountrySelector(props:any){
 
     useEffect(()=>{
         if(onChange){
-            // onChange({value:valueTotal});
+             onChange({value:valueToShow});
         }
            
-    },[valueTotal])
+    },[valueToShow])
 
     useEffect(()=>{
-     
         if(value){
-            
+            setValueToShow(value)
+            setValueTotal({country:value.country.id,province:value.province?.id,city:value.city.id})
         }
     },[value])
 
@@ -165,9 +165,9 @@ export default function CountrySelector(props:any){
                       "logic": "and",
                       "filters": [
                         {
-                          "field": "province_id",
-                          "operator": "isnull",
-                          "value": null
+                          "field": "id",
+                          "operator": "lt",
+                          "value": 109
                         }
                       ]
                     }
@@ -216,10 +216,10 @@ export default function CountrySelector(props:any){
         })
     }
 
-    return <fieldset className={styles.container}>
-        <legend><Label>{others.label}</Label></legend>
+    return <fieldset className={styles.container} >
+        <legend className="k-form-legend">{others.label}</legend>
         
-        <div className="k-form-field" onFocus={onFocus} onBlur={onBlur}>
+        <div className={"k-form-field"} onFocus={onFocus} onBlur={onBlur}>
             <Label>Stato</Label>
             <MultiColumnComboBox
                 adaptive={true}
@@ -311,7 +311,10 @@ export default function CountrySelector(props:any){
                 placeholder="Digita per iniziare la ricerca"
             />
         </div>
-        
+        {
+            // Display an error message after the "visited" or "touched" field is set to true.
+            visited && validationMessage && <Error>{validationMessage}</Error>
+        }
         {modal && (
         <Dialog title={"Aggiungi nuova Città"} onClose={abortInsert} width={350}>
             <p>
