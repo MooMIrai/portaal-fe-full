@@ -21,6 +21,52 @@ class TimesheetsServiceC {
     }
   };
 
+  syncDay = async (
+    timesheet_id: number,
+    day: number,
+    TimeSheetDetails: {
+      hours: number,
+      minutes: number,
+      activity_id: number,
+      leaverequest_id?: number
+    }[],
+    accept_holidays?: boolean,
+  ) => {
+    try {
+      const response = await client.post(`api/v1/timesheets/syncDetail?accept_holidays=${accept_holidays || true}`, {
+        timesheet_id,
+        day,
+        TimeSheetDetails
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching resources:", error);
+      throw error;
+    }
+  };
+
+  syncMultipleDays = async (
+    data: {
+      timesheet_id: number,
+      day: number,
+      TimeSheetDetails: {
+        hours: number,
+        minutes: number,
+        activity_id: number,
+        leaverequest_id?: number
+      }[]
+    }[],
+    accept_holidays?: boolean,
+  ) => {
+    try {
+      const response = await client.post(`api/v1/timesheets/syncMassiveDetail?accept_holidays=${accept_holidays || true}`, data);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching resources:", error);
+      throw error;
+    }
+  };
+
   getSingleTimesheets = async (id: number, include: boolean) => {
     try {
       const response = await client.get(`api/v1/timesheets/${id}`, {

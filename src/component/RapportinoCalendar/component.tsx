@@ -53,6 +53,10 @@ export default function RapportinoCalendar() {
       });
   };
 
+  const onActivitiesAdded = () => {
+    fetchTimesheet(date);
+  }
+
   const handleDateChange = useCallback(
     (event: any) => {
       const dateObject = new Date(event.value);
@@ -80,6 +84,7 @@ export default function RapportinoCalendar() {
           activitiesHours={activitiesHours}
           item={{ ...slot }}
           onClose={closeModalCallback}
+          onActivitiesAdded={onActivitiesAdded}
         />
       ),
       title: /* slot.start.toLocaleDateString("it-IT")  */ "",
@@ -87,6 +92,7 @@ export default function RapportinoCalendar() {
   };
 
   const renderMultipleSelectModal = (timesheetId: number, dates: Date[], closeModalCallback) => {
+    const activitiesHours = data.filter((el) => dates.find(d => d.getDate() === el.day));
     const title = dates?.length >= 2
       ? dates[0].toLocaleDateString() + " - " + dates[dates.length - 1].toLocaleDateString()
       : dates.length === 1
@@ -96,10 +102,11 @@ export default function RapportinoCalendar() {
     return {
       component: (
         <RapportinoCrud
-          activitiesHours={[]}
+          activitiesHours={activitiesHours}
           timesheetId={timesheetId}
           dates={dates}
           onClose={closeModalCallback}
+          onActivitiesAdded={onActivitiesAdded}
         />
       ),
       title: title,

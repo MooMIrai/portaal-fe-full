@@ -8,6 +8,7 @@ interface RapportinoCrudProps {
   dates?: Date[];
   timesheetId?: number;
   onClose: () => void;
+  onActivitiesAdded: () => void;
 }
 
 const RapportinoCrud = (props: RapportinoCrudProps) => {
@@ -54,7 +55,71 @@ const RapportinoCrud = (props: RapportinoCrudProps) => {
     setList(newData);
   };
 
-  console.log("list: ", list);
+  const handleConfirm = async () => {
+    if (props.item && props.item.timeSheetsId) {
+      const timesheetDetails: {
+        hours: number,
+        minutes: number,
+        activity_id: number,
+        leaverequest_id: number
+      }[] = list.map((item: any) => {
+        return {
+          hours: item.hours,
+          minutes: item.minutes || 0,
+          activity_id: item.activityId,
+          leaverequest_id: item.leaveRequestId,
+        }
+      });
+
+      try {
+        const response = await TimesheetsService.syncDay(
+          props.item.timeSheetsId,
+          props.item.start.getDate(),
+          timesheetDetails
+        );
+        if (response) {
+          props.onClose();
+          props.onActivitiesAdded();
+        }
+      } catch (error) {
+        console.error("Error loading data:", error);
+      }
+    } else if (props.dates && props.timesheetId) {
+      const timesheetDetails: {
+        hours: number,
+        minutes: number,
+        activity_id: number,
+        leaverequest_id: number
+      }[] = list.map((item: any) => {
+        return {
+          hours: item.hours,
+          minutes: item.minutes || 0,
+          activity_id: item.activityId,
+          leaverequest_id: item.leaveRequestId,
+        }
+      });
+
+      const data = props.dates.map(date => {
+        return {
+          timesheet_id: props.timesheetId || 0,
+          day: date.getDate(),
+          TimeSheetDetails: timesheetDetails
+        }
+      });
+
+      try {
+        const response = await TimesheetsService.syncMultipleDays(
+          data
+        );
+        if (response) {
+          props.onClose();
+          props.onActivitiesAdded();
+        }
+      } catch (error) {
+        console.error("Error loading data:", error);
+      }
+    }
+  }
 
   return (
     <InlineEditTable
@@ -106,7 +171,7 @@ const RapportinoCrud = (props: RapportinoCrudProps) => {
         actionLabel: "Conferma",
         cancelLabel: "Annulla",
         onAction: () => {
-          props.onClose();
+          handleConfirm();
         },
         onCancel: () => {
           props.onClose();
