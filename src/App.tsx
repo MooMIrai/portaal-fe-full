@@ -4,10 +4,13 @@ import Theme from "common/Theme";
 import authService from "common/services/AuthService";
 
 import AuthRoutes from "auth/Routes";
+import AuthVisibleRoutes from "auth/VisibleRoutes";
 import LookupsRoutes from "lookups/Routes";
 import initLookupFn from "lookups/Index";
 import HRRoutes from "hr/Routes";
 import initHRFn from "hr/Index";
+import initProfileFn from "auth/Index";
+import "./index.scss"
 import { Routes, useNavigate } from "react-router-dom";
 
 export const App = () => {
@@ -31,6 +34,11 @@ export const App = () => {
       const hrConfig = initHRFn();
       if (hrConfig && hrConfig.menuItems) {
         r = [...r, ...hrConfig.menuItems];
+      }
+
+      const profileConfig = initProfileFn();
+      if (profileConfig && profileConfig.menuItems) {
+        r = [...r, ...profileConfig.menuItems];
       }
       window.addEventListener(
         "LOGOUT",
@@ -59,6 +67,7 @@ export const App = () => {
         <Drawer items={routes}>
           <LookupsRoutes />
           <HRRoutes />
+          <AuthVisibleRoutes />
         </Drawer>
       </Theme>
     </>
