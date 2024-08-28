@@ -26,23 +26,32 @@ import {
   trashIcon,
   eyeIcon,
 } from "@progress/kendo-svg-icons";
-import { TableColumn, TABLE_ACTION_TYPE, TABLE_COLUMN_TYPE } from "../../models/tableModel";
+import {
+  TableColumn,
+  TABLE_ACTION_TYPE,
+  TABLE_COLUMN_TYPE,
+} from "../../models/tableModel";
 import CustomWindow from "../Window/component";
 
 type TablePaginatedProps = {
   pageSizeOptions?: number[];
   getData: (
     pagination: PaginationModel,
-    filter: CompositeFilterDescriptor,
-    sorting: SortDescriptor[],
+    filter?: CompositeFilterDescriptor,
+    sorting?: SortDescriptor[],
     term?: string
   ) => Promise<{ data: Array<Record<string, any>>; meta: { total: number } }>;
   columns: TableColumn[];
   actions?: TABLE_ACTION_TYPE[];
+
   //filter
   filterable?: boolean;
-  filter: CompositeFilterDescriptor;
-  setFilter: (filter: CompositeFilterDescriptor) => void;
+  filterColumnConfig?: {
+    filter: CompositeFilterDescriptor;
+    debouncedFilter: CompositeFilterDescriptor;
+    handleFilterChange: (e: GridFilterChangeEvent) => void;
+  };
+
   //style
   className?: string;
   customIcon?: string;
@@ -79,10 +88,10 @@ type TablePaginatedProps = {
   initialPagination: PaginationModel;
 
   //props for window Modal
-  widthWindow?:number;
-  heightWindow?:number;
-  leftWindow?:number;
-  topWindow?:number;
+  widthWindow?: number;
+  heightWindow?: number;
+  leftWindow?: number;
+  topWindow?: number;
   resizableWindow?: boolean;
   draggableWindow?: boolean;
   minHeightWindow?: number;
@@ -123,8 +132,8 @@ export default function GenericGrid(props: TablePaginatedProps) {
 
   const refreshTable = async (
     pagination: PaginationModel,
-    filter: CompositeFilterDescriptor,
-    sorting: SortDescriptor[],
+    filter?: CompositeFilterDescriptor,
+    sorting?: SortDescriptor[],
     term?: string
   ) => {
     const res = await props.getData(
@@ -138,12 +147,16 @@ export default function GenericGrid(props: TablePaginatedProps) {
   };
 
   useEffect(() => {
-    refreshTable(pagination, props.filter, props.sorting);
+    refreshTable(
+      pagination,
+      props.filterColumnConfig?.debouncedFilter,
+      props.sorting
+    );
     props.typological?.getModel(props.typological.type);
   }, [
     props.typological?.type,
     pagination,
-    props.filter,
+    props.filterColumnConfig?.debouncedFilter,
     props.sorting,
     props.inputSearchConfig?.debouncedSearchTerm,
   ]);
@@ -182,7 +195,7 @@ export default function GenericGrid(props: TablePaginatedProps) {
     setPagination(newPagination);
     refreshTable(
       newPagination,
-      props.filter,
+      props.filterColumnConfig?.filter,
       props.sorting,
       props.inputSearchConfig?.inputSearch
     );
@@ -222,8 +235,8 @@ export default function GenericGrid(props: TablePaginatedProps) {
         sortable={props.sortable}
         onSortChange={handleSortChange}
         sort={props.sorting}
-        filter={props.filter}
-        onFilterChange={(e: GridFilterChangeEvent) => props.setFilter(e.filter)}
+        filter={props.filterColumnConfig?.filter}
+        onFilterChange={props.filterColumnConfig?.handleFilterChange}
         style={{ height: "100%" }}
         data={data}
         total={total}
@@ -262,14 +275,13 @@ export default function GenericGrid(props: TablePaginatedProps) {
               value={props.typological?.type}
             />
           )}
-{
-  props.inputSearchConfig && (
-          <Input
-            placeholder="Cerca"
-            value={props.inputSearchConfig?.inputSearch}
-            onChange={props.inputSearchConfig?.handleInputSearch}
-          />
-)}
+          {props.inputSearchConfig && (
+            <Input
+              placeholder="Cerca"
+              value={props.inputSearchConfig?.inputSearch}
+              onChange={props.inputSearchConfig?.handleInputSearch}
+            />
+          )}
 
           {hasActionCreate() && (
             <div>
@@ -286,27 +298,33 @@ export default function GenericGrid(props: TablePaginatedProps) {
           )}
         </GridToolbar>
 
-        {props.columns.map((column, idx) => 
-          {
-            let cell:React.ComponentType<GridCellProps> | undefined;
-            if(column.type===TABLE_COLUMN_TYPE.date){
-              cell=(cellGrid: GridCellProps) => {
-
-                const date = new Date(cellGrid.dataItem[column.key]);
-                const day = String(date.getDate()).padStart(2, '0'); // Ottieni il giorno e aggiungi lo 0 se necessario
-                const month = String(date.getMonth() + 1).padStart(2, '0'); // Ottieni il mese (i mesi partono da 0, quindi aggiungi 1)
-                const year = date.getFullYear(); // Ottieni l'anno
-                return <td><strong><i>{`${day}/${month}/${year}`}</i></strong></td>
-              };
-            }
-          return <GridColumn
-            key={idx}
-            field={column.key}
-            title={column.label}
-            filter={column.filter}
-            cell = {cell}
-          />}
-        )}
+        {props.columns.map((column, idx) => {
+          let cell: React.ComponentType<GridCellProps> | undefined;
+          if (column.type === TABLE_COLUMN_TYPE.date) {
+            cell = (cellGrid: GridCellProps) => {
+              const date = new Date(cellGrid.dataItem[column.key]);
+              const day = String(date.getDate()).padStart(2, "0"); // Ottieni il giorno e aggiungi lo 0 se necessario
+              const month = String(date.getMonth() + 1).padStart(2, "0"); // Ottieni il mese (i mesi partono da 0, quindi aggiungi 1)
+              const year = date.getFullYear(); // Ottieni l'anno
+              return (
+                <td>
+                  <strong>
+                    <i>{`${day}/${month}/${year}`}</i>
+                  </strong>
+                </td>
+              );
+            };
+          }
+          return (
+            <GridColumn
+              key={idx}
+              field={column.key}
+              title={column.label}
+              filter={column.filter}
+              cell={cell}
+            />
+          );
+        })}
 
         {hasActionInColumn() && (
           <GridColumn
@@ -382,7 +400,7 @@ export default function GenericGrid(props: TablePaginatedProps) {
               () =>
                 refreshTable(
                   pagination,
-                  props.filter,
+                  props.filterColumnConfig?.filter,
                   props.sorting,
                   props.inputSearchConfig?.inputSearch
                 )
