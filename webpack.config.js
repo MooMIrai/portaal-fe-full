@@ -14,6 +14,7 @@ const mfeConfig =(path,mode)=> ({
   exposes: {
     "./Index": "./src/MfeInit",
     "./Routes": "./src/App",
+    "./VisibleRoutes": "./src/VisibleRoutes",
   },
   shared: {
     ...deps,
