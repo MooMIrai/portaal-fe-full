@@ -6,7 +6,8 @@
 
 .sidebarContainer {
   :global(.k-drawer-container) {
-    height: calc(100vh - 43px) !important;
+    background: #f6f6f6e0 !important;
+    height: calc(100vh) !important;
   }
   :global(.k-drawer-item) {
     user-select: none !important;
@@ -15,9 +16,16 @@
     font-size: 20px !important;
   }
   :global(.k-drawer-content) {
-    padding: 10px !important;
+    height: 100vh !important;
+    padding: 0 0 0 0 !important;
   }
   :global(.k-drawer-item.sub-item) {
     padding-left: 20px !important;
+  }
+}
+
+.sidebarContainer {
+  :global(.k-drawer-container) {
+    height: 100vh !important;
   }
 }

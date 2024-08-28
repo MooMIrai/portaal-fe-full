@@ -22,9 +22,11 @@ const mfeConfig = {
     "./Window": "./src/components/Window/component",
     "./Button": "./src/components/Button/component",
     "./CustomListView": "./src/components/CustomListView/component",
-    "./AutoComplete": "./src/components/AutoComplete/component",
-    "./CountrySelector": "./src/components/CountrySelector/component",
-
+    "./AutoComplete":"./src/components/AutoComplete/component",
+    "./CountrySelector":"./src/components/CountrySelector/component",
+    "./AvatarIcon":"./src/components/AvatarIcon/component",
+    "./CustomCard":"./src/components/CustomCard/component",
+    
     "./services/AuthService": "./src/services/AuthService",
     "./services/BEService": "./src/services/BEService",
     "./services/BaseHTTPService": "./src/services/BaseHTTPService",
