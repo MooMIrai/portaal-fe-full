@@ -84,7 +84,7 @@ const MultipleSelectionCrud = (props: any) => {
   if (props.renderData && props.show) {
     const dates = props.getDates();
     if (dates.length) {
-      const { component, title } = props.renderData(props.timesheetId, dates);
+      const { component, title } = props.renderData(props.timesheetId, dates, props.handleOpenCloseModal);
       return <CustomWindow
         showModalFooter={false}
         height={500}
