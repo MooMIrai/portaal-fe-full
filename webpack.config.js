@@ -42,7 +42,7 @@ module.exports = (_, argv) => {
 
   return {
   entry: "./src/index",
-  mode: "development",
+  mode: argv.mode,
   output: {
     publicPath: process.env.RELEASE_PATH,
     clean: true
