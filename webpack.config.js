@@ -47,12 +47,6 @@ module.exports = (_, argv) => {
     publicPath: process.env.RELEASE_PATH,
     clean: true
   },
-  optimization: {
-    splitChunks: {
-      chunks: "all",
-    },
-    runtimeChunk: "single",
-  },
   resolve: {
     extensions: [".tsx", ".ts", ".jsx", ".js", ".json"],
   },
@@ -88,7 +82,6 @@ module.exports = (_, argv) => {
     new HtmlWebPackPlugin({
       template: "./src/index.html",
     }),
-    new Dotenv({path:'./.env.'+argv.mode}),
     new Dotenv({path:'./.env.'+argv.mode}),
     ...(argv.mode==='production'?[new webpack.optimize.LimitChunkCountPlugin({
       maxChunks: 1,
