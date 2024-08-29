@@ -225,13 +225,10 @@ const PersonalPage = () => {
           getData={loadData}
           columns={columns}
           resizable={true}
-          resizableWindow={false}
-          topWindow={0}
-          leftWindow={0}
-          draggableWindow={true}
-          heightWindow={windowSize.height}
-          widthWindow={windowSize.width}
+          resizableWindow={false}  
+          stageWindow={"FULLSCREEN"}
           actions={["create", "delete", "edit", "show"]}
+          classNameWindow={ styles.windowStyle}
           formCrud={(row, type, closeModalCallback, refreshTable) => (
             <>
               {type === "delete" ? (

@@ -6,13 +6,16 @@
   justify-content: center;
 } */
 
-.parentTab:first-child > :first-child > * {
+/* .parentTab:first-child > :first-child > * {
   display: flex;
   justify-content: center;
+} */
+.parentForm{
+  padding:1rem;
 }
-
 .parentForm:first-child {
 max-width:none;
+
 
 & > :first-child > * {
   display: grid;
@@ -24,6 +27,20 @@ max-width:none;
   max-width: 100% !important;
 }
 }
+@media(max-width:520px){
+  .parentForm:first-child {
+    max-width:none;
+    
+    & > :first-child > * {
+     display:flex;
+     flex-direction: column;
+    }
+    & form{
+      max-width: 100% !important;
+    }
+    }
+}
+
 /* .checkboxContainer:first-child > :first-child > * > input:checked{
    background-color: #E1F5FE;
    color: #0497B8 !important;
