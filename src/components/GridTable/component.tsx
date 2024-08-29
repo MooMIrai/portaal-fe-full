@@ -7,6 +7,8 @@ import {
   GridPageChangeEvent,
   GridFilterChangeEvent,
   GridSortChangeEvent,
+  GridExpandChangeEvent,
+  GridDetailRowProps,
 } from "@progress/kendo-react-grid";
 import { Button } from "@progress/kendo-react-buttons";
 import { FORM_TYPE } from "../../models/formModel";
@@ -17,8 +19,6 @@ import {
   CompositeFilterDescriptor,
   SortDescriptor,
 } from "@progress/kendo-data-query";
-import { Input } from "@progress/kendo-react-inputs";
-import { DropDownList } from "@progress/kendo-react-dropdowns";
 import styles from "./styles.module.scss";
 import {
   plusIcon,
@@ -87,6 +87,11 @@ type TablePaginatedProps = {
   ) => JSX.Element;
   initialPagination: PaginationModel;
 
+  expand?:{
+    enabled:boolean,
+    render:(props: GridDetailRowProps) => JSX.Element
+  }
+
   //props for window Modal
   widthWindow?: number;
   heightWindow?: number;
@@ -129,6 +134,20 @@ export default function GenericGrid(props: TablePaginatedProps) {
   );
   const [data, setData] = useState<Array<Record<string, any>>>();
   const [row, setRow] = useState<Record<string, any> | undefined>(undefined);
+
+
+  const expandChange = (event: GridExpandChangeEvent) => {
+    if(data){
+      let newData = data.map((item: any,indexP) => {
+        if (indexP === event.dataIndex) {
+          item.gridtable_expanded = !event.dataItem.gridtable_expanded;
+        }
+        return item;
+      });
+      setData(newData);
+    }
+
+  };
 
   const refreshTable = async (
     pagination: PaginationModel,
@@ -227,9 +246,20 @@ export default function GenericGrid(props: TablePaginatedProps) {
       ? "Salva modifica"
       : "";
 
+
+    let expandedProps = {};
+    if(props.expand && props.expand.enabled){
+      expandedProps={
+        expandField:"gridtable_expanded",
+        onExpandChange:expandChange,
+        detail:props.expand.render
+      }
+    }
+
   return (
     <div className={styles.gridContainer}>
-      <Grid
+      <Grid 
+        {...expandedProps}
         filterable={props.filterable}
         resizable={props.resizable}
         sortable={props.sortable}
@@ -240,6 +270,7 @@ export default function GenericGrid(props: TablePaginatedProps) {
         style={{ height: "100%" }}
         data={data}
         total={total}
+        
         skip={
           pagination.currentPage
             ? (pagination.currentPage - 1) * pagination.pageSize
