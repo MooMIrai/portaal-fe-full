@@ -231,7 +231,7 @@ const PersonalPage = () => {
           draggableWindow={true}
           heightWindow={windowSize.height}
           widthWindow={windowSize.width}
-          actions={["create", "delete", "edit", "show"]}
+          actions={()=>["create", "delete", "edit", "show"]}
           formCrud={(row, type, closeModalCallback, refreshTable) => (
             <>
               {type === "delete" ? (

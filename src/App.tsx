@@ -5,6 +5,7 @@ import Rapportino from "./pages/Rapportino/component";
 import Clienti from "./pages/Clienti/component";
 import GestioneFeriePermessi from "./pages/GestioneFeriePermessi/component";
 import OffertePage from "./pages/Offerte/component";
+import ProgettiPage from "./pages/Progetti/component";
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
       <Route path={"/clienti"} element={<Clienti />}></Route>
       <Route path={"/offerte"} element={<OffertePage />}></Route>
       <Route path={"/gestioneFeriePermessi"} element={<GestioneFeriePermessi />}></Route>
+      <Route path={"/progetti"} element={<ProgettiPage />}></Route>
     </Routes>
   );
 };
