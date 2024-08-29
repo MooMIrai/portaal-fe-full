@@ -52,7 +52,7 @@ const columns: any = [
     key: "company",
     label: "Società",
     type: "string",
-    sortable: true,
+    sortable: false,
     filter: "text",
   },
   {
@@ -73,21 +73,21 @@ const columns: any = [
     key: "ContractType",
     label: "Tipo di Contratto",
     type: "string",
-    sortable: true,
+    sortable: false,
     filter: "text",
   },
   {
     key: "annualCost",
     label: "Costo Annuale",
     type: "string",
-    sortable: true,
+    sortable: false,
     filter: "numeric",
   },
   {
     key: "dailyCost",
     label: "Costo Giornaliero",
     type: "string",
-    sortable: true,
+    sortable: false,
     filter: "numeric",
   },
 ];

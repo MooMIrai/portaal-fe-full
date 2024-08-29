@@ -207,65 +207,86 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
 
 };
 
-export const getFormTrattamentoEconomicoFields = (formData: TrattamentoEconomicoData | null, company: companyOption[], type: any) => {
-    const companyOptions = company.map(company => company.label);
-    const optionalDateValidator = (field: string) => (value: any, formData: TrattamentoEconomicoData | null) => {
-        if (!value) return true;
-        const selectedDate = new Date(value);
-        const hireDate = new Date(formData?.dataAssunzione);
-        const startDate = new Date(formData?.dataInizioTrattamento);
-
-        if (selectedDate <= hireDate || selectedDate <= startDate) {
-            return false;
-        }
-        return true;
+export const getFormTrattamentoEconomicoFields = (
+    formData: TrattamentoEconomicoData | null,
+    company: companyOption[],
+    type: any
+  ) => {
+    const companyOptions = company.map((company) => company.label);
+  
+    const optionalDateValidator = (field: string) => (
+      value: any,
+      formData: TrattamentoEconomicoData | null
+    ) => {
+      if (!value) return true;
+      const selectedDate = new Date(value);
+      const hireDate = new Date(formData?.dataAssunzione);
+      const startDate = new Date(formData?.dataInizioTrattamento);
+  
+      if (selectedDate <= hireDate || selectedDate <= startDate) {
+        return false;
+      }
+      return true;
     };
-
+  
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set the time to midnight to avoid time-related issues
+  
     const fields = {
-        tipologiaContratto_autocomplete: {
-            name: "tipologiaContratto_autocomplete",
-            label: "Tipologia di Contratto di Lavoro",
-            type: "contract-type",
-            disabled: (type === "view"),
-            value: formData?.tipologiaContratto_autocomplete || "",
-            required: true,
-            validator: (value: any) => value ? "" : "Il campo Tipologia di Contratto è obbligatorio",
+      tipologiaContratto_autocomplete: {
+        name: "tipologiaContratto_autocomplete",
+        label: "Tipologia di Contratto di Lavoro",
+        type: "contract-type",
+        disabled: type === "view",
+        value: formData?.tipologiaContratto_autocomplete || "",
+        required: true,
+        validator: (value: any) =>
+          value ? "" : "Il campo Tipologia di Contratto è obbligatorio",
+      },
+      societa: {
+        name: "societa",
+        label: "Società",
+        type: "select",
+        showLabel: false,
+        disabled: type === "view",
+        value: formData?.societa || "",
+        required: true,
+        validator: (value: any) =>
+          value ? "" : "Il campo Società è obbligatorio",
+        options: companyOptions,
+      },
+      tipoAmbitoLavorativo_autocomplete: {
+        name: "tipoAmbitoLavorativo_autocomplete",
+        label: "Ambito Lavorativo",
+        type: "work-scope",
+        disabled: type === "view",
+        value:
+          formData?.tipologiaContratto_autocomplete?.id === 0 &&
+          formData?.tipologiaContratto_autocomplete?.name === ""
+            ? undefined
+            : formData?.tipologiaContratto_autocomplete,
+        required: true,
+        validator: (value: any) =>
+          value ? "" : "Il campo Ambito Lavorativo è obbligatorio",
+      },
+      dataInizioTrattamento: {
+        name: "dataInizioTrattamento",
+        label: "Data di Inizio del Trattamento",
+        type: "date",
+        disabled: type === "view",
+        required: true,
+        validator: (value: any) => {
+          if (!value) {
+            return "Il campo Data Inizio Trattamento è obbligatorio";
+          }
+          const selectedDate = new Date(value);
+          if (selectedDate < today) {
+            return "La Data di Inizio del Trattamento non può essere nel passato";
+          }
+          return "";
         },
-        societa: {
-            name: "societa",
-            label: "Società",
-            type: "select",
-            showLabel: false,
-            disabled: (type === "view"),
-            value: formData?.societa || "",
-            required: true,
-            validator: (value: any) => value ? "" : "Il campo Società è obbligatorio",
-            options: companyOptions
-        },
-        tipoAmbitoLavorativo_autocomplete: {
-            name: "tipoAmbitoLavorativo_autocomplete",
-            label: "Ambito Lavorativo",
-            type: "work-scope",
-            disabled: (type === "view"),
-            value:
-                formData?.tipologiaContratto_autocomplete?.id === 0 &&
-                    formData?.tipologiaContratto_autocomplete?.name === ""
-                    ? undefined
-                    : formData?.tipologiaContratto_autocomplete,
-            required: true,
-            validator: (value: any) => value ? "" : "Il campo Ambito Lavorativo è obbligatorio",
-        },
-        dataInizioTrattamento: {
-            name: "dataInizioTrattamento",
-            label: "Data di Inizio del Trattamento",
-            type: "date",
-            disabled: (type === "view"),
-            required: true,
-            validator: (value: any) => value ? "" : "Il campo Data Inizio Trattamento è obbligatorio",
-            value: formData?.dataInizioTrattamento || "",
-            
-            
-        },
+        value: formData?.dataInizioTrattamento || "",
+      },
         costoGiornaliero: {
             name: "costoGiornaliero",
             label: "Costo Giornaliero",

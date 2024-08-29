@@ -4,7 +4,6 @@ import { TabStripSelectEventArguments } from "@progress/kendo-react-layout";
 import Form from "common/Form";
 import Window from "common/Window";
 import styles from "./style.module.scss";
-import AutoComplete from "common/AutoComplete"
 import {
   getFormAnagraficaFields,
   getFormTrattamentoEconomicoFields,
@@ -12,7 +11,7 @@ import {
   getFormPermessiFields,
 } from "./FormFields";
 import { AnagraficaData, TrattamentoEconomicoData, RuoliData, PermessiData } from "./modelForms";
-import { ActivityTypeOption, cityAdapter, cityTypeOption, companyAdapter, companyOption,countryAdapter, countryOption, dataAdapter, genderAdapter, genderOption, permessiAdapter, reverseAdapter, roleAdapter, RoleOption} from "../../adapters/personaleAdapters";
+import { ActivityTypeOption, cityAdapter, cityTypeOption, companyAdapter, companyOption, countryAdapter, countryOption, dataAdapter, genderAdapter, genderOption, permessiAdapter, reverseAdapter, roleAdapter, RoleOption } from "../../adapters/personaleAdapters";
 import { CrudGenericService } from "../../services/personaleServices";
 import Button from "common/Button";
 import { formFields } from "./customfields";
@@ -40,7 +39,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
   const [selected, setSelected] = useState(0);
   const [formAnagraficaData, setFormAnagraficaData] = useState<AnagraficaData>(anagrafica);
   const [formTrattamentoEconomicoData, setFormTrattamentoEconomicoData] = useState<TrattamentoEconomicoData>(!newForm ? trattamentoEconomico : {});
-  const [storicoTrattamentoData, setStoricoTrattamentoData] = useState<any>(row.trattamentoEconomicoArray || []); 
+  const [storicoTrattamentoData, setStoricoTrattamentoData] = useState<any>(row.trattamentoEconomicoArray || []);
   const [formRuoliData, setFormRuoliData] = useState<RuoliData>(ruoli);
   const [formPermessiData, setFormPermessiData] = useState<PermessiData>(permessi);
   const [roles, setRoles] = useState<RoleOption[]>([]);
@@ -53,7 +52,8 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
   const formPermessi = useRef<HTMLFormElement>(null);
   const [city, setCity] = useState<cityTypeOption[]>([]);
 
-  
+  const [currentIndex, setCurrentIndex] = useState(0);
+
   const [showNewContractModal, setShowNewContractModal] = useState(false);
   const [confirmNewContractStep, setConfirmNewContractStep] = useState(false);
   const handleSelect = (e: TabStripSelectEventArguments) => {
@@ -118,7 +118,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
       country: country,
     };
 
-    
+
 
     if (!hasError) {
       const formattedData = reverseAdapter(combinedData);
@@ -139,7 +139,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
         setFormTrattamentoEconomicoData(formTrattamentoEconomico.current.values);
       } else {
         formTrattamentoEconomico.current.values = {}
-        formTrattamentoEconomico.current.values. dataInizioTrattamento= today
+        formTrattamentoEconomico.current.values.dataInizioTrattamento = today
         setFormTrattamentoEconomicoData(formTrattamentoEconomico.current.values)
       }
     }
@@ -157,6 +157,9 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
         const roleResponse = await CrudGenericService.fetchResources("role");
         const adaptedRoles = roleAdapter(roleResponse);
         setRoles(adaptedRoles);
+        const companyResponse = await CrudGenericService.fetchResources("Company");
+        const adaptedCompany = companyAdapter(companyResponse);
+        setCompany(adaptedCompany);
 
         const genderResponse = await CrudGenericService.fetchResources("Gender");
         const adaptedGender = genderAdapter(genderResponse);
@@ -195,66 +198,81 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
     }
   }, [newForm]);
 
-    // Sorting the storicoTrattamentoData by scadenzaEffettiva date
-    const sortedStoricoTrattamentoData = [...storicoTrattamentoData].sort((a: TrattamentoEconomicoData, b: TrattamentoEconomicoData) => {
-      const dateA = a.scadenzaEffettiva ? new Date(a.scadenzaEffettiva) : new Date(0); 
-      const dateB = b.scadenzaEffettiva ? new Date(b.scadenzaEffettiva) : new Date(0);
-      return dateA.getTime() - dateB.getTime(); 
-    });
+  // Sorting the storicoTrattamentoData by scadenzaEffettiva date
+  const sortedStoricoTrattamentoData = [...storicoTrattamentoData].sort((a: TrattamentoEconomicoData, b: TrattamentoEconomicoData) => {
+    const dateA = a.scadenzaEffettiva ? new Date(a.scadenzaEffettiva) : new Date(0);
+    const dateB = b.scadenzaEffettiva ? new Date(b.scadenzaEffettiva) : new Date(0);
+    return dateA.getTime() - dateB.getTime();
+  });
 
-    const renderStoricoTrattamento = () => {
-      return (
-        <div>
+  const renderStoricoTrattamento = () => {
+    const totalStorici = sortedStoricoTrattamentoData.length; 
+
+    return (
+      <div>
+        <div className={styles.header}>
           <h3>Storico Trattamenti Economici</h3>
-          <div className={styles.container}>
-            {sortedStoricoTrattamentoData.length > 0 ? (
-              sortedStoricoTrattamentoData.map((storico: TrattamentoEconomicoData, index: number) => (
-                <div key={index} className={styles.storicoItem}>
-                  <h4>Trattamento Economico {index + 1}</h4>
-                  <div className={styles.col}><strong>Tipologia Contratto:</strong> {storico.tipologiaContratto}</div>
-                  <div className={styles.col}><strong>Società:</strong> {storico.societa}</div>
-                  <div className={styles.col}><strong>Tipo Ambito Lavorativo:</strong> {storico.tipoAmbitoLavorativo}</div>
-                  <div className={styles.col}><strong>Data Inizio Trattamento:</strong> {storico.dataInizioTrattamento ? new Date(storico.dataInizioTrattamento).toLocaleDateString() : 'N/A'}</div>
-                  <div className={styles.col}><strong>Costo Giornaliero:</strong> {storico.costoGiornaliero}</div>
-                  <div className={styles.col}><strong>Data Assunzione:</strong> {storico.dataAssunzione ? new Date(storico.dataAssunzione).toLocaleDateString() : 'N/A'}</div>
-                  <div className={styles.col}><strong>Scadenza Effettiva:</strong> {storico.scadenzaEffettiva ? new Date(storico.scadenzaEffettiva).toLocaleDateString() : 'N/A'}</div>
-                  <div className={styles.col}><strong>Data Recesso:</strong> {storico.dataRecesso ? new Date(storico.dataRecesso).toLocaleDateString() : 'N/A'}</div>
-                  <div className={styles.col}><strong>Motivazione Cessazione:</strong> {storico.motivazioneCessazione}</div>
-                  <div className={styles.col}><strong>Trasformazioni:</strong> {storico.trasformazioni}</div>
-                  <div className={styles.col}><strong>CCNL:</strong> {storico.ccnl}</div>
-                  <div className={styles.col}><strong>RAL:</strong> {storico.ral}</div>
-                  <div className={styles.col}><strong>Trasferta:</strong> {storico.trasferta}</div>
-                  <div className={styles.col}><strong>Buoni Pasto:</strong> {storico.buoniPasto}</div>
-                  <div className={styles.col}><strong>Netto Mese:</strong> {storico.nettoMese}</div>
-                  <div className={styles.col}><strong>Costo Annuale:</strong> {storico.costoAnnuale}</div>
-                  <div className={styles.col}><strong>Tariffa Vendita:</strong> {storico.tariffaVendita}</div>
-                  <div className={styles.col}><strong>Note:</strong> {storico.note}</div>
-                </div>
-              ))
-            ) : (
-              <div className={styles.emptyState}>
-                <h5>Nessun Trattamento Economico Precedente</h5>
-              </div>
-            )}
-          </div>
+          {totalStorici > 0 && (
+            <span className={styles.totalStorici}>
+              Totale storici: {currentIndex + 1}/{totalStorici}
+            </span>
+          )}
         </div>
-      );
-    };
 
-    const isNewTreatmentButtonDisabled = () => {
-      // Controlla se il formTrattamentoEconomicoData è vuoto o se contiene solo la data
-      const onlyHasDate =
-        Object.keys(formTrattamentoEconomicoData).length === 1 && formTrattamentoEconomicoData.dataInizioTrattamento;
-  
-      return (
-        !formTrattamentoEconomicoData ||
-        Object.keys(formTrattamentoEconomicoData).length === 0 || 
-        onlyHasDate || 
-        !formTrattamentoEconomicoData.dataInizioTrattamento 
-      );
-    };
+        <div className={styles.container}>
+          {totalStorici > 0 ? (
+            <div className={styles.storicoItem}>
+              <h4>Trattamento Economico {currentIndex + 1}</h4>
+              <div className={styles.col}><strong>Tipologia Contratto:</strong> {sortedStoricoTrattamentoData[currentIndex].tipologiaContratto}</div>
+              <div className={styles.col}><strong>Società:</strong> {sortedStoricoTrattamentoData[currentIndex].societa}</div>
+              <div className={styles.col}><strong>Tipo Ambito Lavorativo:</strong> {sortedStoricoTrattamentoData[currentIndex].tipoAmbitoLavorativo}</div>
+              <div className={styles.col}><strong>Data Inizio Trattamento:</strong> {sortedStoricoTrattamentoData[currentIndex].dataInizioTrattamento ? new Date(sortedStoricoTrattamentoData[currentIndex].dataInizioTrattamento).toLocaleDateString() : 'N/A'}</div>
+              <div className={styles.col}><strong>Costo Giornaliero:</strong> {sortedStoricoTrattamentoData[currentIndex].costoGiornaliero}</div>
+              <div className={styles.col}><strong>Data Assunzione:</strong> {sortedStoricoTrattamentoData[currentIndex].dataAssunzione ? new Date(sortedStoricoTrattamentoData[currentIndex].dataAssunzione).toLocaleDateString() : 'N/A'}</div>
+              <div className={styles.col}><strong>Scadenza Effettiva:</strong> {sortedStoricoTrattamentoData[currentIndex].scadenzaEffettiva ? new Date(sortedStoricoTrattamentoData[currentIndex].scadenzaEffettiva).toLocaleDateString() : 'N/A'}</div>
+              <div className={styles.col}><strong>Data Recesso:</strong> {sortedStoricoTrattamentoData[currentIndex].dataRecesso ? new Date(sortedStoricoTrattamentoData[currentIndex].dataRecesso).toLocaleDateString() : 'N/A'}</div>
+              <div className={styles.col}><strong>Motivazione Cessazione:</strong> {sortedStoricoTrattamentoData[currentIndex].motivazioneCessazione}</div>
+              <div className={styles.col}><strong>Trasformazioni:</strong> {sortedStoricoTrattamentoData[currentIndex].trasformazioni}</div>
+              <div className={styles.col}><strong>CCNL:</strong> {sortedStoricoTrattamentoData[currentIndex].ccnl}</div>
+              <div className={styles.col}><strong>RAL:</strong> {sortedStoricoTrattamentoData[currentIndex].ral}</div>
+              <div className={styles.col}><strong>Trasferta:</strong> {sortedStoricoTrattamentoData[currentIndex].trasferta}</div>
+              <div className={styles.col}><strong>Buoni Pasto:</strong> {sortedStoricoTrattamentoData[currentIndex].buoniPasto}</div>
+              <div className={styles.col}><strong>Netto Mese:</strong> {sortedStoricoTrattamentoData[currentIndex].nettoMese}</div>
+              <div className={styles.col}><strong>Costo Annuale:</strong> {sortedStoricoTrattamentoData[currentIndex].costoAnnuale}</div>
+              <div className={styles.col}><strong>Tariffa Vendita:</strong> {sortedStoricoTrattamentoData[currentIndex].tariffaVendita}</div>
+              <div className={styles.col}><strong>Note:</strong> {sortedStoricoTrattamentoData[currentIndex].note}</div>
+            </div>
+          ) : (
+            <div className={styles.emptyState}>
+              <h5>Nessun Trattamento Economico Precedente</h5>
+            </div>
+          )}
+        </div>
+        {totalStorici > 1 && (
+          <div className={styles.navigationButtons}>
+            <Button onClick={handlePrevious} disabled={currentIndex === 0}>Indietro</Button>
+            <Button className={styles.buttonAvanti} onClick={handleNext} disabled={currentIndex === totalStorici - 1}>Avanti</Button>
+          </div>
+        )}
+      </div>
+    );
+  };
 
-  
+
+  const isNewTreatmentButtonDisabled = () => {
+    // Controlla se il formTrattamentoEconomicoData è vuoto o se contiene solo la data
+    const onlyHasDate =
+      Object.keys(formTrattamentoEconomicoData).length === 1 && formTrattamentoEconomicoData.dataInizioTrattamento;
+
+    return (
+      !formTrattamentoEconomicoData ||
+      Object.keys(formTrattamentoEconomicoData).length === 0 ||
+      onlyHasDate ||
+      !formTrattamentoEconomicoData.dataInizioTrattamento
+    );
+  };
+
+
 
   const handleNewContract = () => {
     setShowNewContractModal(true);
@@ -271,6 +289,21 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
     setConfirmNewContractStep(false);
   };
 
+  const handleNext = () => {
+    if (currentIndex < sortedStoricoTrattamentoData.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    }
+  };
+
+  // Definisce la classe CSS dinamica in base alla presenza di storici
+  const trattamentoEconomicoClass = sortedStoricoTrattamentoData.length > 0 ? styles.trattamentoEconomicoConStorici : styles.trattamentoEconomicoSenzaStorici;
+
   const tabs = [
     {
       title: "Anagrafica",
@@ -284,8 +317,8 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
             description="Ana"
             addedFields={formFields}
           />
-           
-          
+
+
         </div>
       ),
     },
@@ -293,28 +326,28 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
       title: "Trattamento Economico",
       children: (
         <>
-        <div className={styles.parentForm}>
-          <Form
-            ref={formTrattamentoEconomico}
-            fields={Object.values(getFormTrattamentoEconomicoFields(formTrattamentoEconomicoData, company, type))}
-            formData={formTrattamentoEconomicoData}
-            onSubmit={(data: TrattamentoEconomicoData) => setFormTrattamentoEconomicoData(data)}
-            description="TE"
-            addedFields={formFields}
-          />
-            </div> 
-          {(type === "edit" || type === "view") && ( (
+          <div className={` ${trattamentoEconomicoClass}`}>
+            <Form
+              ref={formTrattamentoEconomico}
+              fields={Object.values(getFormTrattamentoEconomicoFields(formTrattamentoEconomicoData, company, type))}
+              formData={formTrattamentoEconomicoData}
+              onSubmit={(data: TrattamentoEconomicoData) => setFormTrattamentoEconomicoData(data)}
+              description="TE"
+              addedFields={formFields}
+            />
+          </div>
+          {(type === "edit" || type === "view") && ((
             <>
-            <div className={styles.buttonTrattamento}>
-              <Button disabled={isNewTreatmentButtonDisabled() || type === "view"} onClick={handleNewContract}>Nuovo Trattamento</Button>
+              <div className={styles.buttonTrattamento}>
+                <Button disabled={isNewTreatmentButtonDisabled() || type === "view"} onClick={handleNewContract}>Nuovo Trattamento</Button>
               </div>
               <div className={styles.listBoxContainer}>
                 {renderStoricoTrattamento()}
               </div>
-            
+
             </>
           ))}
-       </>
+        </>
       ),
     },
     {
@@ -347,7 +380,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
     }
   ];
 
-  
+
 
   return (
     <div className={styles.parentTab}>
