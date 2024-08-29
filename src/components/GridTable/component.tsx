@@ -42,7 +42,7 @@ type TablePaginatedProps = {
     term?: string
   ) => Promise<{ data: Array<Record<string, any>>; meta: { total: number } }>;
   columns: TableColumn[];
-  actions?: TABLE_ACTION_TYPE[];
+  actions: (row?: Record<string, any> | undefined) => TABLE_ACTION_TYPE[];
 
   //filter
   filterable?: boolean;
@@ -162,10 +162,10 @@ export default function GenericGrid(props: TablePaginatedProps) {
   ]);
 
   const hasActionInColumn = () =>
-    props.actions?.some((p) => p !== TABLE_ACTION_TYPE.create);
+    props.actions?.()?.some((p) => p !== TABLE_ACTION_TYPE.create);
 
   const hasActionCreate = () =>
-    props.actions?.some((p) => p === TABLE_ACTION_TYPE.create);
+    props.actions?.()?.some((p) => p === TABLE_ACTION_TYPE.create);
 
   const openModal = (
     type: TABLE_ACTION_TYPE,
@@ -256,7 +256,7 @@ export default function GenericGrid(props: TablePaginatedProps) {
         )}
       >
         <GridToolbar className={styles.toolBarContainer}>
-          {props.dropListLookup && (
+          {/* {props.dropListLookup && (
             <DropDownList
               style={{ height: "38px" }}
               data={[
@@ -281,16 +281,14 @@ export default function GenericGrid(props: TablePaginatedProps) {
               value={props.inputSearchConfig?.inputSearch}
               onChange={props.inputSearchConfig?.handleInputSearch}
             />
-          )}
+          )} */}
 
           {hasActionCreate() && (
             <div>
               <Button
                 svgIcon={plusIcon}
                 themeColor={"primary"}
-                onClick={() => {
-                  openModal(TABLE_ACTION_TYPE.create);
-                }}
+                onClick={() => openModal(TABLE_ACTION_TYPE.create)}
               >
                 Nuovo
               </Button>
@@ -303,9 +301,9 @@ export default function GenericGrid(props: TablePaginatedProps) {
           if (column.type === TABLE_COLUMN_TYPE.date) {
             cell = (cellGrid: GridCellProps) => {
               const date = new Date(cellGrid.dataItem[column.key]);
-              const day = String(date.getDate()).padStart(2, "0"); // Ottieni il giorno e aggiungi lo 0 se necessario
-              const month = String(date.getMonth() + 1).padStart(2, "0"); // Ottieni il mese (i mesi partono da 0, quindi aggiungi 1)
-              const year = date.getFullYear(); // Ottieni l'anno
+              const day = String(date.getDate()).padStart(2, "0");
+              const month = String(date.getMonth() + 1).padStart(2, "0");
+              const year = date.getFullYear();
               return (
                 <td>
                   <strong>
@@ -331,45 +329,41 @@ export default function GenericGrid(props: TablePaginatedProps) {
             filterable={false}
             field="action"
             cell={(cellGrid: GridCellProps) => {
+              const actions = props.actions?.(cellGrid.dataItem);
+
               return (
                 <td>
                   <div className={styles.commandButtons}>
-                    {props.actions &&
-                      props.actions.includes(TABLE_ACTION_TYPE.show) && (
-                        <Button
-                          svgIcon={eyeIcon}
-                          fillMode={"link"}
-                          themeColor={"info"}
-                          onClick={() =>
-                            openModal(TABLE_ACTION_TYPE.show, cellGrid.dataItem)
-                          }
-                        ></Button>
-                      )}
-                    {props.actions &&
-                      props.actions.includes(TABLE_ACTION_TYPE.edit) && (
-                        <Button
-                          svgIcon={pencilIcon}
-                          fillMode={"link"}
-                          themeColor={"warning"}
-                          onClick={() =>
-                            openModal(TABLE_ACTION_TYPE.edit, cellGrid.dataItem)
-                          }
-                        ></Button>
-                      )}
-                    {props.actions &&
-                      props.actions.includes(TABLE_ACTION_TYPE.delete) && (
-                        <Button
-                          svgIcon={trashIcon}
-                          fillMode={"link"}
-                          themeColor={"error"}
-                          onClick={() =>
-                            openModal(
-                              TABLE_ACTION_TYPE.delete,
-                              cellGrid.dataItem
-                            )
-                          }
-                        ></Button>
-                      )}
+                    {actions?.includes(TABLE_ACTION_TYPE.show) && (
+                      <Button
+                        svgIcon={eyeIcon}
+                        fillMode={"link"}
+                        themeColor={"info"}
+                        onClick={() =>
+                          openModal(TABLE_ACTION_TYPE.show, cellGrid.dataItem)
+                        }
+                      ></Button>
+                    )}
+                    {actions?.includes(TABLE_ACTION_TYPE.edit) && (
+                      <Button
+                        svgIcon={pencilIcon}
+                        fillMode={"link"}
+                        themeColor={"warning"}
+                        onClick={() =>
+                          openModal(TABLE_ACTION_TYPE.edit, cellGrid.dataItem)
+                        }
+                      ></Button>
+                    )}
+                    {actions?.includes(TABLE_ACTION_TYPE.delete) && (
+                      <Button
+                        svgIcon={trashIcon}
+                        fillMode={"link"}
+                        themeColor={"error"}
+                        onClick={() =>
+                          openModal(TABLE_ACTION_TYPE.delete, cellGrid.dataItem)
+                        }
+                      ></Button>
+                    )}
                   </div>
                 </td>
               );
