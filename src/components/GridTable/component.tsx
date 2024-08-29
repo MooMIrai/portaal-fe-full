@@ -32,6 +32,7 @@ import {
   TABLE_COLUMN_TYPE,
 } from "../../models/tableModel";
 import CustomWindow from "../Window/component";
+import { useDebounce } from "@uidotdev/usehooks";
 
 type TablePaginatedProps = {
   pageSizeOptions?: number[];
@@ -46,11 +47,6 @@ type TablePaginatedProps = {
 
   //filter
   filterable?: boolean;
-  filterColumnConfig?: {
-    filter: CompositeFilterDescriptor;
-    debouncedFilter: CompositeFilterDescriptor;
-    handleFilterChange: (e: GridFilterChangeEvent) => void;
-  };
 
   //style
   className?: string;
@@ -87,10 +83,10 @@ type TablePaginatedProps = {
   ) => JSX.Element;
   initialPagination: PaginationModel;
 
-  expand?:{
-    enabled:boolean,
-    render:(props: GridDetailRowProps) => JSX.Element
-  }
+  expand?: {
+    enabled: boolean;
+    render: (props: GridDetailRowProps) => JSX.Element;
+  };
 
   //props for window Modal
   widthWindow?: number;
@@ -134,11 +130,12 @@ export default function GenericGrid(props: TablePaginatedProps) {
   );
   const [data, setData] = useState<Array<Record<string, any>>>();
   const [row, setRow] = useState<Record<string, any> | undefined>(undefined);
-
+  const [filter, setFilter] = useState<any>({ logic: "or", filters: [] });
+  const debouncedFilterColumn = useDebounce(filter, 650);
 
   const expandChange = (event: GridExpandChangeEvent) => {
-    if(data){
-      let newData = data.map((item: any,indexP) => {
+    if (data) {
+      let newData = data.map((item: any, indexP) => {
         if (indexP === event.dataIndex) {
           item.gridtable_expanded = !event.dataItem.gridtable_expanded;
         }
@@ -146,7 +143,6 @@ export default function GenericGrid(props: TablePaginatedProps) {
       });
       setData(newData);
     }
-
   };
 
   const refreshTable = async (
@@ -168,16 +164,16 @@ export default function GenericGrid(props: TablePaginatedProps) {
   useEffect(() => {
     refreshTable(
       pagination,
-      props.filterColumnConfig?.debouncedFilter,
+      debouncedFilterColumn,
       props.sorting
     );
     props.typological?.getModel(props.typological.type);
   }, [
     props.typological?.type,
     pagination,
-    props.filterColumnConfig?.debouncedFilter,
+    debouncedFilterColumn,
     props.sorting,
-    props.inputSearchConfig?.debouncedSearchTerm,
+    //props.inputSearchConfig?.debouncedSearchTerm,
   ]);
 
   const hasActionInColumn = () =>
@@ -214,7 +210,7 @@ export default function GenericGrid(props: TablePaginatedProps) {
     setPagination(newPagination);
     refreshTable(
       newPagination,
-      props.filterColumnConfig?.filter,
+      filter,
       props.sorting,
       props.inputSearchConfig?.inputSearch
     );
@@ -246,31 +242,33 @@ export default function GenericGrid(props: TablePaginatedProps) {
       ? "Salva modifica"
       : "";
 
+  let expandedProps = {};
+  if (props.expand && props.expand.enabled) {
+    expandedProps = {
+      expandField: "gridtable_expanded",
+      onExpandChange: expandChange,
+      detail: props.expand.render,
+    };
+  }
 
-    let expandedProps = {};
-    if(props.expand && props.expand.enabled){
-      expandedProps={
-        expandField:"gridtable_expanded",
-        onExpandChange:expandChange,
-        detail:props.expand.render
-      }
-    }
+  const handleFilterColumnChange = (e: any) => {
+    setFilter(e.filter);
+  };
 
   return (
     <div className={styles.gridContainer}>
-      <Grid 
+      <Grid
         {...expandedProps}
         filterable={props.filterable}
         resizable={props.resizable}
         sortable={props.sortable}
         onSortChange={handleSortChange}
         sort={props.sorting}
-        filter={props.filterColumnConfig?.filter}
-        onFilterChange={props.filterColumnConfig?.handleFilterChange}
+        filter={filter}
+        onFilterChange={handleFilterColumnChange}
         style={{ height: "100%" }}
         data={data}
         total={total}
-        
         skip={
           pagination.currentPage
             ? (pagination.currentPage - 1) * pagination.pageSize
@@ -425,7 +423,7 @@ export default function GenericGrid(props: TablePaginatedProps) {
               () =>
                 refreshTable(
                   pagination,
-                  props.filterColumnConfig?.filter,
+                  filter,
                   props.sorting,
                   props.inputSearchConfig?.inputSearch
                 )
