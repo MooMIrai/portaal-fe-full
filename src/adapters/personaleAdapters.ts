@@ -597,13 +597,6 @@ const mapGenderToID = (
   return scope ? scope.value : undefined;
 };
 
-const mapCityToID = (
-  label: string,
-  city: cityTypeOption[]
-): number | undefined => {
-  const scope = city.find((scope) => scope.label === label);
-  return scope ? scope.value : undefined;
-};
 
 const mapCountryToID = (
   label: string,

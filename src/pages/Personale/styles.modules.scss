@@ -6,8 +6,25 @@
     gap:20px;
     align-items: center;
     font-size: 20px;
+    
      & > div {
         display: flex;
         gap:20px;
      }
  }
+
+ .windowStyle{
+   height:100% !important
+ }
+
+ .windowStyle > div > div > button:first-child  {
+  display:none !important
+}
+.windowStyle > div > div > span:first-child {
+   display:none !important
+ }
+
+ .windowStyle > div > div > svg:first-child {
+   display:none !important
+ }
+
