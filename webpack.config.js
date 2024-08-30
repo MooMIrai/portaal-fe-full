@@ -76,10 +76,6 @@ module.exports = (_, argv) => {
         template: "./src/index.html",
       }),
       new Dotenv({path:'./.env.'+argv.mode}),
-      new Dotenv({path:'./.env.'+argv.mode}),
-    ...(argv.mode==='production'?[new webpack.optimize.LimitChunkCountPlugin({
-      maxChunks: 1,
-    })]:[]),
     ],
   }
 };
