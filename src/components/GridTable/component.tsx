@@ -156,7 +156,7 @@ function GenericGrid(props: TablePaginatedProps) {
 
   useEffect(() => {
     refreshTable();
-  }, [pagination, debouncedFilterColumn, props.sorting]);
+  }, [pagination, debouncedFilterColumn, sorting]);
 
   const hasActionInColumn = () =>
     props.actions?.()?.some((p) => p !== TABLE_ACTION_TYPE.create);
