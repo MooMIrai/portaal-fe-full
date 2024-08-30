@@ -1,11 +1,16 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, {
+  Dispatch,
+  forwardRef,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import {
   Grid,
   GridColumn,
   GridToolbar,
   GridCellProps,
   GridPageChangeEvent,
-  GridFilterChangeEvent,
   GridSortChangeEvent,
   GridExpandChangeEvent,
   GridDetailRowProps,
@@ -35,12 +40,12 @@ import CustomWindow from "../Window/component";
 import { useDebounce } from "@uidotdev/usehooks";
 
 type TablePaginatedProps = {
+  ref?: any;
   pageSizeOptions?: number[];
   getData: (
     pagination: PaginationModel,
     filter?: CompositeFilterDescriptor,
-    sorting?: SortDescriptor[],
-    term?: string
+    sorting?: SortDescriptor[]
   ) => Promise<{ data: Array<Record<string, any>>; meta: { total: number } }>;
   columns: TableColumn[];
   actions: (row?: Record<string, any> | undefined) => TABLE_ACTION_TYPE[];
@@ -54,13 +59,6 @@ type TablePaginatedProps = {
   customHeader?: string;
   resizable?: boolean;
   dropListLookup?: boolean;
-
-  //generic crud search
-  inputSearchConfig?: {
-    inputSearch: string;
-    debouncedSearchTerm: string;
-    handleInputSearch: (e: any) => void;
-  };
 
   //sort
   sortable?: boolean;
@@ -87,6 +85,9 @@ type TablePaginatedProps = {
     enabled: boolean;
     render: (props: GridDetailRowProps) => JSX.Element;
   };
+
+  //
+  customToolBarComponent?: (refreshTable: () => void) => JSX.Element;
 
   //props for window Modal
   widthWindow?: number;
@@ -118,19 +119,21 @@ const MyPager = (props: PagerProps) => (
   </div>
 );
 
-export default function GenericGrid(props: TablePaginatedProps) {
+function GenericGrid(props: TablePaginatedProps) {
   const [modal, setModal] = useState<{
     open: boolean;
     data?: Record<string, any>;
     type?: TABLE_ACTION_TYPE;
   }>({ open: false });
   const [total, setTotal] = useState<number>(0);
-  const [pagination, setPagination] = useState<PaginationModel>(
-    props.initialPagination
-  );
+  const [pagination, setPagination] = useState<PaginationModel>({
+    currentPage: 1,
+    pageSize: 10,
+  });
   const [data, setData] = useState<Array<Record<string, any>>>();
   const [row, setRow] = useState<Record<string, any> | undefined>(undefined);
   const [filter, setFilter] = useState<any>({ logic: "or", filters: [] });
+  const [sorting, setSorting] = useState<any[]>([]);
   const debouncedFilterColumn = useDebounce(filter, 650);
 
   const expandChange = (event: GridExpandChangeEvent) => {
@@ -145,36 +148,15 @@ export default function GenericGrid(props: TablePaginatedProps) {
     }
   };
 
-  const refreshTable = async (
-    pagination: PaginationModel,
-    filter?: CompositeFilterDescriptor,
-    sorting?: SortDescriptor[],
-    term?: string
-  ) => {
-    const res = await props.getData(
-      pagination,
-      filter,
-      sorting,
-      props.inputSearchConfig?.debouncedSearchTerm
-    );
+  const refreshTable = async () => {
+    const res = await props.getData(pagination, filter, sorting);
     setData(res?.data);
     setTotal(res?.meta.total);
   };
 
   useEffect(() => {
-    refreshTable(
-      pagination,
-      debouncedFilterColumn,
-      props.sorting
-    );
-    props.typological?.getModel(props.typological.type);
-  }, [
-    props.typological?.type,
-    pagination,
-    debouncedFilterColumn,
-    props.sorting,
-    //props.inputSearchConfig?.debouncedSearchTerm,
-  ]);
+    refreshTable();
+  }, [pagination, debouncedFilterColumn, props.sorting]);
 
   const hasActionInColumn = () =>
     props.actions?.()?.some((p) => p !== TABLE_ACTION_TYPE.create);
@@ -208,16 +190,11 @@ export default function GenericGrid(props: TablePaginatedProps) {
       pageSize: event.page.take,
     };
     setPagination(newPagination);
-    refreshTable(
-      newPagination,
-      filter,
-      props.sorting,
-      props.inputSearchConfig?.inputSearch
-    );
+    refreshTable();
   };
 
   const handleSortChange = (e: GridSortChangeEvent) => {
-    props.setSorting(e.sort);
+    setSorting(e.sort);
   };
 
   let title =
@@ -263,7 +240,7 @@ export default function GenericGrid(props: TablePaginatedProps) {
         resizable={props.resizable}
         sortable={props.sortable}
         onSortChange={handleSortChange}
-        sort={props.sorting}
+        sort={sorting}
         filter={filter}
         onFilterChange={handleFilterColumnChange}
         style={{ height: "100%" }}
@@ -285,32 +262,7 @@ export default function GenericGrid(props: TablePaginatedProps) {
         )}
       >
         <GridToolbar className={styles.toolBarContainer}>
-          {/* {props.dropListLookup && (
-            <DropDownList
-              style={{ height: "38px" }}
-              data={[
-                "Role",
-                "ProjectType",
-                "ActivityType",
-                "AccountStatus",
-                "WorkScope",
-                "ContractType",
-              ]}
-              required={false}
-              disabled={false}
-              onChange={(e) => {
-                props.typological?.setType(e.target.value);
-              }}
-              value={props.typological?.type}
-            />
-          )}
-          {props.inputSearchConfig && (
-            <Input
-              placeholder="Cerca"
-              value={props.inputSearchConfig?.inputSearch}
-              onChange={props.inputSearchConfig?.handleInputSearch}
-            />
-          )} */}
+          {props.customToolBarComponent?.(refreshTable)}
 
           {hasActionCreate() && (
             <div>
@@ -420,16 +372,12 @@ export default function GenericGrid(props: TablePaginatedProps) {
               row,
               new TableToFormTypeAdapter().adapt(modal.type),
               handleCloseModal,
-              () =>
-                refreshTable(
-                  pagination,
-                  filter,
-                  props.sorting,
-                  props.inputSearchConfig?.inputSearch
-                )
+              () => refreshTable()
             )
           : null}
       </CustomWindow>
     </div>
   );
 }
+
+export default GenericGrid;
