@@ -107,12 +107,17 @@ export default function CountrySelector(props:any){
            
     },[valueToShow])
 
-    useEffect(()=>{
-        if(value){
-            setValueToShow(value)
-            setValueTotal({country:value.country.id,province:value.province?.id,city:value.city.id})
+    useEffect(() => {
+        if (value) {
+            setValueToShow(value);
+            setValueTotal({
+                country: value.country?.id,
+                province: value.province?.id,
+                city: value.city?.id
+            });
         }
-    },[value])
+    }, [value]);
+    
 
     const timeout = useRef<any>();
 

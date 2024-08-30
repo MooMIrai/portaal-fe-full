@@ -38,6 +38,7 @@ import {
 } from "../../models/tableModel";
 import CustomWindow from "../Window/component";
 import { useDebounce } from "@uidotdev/usehooks";
+import { WindowActionsEvent } from "@progress/kendo-react-dialogs";
 
 type TablePaginatedProps = {
   ref?: any;
@@ -100,6 +101,10 @@ type TablePaginatedProps = {
   minWidthWindow?: number;
   initialHeightWindow?: number;
   initialWidthWindow?: number;
+  stageWindow?:string;
+  onStageChangeWindow?:(event: WindowActionsEvent) => void
+  classNameWindow?:string
+  classNameWindowDelete?:string
 };
 
 const MyPager = (props: PagerProps) => (
@@ -231,6 +236,10 @@ function GenericGrid(props: TablePaginatedProps) {
   const handleFilterColumnChange = (e: any) => {
     setFilter(e.filter);
   };
+  const windowClassName =
+      modal.type === TABLE_ACTION_TYPE.delete
+        ? props.classNameWindowDelete
+        : props.classNameWindow;
 
   return (
     <div className={styles.gridContainer}>
@@ -300,6 +309,7 @@ function GenericGrid(props: TablePaginatedProps) {
               field={column.key}
               title={column.label}
               filter={column.filter}
+              sortable={column.sortable}
               cell={cell}
             />
           );
@@ -366,6 +376,9 @@ function GenericGrid(props: TablePaginatedProps) {
         height={props.heightWindow}
         width={props.widthWindow}
         callToAction={callToAction}
+        stage={props.stageWindow}
+        onStageChange={props.onStageChangeWindow}
+        className={windowClassName}
       >
         {props.formCrud && modal.open
           ? props.formCrud(
