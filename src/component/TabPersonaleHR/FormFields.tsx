@@ -26,6 +26,8 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
     };
 
 
+   
+    
     const optionalCapValidator = (value: any) => {
         if (!value) return true;
         return /^[0-9]{5}$/.test(value);
@@ -210,83 +212,196 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
 export const getFormTrattamentoEconomicoFields = (
     formData: TrattamentoEconomicoData | null,
     company: companyOption[],
-    type: any
-  ) => {
+    type: any,
+    isFirstTreatment: boolean,
+    newForm:boolean,
+    storicoTrattamentoData
+) => {
     const companyOptions = company.map((company) => company.label);
-  
+
     const optionalDateValidator = (field: string) => (
-      value: any,
-      formData: TrattamentoEconomicoData | null
+        value: any,
+        formData: TrattamentoEconomicoData | null
     ) => {
-      if (!value) return true;
-      const selectedDate = new Date(value);
-      const hireDate = new Date(formData?.dataAssunzione);
-      const startDate = new Date(formData?.dataInizioTrattamento);
-  
-      if (selectedDate <= hireDate || selectedDate <= startDate) {
-        return false;
-      }
-      return true;
+        if (!value) return true;
+        const selectedDate = new Date(value);
+        const hireDate = new Date(formData?.dataAssunzione);
+        const startDate = new Date(formData?.dataInizioTrattamento);
+
+        if (selectedDate <= hireDate || selectedDate <= startDate) {
+            return false;
+        }
+        return true;
     };
-  
+
+   
+
+    const validateNoOverlap = (startDate, endDate, storicoTrattamentoData) => {
+        for (let i = 0; i < storicoTrattamentoData.length; i++) {
+            const { dataInizioTrattamento, scadenzaEffettiva } = storicoTrattamentoData[i];
+            const start = new Date(dataInizioTrattamento);
+            const end = new Date(scadenzaEffettiva);
+
+            // Verifica che non ci sia intersezione
+            if (
+                (startDate >= start && startDate <= end) || // startDate falls within an existing treatment range
+                (endDate >= start && endDate <= end) ||     // endDate falls within an existing treatment range
+                (startDate <= start && endDate >= end)      // startDate is before an existing start and endDate is after an existing end
+            ) {
+                return true;
+            }
+        }
+        return false;
+    };
+
     const today = new Date();
     today.setHours(0, 0, 0, 0); // Set the time to midnight to avoid time-related issues
-  
+
     const fields = {
-      tipologiaContratto_autocomplete: {
-        name: "tipologiaContratto_autocomplete",
-        label: "Tipologia di Contratto di Lavoro",
-        type: "contract-type",
-        disabled: type === "view",
-        value: formData?.tipologiaContratto_autocomplete || "",
-        required: true,
-        validator: (value: any) =>
-          value ? "" : "Il campo Tipologia di Contratto è obbligatorio",
-      },
-      societa: {
-        name: "societa",
-        label: "Società",
-        type: "select",
-        showLabel: false,
-        disabled: type === "view",
-        value: formData?.societa || "",
-        required: true,
-        validator: (value: any) =>
-          value ? "" : "Il campo Società è obbligatorio",
-        options: companyOptions,
-      },
-      tipoAmbitoLavorativo_autocomplete: {
-        name: "tipoAmbitoLavorativo_autocomplete",
-        label: "Ambito Lavorativo",
-        type: "work-scope",
-        disabled: type === "view",
-        value:
-          formData?.tipologiaContratto_autocomplete?.id === 0 &&
-          formData?.tipologiaContratto_autocomplete?.name === ""
-            ? undefined
-            : formData?.tipologiaContratto_autocomplete,
-        required: true,
-        validator: (value: any) =>
-          value ? "" : "Il campo Ambito Lavorativo è obbligatorio",
-      },
-      dataInizioTrattamento: {
-        name: "dataInizioTrattamento",
-        label: "Data di Inizio del Trattamento",
-        type: "date",
-        disabled: type === "view",
-        required: true,
-        validator: (value: any) => {
-          if (!value) {
-            return "Il campo Data Inizio Trattamento è obbligatorio";
-          }
-          const selectedDate = new Date(value);
-          if (selectedDate < today) {
-            return "La Data di Inizio del Trattamento non può essere nel passato";
-          }
-          return "";
+        tipologiaContratto_autocomplete: {
+            name: "tipologiaContratto_autocomplete",
+            label: "Tipologia di Contratto di Lavoro",
+            type: "contract-type",
+            disabled: type === "view",
+            value: formData?.tipologiaContratto_autocomplete || "",
+            required: true,
+            validator: (value: any) =>
+                value ? "" : "Il campo Tipologia di Contratto è obbligatorio",
         },
-        value: formData?.dataInizioTrattamento || "",
-      },
+        societa: {
+            name: "societa",
+            label: "Società",
+            type: "select",
+            showLabel: false,
+            disabled: type === "view",
+            value: formData?.societa || "",
+            required: true,
+            validator: (value: any) =>
+                value ? "" : "Il campo Società è obbligatorio",
+            options: companyOptions,
+        },
+        tipoAmbitoLavorativo_autocomplete: {
+            name: "tipoAmbitoLavorativo_autocomplete",
+            label: "Ambito Lavorativo",
+            type: "work-scope",
+            disabled: type === "view",
+            value:
+                formData?.tipologiaContratto_autocomplete?.id === 0 &&
+                    formData?.tipologiaContratto_autocomplete?.name === ""
+                    ? undefined
+                    : formData?.tipologiaContratto_autocomplete,
+            required: true,
+            validator: (value: any) =>
+                value ? "" : "Il campo Ambito Lavorativo è obbligatorio",
+        },
+        dataInizioTrattamento: {
+            name: "dataInizioTrattamento",
+            label: "Data di Inizio del Trattamento",
+            type: "date",
+            disabled: type === "view",
+            required: true,
+            validator: (value: any) => {
+                if (!value) {
+                    return "Il campo Data Inizio Trattamento è obbligatorio";
+                }
+            
+                const selectedDate = new Date(value);
+                const hireDate = formData?.dataAssunzione ? new Date(formData.dataAssunzione) : null;
+
+                // Controllo per il primo trattamento
+                if (isFirstTreatment) {
+                    if (hireDate && selectedDate.getTime() !== hireDate.getTime()) {
+                        return "Per il primo trattamento, la Data di Inizio del Trattamento deve essere uguale alla Data di Assunzione";
+                    } else if (selectedDate < today) {
+                        return "La Data di Inizio del Trattamento non può essere nel passato";
+                    }
+                } else {
+                    // Controllo per trattamenti successivi
+                    if (hireDate && selectedDate < hireDate) {
+                        return "La Data di Inizio del Trattamento non può essere precedente alla Data di Assunzione";
+                    }
+
+                    // Logica per nuovi trattamenti: start date dopo l'ultimo end date
+                    if (newForm) {
+                        const latestEndDate = storicoTrattamentoData.length > 0 ? new Date(storicoTrattamentoData[storicoTrattamentoData.length - 1].scadenzaEffettiva) : null;
+                        if (latestEndDate && selectedDate <= latestEndDate) {
+                            return "La Data di Inizio del nuovo trattamento deve essere successiva alla Scadenza Effettiva dell'ultimo trattamento";
+                        }
+                    }
+
+                    // Controllo per aggiornamento: le date non devono intersecarsi
+                    if (!newForm) {
+                        if (validateNoOverlap(selectedDate, selectedDate, storicoTrattamentoData)) {
+                            return "La Data di Inizio Trattamento non può intersecarsi con intervalli esistenti di altri trattamenti";
+                        }
+                    }
+                }
+
+                return "";
+            },
+            
+            
+            value: formData?.dataInizioTrattamento || "",
+        },
+   
+        
+        dataAssunzione: {
+            name: "dataAssunzione",
+            label: "Data Assunzione",
+            type: "date",
+            disabled: (type === "view" || !isFirstTreatment),
+            value: formData?.dataAssunzione || "",
+            validator: (value: any) => {
+                if (isFirstTreatment && value && formData?.dataInizioTrattamento) {
+                  const assunzioneDate = new Date(value);
+                  const inizioTrattamentoDate = new Date(formData.dataInizioTrattamento);
+        
+                  if (assunzioneDate.getTime() !== inizioTrattamentoDate.getTime()) {
+                    return "Per il primo trattamento, la Data di Assunzione deve essere uguale alla Data di Inizio del Trattamento";
+                  }
+                }
+                return "";
+              }
+            },
+         
+            scadenzaEffettiva: {
+                name: "scadenzaEffettiva",
+                label: "Scadenza Effettiva",
+                type: "date",
+                disabled: (type === "view"),
+                value: formData?.scadenzaEffettiva || "",
+                validator: (value: any) => {
+                    const selectedDate = new Date(value);
+                    const hireDate = formData?.dataAssunzione ? new Date(formData.dataAssunzione) : null;
+                    const startDate = formData?.dataInizioTrattamento ? new Date(formData.dataInizioTrattamento) : null;
+    
+                    // Controllo che la scadenza effettiva non sia lo stesso giorno o prima della data di assunzione o di inizio trattamento
+                    if (hireDate && selectedDate <= hireDate) {
+                        return "La Scadenza Effettiva non può essere lo stesso giorno o prima della Data di Assunzione";
+                    }
+                    if (startDate && selectedDate <= startDate) {
+                        return "La Scadenza Effettiva non può essere lo stesso giorno o prima della Data di Inizio del Trattamento";
+                    }
+    
+                    // Controllo per sovrapposizione delle date con trattamenti esistenti
+                 if (!newForm){
+                    if (validateNoOverlap(startDate, selectedDate, storicoTrattamentoData)) {
+                        return "La Scadenza Effettiva non può intersecarsi con intervalli esistenti di altri trattamenti";
+                    }
+
+                 } 
+                    return "";
+                }
+            },
+            
+        dataRecesso: {
+            name: "dataRecesso",
+            label: "Data del Recesso",
+            type: "date",
+            disabled: (type === "view"),
+            value: formData?.dataRecesso || "",
+            validator: (value: any) => optionalDateValidator("Data del Recesso")(value, formData) ? "" : "Il campo Data del Recesso non può essere lo stesso giorno o prima della Data di Assunzione o della Data di Inizio del Trattamento",
+        },
         costoGiornaliero: {
             name: "costoGiornaliero",
             label: "Costo Giornaliero",
@@ -296,29 +411,6 @@ export const getFormTrattamentoEconomicoFields = (
             required: true,
             validator: (value: any) => value ? "" : "Il campo Costo Giornaliero è obbligatorio",
             value: formData?.costoGiornaliero || 0,
-        },
-        dataAssunzione: {
-            name: "dataAssunzione",
-            label: "Data Assunzione",
-            type: "date",
-            disabled: (type === "view"),
-            value: formData?.dataAssunzione || "",
-        },
-        scadenzaEffettiva: {
-            name: "scadenzaEffettiva",
-            label: "Scadenza Effettiva",
-            type: "date",
-            disabled: (type === "view"),
-            value: formData?.scadenzaEffettiva || "",
-            validator: (value: any) => optionalDateValidator("Scadenza Effettiva")(value, formData) ? "" : "Il campo Scadenza Effettiva non può essere lo stesso giorno o prima della Data di Assunzione o della Data di Inizio del Trattamento",
-        },
-        dataRecesso: {
-            name: "dataRecesso",
-            label: "Data del Recesso",
-            type: "date",
-            disabled: (type === "view"),
-            value: formData?.dataRecesso || "",
-            validator: (value: any) => optionalDateValidator("Data del Recesso")(value, formData) ? "" : "Il campo Data del Recesso non può essere lo stesso giorno o prima della Data di Assunzione o della Data di Inizio del Trattamento",
         },
         motivazioneCessazione: {
             name: "motivazioneCessazione",

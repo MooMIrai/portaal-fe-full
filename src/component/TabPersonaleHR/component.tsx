@@ -24,10 +24,36 @@ type PersonaleSectionProps = {
   onSubmit: (type: any, formData: any, refreshTable: () => void, id: any) => void;
 };
 
+interface AutocompleteField {
+  id: number | undefined;
+  name: string | undefined;
+}
+
+
+// Funzioni di Utilità
+const isObjectEffectivelyEmpty = (obj: Record<string, any>): boolean => {
+  return Object.entries(obj).every(([key, value]) => {
+    if (key.endsWith("_autocomplete") && isAutocompleteField(value)) {
+      return value.id === undefined || value.name === undefined || value.name === "";
+    }
+    return value === "" || value === 0 || value === null || value === undefined;
+  });
+};
+
+const isAutocompleteField = (value: any): value is AutocompleteField => {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "id" in value &&
+    "name" in value
+  );
+};
 
 // migliorare l'aspetto dello storico e poi capire come rendere più fluido la transiciton quando clicco su si 
 const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeModalCallback, refreshTable, onSubmit }) => {
   const isCreate = type === "create";
+
+  //state
   const [newForm, setNewForm] = useState<boolean>(false);
   const [country, setCountry] = useState<countryOption[]>([]);
   const { anagrafica, trattamentoEconomico, ruoli, permessi } = isCreate ? {
@@ -46,22 +72,99 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
   const [company, setCompany] = useState<companyOption[]>([]);
   const [gender, setGender] = useState<genderOption[]>([]);
   const [activity, setActivity] = useState<ActivityTypeOption[]>([]);
+  const [city, setCity] = useState<cityTypeOption[]>([]);
+  const [dataAssunzione,setDataAssunzione]=useState(formTrattamentoEconomicoData.dataAssunzione)
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [showNewContractModal, setShowNewContractModal] = useState(false);
+  const [confirmNewContractStep, setConfirmNewContractStep] = useState(false);
+  const [today, setToday] = useState<Date>(new Date());
+
+  //Ref
   const formAnagrafica = useRef<HTMLFormElement>(null);
   const formTrattamentoEconomico = useRef<HTMLFormElement>(null);
   const formRuoli = useRef<HTMLFormElement>(null);
   const formPermessi = useRef<HTMLFormElement>(null);
-  const [city, setCity] = useState<cityTypeOption[]>([]);
 
-  const [currentIndex, setCurrentIndex] = useState(0);
 
-  const [showNewContractModal, setShowNewContractModal] = useState(false);
-  const [confirmNewContractStep, setConfirmNewContractStep] = useState(false);
-  const handleSelect = (e: TabStripSelectEventArguments) => {
-    setSelected(e.selected);
+
+const isFirstTreatment = storicoTrattamentoData.length === 0 && (isObjectEffectivelyEmpty(formTrattamentoEconomicoData) || isCreate);
+
+
+//UseEffect
+useEffect(() => {
+  if (formAnagrafica.current) {
+    setFormAnagraficaData(formAnagrafica.current.values);
+  }
+  if (formTrattamentoEconomico.current) {
+    if (!newForm) {
+      setFormTrattamentoEconomicoData(formTrattamentoEconomico.current.values);
+    } else {
+      formTrattamentoEconomico.current.values = {}
+      formTrattamentoEconomico.current.values.dataInizioTrattamento = today
+      formTrattamentoEconomico.current.values.dataAssunzione= dataAssunzione
+      setFormTrattamentoEconomicoData(formTrattamentoEconomico.current.values)
+    }
+  }
+  if (formRuoli.current) {
+    setFormRuoliData(formRuoli.current.values);
+  }
+  if (formPermessi.current) {
+    setFormPermessiData(formPermessi.current.values);
+  }
+}, [selected, newForm]);
+
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const roleResponse = await CrudGenericService.fetchResources("role");
+      const adaptedRoles = roleAdapter(roleResponse);
+      setRoles(adaptedRoles);
+      const companyResponse = await CrudGenericService.fetchResources("Company");
+      const adaptedCompany = companyAdapter(companyResponse);
+      setCompany(adaptedCompany);
+
+      const genderResponse = await CrudGenericService.fetchResources("Gender");
+      const adaptedGender = genderAdapter(genderResponse);
+      setGender(adaptedGender);
+
+      const activityTypeResponse = await CrudGenericService.fetchResources("ActivityType");
+      const adaptedActivities = permessiAdapter(activityTypeResponse);
+      setActivity(adaptedActivities);
+
+      const cityResponse = await CrudGenericService.fetchResources("city");
+      const adaptedCity = cityAdapter(cityResponse);
+      setCity(adaptedCity);
+
+      const countryResponse = await CrudGenericService.fetchResources("country");
+      const adaptedCountry = countryAdapter(countryResponse);
+      setCountry(adaptedCountry);
+
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
-  const [today, setToday] = useState<Date>(new Date());
+
+  fetchData();
+}, []);
 
 
+//gestione del nuovo trattamento economico
+useEffect(() => {
+  if (newForm) {
+    const newTreatmentData: TrattamentoEconomicoData = {
+      ...formTrattamentoEconomicoData,
+      tipologiaContratto_autocomplete: { id: 0, name: "" },
+      tipoAmbitoLavorativo_autocomplete: { id: 0, name: "" },
+    };
+    setStoricoTrattamentoData([...storicoTrattamentoData, newTreatmentData]);
+    setFormTrattamentoEconomicoData(newTreatmentData);
+   
+  }
+}, [newForm]);
+
+const handleSelect = (e: TabStripSelectEventArguments) => {
+  setSelected(e.selected);
+};
 
   const handleSubmit = () => {
     let hasError = false;
@@ -79,6 +182,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
       if (formTrattamentoEconomico.current) {
         formTrattamentoEconomico.current.onSubmit();
         if (formTrattamentoEconomico.current.isValid()) {
+          console.log("formTrattamentoEconomico.current.values",formTrattamentoEconomico.current.values)
           setFormTrattamentoEconomicoData(formTrattamentoEconomico.current.values);
         } else {
           hasError = true;
@@ -103,7 +207,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
         }
       }
     }
-
+    setNewForm(false);
     const combinedData = {
       id: row.id,
       idRuoli: roles,
@@ -111,7 +215,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
       company: company,
       gender: gender,
       anagrafica: formAnagraficaData,
-      trattamentoEconomico: formTrattamentoEconomicoData,
+      trattamentoEconomico: formTrattamentoEconomico?.current?.values,
       ruoli: formRuoliData,
       permessi: formPermessiData,
       city: city,
@@ -130,73 +234,26 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
     }
   };
 
-  useEffect(() => {
-    if (formAnagrafica.current) {
-      setFormAnagraficaData(formAnagrafica.current.values);
-    }
-    if (formTrattamentoEconomico.current) {
-      if (!newForm) {
-        setFormTrattamentoEconomicoData(formTrattamentoEconomico.current.values);
-      } else {
-        formTrattamentoEconomico.current.values = {}
-        formTrattamentoEconomico.current.values.dataInizioTrattamento = today
-        setFormTrattamentoEconomicoData(formTrattamentoEconomico.current.values)
-      }
-    }
-    if (formRuoli.current) {
-      setFormRuoliData(formRuoli.current.values);
-    }
-    if (formPermessi.current) {
-      setFormPermessiData(formPermessi.current.values);
-    }
-  }, [selected, newForm]);
+  
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const roleResponse = await CrudGenericService.fetchResources("role");
-        const adaptedRoles = roleAdapter(roleResponse);
-        setRoles(adaptedRoles);
-        const companyResponse = await CrudGenericService.fetchResources("Company");
-        const adaptedCompany = companyAdapter(companyResponse);
-        setCompany(adaptedCompany);
+  const handleNewContract = () => {
+    setShowNewContractModal(true);
+    setConfirmNewContractStep(true);
+  };
 
-        const genderResponse = await CrudGenericService.fetchResources("Gender");
-        const adaptedGender = genderAdapter(genderResponse);
-        setGender(adaptedGender);
+  const confirmNewContract = () => {
+    setNewForm(true);
+    setShowNewContractModal(false);
+  };
 
-        const activityTypeResponse = await CrudGenericService.fetchResources("ActivityType");
-        const adaptedActivities = permessiAdapter(activityTypeResponse);
-        setActivity(adaptedActivities);
+  const closeNewContractModal = () => {
+    setNewForm(false);
+    setShowNewContractModal(false);
+    setConfirmNewContractStep(false);
+  };
 
-        const cityResponse = await CrudGenericService.fetchResources("city");
-        const adaptedCity = cityAdapter(cityResponse);
-        setCity(adaptedCity);
 
-        const countryResponse = await CrudGenericService.fetchResources("country");
-        const adaptedCountry = countryAdapter(countryResponse);
-        setCountry(adaptedCountry);
-
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    if (newForm) {
-      const newTreatmentData: TrattamentoEconomicoData = {
-        ...formTrattamentoEconomicoData,
-        tipologiaContratto_autocomplete: { id: 0, name: "" },
-        tipoAmbitoLavorativo_autocomplete: { id: 0, name: "" },
-      };
-      setStoricoTrattamentoData([...storicoTrattamentoData, newTreatmentData]);
-      setFormTrattamentoEconomicoData(newTreatmentData);
-      setNewForm(false);
-    }
-  }, [newForm]);
+//Gestione storico e display del componente storico trattamenti
 
   // Sorting the storicoTrattamentoData by scadenzaEffettiva date
   const sortedStoricoTrattamentoData = [...storicoTrattamentoData].sort((a: TrattamentoEconomicoData, b: TrattamentoEconomicoData) => {
@@ -273,22 +330,6 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
   };
 
 
-
-  const handleNewContract = () => {
-    setShowNewContractModal(true);
-    setConfirmNewContractStep(true);
-  };
-
-  const confirmNewContract = () => {
-    setNewForm(true);
-    setShowNewContractModal(false);
-  };
-
-  const closeNewContractModal = () => {
-    setShowNewContractModal(false);
-    setConfirmNewContractStep(false);
-  };
-
   const handleNext = () => {
     if (currentIndex < sortedStoricoTrattamentoData.length - 1) {
       setCurrentIndex(currentIndex + 1);
@@ -329,7 +370,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
           <div className={` ${trattamentoEconomicoClass}`}>
             <Form
               ref={formTrattamentoEconomico}
-              fields={Object.values(getFormTrattamentoEconomicoFields(formTrattamentoEconomicoData, company, type))}
+              fields={Object.values(getFormTrattamentoEconomicoFields(formTrattamentoEconomicoData, company, type, isFirstTreatment,newForm,storicoTrattamentoData))}
               formData={formTrattamentoEconomicoData}
               onSubmit={(data: TrattamentoEconomicoData) => setFormTrattamentoEconomicoData(data)}
               description="TE"
