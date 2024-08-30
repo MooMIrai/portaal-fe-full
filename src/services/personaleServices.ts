@@ -10,19 +10,17 @@ class CrudGenericServiceC {
     pageSize: number,
     filtering: CompositeFilterDescriptor,
     sorting: Array<SortDescriptor>,
-    term?: string,
     include?: boolean
   ) => {
     try {
       const params = {
         pageNum,
         pageSize,
-        term,
         include,
       };
 
       const response = await client.post(
-        `api/v1/crud/account`,
+        `api/v1/accounts`,
         { filtering, sorting },
         { params }
       );

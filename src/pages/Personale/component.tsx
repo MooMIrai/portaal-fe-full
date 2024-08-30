@@ -52,7 +52,7 @@ const columns: any = [
     key: "company",
     label: "Società",
     type: "string",
-    sortable: false,
+    sortable: true,
     filter: "text",
   },
   {
@@ -73,7 +73,7 @@ const columns: any = [
     key: "ContractType",
     label: "Tipo di Contratto",
     type: "string",
-    sortable: false,
+    sortable: true,
     filter: "text",
   },
   {
@@ -94,18 +94,13 @@ const columns: any = [
 
 const PersonalPage = () => {
   const [data, setData] = useState<any>();
-  const [filter, setFilter] = useState<any>({ logic: "or", filters: [] });
-  const debouncedFilterColumn = useDebounce(filter, 650);
-  const [sorting, setSorting] = useState<any[]>([]);
-  const [pagination, setPagination] = useState<any>({
-    currentPage: 1,
-    pageSize: 10,
-  });
   const [country, setCountry] = useState<countryOption[]>([]);
   const [loading, setLoading] = useState(true);
   const [city, setCity] = useState<cityTypeOption[]>([]);
   const [sede, setSede] = useState<locationOption[]>([]);
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
+
+
 
   useEffect(() => {
     const fetchCountryData = async () => {
@@ -148,7 +143,6 @@ const PersonalPage = () => {
     pagination: any,
     filter: any,
     sorting: any[],
-    term?: string
   ) => {
     const include = true;
 
@@ -163,7 +157,6 @@ const PersonalPage = () => {
       pagination.pageSize,
       mappedFilter,
       mappedSorting,
-      term,
       include
     );
     const transformedData = transformUserData(
@@ -202,9 +195,6 @@ const PersonalPage = () => {
     }
   };
 
-  const handleFilterColumnChange = (e: any) => {
-    setFilter(e.filter);
-  };
 
   return (
     <div>
@@ -212,23 +202,21 @@ const PersonalPage = () => {
         <p>Loading...</p>
       ) : (
         <GridTable
-          filterColumnConfig={{
-            filter: filter,
-            debouncedFilter: debouncedFilterColumn,
-            handleFilterChange: handleFilterColumnChange,
-          }}
           filterable={true}
-          initialPagination={pagination}
           sortable={true}
-          setSorting={setSorting}
-          sorting={sorting}
           getData={loadData}
           columns={columns}
-          resizable={true}
-          resizableWindow={false}  
           stageWindow={"FULLSCREEN"}
-          actions={["create", "delete", "edit", "show"]}
-          classNameWindow={ styles.windowStyle}
+          widthWindow={"100%"}
+          heightWindow={"100%"}
+          actions={()=>[
+            "show",
+            "edit",
+            "delete",
+            "create"
+            
+          ]}
+          classNameWindow={styles.windowStyle}
           formCrud={(row, type, closeModalCallback, refreshTable) => (
             <>
               {type === "delete" ? (

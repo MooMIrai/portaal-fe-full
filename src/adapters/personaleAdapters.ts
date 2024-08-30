@@ -626,6 +626,8 @@ export const reverseAdapter = (combinedData: {
   city: cityTypeOption[];
   country: countryOption[];
 }) => {
+
+  console.log("Combined Data before transformation:", combinedData);
   const permessiIDs =
     mapPermessiNamesToIDs(combinedData.permessi, combinedData.idPermessi) || [];
   return {
