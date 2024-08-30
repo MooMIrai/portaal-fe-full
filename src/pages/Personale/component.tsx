@@ -34,11 +34,6 @@ const mapFilterFields = (filter: any | null): any => {
   const mappedFilters = filter.filters.map((f) => {
     if ("field" in f) {
       const fd = f as any;
-      console.log("field", fd);
-      const isNumericField = typeof fd.value === "string";
-      console.log("ao", isNumericField);
-      /*    const filterValue = isNumericField && !isNaN(Number(debouncedValue)) ? Number(debouncedValue) : debouncedValue; */
-
       return { ...fd, field: columnFieldMap[fd.field as string] || fd.field };
     } else {
       const cf = f as any;
@@ -159,6 +154,7 @@ const PersonalPage = () => {
       mappedSorting,
       include
     );
+    console.log(resources)
     const transformedData = transformUserData(
       resources.data,
       country,
@@ -207,8 +203,6 @@ const PersonalPage = () => {
           getData={loadData}
           columns={columns}
           stageWindow={"FULLSCREEN"}
-          widthWindow={"100%"}
-          heightWindow={"100%"}
           actions={()=>[
             "show",
             "edit",

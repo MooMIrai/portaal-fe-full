@@ -16,6 +16,8 @@ import { CrudGenericService } from "../../services/personaleServices";
 import Button from "common/Button";
 import { formFields } from "./customfields";
 
+
+//to do: gestire bene le date, bug delle privince e città non prende il paese, componente loading,stile full width  e full altezza
 type PersonaleSectionProps = {
   row: Record<string, any>;
   type: any;
@@ -149,7 +151,7 @@ useEffect(() => {
 
 
 //gestione del nuovo trattamento economico
-useEffect(() => {
+/* useEffect(() => {
   if (newForm) {
     const newTreatmentData: TrattamentoEconomicoData = {
       ...formTrattamentoEconomicoData,
@@ -160,8 +162,14 @@ useEffect(() => {
     setFormTrattamentoEconomicoData(newTreatmentData);
    
   }
-}, [newForm]);
+}, [newForm]); */
 
+useEffect(() => {
+  if (newForm) {
+    setStoricoTrattamentoData([...storicoTrattamentoData, formTrattamentoEconomicoData]);
+    setNewForm(false);
+  }
+}, [newForm]);
 const handleSelect = (e: TabStripSelectEventArguments) => {
   setSelected(e.selected);
 };
@@ -182,7 +190,6 @@ const handleSelect = (e: TabStripSelectEventArguments) => {
       if (formTrattamentoEconomico.current) {
         formTrattamentoEconomico.current.onSubmit();
         if (formTrattamentoEconomico.current.isValid()) {
-          console.log("formTrattamentoEconomico.current.values",formTrattamentoEconomico.current.values)
           setFormTrattamentoEconomicoData(formTrattamentoEconomico.current.values);
         } else {
           hasError = true;
@@ -215,7 +222,7 @@ const handleSelect = (e: TabStripSelectEventArguments) => {
       company: company,
       gender: gender,
       anagrafica: formAnagraficaData,
-      trattamentoEconomico: formTrattamentoEconomico?.current?.values,
+      trattamentoEconomico: formTrattamentoEconomicoData /* formTrattamentoEconomico?.current?.values */,
       ruoli: formRuoliData,
       permessi: formPermessiData,
       city: city,
@@ -233,7 +240,7 @@ const handleSelect = (e: TabStripSelectEventArguments) => {
       closeModalCallback();
     }
   };
-
+  
   
 
   const handleNewContract = () => {

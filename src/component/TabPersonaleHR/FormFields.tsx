@@ -352,6 +352,10 @@ export const getFormTrattamentoEconomicoFields = (
             disabled: (type === "view" || !isFirstTreatment),
             value: formData?.dataAssunzione || "",
             validator: (value: any) => {
+                if (!value) {
+                    // Se il valore non è fornito, ritorna un messaggio vuoto per indicare nessun errore
+                    return "";
+                }
                 if (isFirstTreatment && value && formData?.dataInizioTrattamento) {
                   const assunzioneDate = new Date(value);
                   const inizioTrattamentoDate = new Date(formData.dataInizioTrattamento);
@@ -371,6 +375,10 @@ export const getFormTrattamentoEconomicoFields = (
                 disabled: (type === "view"),
                 value: formData?.scadenzaEffettiva || "",
                 validator: (value: any) => {
+                  if (!value) {
+                        // Se il valore non è fornito, ritorna un messaggio vuoto per indicare nessun errore
+                        return "";
+                    }
                     const selectedDate = new Date(value);
                     const hireDate = formData?.dataAssunzione ? new Date(formData.dataAssunzione) : null;
                     const startDate = formData?.dataInizioTrattamento ? new Date(formData.dataInizioTrattamento) : null;
