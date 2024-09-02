@@ -31,15 +31,20 @@ const withAutocomplete = (fetchData:(filter:string)=>Promise<Array<{id:any,name:
     useEffect(()=>{
         getData(debouncedSearchTerm);
     },[debouncedSearchTerm]);
-
-    useEffect(()=>{
-       if(props.value){
-            setValue({
-                id:props.value.id,
-                name:props.value.name
-            });
-       }
-    },[])
+    useEffect(() => {
+        if (props.value) {
+            if (props.value.name === " ") {
+                setValue(""); 
+            } else {
+                setValue({
+                    id: props.value.id,
+                    name: props.value.name
+                });
+            }
+        } else {
+            setValue(""); 
+        }
+    }, [props.value]);
 
 
     return <Autocomplete 

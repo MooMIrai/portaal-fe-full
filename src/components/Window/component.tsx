@@ -37,7 +37,9 @@ const CustomWindow = ({
   onSubmit,
   callToAction,
   top,
-  left
+  left,
+  stage,
+  className
 }: CustomWindowProps) => {
   return show ? (
     <Window
@@ -60,6 +62,8 @@ const CustomWindow = ({
       minimizeButton={() => <div></div>}
       maximizeButton={() => <div></div>}
       resizable={resizable}
+      stage={stage}
+      className={className}
     >
       {children}
       {showModalFooter && (

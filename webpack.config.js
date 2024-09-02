@@ -116,9 +116,6 @@ module.exports = (_, argv) => {
       filename: "index.html",
       chunks: ["bundle"],
     }),
-    new Dotenv({path:'./.env.'+argv.mode}),
-    ...(argv.mode==='production'?[new webpack.optimize.LimitChunkCountPlugin({
-      maxChunks: 1,
-    })]:[]),
+    new Dotenv({path:'./.env.'+argv.mode})
   ],
 }};
