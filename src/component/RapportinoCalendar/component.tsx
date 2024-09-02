@@ -87,7 +87,7 @@ export default function RapportinoCalendar() {
           onActivitiesAdded={onActivitiesAdded}
         />
       ),
-      title: /* slot.start.toLocaleDateString("it-IT")  */ "",
+      title: slot.start?.toLocaleDateString("it-IT") || "",
     };
   };
 

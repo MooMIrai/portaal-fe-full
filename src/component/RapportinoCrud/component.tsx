@@ -125,6 +125,8 @@ const RapportinoCrud = (props: RapportinoCrudProps) => {
     <InlineEditTable
       getData={loadData}
       list={list}
+      groupable={true}
+      group={[{ field: "productive" }]}
       setList={(res) => {
         console.log("res: ", res);
         setList(
@@ -144,12 +146,20 @@ const RapportinoCrud = (props: RapportinoCrudProps) => {
               activityId: item.id,
               code: item.code,
               inEdit: true,
+              productive: item.ActivityType != null ? false : true
             };
           })
         );
       }}
       onItemChange={itemChange}
       columns={[
+        {
+          key: "productive",
+          label: "Produttiva",
+          editable: false,
+          type: "boolean",
+          sortable: false,
+        },
         {
           key: "code",
           label: "Commesse",
