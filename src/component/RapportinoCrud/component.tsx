@@ -146,7 +146,7 @@ const RapportinoCrud = (props: RapportinoCrudProps) => {
               activityId: item.id,
               code: item.code,
               inEdit: true,
-              productive: item.ActivityType != null ? false : true
+              productive: item.ActivityType != null ? "No" : "Si"
             };
           })
         );
@@ -157,7 +157,7 @@ const RapportinoCrud = (props: RapportinoCrudProps) => {
           key: "productive",
           label: "Produttiva",
           editable: false,
-          type: "boolean",
+          type: "string",
           sortable: false,
         },
         {
