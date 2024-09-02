@@ -27,9 +27,9 @@ const mapToAnagraficaData = (
       code:Person.CityRes?.code
     },
     country:{
-      id:Person.CityRes?.Country?.id,
-      name:Person.CityRes?.Country?.name,
-      code:Person.CityRes?.Country?.code
+      id:Person.CityRes?.Country?.id || Person.CityRes?.Province?.Country?.id,
+      name:Person.CityRes?.Country?.name || Person.CityRes?.Province.Country?.name,
+      code:Person.CityRes?.Country?.code || Person.CityRes?.Province.Country?.code
     },
     province:Person.CityRes && Person.CityRes.Province?
     {
@@ -46,9 +46,9 @@ const mapToAnagraficaData = (
         code:Person.CityBirth?.code
       },
       country:{
-        id:Person.CityBirth?.Country?.id,
-        name:Person.CityBirth?.Country?.name,
-        code:Person.CityBirth?.Country?.code
+        id:Person.CityBirth?.Country?.id || Person.CityRes?.Province?.Country?.id ,
+        name:Person.CityBirth?.Country?.name || Person.CityRes?.Province.Country?.name,
+        code:Person.CityBirth?.Country?.code ||  Person.CityRes?.Province.Country?.code
       },
       province:Person.CityBirth && Person.CityBirth.Province?
       {
@@ -597,13 +597,6 @@ const mapGenderToID = (
   return scope ? scope.value : undefined;
 };
 
-const mapCityToID = (
-  label: string,
-  city: cityTypeOption[]
-): number | undefined => {
-  const scope = city.find((scope) => scope.label === label);
-  return scope ? scope.value : undefined;
-};
 
 const mapCountryToID = (
   label: string,
@@ -633,6 +626,8 @@ export const reverseAdapter = (combinedData: {
   city: cityTypeOption[];
   country: countryOption[];
 }) => {
+
+  console.log("Combined Data before transformation:", combinedData);
   const permessiIDs =
     mapPermessiNamesToIDs(combinedData.permessi, combinedData.idPermessi) || [];
   return {

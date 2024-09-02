@@ -34,11 +34,6 @@ const mapFilterFields = (filter: any | null): any => {
   const mappedFilters = filter.filters.map((f) => {
     if ("field" in f) {
       const fd = f as any;
-      console.log("field", fd);
-      const isNumericField = typeof fd.value === "string";
-      console.log("ao", isNumericField);
-      /*    const filterValue = isNumericField && !isNaN(Number(debouncedValue)) ? Number(debouncedValue) : debouncedValue; */
-
       return { ...fd, field: columnFieldMap[fd.field as string] || fd.field };
     } else {
       const cf = f as any;
@@ -80,32 +75,27 @@ const columns: any = [
     key: "annualCost",
     label: "Costo Annuale",
     type: "string",
-    sortable: true,
+    sortable: false,
     filter: "numeric",
   },
   {
     key: "dailyCost",
     label: "Costo Giornaliero",
     type: "string",
-    sortable: true,
+    sortable: false,
     filter: "numeric",
   },
 ];
 
 const PersonalPage = () => {
   const [data, setData] = useState<any>();
-  const [filter, setFilter] = useState<any>({ logic: "or", filters: [] });
-  const debouncedFilterColumn = useDebounce(filter, 650);
-  const [sorting, setSorting] = useState<any[]>([]);
-  const [pagination, setPagination] = useState<any>({
-    currentPage: 1,
-    pageSize: 10,
-  });
   const [country, setCountry] = useState<countryOption[]>([]);
   const [loading, setLoading] = useState(true);
   const [city, setCity] = useState<cityTypeOption[]>([]);
   const [sede, setSede] = useState<locationOption[]>([]);
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
+
+
 
   useEffect(() => {
     const fetchCountryData = async () => {
@@ -148,7 +138,6 @@ const PersonalPage = () => {
     pagination: any,
     filter: any,
     sorting: any[],
-    term?: string
   ) => {
     const include = true;
 
@@ -163,9 +152,9 @@ const PersonalPage = () => {
       pagination.pageSize,
       mappedFilter,
       mappedSorting,
-      term,
       include
     );
+    console.log(resources)
     const transformedData = transformUserData(
       resources.data,
       country,
@@ -202,9 +191,6 @@ const PersonalPage = () => {
     }
   };
 
-  const handleFilterColumnChange = (e: any) => {
-    setFilter(e.filter);
-  };
 
   return (
     <div>
@@ -212,26 +198,19 @@ const PersonalPage = () => {
         <p>Loading...</p>
       ) : (
         <GridTable
-          filterColumnConfig={{
-            filter: filter,
-            debouncedFilter: debouncedFilterColumn,
-            handleFilterChange: handleFilterColumnChange,
-          }}
           filterable={true}
-          initialPagination={pagination}
           sortable={true}
-          setSorting={setSorting}
-          sorting={sorting}
           getData={loadData}
           columns={columns}
-          resizable={true}
-          resizableWindow={false}
-          topWindow={0}
-          leftWindow={0}
-          draggableWindow={true}
-          heightWindow={windowSize.height}
-          widthWindow={windowSize.width}
-          actions={["create", "delete", "edit", "show"]}
+          stageWindow={"FULLSCREEN"}
+          actions={()=>[
+            "show",
+            "edit",
+            "delete",
+            "create"
+            
+          ]}
+          classNameWindow={styles.windowStyle}
           formCrud={(row, type, closeModalCallback, refreshTable) => (
             <>
               {type === "delete" ? (
