@@ -8,18 +8,19 @@ export interface TableColumn {
   type?: TABLE_COLUMN_TYPE;
   render?: (row: any, refreshTable?: () => void) => JSX.Element;
   filter?: any;
+  hidden?: boolean;
 }
 
 export enum TABLE_COLUMN_TYPE {
-  "string"="string",
-  "date"="date",
-  "custom"="custom",
+  "string" = "string",
+  "date" = "date",
+  "custom" = "custom",
 }
 
 export enum TABLE_ACTION_TYPE {
-  "show"="show",
-  "edit"="edit",
-  "delete"="delete",
-  "create"="create",
-  "custom"="custom",
+  "show" = "show",
+  "edit" = "edit",
+  "delete" = "delete",
+  "create" = "create",
+  "custom" = "custom",
 }
