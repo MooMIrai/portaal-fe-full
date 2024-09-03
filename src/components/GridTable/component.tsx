@@ -1,12 +1,19 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, {
+  Dispatch,
+  forwardRef,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import {
   Grid,
   GridColumn,
   GridToolbar,
   GridCellProps,
   GridPageChangeEvent,
-  GridFilterChangeEvent,
   GridSortChangeEvent,
+  GridExpandChangeEvent,
+  GridDetailRowProps,
 } from "@progress/kendo-react-grid";
 import { Button } from "@progress/kendo-react-buttons";
 import { FORM_TYPE } from "../../models/formModel";
@@ -17,8 +24,6 @@ import {
   CompositeFilterDescriptor,
   SortDescriptor,
 } from "@progress/kendo-data-query";
-import { Input } from "@progress/kendo-react-inputs";
-import { DropDownList } from "@progress/kendo-react-dropdowns";
 import styles from "./styles.module.scss";
 import {
   plusIcon,
@@ -26,36 +31,35 @@ import {
   trashIcon,
   eyeIcon,
 } from "@progress/kendo-svg-icons";
-import { TableColumn, TABLE_ACTION_TYPE, TABLE_COLUMN_TYPE } from "../../models/tableModel";
+import {
+  TableColumn,
+  TABLE_ACTION_TYPE,
+  TABLE_COLUMN_TYPE,
+} from "../../models/tableModel";
 import CustomWindow from "../Window/component";
+import { useDebounce } from "@uidotdev/usehooks";
+import { WindowActionsEvent } from "@progress/kendo-react-dialogs";
 
 type TablePaginatedProps = {
+  ref?: any;
   pageSizeOptions?: number[];
   getData: (
     pagination: PaginationModel,
-    filter: CompositeFilterDescriptor,
-    sorting: SortDescriptor[],
-    term?: string
+    filter?: CompositeFilterDescriptor,
+    sorting?: SortDescriptor[]
   ) => Promise<{ data: Array<Record<string, any>>; meta: { total: number } }>;
   columns: TableColumn[];
-  actions?: TABLE_ACTION_TYPE[];
+  actions: (row?: Record<string, any> | undefined) => TABLE_ACTION_TYPE[];
+
   //filter
   filterable?: boolean;
-  filter: CompositeFilterDescriptor;
-  setFilter: (filter: CompositeFilterDescriptor) => void;
+
   //style
   className?: string;
   customIcon?: string;
   customHeader?: string;
   resizable?: boolean;
   dropListLookup?: boolean;
-
-  //generic crud search
-  inputSearchConfig?: {
-    inputSearch: string;
-    debouncedSearchTerm: string;
-    handleInputSearch: (e: any) => void;
-  };
 
   //sort
   sortable?: boolean;
@@ -78,17 +82,29 @@ type TablePaginatedProps = {
   ) => JSX.Element;
   initialPagination: PaginationModel;
 
+  expand?: {
+    enabled: boolean;
+    render: (props: GridDetailRowProps) => JSX.Element;
+  };
+
+  //
+  customToolBarComponent?: (refreshTable: () => void) => JSX.Element;
+
   //props for window Modal
-  widthWindow?:number;
-  heightWindow?:number;
-  leftWindow?:number;
-  topWindow?:number;
+  widthWindow?: number;
+  heightWindow?: number;
+  leftWindow?: number;
+  topWindow?: number;
   resizableWindow?: boolean;
   draggableWindow?: boolean;
   minHeightWindow?: number;
   minWidthWindow?: number;
   initialHeightWindow?: number;
   initialWidthWindow?: number;
+  stageWindow?:string;
+  onStageChangeWindow?:(event: WindowActionsEvent) => void
+  classNameWindow?:string
+  classNameWindowDelete?:string
 };
 
 const MyPager = (props: PagerProps) => (
@@ -108,51 +124,50 @@ const MyPager = (props: PagerProps) => (
   </div>
 );
 
-export default function GenericGrid(props: TablePaginatedProps) {
+function GenericGrid(props: TablePaginatedProps) {
   const [modal, setModal] = useState<{
     open: boolean;
     data?: Record<string, any>;
     type?: TABLE_ACTION_TYPE;
   }>({ open: false });
   const [total, setTotal] = useState<number>(0);
-  const [pagination, setPagination] = useState<PaginationModel>(
-    props.initialPagination
-  );
+  const [pagination, setPagination] = useState<PaginationModel>({
+    currentPage: 1,
+    pageSize: 10,
+  });
   const [data, setData] = useState<Array<Record<string, any>>>();
   const [row, setRow] = useState<Record<string, any> | undefined>(undefined);
+  const [filter, setFilter] = useState<any>({ logic: "or", filters: [] });
+  const [sorting, setSorting] = useState<any[]>([]);
+  const debouncedFilterColumn = useDebounce(filter, 650);
 
-  const refreshTable = async (
-    pagination: PaginationModel,
-    filter: CompositeFilterDescriptor,
-    sorting: SortDescriptor[],
-    term?: string
-  ) => {
-    const res = await props.getData(
-      pagination,
-      filter,
-      sorting,
-      props.inputSearchConfig?.debouncedSearchTerm
-    );
+  const expandChange = (event: GridExpandChangeEvent) => {
+    if (data) {
+      let newData = data.map((item: any, indexP) => {
+        if (indexP === event.dataIndex) {
+          item.gridtable_expanded = !event.dataItem.gridtable_expanded;
+        }
+        return item;
+      });
+      setData(newData);
+    }
+  };
+
+  const refreshTable = async () => {
+    const res = await props.getData(pagination, filter, sorting);
     setData(res?.data);
     setTotal(res?.meta.total);
   };
 
   useEffect(() => {
-    refreshTable(pagination, props.filter, props.sorting);
-    props.typological?.getModel(props.typological.type);
-  }, [
-    props.typological?.type,
-    pagination,
-    props.filter,
-    props.sorting,
-    props.inputSearchConfig?.debouncedSearchTerm,
-  ]);
+    refreshTable();
+  }, [pagination, debouncedFilterColumn, sorting]);
 
   const hasActionInColumn = () =>
-    props.actions?.some((p) => p !== TABLE_ACTION_TYPE.create);
+    props.actions?.()?.some((p) => p !== TABLE_ACTION_TYPE.create);
 
   const hasActionCreate = () =>
-    props.actions?.some((p) => p === TABLE_ACTION_TYPE.create);
+    props.actions?.()?.some((p) => p === TABLE_ACTION_TYPE.create);
 
   const openModal = (
     type: TABLE_ACTION_TYPE,
@@ -180,16 +195,11 @@ export default function GenericGrid(props: TablePaginatedProps) {
       pageSize: event.page.take,
     };
     setPagination(newPagination);
-    refreshTable(
-      newPagination,
-      props.filter,
-      props.sorting,
-      props.inputSearchConfig?.inputSearch
-    );
+    refreshTable();
   };
 
   const handleSortChange = (e: GridSortChangeEvent) => {
-    props.setSorting(e.sort);
+    setSorting(e.sort);
   };
 
   let title =
@@ -214,16 +224,34 @@ export default function GenericGrid(props: TablePaginatedProps) {
       ? "Salva modifica"
       : "";
 
+  let expandedProps = {};
+  if (props.expand && props.expand.enabled) {
+    expandedProps = {
+      expandField: "gridtable_expanded",
+      onExpandChange: expandChange,
+      detail: props.expand.render,
+    };
+  }
+
+  const handleFilterColumnChange = (e: any) => {
+    setFilter(e.filter);
+  };
+  const windowClassName =
+      modal.type === TABLE_ACTION_TYPE.delete
+        ? props.classNameWindowDelete
+        : props.classNameWindow;
+
   return (
     <div className={styles.gridContainer}>
       <Grid
+        {...expandedProps}
         filterable={props.filterable}
         resizable={props.resizable}
         sortable={props.sortable}
         onSortChange={handleSortChange}
-        sort={props.sorting}
-        filter={props.filter}
-        onFilterChange={(e: GridFilterChangeEvent) => props.setFilter(e.filter)}
+        sort={sorting}
+        filter={filter}
+        onFilterChange={handleFilterColumnChange}
         style={{ height: "100%" }}
         data={data}
         total={total}
@@ -243,42 +271,14 @@ export default function GenericGrid(props: TablePaginatedProps) {
         )}
       >
         <GridToolbar className={styles.toolBarContainer}>
-          {props.dropListLookup && (
-            <DropDownList
-              style={{ height: "38px" }}
-              data={[
-                "Role",
-                "ProjectType",
-                "ActivityType",
-                "AccountStatus",
-                "WorkScope",
-                "ContractType",
-              ]}
-              required={false}
-              disabled={false}
-              onChange={(e) => {
-                props.typological?.setType(e.target.value);
-              }}
-              value={props.typological?.type}
-            />
-          )}
-{
-  props.inputSearchConfig && (
-          <Input
-            placeholder="Cerca"
-            value={props.inputSearchConfig?.inputSearch}
-            onChange={props.inputSearchConfig?.handleInputSearch}
-          />
-)}
+          {props.customToolBarComponent?.(refreshTable)}
 
           {hasActionCreate() && (
             <div>
               <Button
                 svgIcon={plusIcon}
                 themeColor={"primary"}
-                onClick={() => {
-                  openModal(TABLE_ACTION_TYPE.create);
-                }}
+                onClick={() => openModal(TABLE_ACTION_TYPE.create)}
               >
                 Nuovo
               </Button>
@@ -286,72 +286,75 @@ export default function GenericGrid(props: TablePaginatedProps) {
           )}
         </GridToolbar>
 
-        {props.columns.map((column, idx) => 
-          {
-            let cell:React.ComponentType<GridCellProps> | undefined;
-            if(column.type===TABLE_COLUMN_TYPE.date){
-              cell=(cellGrid: GridCellProps) => {
-
-                const date = new Date(cellGrid.dataItem[column.key]);
-                const day = String(date.getDate()).padStart(2, '0'); // Ottieni il giorno e aggiungi lo 0 se necessario
-                const month = String(date.getMonth() + 1).padStart(2, '0'); // Ottieni il mese (i mesi partono da 0, quindi aggiungi 1)
-                const year = date.getFullYear(); // Ottieni l'anno
-                return <td><strong><i>{`${day}/${month}/${year}`}</i></strong></td>
-              };
-            }
-          return <GridColumn
-            key={idx}
-            field={column.key}
-            title={column.label}
-            filter={column.filter}
-            cell = {cell}
-          />}
-        )}
+        {props.columns.map((column, idx) => {
+          let cell: React.ComponentType<GridCellProps> | undefined;
+          if (column.type === TABLE_COLUMN_TYPE.date) {
+            cell = (cellGrid: GridCellProps) => {
+              const date = new Date(cellGrid.dataItem[column.key]);
+              const day = String(date.getDate()).padStart(2, "0");
+              const month = String(date.getMonth() + 1).padStart(2, "0");
+              const year = date.getFullYear();
+              return (
+                <td>
+                  <strong>
+                    <i>{`${day}/${month}/${year}`}</i>
+                  </strong>
+                </td>
+              );
+            };
+          }
+          return (
+            <GridColumn
+              key={idx}
+              field={column.key}
+              title={column.label}
+              filter={column.filter}
+              sortable={column.sortable}
+              cell={cell}
+            />
+          );
+        })}
 
         {hasActionInColumn() && (
           <GridColumn
             filterable={false}
             field="action"
             cell={(cellGrid: GridCellProps) => {
+              const actions = props.actions?.(cellGrid.dataItem);
+
               return (
                 <td>
                   <div className={styles.commandButtons}>
-                    {props.actions &&
-                      props.actions.includes(TABLE_ACTION_TYPE.show) && (
-                        <Button
-                          svgIcon={eyeIcon}
-                          fillMode={"link"}
-                          themeColor={"info"}
-                          onClick={() =>
-                            openModal(TABLE_ACTION_TYPE.show, cellGrid.dataItem)
-                          }
-                        ></Button>
-                      )}
-                    {props.actions &&
-                      props.actions.includes(TABLE_ACTION_TYPE.edit) && (
-                        <Button
-                          svgIcon={pencilIcon}
-                          fillMode={"link"}
-                          themeColor={"warning"}
-                          onClick={() =>
-                            openModal(TABLE_ACTION_TYPE.edit, cellGrid.dataItem)
-                          }
-                        ></Button>
-                      )}
-                    {props.actions &&
-                      props.actions.includes(TABLE_ACTION_TYPE.delete) && (
-                        <Button
-                          svgIcon={trashIcon}
-                          fillMode={"link"}
-                          themeColor={"error"}
-                          onClick={() =>
-                            openModal(
-                              TABLE_ACTION_TYPE.delete,
-                              cellGrid.dataItem
-                            )
-                          }
-                        ></Button>
-                      )}
+                    {actions?.includes(TABLE_ACTION_TYPE.show) && (
+                      <Button
+                        svgIcon={eyeIcon}
+                        fillMode={"link"}
+                        themeColor={"info"}
+                        onClick={() =>
+                          openModal(TABLE_ACTION_TYPE.show, cellGrid.dataItem)
+                        }
+                      ></Button>
+                    )}
+                    {actions?.includes(TABLE_ACTION_TYPE.edit) && (
+                      <Button
+                        svgIcon={pencilIcon}
+                        fillMode={"link"}
+                        themeColor={"warning"}
+                        onClick={() =>
+                          openModal(TABLE_ACTION_TYPE.edit, cellGrid.dataItem)
+                        }
+                      ></Button>
+                    )}
+                    {actions?.includes(TABLE_ACTION_TYPE.delete) && (
+                      <Button
+                        svgIcon={trashIcon}
+                        fillMode={"link"}
+                        themeColor={"error"}
+                        onClick={() =>
+                          openModal(TABLE_ACTION_TYPE.delete, cellGrid.dataItem)
+                        }
+                      ></Button>
+                    )}
                   </div>
                 </td>
               );
@@ -373,22 +376,21 @@ export default function GenericGrid(props: TablePaginatedProps) {
         height={props.heightWindow}
         width={props.widthWindow}
         callToAction={callToAction}
+        stage={props.stageWindow}
+        onStageChange={props.onStageChangeWindow}
+        className={windowClassName}
       >
         {props.formCrud && modal.open
           ? props.formCrud(
               row,
               new TableToFormTypeAdapter().adapt(modal.type),
               handleCloseModal,
-              () =>
-                refreshTable(
-                  pagination,
-                  props.filter,
-                  props.sorting,
-                  props.inputSearchConfig?.inputSearch
-                )
+              () => refreshTable()
             )
           : null}
       </CustomWindow>
     </div>
   );
 }
+
+export default GenericGrid;

@@ -7,6 +7,7 @@ import {
 import styles from "./style.module.scss";
 import { TableColumn } from "../../models/tableModel";
 import { Button } from "@progress/kendo-react-buttons";
+import { process } from '@progress/kendo-data-query';
 
 type InlineEditTableProps = {
   getData: () => Promise<any> /* { data: Array<Record<string, any>> } */;
@@ -17,6 +18,8 @@ type InlineEditTableProps = {
   resizable?: boolean;
   onItemChange: (event: GridItemChangeEvent) => void;
   footer?: CustomFooterProps;
+  groupable?: boolean;
+  group?: any[];
 };
 
 interface CustomFooterProps {
@@ -53,6 +56,31 @@ const CustomFooter = (props: CustomFooterProps) => {
 };
 
 export default function InlineEditTable(props: InlineEditTableProps) {
+  const [expandedState, setExpandedState] = useState<any>({});
+
+  const handleExpandChange = (e: any) => {
+    console.log(e);
+    const { dataItem } = e;
+    const expanded = !dataItem.expanded;
+    const newExpandedState = { ...expandedState, [dataItem.value]: expanded };
+    setExpandedState(newExpandedState);
+  };
+
+  const addExpandedStateToGroups = (data: any) => {
+    return data.map((group: any) => ({
+      ...group,
+      expanded: expandedState[group.value],
+      items: group.items ? addExpandedStateToGroups(group.items) : group.items,
+    }));
+  };
+
+  console.log("props.list:", props.list);
+
+  const groupedData = process(props.list || [], { group: props.group });
+  const dataWithExpandedState = addExpandedStateToGroups(groupedData.data);
+
+  console.log("groupedData:", groupedData);
+
   const refreshTable = async () => {
     const res = await props.getData();
     props.setList(res);
@@ -69,7 +97,11 @@ export default function InlineEditTable(props: InlineEditTableProps) {
         onItemChange={props.onItemChange}
         resizable={props.resizable}
         style={{ height: "calc(100% - 60px)" }}
-        data={props.list}
+        data={dataWithExpandedState}
+        groupable={props.groupable}
+        group={props.group}
+        expandField="expanded"
+        onExpandChange={handleExpandChange}
       >
         {props.columns.map((column, idx) => (
           <GridColumn
@@ -79,6 +111,7 @@ export default function InlineEditTable(props: InlineEditTableProps) {
             editable={column.editable}
             editor={column.editor}
             format={column.format}
+            hidden={column.hidden}
           />
         ))}
       </Grid>
