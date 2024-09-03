@@ -23,7 +23,7 @@
     "noFallthroughCasesInSwitch": true // Report errors for fallthrough cases in switch statement
   },
   "paths": {
-      "*": ["./@mf-types/*"]
+    "*": ["./@mf-types/*"]
   },
   "include": [
     "src/**/*" // *** The files TypeScript should type check ***

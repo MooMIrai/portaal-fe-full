@@ -5,11 +5,15 @@ const deps = require("./package.json").dependencies;
 const webpack = require("webpack");
 const { FederatedTypesPlugin } = require("@module-federation/typescript");
 
-const mfeConfig =(path,mode)=> ({
+const mfeConfig = (path, mode) => ({
   name: "auth",
   filename: "remoteEntry.js",
   remotes: {
-    common: "common@"+path+(mode==='production'?'/common':'')+"/remoteEntry.js",
+    common:
+      "common@" +
+      path +
+      (mode === "production" ? "/common" : "") +
+      "/remoteEntry.js",
   },
   exposes: {
     "./Index": "./src/MfeInit",
@@ -18,8 +22,8 @@ const mfeConfig =(path,mode)=> ({
   },
   shared: {
     ...deps,
-    common:{
-      singleton:true
+    common: {
+      singleton: true,
     },
     react: {
       singleton: true,
@@ -33,12 +37,12 @@ const mfeConfig =(path,mode)=> ({
 });
 
 module.exports = (_, argv) => {
-  require('dotenv').config({path:'./.env.'+argv.mode});
-  return{
-    devtool:'source-map',
+  require("dotenv").config({ path: "./.env." + argv.mode });
+  return {
+    devtool: "source-map",
     output: {
       publicPath: process.env.RELEASE_PATH,
-      clean: true
+      clean: true,
     },
     resolve: {
       extensions: [".tsx", ".ts", ".jsx", ".js", ".json"],
@@ -70,16 +74,12 @@ module.exports = (_, argv) => {
       ],
     },
     plugins: [
-      new ModuleFederationPlugin(mfeConfig(process.env.REMOTE_PATH,argv.mode)),
+      new ModuleFederationPlugin(mfeConfig(process.env.REMOTE_PATH, argv.mode)),
       //new FederatedTypesPlugin({ federationConfig: mfeConfig }),
       new HtmlWebPackPlugin({
         template: "./src/index.html",
       }),
-      new Dotenv({path:'./.env.'+argv.mode}),
-      new Dotenv({path:'./.env.'+argv.mode}),
-    ...(argv.mode==='production'?[new webpack.optimize.LimitChunkCountPlugin({
-      maxChunks: 1,
-    })]:[]),
+      new Dotenv({ path: "./.env." + argv.mode }),
     ],
-  }
+  };
 };
