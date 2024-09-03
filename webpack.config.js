@@ -5,20 +5,24 @@ const deps = require("./package.json").dependencies;
 const { FederatedTypesPlugin } = require("@module-federation/typescript");
 const webpack = require("webpack");
 
-const mfeConfig =(path,mode)=> ({
+const mfeConfig = (path, mode) => ({
   name: "hr",
   filename: "remoteEntry.js",
   remotes: {
-    common: "common@"+path+(mode==='production'?'/common':'')+"/remoteEntry.js",
+    common:
+      "common@" +
+      path +
+      (mode === "production" ? "/common" : "") +
+      "/remoteEntry.js",
   },
   exposes: {
     "./Index": "./src/MfeInit",
-    "./Routes": "./src/App"
+    "./Routes": "./src/App",
   },
   shared: {
     ...deps,
-    common:{
-      singleton:true
+    common: {
+      singleton: true,
     },
     react: {
       singleton: true,
@@ -32,52 +36,49 @@ const mfeConfig =(path,mode)=> ({
 });
 
 module.exports = (_, argv) => {
-  require('dotenv').config({path:'./.env.'+argv.mode});
-  return{
-    devtool:'source-map',
-  output: {
-    publicPath: process.env.RELEASE_PATH,
-    clean: true
-  },
-  resolve: {
-    extensions: [".tsx", ".ts", ".jsx", ".js", ".json"],
-  },
-  devServer: {
-    port: 3008,
-    historyApiFallback: true,
-  },
-  module: {
-    rules: [
-      {
-        test: /\.m?js/,
-        type: "javascript/auto",
-        resolve: {
-          fullySpecified: false,
+  require("dotenv").config({ path: "./.env." + argv.mode });
+  return {
+    devtool: "source-map",
+    output: {
+      publicPath: process.env.RELEASE_PATH,
+      clean: true,
+    },
+    resolve: {
+      extensions: [".tsx", ".ts", ".jsx", ".js", ".json"],
+    },
+    devServer: {
+      port: 3008,
+      historyApiFallback: true,
+    },
+    module: {
+      rules: [
+        {
+          test: /\.m?js/,
+          type: "javascript/auto",
+          resolve: {
+            fullySpecified: false,
+          },
         },
-      },
-      {
-        test: /\.(css|s[ac]ss)$/i,
-        use: ["style-loader", "css-loader", "postcss-loader"],
-      },
-      {
-        test: /\.(ts|tsx|js|jsx)$/,
-        exclude: /node_modules/,
-        use: {
-          loader: "babel-loader",
+        {
+          test: /\.(css|s[ac]ss)$/i,
+          use: ["style-loader", "css-loader", "postcss-loader"],
         },
-      },
-    ],
-  },
-  plugins: [
-    new ModuleFederationPlugin(mfeConfig(process.env.REMOTE_PATH,argv.mode)),
+        {
+          test: /\.(ts|tsx|js|jsx)$/,
+          exclude: /node_modules/,
+          use: {
+            loader: "babel-loader",
+          },
+        },
+      ],
+    },
+    plugins: [
+      new ModuleFederationPlugin(mfeConfig(process.env.REMOTE_PATH, argv.mode)),
       //new FederatedTypesPlugin({ federationConfig: mfeConfig }),
       new HtmlWebPackPlugin({
         template: "./src/index.html",
       }),
-      new Dotenv({path:'./.env.'+argv.mode}),
-      ...(argv.mode==='production'?[new webpack.optimize.LimitChunkCountPlugin({
-        maxChunks: 1,
-      })]:[]),
-  ],
-  }
+      new Dotenv({ path: "./.env." + argv.mode }),
+    ],
+  };
 };
