@@ -646,7 +646,7 @@ export const reverseAdapter = (combinedData: {
       cityRes_id: combinedData.anagrafica.residenza?.city.id/* mapCityToID(combinedData.anagrafica.città,combinedData.city) ||  */,
       cityBirth_id:combinedData.anagrafica.nascita?.city.id/* mapCityToID(combinedData.anagrafica.cittaNascita, combinedData.city) || */ ,
 
-      location_id: combinedData.anagrafica.sede_autocomplete?.id,
+      location_id: combinedData.anagrafica.sede_autocomplete?.id || 1,
       provinceRes: combinedData.anagrafica.residenza,
       //provinceBirth: combinedData.anagrafica.Provincianascita,
       country_id: mapCountryToID(combinedData.anagrafica.stato, combinedData.country) || 108,
@@ -670,16 +670,16 @@ export const reverseAdapter = (combinedData: {
       gender_id: mapGenderToID(
         combinedData.anagrafica.sesso,
         combinedData.gender
-      ),
-      activityTypes_id: permessiIDs.length > 0 ? permessiIDs : [2, 3],
+      ) || 1,
+      activityType_ids: permessiIDs.length > 0 ? permessiIDs : [2, 3],
       EmploymentContract: [
         {
           id: combinedData.trattamentoEconomico.id,
           workScope_id:
             combinedData.trattamentoEconomico.tipoAmbitoLavorativo_autocomplete
-              ?.id,
+              ?.id || 1,
           contractType_id:
-            combinedData.trattamentoEconomico.tipologiaContratto_autocomplete?.id,
+            combinedData.trattamentoEconomico.tipologiaContratto_autocomplete?.id || 1,
           company_id:
             mapCompanyToID(
               combinedData.trattamentoEconomico.societa,
@@ -689,11 +689,11 @@ export const reverseAdapter = (combinedData: {
           endDate:
             combinedData.trattamentoEconomico.dataRecesso 
           ? combinedData.trattamentoEconomico.dataRecesso
-            : addOneDay(combinedData.trattamentoEconomico.dataInizioTrattamento),
+            : null,
           effectiveEndDate:
           combinedData.trattamentoEconomico.scadenzaEffettiva 
           ? combinedData.trattamentoEconomico.scadenzaEffettiva 
-          : addOneDay(combinedData.trattamentoEconomico.dataInizioTrattamento),
+          : null,
       
           hireDate:
           combinedData.trattamentoEconomico.dataAssunzione ||combinedData.trattamentoEconomico.dataInizioTrattamento,

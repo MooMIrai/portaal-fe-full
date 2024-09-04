@@ -15,6 +15,7 @@ import { ActivityTypeOption, cityAdapter, cityTypeOption, companyAdapter, compan
 import { CrudGenericService } from "../../services/personaleServices";
 import Button from "common/Button";
 import { formFields } from "./customfields";
+import NotificationProviderActions from "common/providers/NotificationProvider";
 
 
 //to do: gestire bene le date, bug delle privince e città non prende il paese, componente loading,stile full width  e full altezza
@@ -54,6 +55,7 @@ const isAutocompleteField = (value: any): value is AutocompleteField => {
 // migliorare l'aspetto dello storico e poi capire come rendere più fluido la transiciton quando clicco su si 
 const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeModalCallback, refreshTable, onSubmit }) => {
   const isCreate = type === "create";
+  const isUpdate= type === "edit"
 
   //state
   const [newForm, setNewForm] = useState<boolean>(false);
@@ -75,11 +77,16 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
   const [gender, setGender] = useState<genderOption[]>([]);
   const [activity, setActivity] = useState<ActivityTypeOption[]>([]);
   const [city, setCity] = useState<cityTypeOption[]>([]);
-  const [dataAssunzione,setDataAssunzione]=useState(formTrattamentoEconomicoData.dataAssunzione)
+  const [dataAssunzione, setDataAssunzione] = useState(formTrattamentoEconomicoData.dataAssunzione)
+  const [dataRecesso,setDataRecesso]=useState(formTrattamentoEconomicoData.dataRecesso)
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showNewContractModal, setShowNewContractModal] = useState(false);
   const [confirmNewContractStep, setConfirmNewContractStep] = useState(false);
   const [today, setToday] = useState<Date>(new Date());
+  const [alert, setAlert] = useState<boolean>(false)
+  const [contractType, setContractType] = useState<string | null>(formTrattamentoEconomicoData.tipologiaContratto_autocomplete?.name || null);
+  const [isScadenzaEffettivaDisabled, setIsScadenzaEffettivaDisabled] = useState<boolean>(false);
+  
 
   //Ref
   const formAnagrafica = useRef<HTMLFormElement>(null);
@@ -89,95 +96,112 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
 
 
 
-const isFirstTreatment = storicoTrattamentoData.length === 0 && (isObjectEffectivelyEmpty(formTrattamentoEconomicoData) || isCreate);
+  const isFirstTreatment = isCreate || (storicoTrattamentoData.length === 0 && isObjectEffectivelyEmpty(formTrattamentoEconomicoData) );
+  const isFirstTreatmentUpdate= (storicoTrattamentoData.length === 0 && isUpdate) 
+
+  const isViewOnly = !!dataRecesso;
+  //UseEffect
 
 
-//UseEffect
-useEffect(() => {
-  if (formAnagrafica.current) {
-    setFormAnagraficaData(formAnagrafica.current.values);
-  }
-  if (formTrattamentoEconomico.current) {
-    if (!newForm) {
-      setFormTrattamentoEconomicoData(formTrattamentoEconomico.current.values);
-    } else {
-      formTrattamentoEconomico.current.values = {}
-      formTrattamentoEconomico.current.values.dataInizioTrattamento = today
-      formTrattamentoEconomico.current.values.dataAssunzione= dataAssunzione
-      setFormTrattamentoEconomicoData(formTrattamentoEconomico.current.values)
+
+
+  useEffect(() => {
+    if (formAnagrafica.current) {
+      setFormAnagraficaData(formAnagrafica.current.values);
     }
-  }
-  if (formRuoli.current) {
-    setFormRuoliData(formRuoli.current.values);
-  }
-  if (formPermessi.current) {
-    setFormPermessiData(formPermessi.current.values);
-  }
-}, [selected, newForm]);
-
-useEffect(() => {
-  const fetchData = async () => {
-    try {
-      const roleResponse = await CrudGenericService.fetchResources("role");
-      const adaptedRoles = roleAdapter(roleResponse);
-      setRoles(adaptedRoles);
-      const companyResponse = await CrudGenericService.fetchResources("Company");
-      const adaptedCompany = companyAdapter(companyResponse);
-      setCompany(adaptedCompany);
-
-      const genderResponse = await CrudGenericService.fetchResources("Gender");
-      const adaptedGender = genderAdapter(genderResponse);
-      setGender(adaptedGender);
-
-      const activityTypeResponse = await CrudGenericService.fetchResources("ActivityType");
-      const adaptedActivities = permessiAdapter(activityTypeResponse);
-      setActivity(adaptedActivities);
-
-      const cityResponse = await CrudGenericService.fetchResources("city");
-      const adaptedCity = cityAdapter(cityResponse);
-      setCity(adaptedCity);
-
-      const countryResponse = await CrudGenericService.fetchResources("country");
-      const adaptedCountry = countryAdapter(countryResponse);
-      setCountry(adaptedCountry);
-
-    } catch (error) {
-      console.error("Error fetching data:", error);
+    if (formTrattamentoEconomico.current) {
+      if (!newForm) {
+        setFormTrattamentoEconomicoData(formTrattamentoEconomico.current.values);
+        console.log(formTrattamentoEconomico.current)
+        if (formTrattamentoEconomico?.current?.values.tipologiaContratto_autocomplete?.name === "Tempo Indeterminato") {
+          setIsScadenzaEffettivaDisabled(true);
+      } else {
+          setIsScadenzaEffettivaDisabled(false);
+      }
+      } else {
+        formTrattamentoEconomico.current.values = {}
+        formTrattamentoEconomico.current.values.dataInizioTrattamento = today
+        formTrattamentoEconomico.current.values.dataAssunzione = dataAssunzione
+        setFormTrattamentoEconomicoData(formTrattamentoEconomico.current.values)
+      }
     }
-  };
+    if (formRuoli.current) {
+      setFormRuoliData(formRuoli.current.values);
+    }
+    if (formPermessi.current) {
+      setFormPermessiData(formPermessi.current.values);
+    }
+  }, [selected, newForm,formTrattamentoEconomico?.current?.onchange]);
 
-  fetchData();
-}, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const roleResponse = await CrudGenericService.fetchResources("role");
+        const adaptedRoles = roleAdapter(roleResponse);
+        setRoles(adaptedRoles);
+        const companyResponse = await CrudGenericService.fetchResources("Company");
+        const adaptedCompany = companyAdapter(companyResponse);
+        setCompany(adaptedCompany);
 
+        const genderResponse = await CrudGenericService.fetchResources("Gender");
+        const adaptedGender = genderAdapter(genderResponse);
+        setGender(adaptedGender);
 
-//gestione del nuovo trattamento economico
-/* useEffect(() => {
-  if (newForm) {
-    const newTreatmentData: TrattamentoEconomicoData = {
-      ...formTrattamentoEconomicoData,
-      tipologiaContratto_autocomplete: { id: 0, name: "" },
-      tipoAmbitoLavorativo_autocomplete: { id: 0, name: "" },
+        const activityTypeResponse = await CrudGenericService.fetchResources("ActivityType");
+        const adaptedActivities = permessiAdapter(activityTypeResponse);
+        setActivity(adaptedActivities);
+
+        const cityResponse = await CrudGenericService.fetchResources("city");
+        const adaptedCity = cityAdapter(cityResponse);
+        setCity(adaptedCity);
+
+        const countryResponse = await CrudGenericService.fetchResources("country");
+        const adaptedCountry = countryAdapter(countryResponse);
+        setCountry(adaptedCountry);
+
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     };
-    setStoricoTrattamentoData([...storicoTrattamentoData, newTreatmentData]);
-    setFormTrattamentoEconomicoData(newTreatmentData);
-   
-  }
-}, [newForm]); */
 
-useEffect(() => {
-  if (newForm) {
-    setStoricoTrattamentoData([...storicoTrattamentoData, formTrattamentoEconomicoData]);
-    setNewForm(false);
-  }
-}, [newForm]);
-const handleSelect = (e: TabStripSelectEventArguments) => {
-  setSelected(e.selected);
-};
+    fetchData();
+  }, []);
+
+
+
+  //gestione del nuovo trattamento economico
+  /* useEffect(() => {
+    if (newForm) {
+      const newTreatmentData: TrattamentoEconomicoData = {
+        ...formTrattamentoEconomicoData,
+        tipologiaContratto_autocomplete: { id: 0, name: "" },
+        tipoAmbitoLavorativo_autocomplete: { id: 0, name: "" },
+      };
+      setStoricoTrattamentoData([...storicoTrattamentoData, newTreatmentData]);
+      setFormTrattamentoEconomicoData(newTreatmentData);
+     
+    }
+  }, [newForm]); */
+
+  useEffect(() => {
+    if (newForm) {
+      setStoricoTrattamentoData([...storicoTrattamentoData, formTrattamentoEconomicoData]);
+    }
+  }, [newForm]);
+  const handleSelect = (e: TabStripSelectEventArguments) => {
+    setSelected(e.selected);
+  };
 
   const handleSubmit = () => {
     let hasError = false;
-
+     
     if (type === "create" || type === "edit") {
+      if (newForm) {
+        setAlert(true);
+        setNewForm(false)
+        return; 
+      }
+
       if (formAnagrafica.current) {
         formAnagrafica.current.onSubmit();
         if (formAnagrafica.current.isValid()) {
@@ -214,7 +238,16 @@ const handleSelect = (e: TabStripSelectEventArguments) => {
         }
       }
     }
+
+    if(hasError){
+      NotificationProviderActions.openModal(
+        { icon: true, style: "warning" },
+        "Alcuni campi non sono validi. Controlla i campi obbligatori e riprova."
+      );
+    }
     setNewForm(false);
+
+
     const combinedData = {
       id: row.id,
       idRuoli: roles,
@@ -222,7 +255,7 @@ const handleSelect = (e: TabStripSelectEventArguments) => {
       company: company,
       gender: gender,
       anagrafica: formAnagraficaData,
-      trattamentoEconomico: formTrattamentoEconomicoData /* formTrattamentoEconomico?.current?.values */,
+      trattamentoEconomico: formTrattamentoEconomicoData,
       ruoli: formRuoliData,
       permessi: formPermessiData,
       city: city,
@@ -240,8 +273,8 @@ const handleSelect = (e: TabStripSelectEventArguments) => {
       closeModalCallback();
     }
   };
-  
-  
+
+
 
   const handleNewContract = () => {
     setShowNewContractModal(true);
@@ -258,9 +291,18 @@ const handleSelect = (e: TabStripSelectEventArguments) => {
     setShowNewContractModal(false);
     setConfirmNewContractStep(false);
   };
+  const confirmProceed = () => {
+   
+    setAlert(false);   
+    handleSubmit(); 
+  };
 
+  const cancelProceed = () => {
+    setAlert(false);
+    setNewForm(false); 
+  };
 
-//Gestione storico e display del componente storico trattamenti
+  //Gestione storico e display del componente storico trattamenti
 
   // Sorting the storicoTrattamentoData by scadenzaEffettiva date
   const sortedStoricoTrattamentoData = [...storicoTrattamentoData].sort((a: TrattamentoEconomicoData, b: TrattamentoEconomicoData) => {
@@ -270,7 +312,7 @@ const handleSelect = (e: TabStripSelectEventArguments) => {
   });
 
   const renderStoricoTrattamento = () => {
-    const totalStorici = sortedStoricoTrattamentoData.length; 
+    const totalStorici = sortedStoricoTrattamentoData.length;
 
     return (
       <div>
@@ -322,6 +364,14 @@ const handleSelect = (e: TabStripSelectEventArguments) => {
     );
   };
 
+  const handleContractTypeChange = (name, value) => {
+    if (value && value.name === "Tempo Indeterminato") {
+        setIsScadenzaEffettivaDisabled(true);
+    } else {
+        setIsScadenzaEffettivaDisabled(false);
+    }
+};
+
 
   const isNewTreatmentButtonDisabled = () => {
     // Controlla se il formTrattamentoEconomicoData è vuoto o se contiene solo la data
@@ -331,7 +381,7 @@ const handleSelect = (e: TabStripSelectEventArguments) => {
     return (
       !formTrattamentoEconomicoData ||
       Object.keys(formTrattamentoEconomicoData).length === 0 ||
-      onlyHasDate ||
+      onlyHasDate || newForm || isViewOnly ||
       !formTrattamentoEconomicoData.dataInizioTrattamento
     );
   };
@@ -354,16 +404,17 @@ const handleSelect = (e: TabStripSelectEventArguments) => {
 
   const tabs = [
     {
-      title: "Anagrafica",
+      title:isViewOnly ? "Dati personali Archiviati" : "Anagrafica",
       children: (
         <div className={styles.parentForm}>
           <Form
             ref={formAnagrafica}
-            fields={Object.values(getFormAnagraficaFields(formAnagraficaData, gender, type, city, country))}
+            fields={Object.values(getFormAnagraficaFields(formAnagraficaData, gender, type, city, country, isViewOnly))}
             formData={formAnagraficaData}
             onSubmit={(data: AnagraficaData) => setFormAnagraficaData(data)}
             description="Ana"
             addedFields={formFields}
+            disabled={isViewOnly}
           />
 
 
@@ -371,16 +422,16 @@ const handleSelect = (e: TabStripSelectEventArguments) => {
       ),
     },
     {
-      title: "Trattamento Economico",
+      title: isViewOnly ? "Trattamento economico Archiviato": "Trattamento Economico",
       children: (
         <>
           <div className={` ${trattamentoEconomicoClass}`}>
             <Form
               ref={formTrattamentoEconomico}
-              fields={Object.values(getFormTrattamentoEconomicoFields(formTrattamentoEconomicoData, company, type, isFirstTreatment,newForm,storicoTrattamentoData))}
+              fields={Object.values(getFormTrattamentoEconomicoFields(formTrattamentoEconomicoData, company, type, isFirstTreatment,newForm, handleContractTypeChange,isScadenzaEffettivaDisabled,isFirstTreatmentUpdate,isViewOnly))}
               formData={formTrattamentoEconomicoData}
               onSubmit={(data: TrattamentoEconomicoData) => setFormTrattamentoEconomicoData(data)}
-              description="TE"
+              description={isViewOnly ? "Trattamento dipendente" :"TE"}
               addedFields={formFields}
             />
           </div>
@@ -399,12 +450,12 @@ const handleSelect = (e: TabStripSelectEventArguments) => {
       ),
     },
     {
-      title: "Assegna Profilo",
+      title: isViewOnly ? "Ruoli Archiviati" : "Assegna Profilo",
       children: (
         <div className={styles.checkboxContainer}>
           <Form
             ref={formRuoli}
-            fields={Object.values(getFormRuoliFields(formRuoliData, roles, type))}
+            fields={Object.values(getFormRuoliFields(formRuoliData, roles, type,isViewOnly))}
             formData={formRuoliData}
             onSubmit={(data: RuoliData) => setFormRuoliData(data)}
             description="PR"
@@ -413,12 +464,12 @@ const handleSelect = (e: TabStripSelectEventArguments) => {
       ),
     },
     {
-      title: "Assegna Tipologia Ferie e Permessi",
+      title: isViewOnly ? "Ferie e Permessi Archiviati" : "Assegna Tipologia Ferie e Permessi",
       children: (
         <div className={styles.checkboxContainer}>
           <Form
             ref={formPermessi}
-            fields={Object.values(getFormPermessiFields(formPermessiData, activity, type))}
+            fields={Object.values(getFormPermessiFields(formPermessiData, activity, type,isViewOnly))}
             formData={formPermessiData}
             onSubmit={(data: PermessiData) => setFormPermessiData(data)}
             description="per"
@@ -466,7 +517,31 @@ const handleSelect = (e: TabStripSelectEventArguments) => {
           ) : null}
         </Window>
       )}
-
+      {alert && (
+        <Window
+          show={alert}
+          title="Conferma Nuovo Trattamento"
+          onClose={cancelProceed}
+          callToAction="Procedi"
+          draggable
+          resizable
+          initialHeight={200}
+          initialWidth={400}
+        >
+          <p>
+            Se procedi, il trattamento corrente sarà sostituito con il nuovo
+            trattamento. Vuoi procedere?
+          </p>
+          <div className={styles.buttonContainer}>
+            <Button className={styles.cancelButton} onClick={cancelProceed}>
+              Annulla
+            </Button>
+            <Button className={styles.confirmButton} onClick={confirmProceed}>
+              Procedi
+            </Button>
+          </div>
+        </Window>
+      )}
     </div>
   );
 };
