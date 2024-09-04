@@ -61,6 +61,7 @@ export default function CountrySelector(props:any){
         onChange,
         onFocus,
         onBlur,
+        disabled,
         // The custom props that you passed to the Field.
         ...others
       } = props;
@@ -239,6 +240,7 @@ export default function CountrySelector(props:any){
                 value={valueToShow?.country}
                 columns={countryColumns}
                 textField={"name"}
+                disabled={disabled}
                 filterable={true}
                 onChange={(event)=>{
                     if(event.value){
@@ -270,7 +272,7 @@ export default function CountrySelector(props:any){
                     textField={"name"}
                     value={valueToShow?.province}
                     filterable={true}
-                    disabled={!valueTotal?.country || valueToShow?.country.code!=='IT'}
+                    disabled={!valueTotal?.country || valueToShow?.country.code!=='IT' || disabled}
                     onChange={(event)=>{
                         if(event.value)
                             handleChangeValue('province',event.value.id,event.value)
@@ -291,7 +293,7 @@ export default function CountrySelector(props:any){
                 columns={provinceColumns}
                 textField={"name"}
                 filterable={true}
-                disabled={!valueTotal?.country || (!valueTotal?.province  && valueToShow?.country.code==='IT' )}
+                disabled={!valueTotal?.country || (!valueTotal?.province  && valueToShow?.country.code==='IT' ) || disabled}
                 value={valueToShow?.city}
                 adaptive={true}
 

@@ -84,6 +84,7 @@ export interface FieldConfig {
   required?: boolean;
   conditions?:(values:any)=>boolean;
   showLabel?:boolean
+  valueOnChange?: (name: string, value: any) => void; 
   //onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -96,7 +97,6 @@ export interface DynamicFormProps {
   showSubmit?: boolean;
   extraButton?: boolean;
   extraBtnAction?: () => void;
-
   customDisabled?: boolean;
   submitText: string;
   addedFields?: Record<string, React.JSX.Element>
@@ -105,11 +105,13 @@ export interface DynamicFormProps {
 const DynamicField = ({
   field,
   formRenderProps,
-  addedFields
+  addedFields,
+  valueOnChange,
 }: {
   field: FieldConfig;
   formRenderProps: FormRenderProps;
   addedFields?:Record<string,React.JSX.Element>
+  valueOnChange?: (name: string, value: any) => void; 
 }) => {
 
   const { name, type, label, validator, options, disabled,required,showLabel = true } = field;
@@ -132,19 +134,25 @@ const DynamicField = ({
       type={type}
       disabled={disabled}
       value={formRenderProps.valueGetter(name)}
-      onChange={(event) =>{
+      onChange={(event) => {
+   
         let value = undefined;
-        if(event.value){
-          value=event.value;
-        }else if(event.target){
-          value=event.target.value
+        if (event.value) {
+          value = event.value;
+        } else if (event.target) {
+          value = event.target.value;
         }
-        return formRenderProps.onChange(name, {
+
+       
+        formRenderProps.onChange(name, {
           value: value,
-        })
-      }
-        
-      }
+        });
+
+        // Funzione custom per prendere i valori del value 
+        if (valueOnChange) {
+          valueOnChange(name, value);
+        }
+      }}
     />
   );
 };
@@ -191,6 +199,7 @@ const DynamicForm = React.forwardRef<any,DynamicFormProps>((props,ref)=>{
                   addedFields={addedFields}
                   field={field}
                   formRenderProps={formRenderProps}
+                  valueOnChange={field.valueOnChange} 
                 />
               
             </FieldWrapper>

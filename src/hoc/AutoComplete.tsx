@@ -2,9 +2,17 @@ import { Error, Label } from '@progress/kendo-react-labels';
 import React, { useCallback, useEffect, useState } from 'react';
 import Autocomplete from '../components/AutoComplete/component';
 import { useDebounce } from '@uidotdev/usehooks'
+import { ComboBoxProps } from '@progress/kendo-react-dropdowns';
+
+type AutocompleteProps = {
+    value: { id: any, name: string } | null;
+    onChange: (event: any) => void;
+    disabled?: boolean;
+
+} & ComboBoxProps; 
 
 const withAutocomplete = (fetchData:(filter:string)=>Promise<Array<{id:any,name:string}>>) => {
-  const WithAutocomplete = (props:any) => {
+  const WithAutocomplete = (props:AutocompleteProps) => {
     const [data, setData] = useState<Array<any>>([]);
     const [value, setValue] = useState<any>();
     const [filter, setFilter] = React.useState("");
@@ -55,6 +63,7 @@ const withAutocomplete = (fetchData:(filter:string)=>Promise<Array<{id:any,name:
             textField="name"
             dataItemKey={'id'}
             onChange={onChange}
+            disabled={props.disabled}
         />
         
   };
