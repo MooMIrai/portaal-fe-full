@@ -22,10 +22,14 @@ interface SidebarPros {
 }
 
 const CustomItem = (props: DrawerItemProps) => {
-  const { visible, ...others } = props;
+  const { visible, parentId, ...others } = props;
   const arrowDir = props.dataExpanded ? chevronDownIcon : chevronRightIcon;
+
+  const itemStyle = parentId
+  ? { marginLeft: "2rem" }
+  : {};
   return props.visible === false ? null : (
-    <DrawerItem {...others}>
+    <DrawerItem {...others} style={itemStyle}>
       <SvgIcon icon={props.svgIcon} />
       <span className={"k-item-text"}>{props.text}</span>
       {props.dataExpanded !== undefined && (
@@ -97,6 +101,7 @@ const Sidebar = ({ children, items }: SidebarPros) => {
       });
       return {
         ...others,
+        parentId,
         visible: parentEl?.dataExpanded,
       };
     }
@@ -125,7 +130,7 @@ const Sidebar = ({ children, items }: SidebarPros) => {
         onSelect={onSelect}
         mini={true}
       >
-        <DrawerContent>{children}</DrawerContent>
+        <DrawerContent className={styles.drawerContent}>{children}</DrawerContent>
       </Drawer>
     </div>
   );

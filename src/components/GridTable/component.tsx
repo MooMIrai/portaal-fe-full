@@ -264,7 +264,7 @@ const GenericGridC = forwardRef<any, any>((props, ref) => {
         sort={sorting}
         filter={filter}
         onFilterChange={handleFilterColumnChange}
-        style={{ height: "100%" }}
+        style={{ height: "100%",borderRadius:"5px" }}
         data={data}
         total={total}
         skip={

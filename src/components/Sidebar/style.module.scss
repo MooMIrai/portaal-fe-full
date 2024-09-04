@@ -17,7 +17,7 @@
   }
   :global(.k-drawer-content) {
     height: 100vh !important;
-    padding: 0 0 0 0 !important;
+    /* padding: 0 0 0 0 !important; */
   }
   :global(.k-drawer-item.sub-item) {
     padding-left: 20px !important;
@@ -28,4 +28,15 @@
   :global(.k-drawer-container) {
     height: 100vh !important;
   }
+}
+
+
+.childItem {
+  margin-left: 2rem;
+}
+
+.drawerContent{
+  border-radius:5px !important;
+  padding: 6rem 0.5rem 0rem 0.5rem !important;
+  background: linear-gradient(135deg, #3e6eb6 0%, #E1F5FE 100%);
 }
