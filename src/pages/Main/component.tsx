@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import GenericGrid from "common/Table";
 import DynamicForm from "common/Form";
+import InputText from "common/InputText";
 
 import { useDebounce } from "@uidotdev/usehooks";
 import { LookupsService } from "../../services/LookupService";
+import { LookUpsSelector } from "../../components/lookupsSelector/component";
 
 const determineColumnType = (type: string): "text" | "numeric" | "date" => {
   switch (type) {
@@ -58,17 +60,9 @@ const LookUps = () => {
   const [selectedData, setSelectedData] = useState<string>("Role");
   const [columns, setColumns] = useState<any[]>([]);
   const [fields, setFields] = useState<any>({});
-  const [termValue, setTermValue] = useState<string>("");
+  const [termValue, setTermValue] = useState<string>();
   const debouncedSearchTerm = useDebounce(termValue, 650);
-  const [filter, setFilter] = useState<any>({
-    logic: "and",
-    filters: [],
-  });
-  const [sorting, setSorting] = useState<any[]>([]);
-  const pagination = {
-    currentPage: 1,
-    pageSize: 10,
-  };
+  const gridRef = useRef<any>(null);
 
   const loadModel = async (type: string) => {
     try {
@@ -109,12 +103,7 @@ const LookUps = () => {
     }
   };
 
-  const loadData = async (
-    pagination: any,
-    filter: any,
-    sorting: any[],
-    term?: string
-  ) => {
+  const loadData = async (pagination: any, filter: any, sorting: any[]) => {
     try {
       const resources = await LookupsService.searchGenericGrid(
         selectedData,
@@ -122,13 +111,24 @@ const LookUps = () => {
         pagination.pageSize,
         filter,
         sorting,
-        term
+        debouncedSearchTerm
       );
       return resources;
     } catch (error) {
       console.error("Error loading data:", error);
       setColumns([]);
     }
+  };
+
+  const handleTypeChange = (type: any) => {
+    const newSelectedData = type?.value?.name;
+    setSelectedData(newSelectedData);
+    loadModel(newSelectedData);
+  };
+
+  const handleSearchTerm = (event) => {
+    const input = event.target;
+    setTermValue(input.value);
   };
 
   const handleSubmit = async (
@@ -147,36 +147,33 @@ const LookUps = () => {
     refreshTable();
   };
 
-  const handleInputSearch = (e: any) => {
-    const value = e.target.value || "";
-    setTermValue(value);
-  };
+  useEffect(() => {
+    if (gridRef.current) {
+      gridRef.current.refreshTable();
+    }
+  }, [debouncedSearchTerm, selectedData]);
 
   return (
     <div>
       <GenericGrid
+        ref={gridRef}
         dropListLookup={true}
-        inputSearchConfig={{
-          inputSearch: termValue,
-          debouncedSearchTerm: debouncedSearchTerm,
-          handleInputSearch: handleInputSearch,
-        }}
-        typological={{
-          type: selectedData,
-          getModel: loadModel,
-          setType: setSelectedData,
-        }}
-        filter={filter}
-        setFilter={setFilter}
+        customToolBarComponent={() => (
+          <>
+            <InputText value={termValue} onChange={handleSearchTerm} />
+            <LookUpsSelector
+              onChange={(event: { id: number; name: string }) =>
+                handleTypeChange(event)
+              }
+            />
+          </>
+        )}
         filterable={true}
-        initialPagination={pagination}
         sortable={true}
-        setSorting={setSorting}
-        sorting={sorting}
         getData={loadData}
         columns={columns}
         resizable={true}
-        actions={["create", "delete", "edit", "show"]}
+        actions={() => ["create", "delete", "edit", "show"]}
         formCrud={(row, type, closeModalCallback, refreshTable) => {
           const crudCondition = type === "view";
           const handleFields = Object.values(fields).map((el: any) => {
@@ -216,7 +213,6 @@ const LookUps = () => {
                   <div className="k-form-buttons">
                     <button onClick={closeModalCallback}>Cancel</button>
                     <button
-                      //themeColor="primary"
                       onClick={async () => {
                         await handleSubmit(type, row?.id, refreshTable);
                         closeModalCallback();

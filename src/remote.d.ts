@@ -1,5 +1,3 @@
-declare module "common/Form";
-declare module "common/Table";
-declare module "common/DrawerService";
+declare module "common/*";
 
 declare module "common/services/BEService";
