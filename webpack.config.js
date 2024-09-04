@@ -14,6 +14,7 @@ const mfeConfig = {
     "./Theme": "./src/components/Theme/component",
     "./Tab": "./src/components/Tab/component",
     "./Form": "./src/components/DynamicForm/component",
+    "./InputText": "./src/components/InputText/component",
     "./Table": "./src/components/GridTable/component",
     "./Calendar": "./src/components/Calendar/component",
     "./CalendarMobile": "./src/components/CalendarMobile/component",
@@ -21,6 +22,11 @@ const mfeConfig = {
     "./Window": "./src/components/Window/component",
     "./Button": "./src/components/Button/component",
     "./CustomListView": "./src/components/CustomListView/component",
+    "./AutoComplete": "./src/components/AutoComplete/component",
+    "./CountrySelector": "./src/components/CountrySelector/component",
+    "./AvatarIcon": "./src/components/AvatarIcon/component",
+    "./CustomCard": "./src/components/CustomCard/component",
+
     "./AutoComplete": "./src/components/AutoComplete/component",
     "./CountrySelector": "./src/components/CountrySelector/component",
     "./AvatarIcon": "./src/components/AvatarIcon/component",
@@ -114,6 +120,13 @@ module.exports = (_, argv) => {
         chunks: ["bundle"],
       }),
       new Dotenv({ path: "./.env." + argv.mode }),
+      ...(argv.mode === "production"
+        ? [
+            new webpack.optimize.LimitChunkCountPlugin({
+              maxChunks: 1,
+            }),
+          ]
+        : []),
     ],
   };
 };

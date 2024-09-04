@@ -4,6 +4,8 @@ import React, {
   SetStateAction,
   useEffect,
   useState,
+  useRef,
+  useImperativeHandle,
 } from "react";
 import {
   Grid,
@@ -14,6 +16,7 @@ import {
   GridSortChangeEvent,
   GridExpandChangeEvent,
   GridDetailRowProps,
+  GridProps,
 } from "@progress/kendo-react-grid";
 import { Button } from "@progress/kendo-react-buttons";
 import { FORM_TYPE } from "../../models/formModel";
@@ -40,7 +43,7 @@ import CustomWindow from "../Window/component";
 import { useDebounce } from "@uidotdev/usehooks";
 import { WindowActionsEvent } from "@progress/kendo-react-dialogs";
 
-type TablePaginatedProps = {
+interface TablePaginatedProps extends GridProps {
   ref?: any;
   pageSizeOptions?: number[];
   getData: (
@@ -124,12 +127,15 @@ const MyPager = (props: PagerProps) => (
   </div>
 );
 
-function GenericGrid(props: TablePaginatedProps) {
+const GenericGridC = forwardRef<any, any>((props, ref) => {
+  const gridRef = useRef<any>(null); // Reference per il componente Kendo Grid
+
   const [modal, setModal] = useState<{
     open: boolean;
     data?: Record<string, any>;
     type?: TABLE_ACTION_TYPE;
   }>({ open: false });
+
   const [total, setTotal] = useState<number>(0);
   const [pagination, setPagination] = useState<PaginationModel>({
     currentPage: 1,
@@ -163,11 +169,16 @@ function GenericGrid(props: TablePaginatedProps) {
     refreshTable();
   }, [pagination, debouncedFilterColumn, sorting]);
 
+  useImperativeHandle(ref, () => ({
+    refreshTable, 
+    grid: gridRef.current,
+  }));
+
   const hasActionInColumn = () =>
-    props.actions?.()?.some((p) => p !== TABLE_ACTION_TYPE.create);
+    props.actions?.()?.some((p: string) => p !== TABLE_ACTION_TYPE.create);
 
   const hasActionCreate = () =>
-    props.actions?.()?.some((p) => p === TABLE_ACTION_TYPE.create);
+    props.actions?.()?.some((p: string) => p === TABLE_ACTION_TYPE.create);
 
   const openModal = (
     type: TABLE_ACTION_TYPE,
@@ -244,6 +255,7 @@ function GenericGrid(props: TablePaginatedProps) {
   return (
     <div className={styles.gridContainer}>
       <Grid
+        ref={gridRef} // Usa gridRef per Kendo Grid
         {...expandedProps}
         filterable={props.filterable}
         resizable={props.resizable}
@@ -286,7 +298,7 @@ function GenericGrid(props: TablePaginatedProps) {
           )}
         </GridToolbar>
 
-        {props.columns.map((column, idx) => {
+        {props.columns.map((column: any, idx: number) => {
           let cell: React.ComponentType<GridCellProps> | undefined;
           if (column.type === TABLE_COLUMN_TYPE.date) {
             cell = (cellGrid: GridCellProps) => {
@@ -391,6 +403,10 @@ function GenericGrid(props: TablePaginatedProps) {
       </CustomWindow>
     </div>
   );
-}
+});
+
+const GenericGrid = forwardRef<TablePaginatedProps, any>((props, ref) => {
+  return <GenericGridC {...props} ref={ref} />;
+});
 
 export default GenericGrid;
