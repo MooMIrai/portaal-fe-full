@@ -20,8 +20,10 @@ const LoginGoogleComponent = () => {
             alt="TAAL Logo"
             className={styles.logo}
           />
+          <div className={styles.header}>
           <h1>Benvenuto!</h1>
           <p>Accedi al dominio TAAL</p>
+          </div>
           <button
             onClick={handleGoogleLogin}
             className={`${styles.kButton} k-button`}

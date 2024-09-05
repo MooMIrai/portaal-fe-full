@@ -6,6 +6,7 @@ export default function () {
         text: "Profile",
         level: 0,
         route: "/profile",
+        iconKey:"userOutlineIcon"
       },
     ],
   };
