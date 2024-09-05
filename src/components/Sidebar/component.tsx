@@ -13,24 +13,30 @@ import {
   chevronDownIcon,
   chevronRightIcon,
 } from "@progress/kendo-svg-icons";
-import { SvgIcon } from "@progress/kendo-react-common";
+import { SVGIcon, SvgIcon } from "@progress/kendo-react-common";
 import styles from "./style.module.scss";
+import * as svgIcons from "@progress/kendo-svg-icons"; 
 
 interface SidebarPros {
   items: DrawerItemProps[];
   children: React.ReactNode;
 }
 
-const CustomItem = (props: DrawerItemProps) => {
-  const { visible, parentId, ...others } = props;
-  const arrowDir = props.dataExpanded ? chevronDownIcon : chevronRightIcon;
+interface CustomItemProps extends DrawerItemProps {
+  iconKey?: string; // Stringa per il nome dell'icona
+}
 
+
+const CustomItem = (props: CustomItemProps) => {
+  const { visible, parentId,iconKey, ...others } = props;
+  const arrowDir = props.dataExpanded ? chevronDownIcon : chevronRightIcon;
+  const resolvedIcon: SVGIcon | undefined = iconKey ? (svgIcons as any)[iconKey] : undefined;
   const itemStyle = parentId
   ? { marginLeft: "2rem" }
   : {};
   return props.visible === false ? null : (
     <DrawerItem {...others} style={itemStyle}>
-      <SvgIcon icon={props.svgIcon} />
+     {resolvedIcon && <SvgIcon icon={resolvedIcon} />} 
       <span className={"k-item-text"}>{props.text}</span>
       {props.dataExpanded !== undefined && (
         <SvgIcon

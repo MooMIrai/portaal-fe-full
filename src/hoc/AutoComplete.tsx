@@ -63,6 +63,8 @@ const withAutocomplete = (fetchData:(filter:string)=>Promise<Array<{id:any,name:
             textField="name"
             dataItemKey={'id'}
             onChange={onChange}
+            defaultValue={props.defaultValue}
+            placeholder={props.placeholder}
             disabled={props.disabled}
         />
         
