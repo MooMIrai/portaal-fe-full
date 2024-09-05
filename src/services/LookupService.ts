@@ -16,7 +16,7 @@ import beService from "common/services/BEService";
           include,
         };
   
-        const response = await beService.get(`crud/${resourceType}/`, {
+        const response = await beService.get(`api/v1/crud/${resourceType}/`, {
           params,
         });
         return response?.data;
@@ -44,7 +44,7 @@ import beService from "common/services/BEService";
           include,
         };
         const response = await beService.post(
-          `crud/${resourceType}`,
+          `api/v1/crud/${resourceType}`,
           { filtering, sorting },
           { params }
         );
@@ -57,7 +57,7 @@ import beService from "common/services/BEService";
   
     getGridModel = async (resourceType: string) => {
       try {
-        const response = await beService.get(`crud/${resourceType}/models`);
+        const response = await beService.get(`api/v1/crud/${resourceType}/models`);
         return response?.data;
       } catch (error) {
         console.error("Error fetching resources:", error);
@@ -68,7 +68,7 @@ import beService from "common/services/BEService";
     createResource = async (resourceType: string, resourceData: any) => {
       try {
         const response = await beService.post(
-          `crud/${resourceType}/create`,
+          `api/v1/crud/${resourceType}/create`,
           resourceData
         );
         return response?.data;
@@ -80,7 +80,7 @@ import beService from "common/services/BEService";
   
     fetchResource = async (resourceType: string, id: number) => {
       try {
-        const response = await beService.get(`crud/${resourceType}/${id}`);
+        const response = await beService.get(`api/v1/crud/${resourceType}/${id}`);
         return response?.data;
       } catch (error) {
         console.error("Error fetching resource:", error);
@@ -95,7 +95,7 @@ import beService from "common/services/BEService";
     ) => {
       try {
         const response = await beService.patch(
-          `crud/${resourceType}/update/${id}`,
+          `api/v1/crud/${resourceType}/update/${id}`,
           resourceData
         );
         return response?.data;
@@ -108,7 +108,7 @@ import beService from "common/services/BEService";
     deleteResource = async (resourceType: string, id: number) => {
       try {
         const response = await beService.delete(
-          `crud/${resourceType}/delete/${id}`
+          `api/v1/crud/${resourceType}/delete/${id}`
         );
         return response?.data;
       } catch (error) {

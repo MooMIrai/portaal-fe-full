@@ -6,7 +6,8 @@ export default function(){
           id:11,
           text:'Lookups',
           level:0,
-          route:'/lookups'
+          route:'/lookups',
+          iconKey:"listUnorderedOutlineIcon"
       }
     ]
   }

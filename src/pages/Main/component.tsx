@@ -2,10 +2,22 @@ import React, { useEffect, useRef, useState } from "react";
 import GenericGrid from "common/Table";
 import DynamicForm from "common/Form";
 import InputText from "common/InputText";
-
+import Button from "common/Button";
 import { useDebounce } from "@uidotdev/usehooks";
 import { LookupsService } from "../../services/LookupService";
 import { LookUpsSelector } from "../../components/lookupsSelector/component";
+// Utility function to filter out unwanted keys from an object
+const filterOutObjectKeys = (obj: any, keysToRemove: Array<string>) => {
+  return Object.keys(obj)
+    .filter((key) => !keysToRemove.includes(key))
+    .reduce((result: any, key) => {
+      result[key] = obj[key];
+      return result;
+    }, {});
+};
+
+
+const excludedKeys = ["date_created", "date_modified", "user_created", "user_modified"];
 
 const determineColumnType = (type: string): "text" | "numeric" | "date" => {
   switch (type) {
@@ -19,19 +31,17 @@ const determineColumnType = (type: string): "text" | "numeric" | "date" => {
   }
 };
 
-const generateColumns = (data: any): any[] => {
+const generateColumns = (data: any[]): any[] => {
   if (!data || data.length === 0) return [];
-  const columns = Object.keys(data).map(
-    (key) =>
-      ({
-        key: key,
-        label: key.charAt(0).toUpperCase() + key.slice(1),
-        sortable: true,
-        type: "string",
-        filter: determineColumnType(data[key]),
-      } as any)
-  );
-  return columns;
+
+  return data
+    .filter(item => !excludedKeys.includes(item.name))
+    .map((item) => ({
+      key: item.name,
+      label: item.name.charAt(0).toUpperCase() + item.name.slice(1),
+      sortable: item.sortable,
+      filter: determineColumnType(item.type),
+    }));
 };
 
 const determineFieldType = (
@@ -53,7 +63,7 @@ const determineFieldType = (
     return "text";
   }
   if (value instanceof Date) return "date";
-  return "text";
+  return "date";
 };
 
 const LookUps = () => {
@@ -73,35 +83,30 @@ const LookUps = () => {
       setColumns(generateColumns(resources));
 
       const newModel: any = {};
-      for (const key in resources) {
-        if (key !== "id") {
-          if (resources.hasOwnProperty(key)) {
-            newModel[key] = {
-              name: key,
-              type: determineFieldType(resources[key]),
-              label: key,
-              value: resources[key],
-              disabled: false,
-              required: true,
-            };
-          }
-        }
-      }
+      resources
+        .filter((item: any) => !excludedKeys.includes(item.name))
+        .forEach((item: any) => {
+          newModel[item.name] = {
+            name: item.name,
+            type: determineFieldType(item.type),
+            label: item.name.charAt(0).toUpperCase() + item.name.slice(1),
+            value: "",
+            disabled: item.readOnly,
+            required: item.required,
+          };
+        });
 
       setFields(newModel);
-
-      const newDataItem: Record<string, any> = {};
-      for (const key in newModel) {
-        if (newModel.hasOwnProperty(key)) {
-          newDataItem[key] = "";
-        }
-      }
     } catch (error) {
       console.error("Error loading fields:", error);
       setFields({});
       setColumns([]);
     }
   };
+
+  useEffect(() => {
+    loadModel(selectedData);
+  }, [selectedData]);
 
   const loadData = async (pagination: any, filter: any, sorting: any[]) => {
     try {
@@ -126,9 +131,8 @@ const LookUps = () => {
     loadModel(newSelectedData);
   };
 
-  const handleSearchTerm = (event) => {
-    const input = event.target;
-    setTermValue(input.value);
+  const handleSearchTerm = (event: any) => {
+    setTermValue(event.target.value);
   };
 
   const handleSubmit = async (
@@ -136,15 +140,21 @@ const LookUps = () => {
     dataItem: any,
     refreshTable: any
   ): Promise<void> => {
-    if (type === "create") {
-      await LookupsService.createResource(selectedData, dataItem);
-    } else if (type === "edit") {
-      await LookupsService.updateResource(selectedData, dataItem?.id, dataItem);
-    } else if (type === "delete") {
-      await LookupsService.deleteResource(selectedData, dataItem);
-    }
 
-    refreshTable();
+    try {
+      const { id, tenant_code, ...dataToSubmit } = dataItem;
+      if (type === "create") {
+        await LookupsService.createResource(selectedData, dataToSubmit);
+      } else if (type === "edit") {
+        await LookupsService.updateResource(selectedData, id, dataToSubmit);
+      } else if (type === "delete") {
+        await LookupsService.deleteResource(selectedData, dataItem);
+      }
+
+      refreshTable();
+    } catch (error) {
+      console.error("Error in submitting form data:", error);
+    }
   };
 
   useEffect(() => {
@@ -160,8 +170,9 @@ const LookUps = () => {
         dropListLookup={true}
         customToolBarComponent={() => (
           <>
-            <InputText value={termValue} onChange={handleSearchTerm} />
+            <InputText placeholder={"Cerca"} value={termValue} onChange={handleSearchTerm} />
             <LookUpsSelector
+              placeholder={"Inserisci Tipologica"}
               onChange={(event: { id: number; name: string }) =>
                 handleTypeChange(event)
               }
@@ -176,58 +187,40 @@ const LookUps = () => {
         actions={() => ["create", "delete", "edit", "show"]}
         formCrud={(row, type, closeModalCallback, refreshTable) => {
           const crudCondition = type === "view";
-          const handleFields = Object.values(fields).map((el: any) => {
-            return {
+
+          const filteredFields = Object.values(fields)
+            .filter((el: any) => (type === "create" || type === "edit") ? el.name !== "id" : true)
+            .map((el: any) => ({
               ...el,
               disabled: crudCondition,
-            };
-          });
-          const filterOutObjectKeys = (
-            obj: any,
-            keysToRemove: Array<string>
-          ) => {
-            return Object.keys(obj)
-              .filter((key) => !keysToRemove.includes(key))
-              .reduce((result: any, key) => {
-                result[key] = obj[key];
-                return result;
-              }, {});
-          };
+            }));
+          const filteredObject = filterOutObjectKeys(row, excludedKeys);
 
-          const keysToRemove = [
-            "date_created",
-            "date_modified",
-            "user_created",
-            "user_modified",
-          ];
-
-          const filteredObject = filterOutObjectKeys(row, keysToRemove);
 
           return (
             <>
               {type === "delete" ? (
-                <>
-                  <div style={{ padding: "20px" }}>
-                    <span>{"Sei sicuro di voler eliminare il record?"}</span>
-                  </div>
-                  <div className="k-form-buttons">
-                    <button onClick={closeModalCallback}>Cancel</button>
-                    <button
+                 <div  style={{ padding: "20px" }}>
+                  <span>{"Sei sicuro di voler eliminare il record?"}</span>
+                  <div style={{ paddingTop: "20px", paddingLeft:"30px" }} className="k-form-buttons">
+                    <Button onClick={closeModalCallback}>Cancel</Button>
+                    <Button
+                      themeColor={"error"}
                       onClick={async () => {
                         await handleSubmit(type, row?.id, refreshTable);
                         closeModalCallback();
                       }}
                     >
                       {"Elimina"}
-                    </button>
+                    </Button>
                   </div>
-                </>
+                </div>
               ) : (
                 <DynamicForm
                   submitText={crudCondition ? "Esci" : "Salva"}
                   customDisabled={crudCondition}
                   formData={filteredObject}
-                  fields={handleFields}
+                  fields={filteredFields}
                   showSubmit={!crudCondition}
                   extraButton={true}
                   extraBtnAction={closeModalCallback}
