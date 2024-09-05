@@ -6,88 +6,78 @@ import { adaptToCustomerModel } from "../../adapters/clienteAdapters";
 import NotificationProviderActions from "common/providers/NotificationProvider";
 
 const columns = [
-    { key: "customer_code", label: "Codice", type: "string", sortable: true, filter: "text" },
-    { key: "name", label: "Ragione sociale", type: "string", sortable: true, filter: "text" },
-    { key: "email", label: "Email", type: "string", sortable: true, filter: "text" },
-    { key: "website", label: "Sito web", type: "string", sortable: true, filter: "text" },
-    { key: "vatNumber", label: "P.IVA", type: "string", sortable: true, filter: "numeric" },
-    
-  ];
-  
+  { key: "customer_code", label: "Codice", type: "string", sortable: true, filter: "text" },
+  { key: "name", label: "Ragione sociale", type: "string", sortable: true, filter: "text" },
+  { key: "email", label: "Email", type: "string", sortable: true, filter: "text" },
+  { key: "website", label: "Sito web", type: "string", sortable: true, filter: "text" },
+  { key: "vatNumber", label: "P.IVA", type: "string", sortable: true, filter: "numeric" },
 
-function Clienti(){
-    
-    const [filter, setFilter] = useState();
-    const [sorting, setSorting] = useState([]);
-    const [pagination] = useState({ currentPage: 1, pageSize: 10 });
+];
 
 
-    const loadData = async (
-        pagination: any,
-        filter: any,
-        sorting: any[],
-        term?: string
-      ) => {
-        const include= true;
-       
-       const tableResponse= await customerService.search(
-          pagination.currentPage,
-          pagination.pageSize,
-          filter,
-          sorting,
-          term,
-          include,
-        );
-        
-
-        return{ 
-          data:tableResponse.data.map(adaptToCustomerModel),
-          meta: {
-            total:tableResponse.meta.model
-          }
-        }
-        
-      };
-
-    useEffect(() => {
-        loadData(pagination, filter, sorting)
-    }, [pagination, filter, sorting]);
+function Clienti() {
 
 
-    const handleFormSubmit = (type: string, formData: any, refreshTable: any, id: any, closeModal:()=>void)=>{
-        let promise:Promise<any> | undefined=undefined;
-        
-        if (type === "create") {
-          promise = customerService.createResource(formData);
-        } else if (type === "edit") {
-          promise =customerService.updateResource(id,formData);
-        } else if (type === "delete") {
-          promise = customerService.deleteResource(id);
-        }
 
-        if(promise){
-          promise.then(()=>{
-            NotificationProviderActions.openModal({icon:true,style:'success'},"Operazione avvenuta con successo");
-            refreshTable();
-            closeModal();
-          })
-        }
+  const loadData = async (
+    pagination: any,
+    filter: any,
+    sorting: any[],
+    term?: string
+  ) => {
+    const include = true;
 
+    const tableResponse = await customerService.search(
+      pagination.currentPage,
+      pagination.pageSize,
+      filter,
+      sorting,
+      term,
+      include,
+    );
+
+
+    return {
+      data: tableResponse.data.map(adaptToCustomerModel),
+      meta: {
+        total: tableResponse.meta.model
+      }
     }
 
-    return <GridTable
-   /*  inputSearchConfig={{
-      inputSearch: termValue,
-      handleInputSearch: handleInputSearch,
-      debouncedSearchTerm: termValue,
-    }} */
-    filter={filter}
-    setFilter={setFilter}
+  };
+
+
+
+
+  const handleFormSubmit = (type: string, formData: any, refreshTable: any, id: any, closeModal: () => void) => {
+    let promise: Promise<any> | undefined = undefined;
+
+    if (type === "create") {
+      promise = customerService.createResource(formData);
+    } else if (type === "edit") {
+      promise = customerService.updateResource(id, formData);
+    } else if (type === "delete") {
+      promise = customerService.deleteResource(id);
+    }
+
+    if (promise) {
+      promise.then(() => {
+        NotificationProviderActions.openModal({ icon: true, style: 'success' }, "Operazione avvenuta con successo");
+        refreshTable();
+        closeModal();
+      })
+    }
+
+  }
+
+  return <GridTable
+    /*  inputSearchConfig={{
+       inputSearch: termValue,
+       handleInputSearch: handleInputSearch,
+       debouncedSearchTerm: termValue,
+     }} */
     filterable={true}
-    initialPagination={pagination}
     sortable={true}
-    setSorting={setSorting}
-    sorting={sorting}
     getData={loadData}
     columns={columns}
     resizableWindow={true}
@@ -95,22 +85,22 @@ function Clienti(){
     draggableWindow={true}
     initialWidthWindow={900}
     resizable={true}
-    actions={[
+    actions={() => [
       "show",
       "edit",
       "delete",
-      "create",
-    ]}
+      "create"
 
+    ]}
     formCrud={(row: any, type: string, closeModalCallback: any, refreshTable: any) => (
       <>
         <ClienteCrud
-                row={row}
-                type={type}
-                closeModalCallback={closeModalCallback}
-                refreshTable={refreshTable}
-                onSubmit={handleFormSubmit}
-              />
+          row={row}
+          type={type}
+          closeModalCallback={closeModalCallback}
+          refreshTable={refreshTable}
+          onSubmit={handleFormSubmit}
+        />
       </>
     )}
   />

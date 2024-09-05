@@ -13,7 +13,6 @@ import {
 } from "../../adapters/personaleAdapters";
 import Button from "common/Button";
 import NotificationProviderActions from "common/providers/NotificationProvider";
-import { useDebounce } from "@uidotdev/usehooks";
 import styles from "./styles.modules.scss";
 // Column field mapping
 const columnFieldMap: { [key: string]: string } = {
@@ -211,6 +210,7 @@ const PersonalPage = () => {
             
           ]}
           classNameWindow={styles.windowStyle}
+          classNameWindowDelete={styles.windowDelete}
           formCrud={(row, type, closeModalCallback, refreshTable) => (
             <>
               {type === "delete" ? (

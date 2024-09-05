@@ -1,3 +1,5 @@
+
+
 export default function(){
 
   return {
@@ -6,28 +8,34 @@ export default function(){
           id:5,
           text:'HR',
           level:0,
-          route:'/HR'
+          route:'/HR',
+          iconKey: 'globeOutlineIcon',
+       
         },
         {
           parentId:5,
           id:50,
           level:2,
           text:'Personale',
-          route:'/personale'
+          route:'/personale',
+          iconKey:"accessibilityIcon"
         },
         {
           parentId:5,
           id:51,
           level:2,
           text:'Clienti',
-          route:'/clienti'
+          route:'/clienti',
+          iconKey:"myspaceIcon"
+          
         },
         {
           parentId:5,
           id:52,
           level:2,
           text:'Rapportino',
-          route:'/rapportino'
+          route:'/rapportino',
+          iconKey:"calendarIcon"
         }
     ]
   }
