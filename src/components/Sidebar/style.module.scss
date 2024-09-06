@@ -30,15 +30,24 @@
   }
 }
 
-
 .childItem {
   margin-left: 2rem;
 }
 
-.drawerContent{
-  border-radius:5px !important;
+.drawerContent {
+  border-radius: 5px !important;
   padding: 6rem 0.5rem 0rem 0.5rem !important;
-  background: #EBF0F4;
+  background: #ebf0f4;
 }
 
 /* #3e719938 #a2cfe54d  #b3d7ff5c #B3D7FF #b3d7ff2b #b3d7ff3d*/
+
+.toolbarContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.autoComplete {
+  width: 10%;
+}

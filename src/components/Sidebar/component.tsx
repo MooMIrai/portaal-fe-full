@@ -16,6 +16,8 @@ import {
 import { SVGIcon, SvgIcon } from "@progress/kendo-react-common";
 import styles from "./style.module.scss";
 import * as svgIcons from "@progress/kendo-svg-icons"; 
+import AuthService from "../../services/AuthService";
+import withAutocomplete from "../../hoc/AutoComplete";
 
 interface SidebarPros {
   items: DrawerItemProps[];
@@ -50,10 +52,19 @@ const CustomItem = (props: CustomItemProps) => {
   );
 };
 
+const TenantsSelector = withAutocomplete((filter: string) =>
+  AuthService.getTenants(filter)
+);
+
 const Sidebar = ({ children, items }: SidebarPros) => {
   const navigate = useNavigate();
   const [drawerExpanded, setDrawerExpanded] = React.useState(true);
   const [list, setList] = useState<any[]>([]);
+  const [selectedTenant, setSelectedTenant] = useState<{
+    id: number;
+    name: string;
+  } | null>(null);
+  const [tenants, setTenants] = useState<any[]>([]);
 
   const updateItems = (list: any[]): DrawerItemProps[] => {
     return list.map((item, index) => {
@@ -69,6 +80,29 @@ const Sidebar = ({ children, items }: SidebarPros) => {
       return newItem;
     });
   };
+
+  useEffect(() => {
+    AuthService.getTenants("").then((tenantsData) => {
+      setTenants(tenantsData);
+
+      const savedTenant = sessionStorage.getItem("tenant");
+
+      if (savedTenant) {
+        const foundTenant = tenantsData.find(
+          (tenant) => tenant.name === savedTenant
+        );
+        if (foundTenant) {
+          setSelectedTenant(foundTenant);
+        }
+      }
+
+      if (!savedTenant && tenantsData.length > 0) {
+        const defaultTenant = tenantsData[0];
+        setSelectedTenant(defaultTenant);
+        sessionStorage.setItem("tenant", defaultTenant.name);
+      }
+    });
+  }, []);
 
   useEffect(() => {
     if (items) {
@@ -114,9 +148,18 @@ const Sidebar = ({ children, items }: SidebarPros) => {
     return item;
   });
 
+  const handleTenantChange = (event: any) => {
+    const newTenant = event.target.value;
+    if (newTenant) {
+      setSelectedTenant(newTenant);
+      sessionStorage.setItem("tenant", newTenant.name);
+      window.location.reload();
+    }
+  };
+
   return (
     <div className={styles.sidebarContainer}>
-      <div className="custom-toolbar">
+      <div className={styles.toolbarContainer + " custom-toolbar"}>
         <div className={styles.parentButtonHamburgerText}>
           <img
             width={150}
@@ -127,6 +170,14 @@ const Sidebar = ({ children, items }: SidebarPros) => {
           <Button svgIcon={menuIcon} fillMode={"flat"} onClick={handleClick} />
           <span className="title">{""}</span>
         </div>
+        <div className={styles.autoComplete}>
+          {tenants.length > 1 && (
+            <TenantsSelector
+              value={selectedTenant}
+              onChange={handleTenantChange}
+            />
+          )}
+        </div>
       </div>
       <Drawer
         expanded={drawerExpanded}
@@ -136,7 +187,9 @@ const Sidebar = ({ children, items }: SidebarPros) => {
         onSelect={onSelect}
         mini={true}
       >
-        <DrawerContent className={styles.drawerContent}>{children}</DrawerContent>
+        <DrawerContent className={styles.drawerContent}>
+          {children}
+        </DrawerContent>
       </Drawer>
     </div>
   );

@@ -37,6 +37,24 @@ class AuthService {
     const tokenData = tokenService.decodeToken(token);
     return { ...tokenData };
   }
+
+  getTenants(filter: string): Promise<{ id: any; name: string }[]> {
+    const token = this.getToken();
+    const tenantsData = tokenService.getTenantsFromJwt(token);
+
+    // Filtro i tenants in base al parametro `filter`, se necessario
+    const filteredTenants = Object.values({ ...tenantsData })
+      .filter((el) => {
+        const name = typeof el === "string" ? el : "";
+        return name.toLowerCase().includes(filter.toLowerCase());
+      })
+      .map((el) => {
+        return { id: Math.random(), name: String(el) }; // Assicura che `el` sia una stringa
+      });
+
+    // Restituisco i tenant filtrati in una Promise
+    return Promise.resolve(filteredTenants);
+  }
 }
 
 export default new AuthService();
