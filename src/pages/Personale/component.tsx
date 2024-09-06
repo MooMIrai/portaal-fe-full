@@ -88,58 +88,38 @@ const columns: any = [
 
 const PersonalPage = () => {
   const [data, setData] = useState<any>();
-  const [country, setCountry] = useState<countryOption[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [city, setCity] = useState<cityTypeOption[]>([]);
   const [sede, setSede] = useState<locationOption[]>([]);
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
-
-
+  const [isLocationDataReady, setIsLocationDataReady] = useState(false); // Nuovo stato per i dati geografici
 
   useEffect(() => {
     const fetchCountryData = async () => {
-      const countryResponse = await CrudGenericService.fetchResources(
-        "country"
-      );
-      const adaptedCountry = countryAdapter(countryResponse);
-      setCountry(adaptedCountry);
+      try {
+        const sedeResponse = await CrudGenericService.fetchResources("location");
+        const adaptedLocation = sedeAdapter(sedeResponse);
+        setSede(adaptedLocation);
 
-      const cityResponse = await CrudGenericService.fetchResources("city");
-      const adaptedCity = cityAdapter(cityResponse);
-      setCity(adaptedCity);
-
-      const sedeResponse = await CrudGenericService.fetchResources("location");
-      const adaptedLocation = sedeAdapter(sedeResponse);
-      setSede(adaptedLocation);
-
-      setLoading(false);
+        // Imposta lo stato a true dopo aver caricato tutti i dati geografici
+        setIsLocationDataReady(true);
+      } catch (error) {
+        console.error("Error fetching country data:", error);
+      }
     };
 
     fetchCountryData();
   }, []);
 
-  useEffect(() => {
-    const updateWindowSize = () => {
-      setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
-    };
 
-    updateWindowSize();
+  const loadData = async (pagination: any, filter: any, sorting: any[]) => {
+    if (!isLocationDataReady) {
+      // Se i dati geografici non sono ancora pronti, non eseguire il fetch
+      return {
+        data: [],
+        meta: { total: 0 },
+      };
+    }
 
-    window.addEventListener("resize", updateWindowSize);
-
-    return () => window.removeEventListener("resize", updateWindowSize);
-  }, []);
-
-  const loadData = async (
-    pagination: any,
-    filter: any,
-    sorting: any[],
-  ) => {
     const include = true;
-
     const mappedFilter = mapFilterFields(filter);
     const mappedSorting = sorting.map((s) => ({
       ...s,
@@ -153,15 +133,14 @@ const PersonalPage = () => {
       mappedSorting,
       include
     );
-    console.log(resources)
+
     const transformedData = transformUserData(
       resources.data,
-      country,
-      city,
       sede
     );
+    console.log("transfoermedData",transformedData)
     setData(transformedData);
-    console.log("datatransformed", transformedData);
+
     return {
       data: transformedData,
       meta: {
@@ -190,65 +169,60 @@ const PersonalPage = () => {
     }
   };
 
+  // Se i dati non sono pronti, non renderizzare nulla
+  if (!isLocationDataReady) {
+    return null;
+  }
 
   return (
     <div>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <GridTable
-          filterable={true}
-          sortable={true}
-          getData={loadData}
-          columns={columns}
-          stageWindow={"FULLSCREEN"}
-          actions={()=>[
-            "show",
-            "edit",
-            "delete",
-            "create"
-            
-          ]}
-          classNameWindow={styles.windowStyle}
-          classNameWindowDelete={styles.windowDelete}
-          formCrud={(row, type, closeModalCallback, refreshTable) => (
-            <>
-              {type === "delete" ? (
-                <div className={styles.formDelete}>
-                  <span>{"Sei sicuro di voler eliminare il record?"}</span>
-                  <div>
-                    <Button onClick={closeModalCallback}>Cancel</Button>
-                    <Button
-                      themeColor={"error"}
-                      onClick={async () => {
-                        await handleFormSubmit(
-                          type,
-                          null,
-                          refreshTable,
-                          row?.id
-                        );
-                        closeModalCallback();
-                      }}
-                    >
-                      {"Elimina"}
-                    </Button>
-                  </div>
+      <GridTable
+        filterable={true}
+        sortable={true}
+        getData={loadData}
+        columns={columns}
+        stageWindow={"FULLSCREEN"}
+        actions={() => ["show", "edit", "delete", "create"]}
+        classNameWindow={styles.windowStyle}
+        classNameWindowDelete={styles.windowDelete}
+        formCrud={(row, type, closeModalCallback, refreshTable) => (
+          <>
+            {type === "delete" ? (
+              <div className={styles.formDelete}>
+                <span>{"Sei sicuro di voler eliminare il record?"}</span>
+                <div>
+                  <Button onClick={closeModalCallback}>Cancel</Button>
+                  <Button
+                    themeColor={"error"}
+                    onClick={async () => {
+                      await handleFormSubmit(
+                        type,
+                        null,
+                        refreshTable,
+                        row?.id
+                      );
+                      closeModalCallback();
+                    }}
+                  >
+                    {"Elimina"}
+                  </Button>
                 </div>
-              ) : (
-                <PersonaleSection
-                  row={row}
-                  type={type}
-                  closeModalCallback={closeModalCallback}
-                  refreshTable={refreshTable}
-                  onSubmit={handleFormSubmit}
-                />
-              )}
-            </>
-          )}
-        />
-      )}
+              </div>
+            ) : (
+              <PersonaleSection
+                row={row}
+                type={type}
+                closeModalCallback={closeModalCallback}
+                refreshTable={refreshTable}
+                onSubmit={handleFormSubmit}
+              />
+            )}
+          </>
+        )}
+      />
     </div>
   );
 };
 
 export default PersonalPage;
+

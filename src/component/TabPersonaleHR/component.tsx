@@ -11,7 +11,7 @@ import {
   getFormPermessiFields,
 } from "./FormFields";
 import { AnagraficaData, TrattamentoEconomicoData, RuoliData, PermessiData } from "./modelForms";
-import { ActivityTypeOption, cityAdapter, cityTypeOption, companyAdapter, companyOption, countryAdapter, countryOption, dataAdapter, genderAdapter, genderOption, permessiAdapter, reverseAdapter, roleAdapter, RoleOption } from "../../adapters/personaleAdapters";
+import { ActivityTypeOption, cityAdapter, cityTypeOption, companyAdapter, companyOption, countryAdapter, countryOption, dataAdapter, genderAdapter, genderOption, locationOption, permessiAdapter, reverseAdapter, roleAdapter, RoleOption, sedeAdapter } from "../../adapters/personaleAdapters";
 import { CrudGenericService } from "../../services/personaleServices";
 import Button from "common/Button";
 import { formFields } from "./customfields";
@@ -84,9 +84,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
   const [confirmNewContractStep, setConfirmNewContractStep] = useState(false);
   const [today, setToday] = useState<Date>(new Date());
   const [alert, setAlert] = useState<boolean>(false)
-  const [contractType, setContractType] = useState<string | null>(formTrattamentoEconomicoData.tipologiaContratto_autocomplete?.name || null);
   const [isScadenzaEffettivaDisabled, setIsScadenzaEffettivaDisabled] = useState<boolean>(false);
-  
 
   //Ref
   const formAnagrafica = useRef<HTMLFormElement>(null);
@@ -112,7 +110,6 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
     if (formTrattamentoEconomico.current) {
       if (!newForm) {
         setFormTrattamentoEconomicoData(formTrattamentoEconomico.current.values);
-        console.log(formTrattamentoEconomico.current)
         if (formTrattamentoEconomico?.current?.values.tipologiaContratto_autocomplete?.name === "Tempo Indeterminato") {
           setIsScadenzaEffettivaDisabled(true);
       } else {
@@ -151,14 +148,6 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
         const adaptedActivities = permessiAdapter(activityTypeResponse);
         setActivity(adaptedActivities);
 
-        const cityResponse = await CrudGenericService.fetchResources("city");
-        const adaptedCity = cityAdapter(cityResponse);
-        setCity(adaptedCity);
-
-        const countryResponse = await CrudGenericService.fetchResources("country");
-        const adaptedCountry = countryAdapter(countryResponse);
-        setCountry(adaptedCountry);
-
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -166,22 +155,6 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
 
     fetchData();
   }, []);
-
-
-
-  //gestione del nuovo trattamento economico
-  /* useEffect(() => {
-    if (newForm) {
-      const newTreatmentData: TrattamentoEconomicoData = {
-        ...formTrattamentoEconomicoData,
-        tipologiaContratto_autocomplete: { id: 0, name: "" },
-        tipoAmbitoLavorativo_autocomplete: { id: 0, name: "" },
-      };
-      setStoricoTrattamentoData([...storicoTrattamentoData, newTreatmentData]);
-      setFormTrattamentoEconomicoData(newTreatmentData);
-     
-    }
-  }, [newForm]); */
 
   useEffect(() => {
     if (newForm) {
@@ -258,8 +231,6 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
       trattamentoEconomico: formTrattamentoEconomicoData,
       ruoli: formRuoliData,
       permessi: formPermessiData,
-      city: city,
-      country: country,
     };
 
 
@@ -402,6 +373,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
   // Definisce la classe CSS dinamica in base alla presenza di storici
   const trattamentoEconomicoClass = sortedStoricoTrattamentoData.length > 0 ? styles.trattamentoEconomicoConStorici : styles.trattamentoEconomicoSenzaStorici;
 
+
   const tabs = [
     {
       title:isViewOnly ? "Dati personali Archiviati" : "Anagrafica",
@@ -409,7 +381,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
         <div className={styles.parentForm}>
           <Form
             ref={formAnagrafica}
-            fields={Object.values(getFormAnagraficaFields(formAnagraficaData, gender, type, city, country, isViewOnly))}
+            fields={Object.values(getFormAnagraficaFields(formAnagraficaData, gender, type, isViewOnly))}
             formData={formAnagraficaData}
             onSubmit={(data: AnagraficaData) => setFormAnagraficaData(data)}
             description="Ana"

@@ -8,9 +8,6 @@ import {
 // map dal be al fe
 const mapToAnagraficaData = (
   Person: any,
-  countryLabel: string,
-  cityBirthLabel: string,
-  cityResLabel: string,
   sedeLabel: string
 ): AnagraficaData => ({
   person_id: Person?.id,
@@ -72,7 +69,6 @@ const mapToAnagraficaData = (
   telefonoCasa: Person?.phoneNumber2 ? parseInt(Person.phoneNumber2, 10) : 0,
   emailPrivata: Person?.privateEmail || "",
   iban: Person?.bankAddress || "",
-  stato: countryLabel || "",
   partitaIva: Person.vatNumber || 0,
   sede: sedeLabel,
   sede_autocomplete_id: Person.location_id,
@@ -166,8 +162,6 @@ const findMostRecentContract = (contracts: any[]): any => {
 //per la tabella sia per le cllonne che per gestire tutto
 export const transformUserData = (
   data: any[],
-  countryOptions: countryOption[],
-  cityOptions: cityTypeOption[],
   sede: locationOption[]
 ) => {
   return data.map((user) => {
@@ -177,19 +171,6 @@ export const transformUserData = (
     const otherContracts = employmentContracts.filter(
       (contract) => contract.id !== mostRecentContract?.id
     );
-
-    const countryLabel =
-      countryOptions?.find(
-        (country) => country.value === user?.Person?.country_id
-      )?.label || " ";
-
-    const cityResLabel =
-      cityOptions?.find((city) => city.value === user?.Person?.cityRes_id)
-        ?.label || " ";
-
-    const cityBirthLabel =
-      cityOptions?.find((city) => city.value === user?.Person?.cityBirth_id)
-        ?.label || " ";
 
     const sedeLabel =
       sede?.find((sede) => sede.value === user?.Person?.location_id)?.label ||
@@ -207,10 +188,7 @@ export const transformUserData = (
       dailyCost: mostRecentContract?.dailyCost ?? "",
       anagrafica: mapToAnagraficaData(
         user.Person,
-        countryLabel,
-        cityBirthLabel,
-        cityResLabel,
-        sedeLabel
+        sedeLabel,
       ),
       trattamentoEconomico: mapToTrattamentoEconomicoData(
         mostRecentContract || {}
@@ -598,20 +576,6 @@ const mapGenderToID = (
 };
 
 
-const mapCountryToID = (
-  label: string,
-  country: countryOption[]
-): number | undefined => {
-  const scope = country.find((scope) => scope.label === label);
-  return scope ? scope.value : undefined;
-};
-
-const addOneDay = (date) => {
-  const newDate = new Date(date);
-  newDate.setDate(newDate.getDate() + 1); // Incrementa di un giorno
-  return newDate;
-};
-
 //reverse adpter per mandare i dati al be
 export const reverseAdapter = (combinedData: {
   id: any;
@@ -623,8 +587,6 @@ export const reverseAdapter = (combinedData: {
   trattamentoEconomico: TrattamentoEconomicoData;
   ruoli: RuoliData;
   permessi: PermessiData;
-  city: cityTypeOption[];
-  country: countryOption[];
 }) => {
 
   console.log("Combined Data before transformation:", combinedData);
@@ -649,7 +611,6 @@ export const reverseAdapter = (combinedData: {
       location_id: combinedData.anagrafica.sede_autocomplete?.id || 1,
       provinceRes: combinedData.anagrafica.residenza,
       //provinceBirth: combinedData.anagrafica.Provincianascita,
-      country_id: mapCountryToID(combinedData.anagrafica.stato, combinedData.country) || 108,
       //cityRes: combinedData.anagrafica.comuneResidenza,
       //cityBirth: combinedData.anagrafica.comuneNascita,
       dateBirth: combinedData.anagrafica.dataNascita,

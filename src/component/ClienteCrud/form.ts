@@ -53,6 +53,7 @@ export const getFormCustomerFields = (formData: CustomerModel, type:string) => {
             name: "email",
             label: "Email",
             type: "email",
+            showLabel: false,
             disabled:type === "view",
             value: formData.email || "",
         },

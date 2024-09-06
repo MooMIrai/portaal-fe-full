@@ -1,13 +1,12 @@
 // formFields.ts
-import { useEffect, useState } from 'react';
-import { ActivityTypeOption, cityTypeOption, companyOption, countryOption, genderOption, RoleOption } from '../../adapters/personaleAdapters';
+
+import { ActivityTypeOption,companyOption,genderOption, RoleOption } from '../../adapters/personaleAdapters';
 import { AnagraficaData, TrattamentoEconomicoData, RuoliData, PermessiData } from './modelForms';
 
 
 
-export const getFormAnagraficaFields = (formData: AnagraficaData, gender: genderOption[], type: any, city: cityTypeOption[], country: countryOption[],isViewOnly:boolean) => {
+export const getFormAnagraficaFields = (formData: AnagraficaData, gender: genderOption[], type: any,isViewOnly:boolean) => {
     const genderOptions = gender.map(company => company.label)
-    const cityOptions = city.map(city => city.label)
     const onlyLettersValidator = (value: any) => /^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/.test(value) ? "" : "Il campo deve contenere solo lettere";
 
     const dateValidator = (value: any) => {

@@ -23,7 +23,6 @@ function Clienti() {
     pagination: any,
     filter: any,
     sorting: any[],
-    term?: string
   ) => {
     const include = true;
 
@@ -32,7 +31,6 @@ function Clienti() {
       pagination.pageSize,
       filter,
       sorting,
-      term,
       include,
     );
 
