@@ -4,6 +4,7 @@ const Dotenv = require("dotenv-webpack");
 const deps = require("./package.json").dependencies;
 const { FederatedTypesPlugin } = require("@module-federation/typescript");
 const webpack = require("webpack");
+const CopyPlugin = require("copy-webpack-plugin");
 
 const mfeConfig = (path, mode) => {
   let remotes = {
@@ -84,6 +85,9 @@ module.exports = (_, argv) => {
         template: "./src/index.html",
       }),
       new Dotenv({ path: "./.env." + argv.mode }),
+      new CopyPlugin({
+        patterns: [{ from: "public", to: "." }],
+      }),
     ],
 
     //devtool: "source-map",
