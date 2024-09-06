@@ -10,7 +10,7 @@ import initLookupFn from "lookups/Index";
 import HRRoutes from "hr/Routes";
 import initHRFn from "hr/Index";
 import initProfileFn from "auth/Index";
-import "./index.scss"
+import "./index.scss";
 import { Routes, useNavigate } from "react-router-dom";
 
 export const App = () => {
@@ -62,14 +62,12 @@ export const App = () => {
   }
 
   return (
-    <>
-      <Theme>
-        <Drawer items={routes}>
-          <LookupsRoutes />
-          <HRRoutes />
-          <AuthVisibleRoutes />
-        </Drawer>
-      </Theme>
-    </>
+    <Theme>
+      <Drawer items={routes}>
+        <LookupsRoutes />
+        <HRRoutes />
+        <AuthVisibleRoutes />
+      </Drawer>
+    </Theme>
   );
 };
