@@ -12,12 +12,14 @@ import {
   menuIcon,
   chevronDownIcon,
   chevronRightIcon,
+  logoutIcon,
 } from "@progress/kendo-svg-icons";
 import { SVGIcon, SvgIcon } from "@progress/kendo-react-common";
 import styles from "./style.module.scss";
 import * as svgIcons from "@progress/kendo-svg-icons"; 
 import AuthService from "../../services/AuthService";
 import withAutocomplete from "../../hoc/AutoComplete";
+
 
 interface SidebarPros {
   items: DrawerItemProps[];
@@ -157,6 +159,11 @@ const Sidebar = ({ children, items }: SidebarPros) => {
     }
   };
 
+  const logout = () => {
+    AuthService.logout()
+  };
+
+
   return (
     <div className={styles.sidebarContainer}>
       <div className={styles.toolbarContainer + " custom-toolbar"}>
@@ -170,15 +177,21 @@ const Sidebar = ({ children, items }: SidebarPros) => {
           <Button svgIcon={menuIcon} fillMode={"flat"} onClick={handleClick} />
           <span className="title">{""}</span>
         </div>
+        <div className={styles.buttonToolBar}>
         <div className={styles.autoComplete}>
           {tenants.length > 1 && (
             <TenantsSelector
               value={selectedTenant}
               onChange={handleTenantChange}
             />
+          
           )}
-        </div>
+           
       </div>
+      <Button svgIcon={logoutIcon} /* fillMode="outline" */ themeColor="primary" onClick={logout}>Logout</Button>
+      </div>
+        </div>
+     
       <Drawer
         expanded={drawerExpanded}
         mode="push"
