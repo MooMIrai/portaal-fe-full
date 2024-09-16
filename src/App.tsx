@@ -7,8 +7,8 @@ import AuthRoutes from "auth/Routes";
 import AuthVisibleRoutes from "auth/VisibleRoutes";
 import LookupsRoutes from "lookups/Routes";
 import initLookupFn from "lookups/Index";
-import HRRoutes from "hr/Routes";
-import initHRFn from "hr/Index";
+import SalesRoutes from "sales/Routes";
+import initSalesFn from "sales/Index";
 import initProfileFn from "auth/Index";
 import "./index.scss";
 import { Routes, useNavigate } from "react-router-dom";
@@ -31,7 +31,7 @@ export const App = () => {
       if (lookupConfig && lookupConfig.menuItems) {
         r = [...r, ...lookupConfig.menuItems];
       }
-      const hrConfig = initHRFn();
+      const hrConfig = initSalesFn();
       if (hrConfig && hrConfig.menuItems) {
         r = [...r, ...hrConfig.menuItems];
       }
@@ -65,7 +65,7 @@ export const App = () => {
     <Theme>
       <Drawer items={routes}>
         <LookupsRoutes />
-        <HRRoutes />
+        <SalesRoutes />
         <AuthVisibleRoutes />
       </Drawer>
     </Theme>

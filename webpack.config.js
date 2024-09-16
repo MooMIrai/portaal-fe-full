@@ -11,14 +11,14 @@ const mfeConfig = (path, mode) => {
     common: "common@http://localhost:3003/remoteEntry.js",
     auth: "auth@http://localhost:3006/remoteEntry.js",
     lookups: "lookups@http://localhost:3005/remoteEntry.js",
-    hr: "hr@http://localhost:3008/remoteEntry.js",
+    sales: "sales@http://localhost:3008/remoteEntry.js",
   };
   if (mode === "production") {
     remotes = {
       common: "common@common/remoteEntry.js",
       auth: "auth@auth/remoteEntry.js",
       lookups: "lookups@lookups/remoteEntry.js",
-      hr: "hr@hr/remoteEntry.js",
+      sales: "sales@sales/remoteEntry.js",
     };
   }
   return {

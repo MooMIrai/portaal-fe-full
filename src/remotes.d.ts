@@ -9,6 +9,6 @@ declare module 'auth/Index';
 declare module 'lookups/Routes'
 declare module 'lookups/Index'
 
-declare module 'hr/Routes';
-declare module 'hr/Index';
+declare module 'sales/Routes';
+declare module 'sales/Index';
 
