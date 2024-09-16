@@ -13,13 +13,15 @@ export default abstract class BaseHTTPService{
       include?: boolean
     ) => {
       try {
-        const params = {
+        const params:any = {
           pageNum,
           pageSize,
-          term,
           include,
         };
-  
+        if (typeof term === "string" && term.trim() !== "") {
+          params.term = term;
+        }
+    
         const response = await client.post(
           `/api/v1/${this.getTableName()}`,
           (!filtering || filtering.length===0) && (!sorting ||sorting.length==0)?undefined:{ filtering, sorting }, 

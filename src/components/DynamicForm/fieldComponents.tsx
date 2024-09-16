@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { DropDownList } from "@progress/kendo-react-dropdowns";
 import { FieldRenderProps } from "@progress/kendo-react-form";
 import {
@@ -10,19 +10,21 @@ import {
 import { Calendar, CalendarProps, DatePicker } from "@progress/kendo-react-dateinputs";
 
 import withField from "../../hoc/Field";
+import UploadComponent from "../UpLoad/component";
+import { Button } from "@progress/kendo-react-buttons";
 
 const TextInputC = (
   fieldRenderProps: FieldRenderProps & { disabled?: boolean }
 ) => {
   const { validationMessage, visited, disabled, required, value, label, ...others } =
     fieldRenderProps;
- 
+
   return <Input
-  {...others}
-  value={value ?? ""}
-  required={required}
-  disabled={disabled}
-/>
+    {...others}
+    value={value ?? ""}
+    required={required}
+    disabled={disabled}
+  />
 }
 
 const DateInputC = (
@@ -38,11 +40,11 @@ const DateInputC = (
     ...others
   } = fieldRenderProps;
   return <DatePicker
-  {...others}
-  value={value ?? null}
-  required={required}
-  disabled={disabled}
-/>
+    {...others}
+    value={value ?? null}
+    required={required}
+    disabled={disabled}
+  />
 };
 
 const EmailInputC = (
@@ -51,15 +53,15 @@ const EmailInputC = (
   const { validationMessage, visited, disabled, required, value, ...others } =
     fieldRenderProps;
   return (
-    
-      <Input
-        type="email"
-        {...others}
-        value={value ?? ""}
-        required={required}
-        disabled={disabled}
-      />
-      
+
+    <Input
+      type="email"
+      {...others}
+      value={value ?? ""}
+      required={required}
+      disabled={disabled}
+    />
+
   );
 };
 
@@ -69,13 +71,13 @@ const PasswordInputC = (
   const { validationMessage, visited, disabled, required, value, ...others } =
     fieldRenderProps;
   return (
-      <Input
-        type="password"
-        {...others}
-        value={value ?? ""}
-        required={required}
-        disabled={disabled}
-      />
+    <Input
+      type="password"
+      {...others}
+      value={value ?? ""}
+      required={required}
+      disabled={disabled}
+    />
   );
 };
 
@@ -92,16 +94,100 @@ const TextAreaInputC = (
     ...others
   } = fieldRenderProps;
   return (
-    
-      <TextArea
-        {...others}
-        value={value ?? ""}
-        required={required}
-        disabled={disabled}
-      />
-      
+
+    <TextArea
+      {...others}
+      value={value ?? ""}
+      required={required}
+      disabled={disabled}
+    />
+
   );
 };
+
+
+const UploadInputC = (
+  fieldRenderProps: FieldRenderProps & { disabled?: boolean; label?: string, accept?: string, autoUpload?: boolean, onDownload?:()=>void, multiple?:boolean}
+) => {
+  const {
+    validationMessage,
+    visited,
+    disabled,
+    required,
+    value,
+    label,
+    files,
+    onDownload,
+    multiple,
+    ...others
+  } = fieldRenderProps;
+
+  const [attachments, setAttachments] = useState<any[]>(fieldRenderProps.value || []);
+
+
+  const upLoadData = (event: any) => {
+    if (Array.isArray(event.affectedFiles)) {
+      const file = event.affectedFiles[0].getRawFile();
+      const reader = new FileReader();
+  
+      reader.onload = function (evt) {
+        const result = evt?.target?.result;
+  
+        if (result instanceof ArrayBuffer) {
+          // Converti ArrayBuffer in Uint8Array
+          const byteArray = new Uint8Array(result);
+          const byteArrayAsArray = Array.from(byteArray);
+          const newAttachment = {
+            name: event.affectedFiles[0].name,
+            extension: event.affectedFiles[0].extension,
+            data: byteArrayAsArray, // Dati in Uint8Array
+            size: event.affectedFiles[0].size,
+            progress: 100,
+            status: 2,
+            uid: event.affectedFiles[0].uid,
+          };
+  
+          setAttachments((prevAttachments) => [...prevAttachments, newAttachment]);
+          fieldRenderProps.onChange({ value: [...attachments, newAttachment] });
+        }
+      };
+
+      reader.readAsArrayBuffer(file);
+    } else {
+      console.error("affectedFiles non è un array:", event.affectedFiles);
+    }
+  };
+
+  const onChangeHandler = (event: any) => {
+    fieldRenderProps.onChange({ value: event.newState });
+    upLoadData(event);
+  };
+
+  const onRemoveHandler = (event: any) => {
+
+    const updatedAttachments = attachments.filter(
+      (file) => file.uid !== event.affectedFiles[0].uid
+    );
+    setAttachments(updatedAttachments);
+
+
+    fieldRenderProps.onChange({ value: updatedAttachments });
+  };
+  return (
+    <div>
+      <UploadComponent
+        files={files}
+        onAdd={onChangeHandler}
+        onRemove={onRemoveHandler}
+        multiple={false}
+        disabled={disabled}
+        onDownload={onDownload}
+        {...others}
+      />
+    </div>
+  );
+};
+
 
 const SelectInputC = (
   fieldRenderProps: FieldRenderProps & { disabled?: boolean }
@@ -116,14 +202,14 @@ const SelectInputC = (
     ...others
   } = fieldRenderProps;
   return (
-   
-      <DropDownList
-        data={options}
-        {...others}
-        value={value ?? undefined}
-        required={required}
-        disabled={disabled}
-      />
+
+    <DropDownList
+      data={options}
+      {...others}
+      value={value ?? undefined}
+      required={required}
+      disabled={disabled}
+    />
 
   );
 };
@@ -141,13 +227,13 @@ const RadioGroupInputC = (
     ...others
   } = fieldRenderProps;
   return (
-   
-      <RadioGroup
-        data={options}
-        {...others}
-        value={value ?? undefined}
-        disabled={disabled}
-      />
+
+    <RadioGroup
+      data={options}
+      {...others}
+      value={value ?? undefined}
+      disabled={disabled}
+    />
 
   );
 };
@@ -160,19 +246,19 @@ const CheckboxInputC = (
   return (
 
 
-      <Checkbox
-        {...others}
-        value={value ?? false}
-        required={required}
-        disabled={disabled}
-      />
-      
+    <Checkbox
+      {...others}
+      value={value ?? false}
+      required={required}
+      disabled={disabled}
+    />
+
   );
 };
 
 
-const CalendarOnlyYear=(props:CalendarProps<any>)=>{
-  return <Calendar {...props} topView="decade" bottomView="decade"  />
+const CalendarOnlyYear = (props: CalendarProps<any>) => {
+  return <Calendar {...props} topView="decade" bottomView="decade" />
 }
 
 const YearInputC = (
@@ -188,16 +274,16 @@ const YearInputC = (
     ...others
   } = fieldRenderProps;
   return (
-    
-      <DatePicker
-        {...others}
-        format={'yyyy'}
-        calendar={CalendarOnlyYear}
-        value={value ?? null}
-        required={required}
-        disabled={disabled}
-      />
-      
+
+    <DatePicker
+      {...others}
+      format={'yyyy'}
+      calendar={CalendarOnlyYear}
+      value={value ?? null}
+      required={required}
+      disabled={disabled}
+    />
+
   );
 };
 
@@ -210,4 +296,5 @@ export const SelectInput = withField(SelectInputC);
 export const RadioGroupInput = withField(RadioGroupInputC);
 export const CheckboxInput = withField(CheckboxInputC);
 export const YearInput = withField(YearInputC);
+export const UploadInput = withField(UploadInputC)
 

@@ -16,7 +16,8 @@ import {
   RadioGroupInput,
   CheckboxInput,
   DateInput,
-  YearInput
+  YearInput,
+  UploadInput
 } from "./fieldComponents";
 import CountrySelector from "../CountrySelector/component";
 
@@ -44,6 +45,8 @@ const getFieldComponent = (type: FieldType) => {
       return YearInput;
     case 'country':
       return CountrySelector;
+      case 'upload':
+      return UploadInput;
     default:
       return TextInput;
   }
@@ -71,7 +74,8 @@ export type FieldType =
   | "radio"
   | "select"
   | "year"
-  | "country";
+  | "country"
+  | "upload";
 
 export interface FieldConfig {
   name: string;
@@ -85,6 +89,8 @@ export interface FieldConfig {
   conditions?:(values:any)=>boolean;
   showLabel?:boolean
   valueOnChange?: (name: string, value: any) => void; 
+  onDownload?:()=>void
+  multiple?:boolean
   //onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -111,18 +117,18 @@ const DynamicField = ({
   field: FieldConfig;
   formRenderProps: FormRenderProps;
   addedFields?:Record<string,React.JSX.Element>
-  valueOnChange?: (name: string, value: any) => void; 
+  valueOnChange?: (name: string, value: any) => void;
+
 }) => {
 
-  const { name, type, label, validator, options, disabled,required,showLabel = true } = field;
+  const { name, type, label, validator, options, disabled,required,showLabel = true ,onDownload,multiple} = field;
   let Component:any = getFieldComponent(type);
 
   if(addedFields && Object.keys(addedFields).some(s=>s===type)){
     Component = addedFields[type];
   }
+
  
-
-
   return (
     <Field
       name={name}
@@ -133,6 +139,9 @@ const DynamicField = ({
       options={options}
       type={type}
       disabled={disabled}
+      multiple={multiple}
+      onDownload={onDownload}
+      files={formRenderProps.valueGetter(name)}
       value={formRenderProps.valueGetter(name)}
       onChange={(event) => {
    
