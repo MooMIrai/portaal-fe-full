@@ -6,7 +6,7 @@ const { FederatedTypesPlugin } = require("@module-federation/typescript");
 const webpack = require("webpack");
 
 const mfeConfig = (path, mode) => ({
-  name: "hr",
+  name: "sales",
   filename: "remoteEntry.js",
   remotes: {
     common:
