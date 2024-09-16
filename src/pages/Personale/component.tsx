@@ -3,10 +3,6 @@ import GridTable from "common/Table";
 import PersonaleSection from "./../../component/TabPersonaleHR/component";
 import { CrudGenericService } from "../../services/personaleServices";
 import {
-  cityAdapter,
-  cityTypeOption,
-  countryAdapter,
-  countryOption,
   locationOption,
   sedeAdapter,
   transformUserData,
@@ -16,12 +12,12 @@ import NotificationProviderActions from "common/providers/NotificationProvider";
 import styles from "./styles.modules.scss";
 // Column field mapping
 const columnFieldMap: { [key: string]: string } = {
-  company: "Person.EmploymentContract.Company.name",
+  company: "Person.CurrentContract.Contract.Company.name",
   lastName: "Person.lastName",
   firstName: "Person.firstName",
-  ContractType: "Person.EmploymentContract.ContractType.description",
-  annualCost: "Person.EmploymentContract.annualCost",
-  dailyCost: "Person.EmploymentContract.dailyCost",
+  ContractType: "Person.CurrentContract.Contract.ContractType.description",
+  annualCost: "Person.CurrentContract.Contract.annualCost",
+  dailyCost: "Person.CurrentContract.Contract.dailyCost",
 };
 
 // Filter mapping function
@@ -89,7 +85,6 @@ const columns: any = [
 const PersonalPage = () => {
   const [data, setData] = useState<any>();
   const [sede, setSede] = useState<locationOption[]>([]);
-  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
   const [isLocationDataReady, setIsLocationDataReady] = useState(false); // Nuovo stato per i dati geografici
 
   useEffect(() => {
@@ -112,7 +107,6 @@ const PersonalPage = () => {
 
   const loadData = async (pagination: any, filter: any, sorting: any[]) => {
     if (!isLocationDataReady) {
-      // Se i dati geografici non sono ancora pronti, non eseguire il fetch
       return {
         data: [],
         meta: { total: 0 },
@@ -181,6 +175,7 @@ const PersonalPage = () => {
         sortable={true}
         getData={loadData}
         columns={columns}
+        resizable={true}
         stageWindow={"FULLSCREEN"}
         actions={() => ["show", "edit", "delete", "create"]}
         classNameWindow={styles.windowStyle}

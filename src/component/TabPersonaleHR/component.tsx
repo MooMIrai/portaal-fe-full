@@ -11,7 +11,7 @@ import {
   getFormPermessiFields,
 } from "./FormFields";
 import { AnagraficaData, TrattamentoEconomicoData, RuoliData, PermessiData } from "./modelForms";
-import { ActivityTypeOption, cityAdapter, cityTypeOption, companyAdapter, companyOption, countryAdapter, countryOption, dataAdapter, genderAdapter, genderOption, locationOption, permessiAdapter, reverseAdapter, roleAdapter, RoleOption, sedeAdapter } from "../../adapters/personaleAdapters";
+import { ActivityTypeOption, cityAdapter, cityTypeOption, companyAdapter, companyOption, countryAdapter, countryOption, dataAdapter, genderAdapter, genderOption, locationOption, permessiAdapter, reverseAdapter, reverseAdapterUpdate, roleAdapter, RoleOption, sedeAdapter } from "../../adapters/personaleAdapters";
 import { CrudGenericService } from "../../services/personaleServices";
 import Button from "common/Button";
 import { formFields } from "./customfields";
@@ -32,7 +32,6 @@ interface AutocompleteField {
   name: string | undefined;
 }
 
-
 // Funzioni di Utilità
 const isObjectEffectivelyEmpty = (obj: Record<string, any>): boolean => {
   return Object.entries(obj).every(([key, value]) => {
@@ -52,10 +51,12 @@ const isAutocompleteField = (value: any): value is AutocompleteField => {
   );
 };
 
+
+
 // migliorare l'aspetto dello storico e poi capire come rendere più fluido la transiciton quando clicco su si 
 const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeModalCallback, refreshTable, onSubmit }) => {
   const isCreate = type === "create";
-  const isUpdate= type === "edit"
+  const isUpdate = type === "edit"
 
   //state
   const [newForm, setNewForm] = useState<boolean>(false);
@@ -78,14 +79,17 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
   const [activity, setActivity] = useState<ActivityTypeOption[]>([]);
   const [city, setCity] = useState<cityTypeOption[]>([]);
   const [dataAssunzione, setDataAssunzione] = useState(formTrattamentoEconomicoData.dataAssunzione)
-  const [dataRecesso,setDataRecesso]=useState(formTrattamentoEconomicoData.dataRecesso)
+  const [dataRecesso, setDataRecesso] = useState(formTrattamentoEconomicoData.dataRecesso)
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showNewContractModal, setShowNewContractModal] = useState(false);
   const [confirmNewContractStep, setConfirmNewContractStep] = useState(false);
   const [today, setToday] = useState<Date>(new Date());
   const [alert, setAlert] = useState<boolean>(false)
   const [isScadenzaEffettivaDisabled, setIsScadenzaEffettivaDisabled] = useState<boolean>(false);
-
+  const[download,setDownload]=useState<boolean>(false)
+  const[modifiedFields,setModifiedFields]=useState<Record<string, any>>({})
+  const[newFormTrattamentoUpdate,setNewFormTrattamentoUpdate]=useState<boolean>(false)
+ 
   //Ref
   const formAnagrafica = useRef<HTMLFormElement>(null);
   const formTrattamentoEconomico = useRef<HTMLFormElement>(null);
@@ -94,13 +98,37 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
 
 
 
-  const isFirstTreatment = isCreate || (storicoTrattamentoData.length === 0 && isObjectEffectivelyEmpty(formTrattamentoEconomicoData) );
-  const isFirstTreatmentUpdate= (storicoTrattamentoData.length === 0 && isUpdate) 
+  const isFirstTreatment = isCreate || (storicoTrattamentoData.length === 0 && isObjectEffectivelyEmpty(formTrattamentoEconomicoData));
+  const isFirstTreatmentUpdate = (storicoTrattamentoData.length === 0 && isUpdate)
+ 
+  
+  const[attachmentNameState,setAttachmentNameState]=useState(null)
 
   const isViewOnly = !!dataRecesso;
   //UseEffect
 
+  const handleFieldChange = (name: string, value: any) => {
+    const currentValue = modifiedFields[name];
 
+    // Verifica se il nuovo valore è effettivamente diverso dal valore corrente
+    if (currentValue !== value) {
+      console.log(`Campo cambiato: ${name}, Nuovo valore: ${value}`);
+      setModifiedFields((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
+  };
+  useEffect(() => {
+    if (type === "edit" || type === "view") {
+      const attachmentName = row.anagrafica.attachment && row.anagrafica.attachment.length > 0
+        ? row.anagrafica.attachment[0].name
+        : null;
+  
+      setAttachmentNameState(attachmentName);
+      setDownload(!!attachmentName); 
+    }
+  }, [row.anagrafica, type]);
 
 
   useEffect(() => {
@@ -112,9 +140,9 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
         setFormTrattamentoEconomicoData(formTrattamentoEconomico.current.values);
         if (formTrattamentoEconomico?.current?.values.tipologiaContratto_autocomplete?.name === "Tempo Indeterminato") {
           setIsScadenzaEffettivaDisabled(true);
-      } else {
+        } else {
           setIsScadenzaEffettivaDisabled(false);
-      }
+        }
       } else {
         formTrattamentoEconomico.current.values = {}
         formTrattamentoEconomico.current.values.dataInizioTrattamento = today
@@ -128,7 +156,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
     if (formPermessi.current) {
       setFormPermessiData(formPermessi.current.values);
     }
-  }, [selected, newForm,formTrattamentoEconomico?.current?.onchange]);
+  }, [selected, newForm, formTrattamentoEconomico?.current?.onchange]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -146,7 +174,9 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
 
         const activityTypeResponse = await CrudGenericService.fetchResources("ActivityType");
         const adaptedActivities = permessiAdapter(activityTypeResponse);
-        setActivity(adaptedActivities);
+        setActivity(adaptedActivities)
+        
+        
 
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -164,15 +194,16 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
   const handleSelect = (e: TabStripSelectEventArguments) => {
     setSelected(e.selected);
   };
-
+  console.log("row,row", row)
   const handleSubmit = () => {
     let hasError = false;
-     
+
     if (type === "create" || type === "edit") {
       if (newForm) {
         setAlert(true);
         setNewForm(false)
-        return; 
+        setNewFormTrattamentoUpdate(true)
+        return;
       }
 
       if (formAnagrafica.current) {
@@ -212,14 +243,21 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
       }
     }
 
-    if(hasError){
+    if (hasError) {
       NotificationProviderActions.openModal(
         { icon: true, style: "warning" },
         "Alcuni campi non sono validi. Controlla i campi obbligatori e riprova."
       );
     }
     setNewForm(false);
+    const modifiedData = Object.keys(modifiedFields).reduce((result, key) => {
+      if (modifiedFields[key] !== undefined) {
+        result[key] = modifiedFields[key];
+      }
+      return result;
+    }, {});
 
+    console.log("modofiedData",modifiedData)
 
     const combinedData = {
       id: row.id,
@@ -231,21 +269,59 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
       trattamentoEconomico: formTrattamentoEconomicoData,
       ruoli: formRuoliData,
       permessi: formPermessiData,
+      modifiedData:modifiedData,
+      newFormTrattamentoEconomico: newFormTrattamentoUpdate
     };
 
-
+  
 
     if (!hasError) {
-      const formattedData = reverseAdapter(combinedData);
-      console.log("formattedData", formattedData);
-      const idrow = row.id;
-      onSubmit(type, formattedData, refreshTable, idrow);
-      refreshTable();
-      closeModalCallback();
+      console.log("row2",row)
+      if(isCreate){
+        const formattedData = reverseAdapter(combinedData);
+        console.log("formattedData", formattedData);
+        const idrow = row.id;
+        onSubmit(type, formattedData, refreshTable, idrow);
+        refreshTable();
+        closeModalCallback();
+        setNewFormTrattamentoUpdate(false)
+
+      } else {
+        const formattedData = reverseAdapterUpdate(combinedData);
+        console.log("formattedData", formattedData);
+        const idrow = row.id;
+        onSubmit(type, formattedData, refreshTable, idrow);
+        refreshTable();
+        closeModalCallback();
+        setNewFormTrattamentoUpdate(false)
+       
+      }
+     
+    
     }
+   
   };
 
+  const handleDownload = async () => {
+    try {
+      if( row.anagrafica.attachment_id){
+        const blob = await CrudGenericService.getCV(row.anagrafica.attachment_id);
+        const fileUrl = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = fileUrl;
+        link.download = row.anagrafica.attachment[0].name
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(fileUrl);
+      }
+    
+    } catch (error) {
+        console.error('Errore durante il download del file:', error);
+    }
+};
 
+  
 
   const handleNewContract = () => {
     setShowNewContractModal(true);
@@ -263,14 +339,14 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
     setConfirmNewContractStep(false);
   };
   const confirmProceed = () => {
-   
-    setAlert(false);   
-    handleSubmit(); 
+
+    setAlert(false);
+    handleSubmit();
   };
 
   const cancelProceed = () => {
     setAlert(false);
-    setNewForm(false); 
+    setNewForm(false);
   };
 
   //Gestione storico e display del componente storico trattamenti
@@ -337,12 +413,27 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
 
   const handleContractTypeChange = (name, value) => {
     if (value && value.name === "Tempo Indeterminato") {
-        setIsScadenzaEffettivaDisabled(true);
+      setIsScadenzaEffettivaDisabled(true);
     } else {
-        setIsScadenzaEffettivaDisabled(false);
+      setIsScadenzaEffettivaDisabled(false);
     }
-};
+  };
 
+  const handleDownloadChange = (name, files) => {
+    if (files === undefined || files.length === 0) {
+      setDownload(false);
+      if (formAnagrafica.current) {
+      console.log(formAnagrafica.current.values)
+      setAttachmentNameState(formAnagrafica.current.values.attachment.name)
+      }
+    } else  {
+      const attachmentName = files[0].name;
+      setAttachmentNameState(attachmentName);
+      setDownload(false)
+    } 
+  };
+
+  console.log("name",attachmentNameState)
 
   const isNewTreatmentButtonDisabled = () => {
     // Controlla se il formTrattamentoEconomicoData è vuoto o se contiene solo la data
@@ -372,16 +463,32 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
 
   // Definisce la classe CSS dinamica in base alla presenza di storici
   const trattamentoEconomicoClass = sortedStoricoTrattamentoData.length > 0 ? styles.trattamentoEconomicoConStorici : styles.trattamentoEconomicoSenzaStorici;
+  const combinedValueOnChange = (name: string, value: any) => {
+    // Chiama prima handleDownloadChange
+    handleDownloadChange(name, value);
+    
+    // Poi chiama handleFieldChange per tracciare il cambiamento
+    handleFieldChange(name, value);
+  };
 
+  const combinedValueOnChangeContractType = (name: string, value: any) => {
+    // Chiama prima handleDownloadChange
+    handleContractTypeChange(name, value);
+    
+    // Poi chiama handleFieldChange per tracciare il cambiamento
+    handleFieldChange(name, value);
+  };
+  
+  
 
   const tabs = [
     {
-      title:isViewOnly ? "Dati personali Archiviati" : "Anagrafica",
+      title: isViewOnly ? "Dati personali Archiviati" : "Anagrafica",
       children: (
         <div className={styles.parentForm}>
           <Form
             ref={formAnagrafica}
-            fields={Object.values(getFormAnagraficaFields(formAnagraficaData, gender, type, isViewOnly))}
+            fields={Object.values(getFormAnagraficaFields(formAnagraficaData, gender, type, isViewOnly,handleDownload,combinedValueOnChange,download,attachmentNameState,handleFieldChange))}
             formData={formAnagraficaData}
             onSubmit={(data: AnagraficaData) => setFormAnagraficaData(data)}
             description="Ana"
@@ -394,16 +501,16 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
       ),
     },
     {
-      title: isViewOnly ? "Trattamento economico Archiviato": "Trattamento Economico",
+      title: isViewOnly ? "Trattamento economico Archiviato" : "Trattamento Economico",
       children: (
         <>
           <div className={` ${trattamentoEconomicoClass}`}>
             <Form
               ref={formTrattamentoEconomico}
-              fields={Object.values(getFormTrattamentoEconomicoFields(formTrattamentoEconomicoData, company, type, isFirstTreatment,newForm, handleContractTypeChange,isScadenzaEffettivaDisabled,isFirstTreatmentUpdate,isViewOnly))}
+              fields={Object.values(getFormTrattamentoEconomicoFields(formTrattamentoEconomicoData, company, type, isFirstTreatment, newForm, combinedValueOnChangeContractType, isScadenzaEffettivaDisabled, isFirstTreatmentUpdate, isViewOnly,handleFieldChange))}
               formData={formTrattamentoEconomicoData}
               onSubmit={(data: TrattamentoEconomicoData) => setFormTrattamentoEconomicoData(data)}
-              description={isViewOnly ? "Trattamento dipendente" :"TE"}
+              description={isViewOnly ? "Trattamento dipendente" : "TE"}
               addedFields={formFields}
             />
           </div>
@@ -427,7 +534,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
         <div className={styles.checkboxContainer}>
           <Form
             ref={formRuoli}
-            fields={Object.values(getFormRuoliFields(formRuoliData, roles, type,isViewOnly))}
+            fields={Object.values(getFormRuoliFields(formRuoliData, roles, type, isViewOnly,handleFieldChange))}
             formData={formRuoliData}
             onSubmit={(data: RuoliData) => setFormRuoliData(data)}
             description="PR"
@@ -441,7 +548,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
         <div className={styles.checkboxContainer}>
           <Form
             ref={formPermessi}
-            fields={Object.values(getFormPermessiFields(formPermessiData, activity, type,isViewOnly))}
+            fields={Object.values(getFormPermessiFields(formPermessiData, activity, type, isViewOnly,handleFieldChange))}
             formData={formPermessiData}
             onSubmit={(data: PermessiData) => setFormPermessiData(data)}
             description="per"

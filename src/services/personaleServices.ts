@@ -90,7 +90,22 @@ class CrudGenericServiceC {
       throw error;
     }
   };
-
+  getCV = async (
+    id:number
+  ) => {
+    try {
+   
+      const response = await client.get(
+        `api/v1/files/stream/${id}`,{
+          responseType: 'blob', 
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching resources:", error);
+      throw error;
+    }
+  };
+  
   updateResource = async (
     id: number,
     resourceData: any
