@@ -4,7 +4,7 @@ import App from "./App";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Theme from "common/Theme";
 
-const root = createRoot(document.getElementById("hr-root")!);
+const root = createRoot(document.getElementById("sales-root")!);
 root.render(<BrowserRouter>
    <Theme><App /></Theme></BrowserRouter>);
 
