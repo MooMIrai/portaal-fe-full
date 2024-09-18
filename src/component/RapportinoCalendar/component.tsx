@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Calendar from "common/Calendar";
 import CalendarMobile from "common/CalendarMobile";
-import RapportinoCrud from "../RapportinoCrud/component";
+
 import { TimesheetsService } from "../../services/rapportinoService";
 import { useWindowSize } from "@uidotdev/usehooks";
+import RapportinoCrud from "../RapportinoCrud/component";
 
 export default function RapportinoCalendar() {
   const [date, setDate] = useState<Date>(new Date());
@@ -74,20 +75,29 @@ export default function RapportinoCalendar() {
     fetchTimesheet(new Date());
   }, []);
 
-  console.log(value);
+ 
 
   const renderContent = (slot, closeModalCallback) => {
     const activitiesHours = data.filter((el) => el.day === slot.day);
+    const dates:Date[] = [];
+    let currentDate = new Date(slot.start);
+
+    while (currentDate < slot.end) {
+        dates.push(new Date(currentDate));
+        currentDate.setDate(currentDate.getDate() + 1); // Incrementa di un giorno
+    }
+
     return {
       component: (
         <RapportinoCrud
-          activitiesHours={activitiesHours}
-          item={{ ...slot }}
-          onClose={closeModalCallback}
-          onActivitiesAdded={onActivitiesAdded}
+          dates={dates}
+          timesheetId={timeSheetsId||0}
+          
+          //onClose={closeModalCallback}
+          //onActivitiesAdded={onActivitiesAdded}
         />
       ),
-      title: slot.start?.toLocaleDateString("it-IT") || "",
+      title: dates[0]?.toLocaleDateString("it-IT") + ' - ' + dates[dates.length-1]?.toLocaleDateString("it-IT") || "",
     };
   };
 
@@ -102,11 +112,11 @@ export default function RapportinoCalendar() {
     return {
       component: (
         <RapportinoCrud
-          activitiesHours={activitiesHours}
+          //activitiesHours={activitiesHours}
           timesheetId={timesheetId}
           dates={dates}
-          onClose={closeModalCallback}
-          onActivitiesAdded={onActivitiesAdded}
+          //onClose={closeModalCallback}
+          //onActivitiesAdded={onActivitiesAdded}
         />
       ),
       title: title,
@@ -127,7 +137,7 @@ export default function RapportinoCalendar() {
           handleDataChange={() => { }}
           data={data}
           contentModal={renderContent}
-          multipleSelectionModal={renderMultipleSelectModal}
+          
         />
       ) : (
         <CalendarMobile
