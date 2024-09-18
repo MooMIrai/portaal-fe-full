@@ -17,51 +17,76 @@ const mapToAnagraficaData = (
   matricola: Person?.employee_id || "",
   sesso: Person?.Gender?.code,
 
-  residenza:{
-    city:{
-      id:Person.CityRes?.id,
-      name:Person.CityRes?.name,
-      code:Person.CityRes?.code
+  residenza: {
+    city: {
+      id: Person?.CityRes?.id,
+      name: Person?.CityRes?.name,
+      code: Person?.CityRes?.code,
     },
-    country:{
-      id:Person.CityRes?.Country?.id || Person.CityRes?.Province?.Country?.id,
-      name:Person.CityRes?.Country?.name || Person.CityRes?.Province.Country?.name,
-      code:Person.CityRes?.Country?.code || Person.CityRes?.Province.Country?.code
+    country: {
+      id: Person?.CityRes?.Country?.id || Person?.CityRes?.Province?.Country?.id,
+      name:
+        Person?.CityRes?.Country?.name || Person?.CityRes?.Province.Country?.name,
+      code:
+        Person?.CityRes?.Country?.code || Person?.CityRes?.Province.Country?.code,
     },
-    province:Person.CityRes && Person.CityRes.Province?
-    {
-      id:Person.CityRes?.Province.id,
-      name:Person.CityRes?.Province.name,
-      code:Person.CityRes?.Province.code
-    }
-    :undefined},
+    province:
+      Person?.CityRes && Person?.CityRes?.Province
+        ? {
+            id: Person?.CityRes?.Province.id,
+            name: Person?.CityRes?.Province.name,
+            code: Person?.CityRes?.Province.code,
+          }
+        : undefined,
+  },
+  attachment_id: Person?.attachment_id,
+  attachment:
+    Person?.Attachment?.file_name && Person?.Attachment?.id
+      ? [
+          {
+            name: Person?.Attachment?.file_name,
+            id: Person?.Attachment?.id,
+            status:2,
+            extension:"pdf",
+            size:20000
+            /*     progress: Person.Attachment?.file_name ?? 100, */
+          },
+        ]
+      : undefined,
+      existingFile: Person?.Attachment?.file_name && Person?.Attachment?.id
+      ? 
+          {
+            name: Person?.Attachment?.file_name,
+            /*     progress: Person.Attachment?.file_name ?? 100, */
+          }
+        
+      : undefined,
+  nascita: {
+    city: {
+      id: Person?.CityBirth?.id,
+      name: Person?.CityBirth?.name,
+      code: Person?.CityBirth?.code,
+    },
+    country: {
+      id:
+        Person?.CityBirth?.Country?.id || Person?.CityRes?.Province?.Country?.id,
+      name:
+        Person?.CityBirth?.Country?.name ||
+        Person?.CityRes?.Province.Country?.name,
+      code:
+        Person?.CityBirth?.Country?.code ||
+        Person?.CityRes?.Province.Country?.code,
+    },
+    province:
+      Person?.CityBirth && Person?.CityBirth?.Province
+        ? {
+            id: Person?.CityBirth.Province.id,
+            name: Person?.CityBirth.Province.name,
+            code: Person?.CityBirth.Province.code,
+          }
+        : undefined,
+  },
 
-    nascita:{
-      city:{
-        id:Person.CityBirth?.id,
-        name:Person.CityBirth?.name,
-        code:Person.CityBirth?.code
-      },
-      country:{
-        id:Person.CityBirth?.Country?.id || Person.CityRes?.Province?.Country?.id ,
-        name:Person.CityBirth?.Country?.name || Person.CityRes?.Province.Country?.name,
-        code:Person.CityBirth?.Country?.code ||  Person.CityRes?.Province.Country?.code
-      },
-      province:Person.CityBirth && Person.CityBirth.Province?
-      {
-        id:Person.CityBirth.Province.id,
-        name:Person.CityBirth.Province.name,
-        code:Person.CityBirth.Province.code
-      }
-      :undefined},
-
-  /* Provincianascita: Person?.provinceBirth || "",
-  comuneNascita: Person?.cityBirth || "",
-  città: cityResLabel,
-  cittaNascita: cityBirthLabel,
-  residenza: Person?.provinceRes || "",
-  comuneResidenza: Person?.cityRes || "", */
-  
   indirizzoResidenza: Person?.address || "",
   dataNascita: Person?.dateBirth ? new Date(Person.dateBirth) : null,
   cap: Person?.zipCode ? parseInt(Person.zipCode, 10) : 0,
@@ -69,10 +94,10 @@ const mapToAnagraficaData = (
   telefonoCasa: Person?.phoneNumber2 ? parseInt(Person.phoneNumber2, 10) : 0,
   emailPrivata: Person?.privateEmail || "",
   iban: Person?.bankAddress || "",
-  partitaIva: Person.vatNumber || 0,
+  partitaIva: Person?.vatNumber || 0,
   sede: sedeLabel,
-  sede_autocomplete_id: Person.location_id,
-  sede_autocomplete: { id: Person.location_id, name: sedeLabel },
+  sede_autocomplete_id: Person?.location_id,
+  sede_autocomplete: { id: Person?.location_id, name: sedeLabel },
   codiceFiscale: Person?.taxCode || "",
 });
 
@@ -149,24 +174,27 @@ const getPermessiIds = (permessi: any[]): number[] => {
   return permessi.map((permessi) => permessi.id);
 };
 
-const findMostRecentContract = (contracts: any[]): any => {
-  if (contracts.length === 0) return null;
-  const mostRecentDate = Math.max(
-    ...contracts.map((contract) => new Date(contract.startDate).getTime())
-  );
-  return contracts.find(
-    (contract) => new Date(contract.startDate).getTime() === mostRecentDate
+const findMostRecentContract = (
+  contracts: any[],
+  currentContract: any
+): any => {
+  if (!currentContract || contracts.length === 0) return null;
+
+  return (
+    contracts.find((contract) => contract.id === currentContract.id) ||
+    currentContract
   );
 };
 
 //per la tabella sia per le cllonne che per gestire tutto
-export const transformUserData = (
-  data: any[],
-  sede: locationOption[]
-) => {
+export const transformUserData = (data: any[], sede: locationOption[]) => {
   return data.map((user) => {
+    const currentContract = user?.Person?.CurrentContract?.Contract || null;
     const employmentContracts = user?.Person?.EmploymentContract || [];
-    const mostRecentContract = findMostRecentContract(employmentContracts);
+    const mostRecentContract = findMostRecentContract(
+      employmentContracts,
+      currentContract
+    );
 
     const otherContracts = employmentContracts.filter(
       (contract) => contract.id !== mostRecentContract?.id
@@ -179,19 +207,16 @@ export const transformUserData = (
     return {
       id: user.id,
       person_id: user.person_id,
-      company: mostRecentContract?.Company.name ?? "",
+      company: currentContract?.Company?.name ?? "",
       lastName: user?.Person?.lastName ?? "",
       firstName: user?.Person?.firstName ?? "",
       email: user?.email,
-      ContractType: mostRecentContract?.ContractType?.description ?? "",
-      annualCost: mostRecentContract?.annualCost ?? "",
-      dailyCost: mostRecentContract?.dailyCost ?? "",
-      anagrafica: mapToAnagraficaData(
-        user.Person,
-        sedeLabel,
-      ),
+      ContractType: currentContract?.ContractType?.description ?? "",
+      annualCost: currentContract?.annualCost ?? "",
+      dailyCost: currentContract?.dailyCost ?? "",
+      anagrafica: mapToAnagraficaData(user.Person, sedeLabel),
       trattamentoEconomico: mapToTrattamentoEconomicoData(
-        mostRecentContract || {}
+        currentContract || {}
       ),
       trattamentoEconomicoArray: otherContracts.map((contract) =>
         mapToTrattamentoEconomicoData(contract)
@@ -218,13 +243,12 @@ export const dataAdapter = (row: Record<string, any>) => {
     email: row.email || "",
     matricola: row.anagrafica.matricola || "",
     sesso: row.anagrafica.sesso,
-    città:row.anagrafica.città || "",
-
-    //cittaNascita:row.anagrafica.cittaNascita || "",
-    //Provincianascita: row.anagrafica.Provincianascita || "",
-    //comuneNascita: row.anagrafica.comuneNascita || "",
+    città: row.anagrafica.città || "",
+    attachment_id: row.anagrafica.attachment_id || null,
+    attachment: row.anagrafica.attachment || null,
     residenza: row.anagrafica.residenza || undefined,
     nascita: row.anagrafica.nascita || undefined,
+    existingFile:row.anagrafica.existingFile || undefined,
     //comuneResidenza: row.anagrafica.comuneResidenza || "",
     indirizzoResidenza: row.anagrafica.indirizzoResidenza || "",
     dataNascita: row.anagrafica.dataNascita
@@ -282,7 +306,8 @@ export const dataAdapter = (row: Record<string, any>) => {
     tipologiaContratto:
       row.trattamentoEconomico?.tipologiaContratto.toString() || "",
     societa: row.trattamentoEconomico.societa?.toString() || "",
-    tipologiaContratto_autocomplete: row.trattamentoEconomico?.tipologiaContratto_autocomplete,
+    tipologiaContratto_autocomplete:
+      row.trattamentoEconomico?.tipologiaContratto_autocomplete,
     tipoAmbitoLavorativo_autocomplete:
       row.trattamentoEconomico.tipoAmbitoLavorativo_autocomplete || {},
     tipoAmbitoLavorativo:
@@ -331,6 +356,7 @@ export const dataAdapter = (row: Record<string, any>) => {
     HPE: row.permessi.HPE || false,
     HFE: row.permessi.HFE || false,
     HPE_104: row.permessi.HPE_104 || false,
+    HCPT: row.permessi.HCPT || false,
     MAT: row.permessi.MAT || false,
     LUT: row.permessi.LUT || false,
     CMATR: row.permessi.CMATR || false,
@@ -366,8 +392,6 @@ type GenderApiResponse = {
   };
 };
 
-
-
 type CompanyApiResponse = {
   data: Array<{
     id: number;
@@ -385,6 +409,7 @@ type ActivityTypeApiResponse = {
     description: string;
     time_unit: string;
     productive: boolean;
+    isHoliday:boolean;
   }>;
   meta: {
     total: number;
@@ -434,6 +459,7 @@ export type ActivityTypeOption = {
   label: string;
   value: number;
   code?: string;
+  isHoliday?:boolean;
 };
 export type RoleOption = {
   label: string;
@@ -446,7 +472,6 @@ export type genderOption = {
   value: number;
   name?: string;
 };
-
 
 export type companyOption = {
   label: string;
@@ -472,7 +497,6 @@ export const roleAdapter = (apiResponse: RoleApiResponse): RoleOption[] => {
   }));
 };
 
-
 export const companyAdapter = (
   apiResponse: CompanyApiResponse
 ): companyOption[] => {
@@ -486,12 +510,16 @@ export const companyAdapter = (
 export const permessiAdapter = (
   apiResponse: ActivityTypeApiResponse
 ): ActivityTypeOption[] => {
-  return apiResponse.data.map((permesso) => ({
-    label: permesso.description,
-    value: permesso.id,
-    code: permesso.code,
-  }));
+  return apiResponse.data
+    .filter((permesso) => permesso.isHoliday)  
+    .map((permesso) => ({
+      label: permesso.description,
+      value: permesso.id,
+      code: permesso.code,
+      isHoliday: permesso.isHoliday
+    }));
 };
+
 export const genderAdapter = (
   apiResponse: GenderApiResponse
 ): genderOption[] => {
@@ -575,7 +603,6 @@ const mapGenderToID = (
   return scope ? scope.value : undefined;
 };
 
-
 //reverse adpter per mandare i dati al be
 export const reverseAdapter = (combinedData: {
   id: any;
@@ -587,9 +614,25 @@ export const reverseAdapter = (combinedData: {
   trattamentoEconomico: TrattamentoEconomicoData;
   ruoli: RuoliData;
   permessi: PermessiData;
+  modifiedData: Record<string, any>;
+  newFormTrattamentoEconomico: boolean;
 }) => {
-
   console.log("Combined Data before transformation:", combinedData);
+  const firstAttachment = combinedData.anagrafica.attachment?.length
+    ? combinedData.anagrafica.attachment[0]
+    : null;
+
+  const attachment =
+    firstAttachment && firstAttachment.data
+      ? {
+          file_name: firstAttachment.name,
+          content_type:
+            firstAttachment.extension === ".pdf"
+              ? "application/pdf"
+              : "application/octet-stream",
+          data: firstAttachment.data || [],
+        }
+      : null;
   const permessiIDs =
     mapPermessiNamesToIDs(combinedData.permessi, combinedData.idPermessi) || [];
   return {
@@ -603,16 +646,16 @@ export const reverseAdapter = (combinedData: {
       phoneNumber: combinedData.anagrafica.cellulare?.toString(),
       phoneNumber2: combinedData.anagrafica.telefonoCasa?.toString(),
       address: combinedData.anagrafica.indirizzoResidenza,
-      privateEmail: (!combinedData.anagrafica.emailPrivata || combinedData.anagrafica.emailPrivata === "") ? null :combinedData.anagrafica.emailPrivata,
-      //city: combinedData.anagrafica.comuneResidenza,
-      cityRes_id: combinedData.anagrafica.residenza?.city.id/* mapCityToID(combinedData.anagrafica.città,combinedData.city) ||  */,
-      cityBirth_id:combinedData.anagrafica.nascita?.city.id/* mapCityToID(combinedData.anagrafica.cittaNascita, combinedData.city) || */ ,
-
+      privateEmail:
+        !combinedData.anagrafica.emailPrivata ||
+        combinedData.anagrafica.emailPrivata === ""
+          ? null
+          : combinedData.anagrafica.emailPrivata,
+      cityRes_id: combinedData.anagrafica.residenza?.city.id,
+      Attachment: attachment,
       location_id: combinedData.anagrafica.sede_autocomplete?.id || 1,
       provinceRes: combinedData.anagrafica.residenza,
-      //provinceBirth: combinedData.anagrafica.Provincianascita,
-      //cityRes: combinedData.anagrafica.comuneResidenza,
-      //cityBirth: combinedData.anagrafica.comuneNascita,
+
       dateBirth: combinedData.anagrafica.dataNascita,
       bankAddress:
         !combinedData.anagrafica.iban || combinedData.anagrafica.iban === ""
@@ -627,11 +670,9 @@ export const reverseAdapter = (combinedData: {
       vatNumber: combinedData.anagrafica.partitaIva || null,
       employee_id: combinedData.anagrafica.matricola || " ",
       note: combinedData.anagrafica.note ?? " ",
-      data: JSON.stringify(combinedData.anagrafica),
-      gender_id: mapGenderToID(
-        combinedData.anagrafica.sesso,
-        combinedData.gender
-      ) || 1,
+      data: "{}",
+      gender_id:
+        mapGenderToID(combinedData.anagrafica.sesso, combinedData.gender) || 1,
       activityType_ids: permessiIDs.length > 0 ? permessiIDs : [2, 3],
       EmploymentContract: [
         {
@@ -640,24 +681,24 @@ export const reverseAdapter = (combinedData: {
             combinedData.trattamentoEconomico.tipoAmbitoLavorativo_autocomplete
               ?.id || 1,
           contractType_id:
-            combinedData.trattamentoEconomico.tipologiaContratto_autocomplete?.id || 1,
+            combinedData.trattamentoEconomico.tipologiaContratto_autocomplete
+              ?.id || 1,
           company_id:
             mapCompanyToID(
               combinedData.trattamentoEconomico.societa,
               combinedData.company
             ) || 1,
           startDate: combinedData.trattamentoEconomico.dataInizioTrattamento,
-          endDate:
-            combinedData.trattamentoEconomico.dataRecesso 
-          ? combinedData.trattamentoEconomico.dataRecesso
+          endDate: combinedData.trattamentoEconomico.dataRecesso
+            ? combinedData.trattamentoEconomico.dataRecesso
             : null,
-          effectiveEndDate:
-          combinedData.trattamentoEconomico.scadenzaEffettiva 
-          ? combinedData.trattamentoEconomico.scadenzaEffettiva 
-          : null,
-      
+          effectiveEndDate: combinedData.trattamentoEconomico.scadenzaEffettiva
+            ? combinedData.trattamentoEconomico.scadenzaEffettiva
+            : null,
+
           hireDate:
-          combinedData.trattamentoEconomico.dataAssunzione ||combinedData.trattamentoEconomico.dataInizioTrattamento,
+            combinedData.trattamentoEconomico.dataAssunzione ||
+            combinedData.trattamentoEconomico.dataInizioTrattamento,
           cessationMotivation:
             combinedData.trattamentoEconomico.motivazioneCessazione || " ",
           transformations:
@@ -679,4 +720,226 @@ export const reverseAdapter = (combinedData: {
       ],
     },
   };
+};
+
+export const reverseAdapterUpdate = (combinedData: {
+  id: any;
+  idRuoli: any[];
+  idPermessi: any[];
+  company: companyOption[];
+  gender: genderOption[];
+  anagrafica: AnagraficaData;
+  trattamentoEconomico: TrattamentoEconomicoData;
+  ruoli: RuoliData;
+  permessi: PermessiData;
+  modifiedData: Record<string, any>;
+  newFormTrattamentoEconomico: boolean;
+}) => {
+  const permessiIDs =
+    mapPermessiNamesToIDs(combinedData.permessi, combinedData.idPermessi) || [];
+
+  const result: any = {};
+
+  if (combinedData.anagrafica.accountStatus_id) {
+    result.accountStatus_id = combinedData.anagrafica.accountStatus_id;
+  }
+
+  if ('email' in combinedData.modifiedData) {
+    result.email = combinedData.modifiedData.email || null;
+  }
+
+  // Anagrafica modificata
+  result.Person = {};
+  result.Person.id= combinedData.anagrafica.person_id
+  if ('nome' in combinedData.modifiedData) {
+    result.Person.firstName = combinedData.modifiedData.nome;
+  }
+  
+  if ('cognome' in combinedData.modifiedData) {
+    result.Person.lastName = combinedData.modifiedData.cognome;
+  }
+  
+  if ('cellulare' in combinedData.modifiedData) {
+    result.Person.phoneNumber = combinedData.modifiedData.cellulare?.toString();
+  }
+  
+  if ('telefonoCasa' in combinedData.modifiedData) {
+    result.Person.phoneNumber2 = combinedData.modifiedData.telefonoCasa?.toString();
+  }
+  
+  if ('indirizzoResidenza' in combinedData.modifiedData) {
+    result.Person.address = combinedData.modifiedData.indirizzoResidenza;
+  }
+  
+  if ('emailPrivata' in combinedData.modifiedData) {
+    result.Person.privateEmail = combinedData.modifiedData.emailPrivata || null;
+  }
+  
+  if ('residenza' in combinedData.modifiedData) {
+    result.Person.cityRes_id = combinedData.modifiedData.residenza.city.id;
+  }
+  
+  if ('attachment' in combinedData.modifiedData) {
+    result.Person.Attachment = combinedData.modifiedData.attachment ? {
+      file_name: combinedData.modifiedData.attachment[0].name,
+      content_type:
+        combinedData.modifiedData.attachment[0].extension === '.pdf'
+          ? 'application/pdf'
+          : 'application/octet-stream',
+      data: combinedData.modifiedData.attachment[0].data || [],
+    } : null; // Se l'allegato è stato rimosso, impostalo su null
+  }
+  
+  if ('sede_autocomplete' in combinedData.modifiedData) {
+    result.Person.location_id = combinedData.modifiedData.sede_autocomplete?.id || 1;
+  }
+  
+  if ('dataNascita' in combinedData.modifiedData) {
+    result.Person.dateBirth = combinedData.modifiedData.dataNascita;
+  }
+  
+  if ('iban' in combinedData.modifiedData) {
+    result.Person.bankAddress = combinedData.modifiedData.iban;
+  }
+  
+  if ('cap' in combinedData.modifiedData) {
+    result.Person.zipCode = combinedData.modifiedData.cap?.toString();
+  }
+  
+  if ('codiceFiscale' in combinedData.modifiedData) {
+    result.Person.taxCode = combinedData.modifiedData.codiceFiscale;
+  }
+  
+  if ('partitaIva' in combinedData.modifiedData) {
+    result.Person.vatNumber = combinedData.modifiedData.partitaIva;
+  }
+  
+  if ('matricola' in combinedData.modifiedData) {
+    result.Person.employee_id = combinedData.modifiedData.matricola;
+  }
+  
+  if ('note' in combinedData.modifiedData) {
+    result.Person.note = combinedData.modifiedData.note;
+  }
+  
+  if ('sesso' in combinedData.modifiedData) {
+    result.Person.gender_id =
+      mapGenderToID(combinedData.modifiedData.sesso, combinedData.gender) || 1;
+  }
+  
+  // Trattamento Economico - solo i campi modificati
+  if (combinedData.newFormTrattamentoEconomico) {
+    // Se è un nuovo trattamento, usa tutti i campi
+    result.Person.EmploymentContract = [
+      {
+        workScope_id: combinedData.trattamentoEconomico.tipoAmbitoLavorativo_autocomplete?.id || 1,
+        contractType_id: combinedData.trattamentoEconomico.tipologiaContratto_autocomplete?.id || 1,
+        company_id: mapCompanyToID(combinedData.trattamentoEconomico.societa, combinedData.company) || 1,
+        startDate: combinedData.trattamentoEconomico.dataInizioTrattamento,
+        endDate: combinedData.trattamentoEconomico.dataRecesso || null,
+        effectiveEndDate: combinedData.trattamentoEconomico.scadenzaEffettiva || null,
+        hireDate: combinedData.trattamentoEconomico.dataAssunzione || combinedData.trattamentoEconomico.dataInizioTrattamento,
+        cessationMotivation: combinedData.trattamentoEconomico.motivazioneCessazione || ' ',
+        transformations: combinedData.trattamentoEconomico.trasformazioni || ' ',
+        collectiveAgreement: combinedData.trattamentoEconomico.ccnl || ' ',
+        mealVouchers: combinedData.trattamentoEconomico.buoniPasto || 'NO',
+        salesRate: Number(combinedData.trattamentoEconomico.tariffaVendita) || 0,
+        dailyCost: Number(combinedData.trattamentoEconomico.costoGiornaliero) || 0,
+        annualGrossSalary: Number(combinedData.trattamentoEconomico.ral) || 0,
+        travelAllowance: Number(combinedData.trattamentoEconomico.trasferta) || 0,
+        netMonthly: Number(combinedData.trattamentoEconomico.nettoMese) || 0,
+        annualCost: Number(combinedData.trattamentoEconomico.costoAnnuale) || 0,
+        notes: combinedData.trattamentoEconomico.note || '',
+      },
+    ];
+  } else {
+    // Se non è un nuovo trattamento, usa solo i campi modificati
+    const employmentContract: any = { id: combinedData.trattamentoEconomico.id };
+
+    if ('tipoAmbitoLavorativo_autocomplete' in combinedData.modifiedData) {
+      employmentContract.workScope_id = combinedData.modifiedData.tipoAmbitoLavorativo_autocomplete?.id || 1;
+    }
+
+    if ('tipologiaContratto_autocomplete' in combinedData.modifiedData) {
+      employmentContract.contractType_id = combinedData.modifiedData.tipologiaContratto_autocomplete?.id || 1;
+    }
+
+    if ('societa' in combinedData.modifiedData) {
+      employmentContract.company_id = mapCompanyToID(combinedData.modifiedData.societa, combinedData.company) || 1;
+    }
+
+    if ('dataInizioTrattamento' in combinedData.modifiedData) {
+      employmentContract.startDate = combinedData.modifiedData.dataInizioTrattamento;
+    }
+
+    if ('dataRecesso' in combinedData.modifiedData) {
+      employmentContract.endDate = combinedData.modifiedData.dataRecesso || null;
+    }
+
+    if ('scadenzaEffettiva' in combinedData.modifiedData) {
+      employmentContract.effectiveEndDate = combinedData.modifiedData.scadenzaEffettiva || null;
+    }
+
+    if ('dataAssunzione' in combinedData.modifiedData) {
+      employmentContract.hireDate = combinedData.modifiedData.dataAssunzione || combinedData.trattamentoEconomico.dataAssunzione;
+    }
+
+    if ('motivazioneCessazione' in combinedData.modifiedData) {
+      employmentContract.cessationMotivation = combinedData.modifiedData.motivazioneCessazione || ' ';
+    }
+
+    if ('trasformazioni' in combinedData.modifiedData) {
+      employmentContract.transformations = combinedData.modifiedData.trasformazioni || ' ';
+    }
+
+    if ('ccnl' in combinedData.modifiedData) {
+      employmentContract.collectiveAgreement = combinedData.modifiedData.ccnl || ' ';
+    }
+
+    if ('buoniPasto' in combinedData.modifiedData) {
+      employmentContract.mealVouchers = combinedData.modifiedData.buoniPasto || 'NO';
+    }
+
+    if ('tariffaVendita' in combinedData.modifiedData) {
+      employmentContract.salesRate = Number(combinedData.modifiedData.tariffaVendita) || 0;
+    }
+
+    if ('costoGiornaliero' in combinedData.modifiedData) {
+      employmentContract.dailyCost = Number(combinedData.modifiedData.costoGiornaliero) || 0;
+    }
+
+    if ('ral' in combinedData.modifiedData) {
+      employmentContract.annualGrossSalary = Number(combinedData.modifiedData.ral) || 0;
+    }
+
+    if ('trasferta' in combinedData.modifiedData) {
+      employmentContract.travelAllowance = Number(combinedData.modifiedData.trasferta) || 0;
+    }
+
+    if ('nettoMese' in combinedData.modifiedData) {
+      employmentContract.netMonthly = Number(combinedData.modifiedData.nettoMese) || 0;
+    }
+
+    if ('costoAnnuale' in combinedData.modifiedData) {
+      employmentContract.annualCost = Number(combinedData.modifiedData.costoAnnuale) || 0;
+    }
+
+    if ('note' in combinedData.modifiedData) {
+      employmentContract.notes = combinedData.modifiedData.note || '';
+    }
+
+    // Aggiungi l'oggetto `employmentContract` solo se ci sono campi modificati
+    if (Object.keys(employmentContract).length > 1) {
+      result.Person.EmploymentContract = [employmentContract];
+    }
+  }
+
+  result.Person.activityType_ids =
+    permessiIDs.length > 0 ? permessiIDs : [2, 3];
+
+  result.role_ids =
+    mapRoleNamesToIDs(combinedData.ruoli, combinedData.idRuoli) || [];
+
+
+  return result;
 };

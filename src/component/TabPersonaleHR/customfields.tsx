@@ -1,6 +1,6 @@
 import withField from "common/hoc/Field";
 import withAutoComplete from "common/hoc/AutoComplete";
-import { CrudGenericService } from "../../services/personaleServices";
+import {CrudGenericService } from "../../services/personaleServices";
 
 const getData = () => {
     return CrudGenericService.fetchResources("location").then((res) => {
