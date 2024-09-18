@@ -32,6 +32,8 @@ const mfeConfig = {
     "./AvatarIcon": "./src/components/AvatarIcon/component",
     "./CustomCard": "./src/components/CustomCard/component",
 
+    "./Accordion":"./src/components/Accordion/component",
+
     "./services/AuthService": "./src/services/AuthService",
     "./services/BEService": "./src/services/BEService",
     "./services/BaseHTTPService": "./src/services/BaseHTTPService",
@@ -116,8 +118,6 @@ module.exports = (_, argv) => {
       //new FederatedTypesPlugin({ federationConfig: mfeConfig }),
       new HtmlWebPackPlugin({
         template: "./src/index.html",
-        filename: "index.html",
-        chunks: ["bundle"],
       }),
       new Dotenv({ path: "./.env." + argv.mode }),
       ...(argv.mode === "production"

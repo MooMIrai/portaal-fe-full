@@ -29,6 +29,7 @@ load(
 
 import esMessages from "./it-language.json";
 import { NotificationProvider } from "../Notification/provider";
+import { CalendarProvider } from "../Calendar/provider";
 
 loadMessages(esMessages, "it-IT");
 
@@ -37,7 +38,9 @@ export default function Theme(props: PropsWithChildren<any>) {
     <LocalizationProvider language="it-IT">
       <IntlProvider locale="it">
         <NotificationProvider>
+          <CalendarProvider>
           {props.children}
+          </CalendarProvider>
         </NotificationProvider>
         </IntlProvider>
     </LocalizationProvider>
