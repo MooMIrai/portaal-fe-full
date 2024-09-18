@@ -91,6 +91,7 @@ export interface FieldConfig {
   valueOnChange?: (name: string, value: any) => void; 
   onDownload?:()=>void
   multiple?:boolean
+  existingFile?: { name: string };
   //onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -106,6 +107,7 @@ export interface DynamicFormProps {
   customDisabled?: boolean;
   submitText: string;
   addedFields?: Record<string, React.JSX.Element>
+  
 }
 
 const DynamicField = ({
@@ -121,7 +123,7 @@ const DynamicField = ({
 
 }) => {
 
-  const { name, type, label, validator, options, disabled,required,showLabel = true ,onDownload,multiple} = field;
+  const { name, type, label, validator, options, disabled,required,showLabel = true ,onDownload,multiple,existingFile} = field;
   let Component:any = getFieldComponent(type);
 
   if(addedFields && Object.keys(addedFields).some(s=>s===type)){
@@ -141,7 +143,7 @@ const DynamicField = ({
       disabled={disabled}
       multiple={multiple}
       onDownload={onDownload}
-      files={formRenderProps.valueGetter(name)}
+      existingFile={existingFile}
       value={formRenderProps.valueGetter(name)}
       onChange={(event) => {
    
@@ -202,8 +204,7 @@ const DynamicForm = React.forwardRef<any,DynamicFormProps>((props,ref)=>{
             return !field.conditions || (formRef && formRef.current && field.conditions(formRef.current.values))
           }).map((field, index) => {
             return (
-            <FieldWrapper key={index} style={field.type==='country'?{gridColumn:'span 3'}:undefined}>
-              
+            <FieldWrapper key={index} style={field.type==='country' ?{gridColumn:'span 3'}:undefined /* || field.type === 'upload' ?{gridColumn:'span 2'}:undefined */}>
                 <DynamicField
                   addedFields={addedFields}
                   field={field}
