@@ -17,7 +17,7 @@ interface CustomWindowProps extends WindowProps {
   resizable?: boolean;
   showModalFooter: boolean;
   top?:number;
-  left?:number
+  left?:number,
 }
 
 const CustomWindow = ({
@@ -39,7 +39,8 @@ const CustomWindow = ({
   top,
   left,
   stage,
-  className
+  className,
+  style
 }: CustomWindowProps) => {
   return show ? (
     <Window
@@ -48,6 +49,7 @@ const CustomWindow = ({
       doubleClickStageChange={false}
       modal={true}
       style={{
+        ...style,
         height:'fit-content',
       }}
       minHeight={minHeight}
