@@ -3,6 +3,17 @@ import {
   SortDescriptor,
 } from "@progress/kendo-data-query";
 import client from "common/services/BEService";
+import BaseHttpService from "common/services/BaseHTTPService";
+
+
+class PS extends BaseHttpService{
+  getTableName () {
+    return 'accounts';
+  }
+}
+
+  
+export const PersonaleService = new PS();
 
 class CrudGenericServiceC {
   getAccounts = async (
@@ -80,6 +91,24 @@ class CrudGenericServiceC {
       throw error;
     }
   };
+
+
+  getCV = async (
+    id:number
+  ) => {
+    try {
+   
+      const response = await client.get(
+        `api/v1/files/stream/${id}`,{
+          responseType: 'blob', 
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching resources:", error);
+      throw error;
+    }
+  };
+  
 
   fetchResource = async (resourceType: string, id: number) => {
     try {

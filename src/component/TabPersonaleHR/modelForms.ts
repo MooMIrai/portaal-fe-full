@@ -17,7 +17,16 @@ export interface AnagraficaData {
     
     residenza?:{country:{id:number,name:string,code:string},province?:{id:number,name:string,code:string},city:{id:number,name:string,code:string}},
     nascita?:{country:{id:number,name:string,code:string},province?:{id:number,name:string,code:string},city:{id:number,name:string,code:string}},
-
+    attachment?: [{
+        extension?: string;       
+        name: string;                  
+        size?: number;             
+        status?: number;          
+        id: string;
+        data?:string;  
+      }];
+      attachment_id?:number;
+      existingFile?: { name: string };
     cap?: number;
     cellulare?: number;
     telefonoCasa?: number;
