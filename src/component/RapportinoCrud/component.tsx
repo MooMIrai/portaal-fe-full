@@ -130,7 +130,7 @@ export default function RapportinoCrud(props:RapportinoCrudProps){
             </Accordion>
             <Accordion title="Richiedi P-F-M" defaultOpened={true}>
                 {
-                    !data.holidays || !data.holidays.length ?<p>Nessun attività non produttiva assegnata per il range di date selezionate</p>
+                    !data.holidays || !data.holidays.length ?<p>Non puoi richiedere ferie o permessi nel range date selezionato</p>
                     :data.holidays.map((res)=>{
                         return <RapportinoInput 
                                     value={values?values[res.Activity.id]:0} 
