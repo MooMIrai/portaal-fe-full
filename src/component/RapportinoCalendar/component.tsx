@@ -11,14 +11,18 @@ const RapportinoItem = (props: any) => {
   
   let bg:string|undefined = undefined;
   let color:string|undefined = undefined;
+  let status='';
   if(props.request){
     if(props.request.approved===null){
       bg = 'rgb(255, 192, 0)';
       color='black';
+      status='(Da approvare)'
     }else if(props.request.approved){
       bg='green';
+      status='(Approvata)'
     }else{
       bg='red'
+      status='(Rifiutata)'
     }
   }
 
@@ -33,7 +37,7 @@ const RapportinoItem = (props: any) => {
     top: 0,
     bottom: 0,
     textAlign: "center",
-  }}>{props.title}</div>
+  }}>{props.title} {status}</div>
 }
 
 export default function RapportinoCalendar() {
@@ -48,6 +52,53 @@ export default function RapportinoCalendar() {
 
     return date.toISOString();
   };
+
+
+  function mergeRequests(data) {
+    const mergedRequests:any[] = [];
+    const requestMap = {};
+  
+    data.forEach(item => {
+      // Verifica se l'elemento ha la proprietà request
+      if (item.request) {
+        const reqId = item.request.id;
+  
+        // Se non esiste ancora nel map, lo aggiungiamo
+        if (!requestMap[reqId]) {
+          requestMap[reqId] = { 
+            ...item,
+            request: { ...item.request },
+            start: new Date(item.start),
+            end: new Date(item.end)
+          };
+        } else {
+          // Aggiorniamo le date minime e massime
+          const currentStart = new Date(item.start);
+          const currentEnd = new Date(item.end);
+  
+          if (currentStart < requestMap[reqId].start) {
+            requestMap[reqId].start = currentStart;
+          }
+          if (currentEnd > requestMap[reqId].end) {
+            requestMap[reqId].end = currentEnd;
+          }
+        }
+      } else {
+        // Se l'elemento non ha request, lo aggiungiamo direttamente
+        mergedRequests.push(item);
+      }
+    });
+  
+    // Convertiamo il map in un array e formatta le date come ISO string
+    for (const reqId in requestMap) {
+      const mergedItem = requestMap[reqId];
+      mergedItem.start = mergedItem.start;
+      mergedItem.end = mergedItem.end;
+      mergedRequests.push(mergedItem);
+    }
+  
+    return mergedRequests;
+  }
 
   const fetchTimesheet = (date: Date) => {
     const year = date.getFullYear();
@@ -78,8 +129,8 @@ export default function RapportinoCalendar() {
               });
             }
           });
-
-          setData(activities);
+          console.log(mergeRequests(activities))
+          setData(mergeRequests(activities));
         });
       })
       .catch((error) => {
