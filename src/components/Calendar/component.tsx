@@ -1,22 +1,17 @@
-import React, { Component, useContext, useEffect, useState } from "react";
+import React, { ReactNode, useContext } from "react";
 import {
   Scheduler,
-  WeekView,
   MonthView,
   SchedulerDataChangeEvent,
   SchedulerDateChangeEvent,
-  SchedulerSlot,
-  SchedulerSlotProps,
+  SchedulerItemProps,
+  SchedulerItem,
 } from "@progress/kendo-react-scheduler";
-import EditItem from "./EditItem/component";
 import CustomViewSlot from "./SlotViewItem/component";
-import EditSlot from "./SlotEditItem/component";
-import CustomHeader from "./CustomHeader/component";
 import "@progress/kendo-date-math/tz/Europe/Rome";
-import CustomContent from "./CustomContent/CustomContent";
 import CustomWindow from "../Window/component";
-import { CalendarProvider,CalendarContext } from "./provider";
-import { end } from "@progress/kendo-react-dateinputs";
+import { CalendarContext } from "./provider";
+
 interface CustomCalendarProps {
   defaultModalTitle: string;
   model:
@@ -40,16 +35,30 @@ interface CustomCalendarProps {
   handleDataChange: ({ deleted }: SchedulerDataChangeEvent) => void;
   handleDateChange: (args: SchedulerDateChangeEvent) => void;
   date?: Date;
+  item:(item:any)=>ReactNode
 }
+
+
+
 
 
 export default function CustomCalendar(props: Readonly<CustomCalendarProps>) {
 
 
 
-  const {selectedEnd,selectedStart,setEnd,setStart,drag,setDrag} = useContext(CalendarContext);
+  const {selectedEnd,selectedStart,setEnd,setStart,drag} = useContext(CalendarContext);
 
 
+  const CustomItem = (propsi: SchedulerItemProps) => (
+    <SchedulerItem
+      {...propsi}
+      style={{
+        ...propsi.style,
+        marginTop:5
+        //backgroundColor: propsi.isAllDay ? "pink" : "blue",
+      }}
+    >{props.item?props.item(propsi.dataItem):undefined}</SchedulerItem>
+  );
   
   const closeModal = ()=>{
     setEnd(undefined),
@@ -92,6 +101,7 @@ export default function CustomCalendar(props: Readonly<CustomCalendarProps>) {
       onDataChange={props.handleDataChange}
       onDateChange={props.handleDateChange}
       viewSlot={CustomViewSlot}
+      item={CustomItem}
       editable={{
         add: true,
         remove: false,
