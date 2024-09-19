@@ -14,6 +14,7 @@ declare module "common/ListBox"
 declare module "common/AutoComplete"
 declare module "common/CountrySelector"
 declare module "common/Accordion"
+declare module "common/InputText"
 
 declare module "common/providers/NotificationProvider";
 

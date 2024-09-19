@@ -30,10 +30,12 @@ export default function RapportinoCalendar() {
           let activities: any = [];
 
           res?.TimesheetDetail.forEach((el) => {
+
             if (el) {
               activities.push({
+                activity:el.PersonActivity.Activity,
                 id: el.id,
-                title: el.Activity?.code,
+                title: el.PersonActivity.Activity.description,
                 day: el.day,
                 hours: el.hours,
                 start: new Date(
@@ -78,13 +80,21 @@ export default function RapportinoCalendar() {
  
 
   const renderContent = (slot, closeModalCallback) => {
-    const activitiesHours = data.filter((el) => el.day === slot.day);
+   
     const dates:Date[] = [];
     let currentDate = new Date(slot.start);
-
+    const values={};
     while (currentDate < slot.end) {
         dates.push(new Date(currentDate));
+        const valuesByDate = data.filter((el) => el.day === currentDate.getDate());
+        if(valuesByDate){
+          values[currentDate.getDate()]={};
+          valuesByDate.forEach((el)=>{
+            values[currentDate.getDate()][el.activity.id]=el.hours;
+          });
+        }
         currentDate.setDate(currentDate.getDate() + 1); // Incrementa di un giorno
+        
     }
 
     return {
@@ -92,7 +102,7 @@ export default function RapportinoCalendar() {
         <RapportinoCrud
           dates={dates}
           timesheetId={timeSheetsId||0}
-          
+          values={values}
           //onClose={closeModalCallback}
           //onActivitiesAdded={onActivitiesAdded}
         />
@@ -101,27 +111,7 @@ export default function RapportinoCalendar() {
     };
   };
 
-  const renderMultipleSelectModal = (timesheetId: number, dates: Date[], closeModalCallback) => {
-    const activitiesHours = data.filter((el) => dates.find(d => d.getDate() === el.day));
-    const title = dates?.length >= 2
-      ? dates[0].toLocaleDateString() + " - " + dates[dates.length - 1].toLocaleDateString()
-      : dates.length === 1
-        ? dates[0].toLocaleDateString()
-        : "";
-
-    return {
-      component: (
-        <RapportinoCrud
-          //activitiesHours={activitiesHours}
-          timesheetId={timesheetId}
-          dates={dates}
-          //onClose={closeModalCallback}
-          //onActivitiesAdded={onActivitiesAdded}
-        />
-      ),
-      title: title,
-    }
-  }
+ 
 
   return (
     <>

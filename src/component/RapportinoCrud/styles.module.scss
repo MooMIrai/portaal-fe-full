@@ -1,0 +1,12 @@
+.rapportinoContainer{
+        display:flex;
+        justify-content: space-between;
+        align-items: center;
+    
+}
+
+.errorBox{
+    padding: 10px 15px;
+    background-color: rgba(255,0,0,0.6);
+    color:rgb(60, 4, 4);
+}
