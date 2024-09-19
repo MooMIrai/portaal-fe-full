@@ -46,10 +46,10 @@ export default function RapportinoCrud(props:RapportinoCrudProps){
         if(props.dates && props.dates.length){
             updateData().then(()=>{
                 if(props.values){
-                    if(Object.keys(props.values).length===1){//TODO is one day set values inputs
+                    if(Object.keys(props.values).length===1){
                         setValues(props.values[Object.keys(props.values)[0]])
                     }
-                    //else clean and check before submit
+                    
                 }
             });
         }

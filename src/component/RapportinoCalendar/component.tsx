@@ -6,6 +6,36 @@ import { TimesheetsService } from "../../services/rapportinoService";
 import { useWindowSize } from "@uidotdev/usehooks";
 import RapportinoCrud from "../RapportinoCrud/component";
 
+
+const RapportinoItem = (props: any) => {
+  
+  let bg:string|undefined = undefined;
+  let color:string|undefined = undefined;
+  if(props.request){
+    if(props.request.approved===null){
+      bg = 'rgb(255, 192, 0)';
+      color='black';
+    }else if(props.request.approved){
+      bg='green';
+    }else{
+      bg='red'
+    }
+  }
+
+  return <div style={{
+    color:color,
+    background:bg,
+    width: "100%",
+    height:"100%",
+    position: "absolute",
+    right: 0,
+    left: 0,
+    top: 0,
+    bottom: 0,
+    textAlign: "center",
+  }}>{props.title}</div>
+}
+
 export default function RapportinoCalendar() {
   const [date, setDate] = useState<Date>(new Date());
   const [data, setData] = useState<any>([]);
@@ -33,6 +63,7 @@ export default function RapportinoCalendar() {
 
             if (el) {
               activities.push({
+                request:el.LeaveRequest,
                 activity:el.PersonActivity.Activity,
                 id: el.id,
                 title: el.PersonActivity.Activity.description,
@@ -127,7 +158,7 @@ export default function RapportinoCalendar() {
           handleDataChange={() => { }}
           data={data}
           contentModal={renderContent}
-          
+          item={RapportinoItem}
         />
       ) : (
         <CalendarMobile
