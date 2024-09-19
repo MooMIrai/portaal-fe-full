@@ -107,7 +107,7 @@ const TextAreaInputC = (
 
 
 const UploadInputC = (
-  fieldRenderProps: FieldRenderProps & { disabled?: boolean; label?: string, accept?: string, autoUpload?: boolean, onDownload?:()=>void, multiple?:boolean}
+  fieldRenderProps: FieldRenderProps & { disabled?: boolean; label?: string, accept?: string, autoUpload?: boolean, onDownload?: () => void, multiple?: boolean,existingFile?:{name:string} }
 ) => {
   const {
     validationMessage,
@@ -119,70 +119,22 @@ const UploadInputC = (
     files,
     onDownload,
     multiple,
+    existingFile,
     ...others
   } = fieldRenderProps;
-
-  const [attachments, setAttachments] = useState<any[]>(fieldRenderProps.value || []);
-
-
-  const upLoadData = (event: any) => {
-    if (Array.isArray(event.affectedFiles)) {
-      const file = event.affectedFiles[0].getRawFile();
-      const reader = new FileReader();
-  
-      reader.onload = function (evt) {
-        const result = evt?.target?.result;
-  
-        if (result instanceof ArrayBuffer) {
-          // Converti ArrayBuffer in Uint8Array
-          const byteArray = new Uint8Array(result);
-          const byteArrayAsArray = Array.from(byteArray);
-          const newAttachment = {
-            name: event.affectedFiles[0].name,
-            extension: event.affectedFiles[0].extension,
-            data: byteArrayAsArray, // Dati in Uint8Array
-            size: event.affectedFiles[0].size,
-            progress: 100,
-            status: 2,
-            uid: event.affectedFiles[0].uid,
-          };
-  
-          setAttachments((prevAttachments) => [...prevAttachments, newAttachment]);
-          fieldRenderProps.onChange({ value: [...attachments, newAttachment] });
-        }
-      };
-
-      reader.readAsArrayBuffer(file);
-    } else {
-      console.error("affectedFiles non è un array:", event.affectedFiles);
-    }
-  };
-
-  const onChangeHandler = (event: any) => {
-    fieldRenderProps.onChange({ value: event.newState });
-    upLoadData(event);
-  };
-
-  const onRemoveHandler = (event: any) => {
-
-    const updatedAttachments = attachments.filter(
-      (file) => file.uid !== event.affectedFiles[0].uid
-    );
-    setAttachments(updatedAttachments);
-
-
-    fieldRenderProps.onChange({ value: updatedAttachments });
+  const handleFileUpload = (fileDataArray: { name: string; extension: string; data: number[]; size: number; status: number }[]) => {
+    console.log("Files uploaded:", fileDataArray);
+    fieldRenderProps.onChange({ value: fileDataArray });
   };
   return (
     <div>
       <UploadComponent
-        files={files}
-        onAdd={onChangeHandler}
-        onRemove={onRemoveHandler}
-        multiple={false}
+        onFileChange={handleFileUpload}
+        multiple={multiple}
+        existingFile={existingFile}
         disabled={disabled}
         onDownload={onDownload}
-        {...others}
+       
       />
     </div>
   );
