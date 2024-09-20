@@ -14,7 +14,9 @@ interface ViewItemProps extends SchedulerViewSlotProps {
 
 const CustomViewSlot = (props: ViewItemProps) => {
 
-  const {setStart,setEnd,setDrag,drag,selectedStart,selectedEnd} = useContext(CalendarContext);
+  const {setStart,setEnd,setDrag,drag,selectedStart,selectedEnd, holidays,date} = useContext(CalendarContext);
+
+
   const attrs = useLongPress(()=>{
     setDrag(true);
     setStart(props.start);
@@ -36,20 +38,48 @@ const CustomViewSlot = (props: ViewItemProps) => {
     }
   },[drag,selectedEnd])
 
-  return <div style={{flex:1,...(active?{background:'#f0f0f0'}:{})}} {...attrs} onMouseEnter={()=>{
-    
-    if(drag && selectedStart){
-      
-      if(props.start>=selectedStart){
-        setEnd(props.end)
-      }
-    }
 
-  }} onMouseUp={()=>{
-    if(drag)
-      setDrag(false)
-  }}>
-          <SchedulerViewSlot {...props}  ></SchedulerViewSlot>
+  const isHoliday = holidays.some((h)=>h===props.start.getDate() ) && date.getMonth()===props.start.getMonth();
+  let bg ={};
+  if(isHoliday){
+    bg ={ background:'rgba(255,0,0,0.2)'}
+  }
+
+  const notInMounth = props.start.getMonth()!= date.getMonth();
+  console.log(props)
+
+
+
+  return <div style={{
+                      flex:1,
+                      ...(active?{background:'#f0f0f0'}:{}),
+                      ...(notInMounth?{cursor:'not-allowed'}:{})
+                    }} 
+                    
+                    {
+                      ...(notInMounth?{}:attrs)
+                    }
+
+                    onMouseEnter={(e)=>{
+                      if(notInMounth){
+                        e.preventDefault()
+                      }else if(drag && selectedStart){
+                        
+                        if(props.start>=selectedStart){
+                          setEnd(props.end)
+                        }
+                      }
+
+                    }} 
+                    onMouseUp={()=>{
+                      if(drag){
+                          setDrag(false)
+                      }
+                      
+                    }}
+        >
+          
+          <SchedulerViewSlot {...props} style={{...props.style,...bg}}  ></SchedulerViewSlot>
     </div>;
 };
 

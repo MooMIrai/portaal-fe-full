@@ -1,4 +1,4 @@
-import React, { ReactNode, useContext } from "react";
+import React, { ComponentType, ReactNode, useContext, useEffect } from "react";
 import {
   Scheduler,
   MonthView,
@@ -35,30 +35,32 @@ interface CustomCalendarProps {
   handleDataChange: ({ deleted }: SchedulerDataChangeEvent) => void;
   handleDateChange: (args: SchedulerDateChangeEvent) => void;
   date?: Date;
-  item:(item:any)=>ReactNode
+  
+  holidays?:Array<number>,
+  item?:ComponentType<SchedulerItemProps> | undefined
 }
 
-
-
+/*
+const CustomItem = (propsi: SchedulerItemProps) => (
+  <SchedulerItem
+    {...propsi}
+    style={{
+      ...propsi.style,
+      marginTop:5
+      //backgroundColor: propsi.isAllDay ? "pink" : "blue",
+    }}
+  >{props.item?props.item(propsi.dataItem):undefined}</SchedulerItem>
+);*/
 
 
 export default function CustomCalendar(props: Readonly<CustomCalendarProps>) {
 
 
 
-  const {selectedEnd,selectedStart,setEnd,setStart,drag} = useContext(CalendarContext);
+  const {selectedEnd,selectedStart,setEnd,setStart,drag,setHolidays,setDate} = useContext(CalendarContext);
 
 
-  const CustomItem = (propsi: SchedulerItemProps) => (
-    <SchedulerItem
-      {...propsi}
-      style={{
-        ...propsi.style,
-        marginTop:5
-        //backgroundColor: propsi.isAllDay ? "pink" : "blue",
-      }}
-    >{props.item?props.item(propsi.dataItem):undefined}</SchedulerItem>
-  );
+
   
   const closeModal = ()=>{
     setEnd(undefined),
@@ -83,12 +85,21 @@ export default function CustomCalendar(props: Readonly<CustomCalendarProps>) {
     
   }
 
+  useEffect(()=>{
+      setHolidays(props.holidays || []);
+  },[props.holidays])
+
+  useEffect(()=>{
+    setDate(props.date || new Date());
+  },[props.date])
+
   let modal = undefined;
 
   if(selectedStart && selectedEnd && !drag){
     modal=getEditModal();
   }
 
+  
   return (<>
 
     <Scheduler
@@ -101,7 +112,7 @@ export default function CustomCalendar(props: Readonly<CustomCalendarProps>) {
       onDataChange={props.handleDataChange}
       onDateChange={props.handleDateChange}
       viewSlot={CustomViewSlot}
-      item={CustomItem}
+      item={props.item}
       editable={{
         add: true,
         remove: false,

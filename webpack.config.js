@@ -38,11 +38,11 @@ const mfeConfig = {
     "./services/BEService": "./src/services/BEService",
     "./services/BaseHTTPService": "./src/services/BaseHTTPService",
 
-    "./providers/NotificationProvider":
-      "./src/components/Notification/provider",
+    "./providers/NotificationProvider":"./src/components/Notification/provider",
 
     "./hoc/Field": "./src/hoc/Field",
     "./hoc/AutoComplete": "./src/hoc/AutoComplete",
+    "./hoc/SchedulerItem": "./src/hoc/SchedulerItemHoc"
   },
   shared: {
     ...deps,
