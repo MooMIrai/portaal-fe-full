@@ -223,7 +223,7 @@ export default function RapportinoCalendar() {
           timesheetId={timeSheetsId||0}
           values={values}
           hasHoliday={hasHolidayInSelection}
-          closeModal={closeModalCallback}
+          closeModal={()=>{closeModalCallback();fetchTimesheet(date)}}
           holidaysData={holidaysData}
           //onClose={closeModalCallback}
           //onActivitiesAdded={onActivitiesAdded}
