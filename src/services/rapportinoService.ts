@@ -67,6 +67,15 @@ class TimesheetsServiceC {
     }
   };
 
+  saveActivities = (timesheet_id:number,startdate:string,enddate:string,details:{activity_id:number,minutes:number,hours:number}[])=>{
+    return client.post('api/v1/timesheets/syncDetails',{
+      timesheet_id:timesheet_id,
+      start_date:startdate,
+      end_date:enddate,
+      TimeSheetDetails:details
+    });
+  }
+
   getSingleTimesheets = async (id: number, include: boolean) => {
     try {
       const response = await client.get(`api/v1/timesheets/${id}`, {

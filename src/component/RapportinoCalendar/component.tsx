@@ -173,23 +173,45 @@ export default function RapportinoCalendar() {
  
 
   const renderContent = (slot, closeModalCallback) => {
-   
+ 
     const dates:Date[] = [];
     let currentDate = new Date(slot.start);
     const values={};
-    let hasHolidayInSelection=false
+    const holidaysData={};
+
+    let hasHolidayInSelection=false;
     while (currentDate < slot.end) {
         if(!hasHolidayInSelection && holidays?.some(h=>h===currentDate.getDate())){
           hasHolidayInSelection=true;
         }
         dates.push(new Date(currentDate));
         const valuesByDate = data.filter((el) => el.day === currentDate.getDate());
+        //prendere i dati per riempire le ore dentro il crud
         if(valuesByDate){
           values[currentDate.getDate()]={};
           valuesByDate.forEach((el)=>{
             values[currentDate.getDate()][el.activity.id]=el.hours;
           });
         }
+        
+        //Prendere orari dei permessi per riempire i timepicker dentro il crud
+        data.filter((el)=>{
+          if(!el.request){
+            return false
+          }
+          let startDate = new Date(el.request.start_date);
+          startDate.setHours(0,0,0,0);
+          let endDate = new Date(el.request.start_date);
+          endDate.setHours(23,59,59,59);
+          return currentDate>= startDate && currentDate<=endDate;
+        }).forEach(hol=>{
+          if(!holidaysData[currentDate.getDate()])
+          {
+            holidaysData[currentDate.getDate()]={};
+          }
+          holidaysData[currentDate.getDate()][hol.activity.id]={start:new Date(hol.request.start_date),end:new Date(hol.request.end_date)}
+        });
+
         currentDate.setDate(currentDate.getDate() + 1); // Incrementa di un giorno
         
     }
@@ -201,6 +223,8 @@ export default function RapportinoCalendar() {
           timesheetId={timeSheetsId||0}
           values={values}
           hasHoliday={hasHolidayInSelection}
+          closeModal={closeModalCallback}
+          holidaysData={holidaysData}
           //onClose={closeModalCallback}
           //onActivitiesAdded={onActivitiesAdded}
         />
@@ -219,7 +243,7 @@ export default function RapportinoCalendar() {
           model={{
             timeSheetsId: timeSheetsId,
           }}
-          timezone="Europe/Rome"
+          //timezone="UTC"
           handleDateChange={handleDateChange}
           defaultView="month"
           handleDataChange={() => { }}
