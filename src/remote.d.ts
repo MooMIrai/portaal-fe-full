@@ -23,3 +23,4 @@ declare module "common/services/BaseHTTPService";
 
 declare module "common/hoc/Field"
 declare module "common/hoc/AutoComplete"
+declare module "common/hoc/SchedulerItem"

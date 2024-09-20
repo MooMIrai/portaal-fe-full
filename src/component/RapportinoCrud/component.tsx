@@ -2,6 +2,8 @@ import Accordion from 'common/Accordion'
 import React, { PropsWithChildren, useEffect, useState } from 'react'
 import { TimesheetsService } from '../../services/rapportinoService';
 import InputText from 'common/InputText';
+import Button from 'common/Button'
+import NotificationActions from 'common/providers/NotificationProvider'
 
 import styles from './styles.module.scss';
 
@@ -12,6 +14,7 @@ interface RapportinoCrudProps {
     dates: Date[];
     timesheetId: number;
     values:Record<number,Record<string,number>>;
+    hasHoliday:boolean
 }
 
 function RapportinoInput(props:PropsWithChildren<{id:number,description:string,value:number,onChange:(value:number)=>void}>){
@@ -64,7 +67,6 @@ export default function RapportinoCrud(props:RapportinoCrudProps){
 
 
     const onInputChange = (activityId:number,hours:number)=>{
-        debugger;
         const newValues=JSON.parse(JSON.stringify(values));
         newValues[activityId]=hours;
         setValues(newValues);
@@ -146,6 +148,14 @@ export default function RapportinoCrud(props:RapportinoCrudProps){
                 }
             </Accordion>
             </div>
+            <div className={styles.footer}>
+                <Button themeColor="success" onClick={()=>{
+                    if(props.hasHoliday){
+                        NotificationActions.openConfirm('Vuoi includere i giorni fesivi compresi nella tua selezione?',()=>alert('si'),'Conferma azione')
+                    }
+                }}>Conferma</Button>
+            </div>
+            
         </div>
 
 }
