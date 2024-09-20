@@ -27,7 +27,9 @@ const mfeConfig = {
     "./AvatarIcon": "./src/components/AvatarIcon/component",
     "./CustomCard": "./src/components/CustomCard/component",
 
-    "./Accordion": "./src/components/Accordion/component",
+    "./Loader":"./src/components/Loader/component",
+
+    "./Accordion":"./src/components/Accordion/component",
 
     "./services/AuthService": "./src/services/AuthService",
     "./services/BEService": "./src/services/BEService",
