@@ -33,6 +33,7 @@ const mfeConfig = {
     "./CustomCard": "./src/components/CustomCard/component",
 
     "./Accordion":"./src/components/Accordion/component",
+    "./TimePicker":"./src/components/TimePicker/component",
 
     "./services/AuthService": "./src/services/AuthService",
     "./services/BEService": "./src/services/BEService",

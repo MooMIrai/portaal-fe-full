@@ -18,11 +18,20 @@ const CustomViewSlot = (props: ViewItemProps) => {
 
 
   const attrs = useLongPress(()=>{
-    setDrag(true);
-    setStart(props.start);
-    setEnd(props.end);
+   
+    
   },
 {
+  onStart:(e)=> {
+      const ev:any = e
+      if(ev.button==2){
+        setDrag(false);
+      }else{
+        setDrag(true);
+        setStart(props.start);
+        setEnd(props.end);
+      }
+  },
   threshold:0
 });
 
@@ -46,7 +55,7 @@ const CustomViewSlot = (props: ViewItemProps) => {
   }
 
   const notInMounth = props.start.getMonth()!= date.getMonth();
-  console.log(props)
+
 
 
 

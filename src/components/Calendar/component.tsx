@@ -108,7 +108,7 @@ export default function CustomCalendar(props: Readonly<CustomCalendarProps>) {
       data={props.data}
       defaultView={props.defaultView}
       defaultDate={props.defaultDate}
-      timezone={props.timezone}
+      timezone={"Etc/UTC"}
       onDataChange={props.handleDataChange}
       onDateChange={props.handleDateChange}
       viewSlot={CustomViewSlot}
