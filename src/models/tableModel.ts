@@ -1,3 +1,5 @@
+import { SVGIcon } from "@progress/kendo-svg-icons";
+
 export interface TableColumn {
   editable?: boolean;
   editor?: "boolean" | "text" | "numeric" | "date";
@@ -9,6 +11,9 @@ export interface TableColumn {
   render?: (row: any, refreshTable?: () => void) => JSX.Element;
   filter?: any;
   hidden?: boolean;
+  hasCellAction?: boolean;
+  cellActionIcon?: SVGIcon;
+  cellModalContent?: (dataItem: any) => JSX.Element;
 }
 
 export enum TABLE_COLUMN_TYPE {

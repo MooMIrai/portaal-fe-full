@@ -27,10 +27,7 @@ const mfeConfig = {
     "./AvatarIcon": "./src/components/AvatarIcon/component",
     "./CustomCard": "./src/components/CustomCard/component",
 
-    "./AutoComplete": "./src/components/AutoComplete/component",
-    "./CountrySelector": "./src/components/CountrySelector/component",
-    "./AvatarIcon": "./src/components/AvatarIcon/component",
-    "./CustomCard": "./src/components/CustomCard/component",
+    "./Loader":"./src/components/Loader/component",
 
     "./Accordion":"./src/components/Accordion/component",
     "./TimePicker":"./src/components/TimePicker/component",
@@ -39,11 +36,14 @@ const mfeConfig = {
     "./services/BEService": "./src/services/BEService",
     "./services/BaseHTTPService": "./src/services/BaseHTTPService",
 
-    "./providers/NotificationProvider":"./src/components/Notification/provider",
+    "./providers/NotificationProvider":
+    "./src/components/Notification/provider",
 
     "./hoc/Field": "./src/hoc/Field",
     "./hoc/AutoComplete": "./src/hoc/AutoComplete",
-    "./hoc/SchedulerItem": "./src/hoc/SchedulerItemHoc"
+    "./hoc/SchedulerItem": "./src/hoc/SchedulerItemHoc",
+
+    "./icons": "@progress/kendo-svg-icons"
   },
   shared: {
     ...deps,
