@@ -1,6 +1,5 @@
-import { Error, Label } from '@progress/kendo-react-labels';
 import { SchedulerItem } from '@progress/kendo-react-scheduler';
-import React, { useEffect } from 'react';
+import React from 'react';
 
 const withSchedulerItem= (WrappedComponent:any) => {
   const WithSchedulerItem = (props:any) => {
