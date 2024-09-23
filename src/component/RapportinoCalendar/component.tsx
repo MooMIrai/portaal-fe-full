@@ -1,7 +1,6 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Calendar from "common/Calendar";
 import CalendarMobile from "common/CalendarMobile";
-import Button from "common/Button"
 import { TimesheetsService } from "../../services/rapportinoService";
 import { useWindowSize } from "@uidotdev/usehooks";
 import RapportinoCrud from "../RapportinoCrud/component";
@@ -129,7 +128,7 @@ export default function RapportinoCalendar() {
   const fetchTimesheet = () => {
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
-    debugger;
+
     TimesheetsService.findOrCreate(8, year, month, "")
       .then((response) => {
         setTimeSheetsId(response.id);
@@ -192,6 +191,7 @@ export default function RapportinoCalendar() {
 
     let hasHolidayInSelection=false;
     while (currentDate < slot.end) {
+
         if(!hasHolidayInSelection && holidays?.some(h=>h===currentDate.getDate())){
           hasHolidayInSelection=true;
         }

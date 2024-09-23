@@ -16,40 +16,37 @@ interface RapportinoCrudProps {
     values:Record<number,Record<string,number>>;
     hasHoliday:boolean,
     closeModal:()=>void,
-    holidaysData:Record<number,Record<string,{start:Date,end:Date}>>
+    holidaysData:Record<number,Record<string,{start:Date,end:Date}>>,
+    
 }
 
-function RapportinoInput(props:PropsWithChildren<{id:number,description:string,value:number,onChange:(value:number)=>void}>){
+function RapportinoInput(props:PropsWithChildren<{
+        id:number,
+        description:string,
+        value:number,
+        onChange:(value:number)=>void,
+        type:"H"|"D",
+        disabled:boolean
+    }>){
 
 
     return <div className={styles.rapportinoContainer}>
         <p>{props.description}</p>
-        <InputText value={props.value} onChange={(e)=>{
+        {props.type==='H'?<InputText disabled={props.disabled} value={props.value} onChange={(e)=>{
             if(e.value.length)
                 props.onChange(parseInt(e.value))
             else
                 props.onChange(0)
-        }} />
-    </div>
+        }} />:
+        <input type='checkbox' disabled={props.disabled} style={{width:20,height:20}} onChange={(ev)=>{
+            if(ev.target.checked){
+                props.onChange(8)
+            }else{
+                props.onChange(0)
+            }
+        }}></input>
 
-}
-
-function RapportinoHolidayInput(props:PropsWithChildren<{id:number,description:string,value:number,onChange:(value:number)=>void,holidayValues?:{start:Date,end:Date}}>){
-
-
-    return <div className={styles.rapportinoContainer}>
-        <p>{props.description}</p>
-        <div className={styles.holidayInputs}>
-            <TimePicker value={props.holidayValues?.start} onChange={()=>{}} />
-            <TimePicker value={props.holidayValues?.end} onChange={()=>{}} />
-            <InputText value={props.value}  /* onChange={(e)=>{
-                if(e.value.length)
-                    props.onChange(parseInt(e.value))
-                else
-                    props.onChange(0)
-            }} */ />
-        </div>
-        
+        }
     </div>
 
 }
@@ -59,9 +56,8 @@ export default function RapportinoCrud(props:RapportinoCrudProps){
 
     const [data,setData] = useState<Record<string,any>>();
     const [values,setValues] = useState<Record<number,number>>({});
-    //const [holidayValues,setHolidayValues] = useState<Record<number,{start:Date,end:Date}>>({});
     const [errors,setErrors] = useState<string>();
-    
+    const [disableExcept,setDisableExcept] = useState();
 
     const updateData = ()=>{
         return TimesheetsService.getActivitiesByListDates(props.dates, props.timesheetId).then(res=>{
@@ -87,9 +83,16 @@ export default function RapportinoCrud(props:RapportinoCrudProps){
     },[props.dates])
 
     useEffect(()=>{
-        let validatorsMessage = validateMaxHours();
-        setErrors(validatorsMessage);
-        
+        const filteredKeys = Object.keys(values).filter(k=>values[k]!==0);
+        if(Object.keys(values).length != filteredKeys.length){
+            const newVal = {};
+            filteredKeys.forEach(k=>{newVal[k]=values[k]});
+            setValues(newVal)
+        }else{
+            let validatorsMessage = validateMaxHours();
+            setErrors(validatorsMessage);
+        }
+
     },[values])
 
 
@@ -101,7 +104,7 @@ export default function RapportinoCrud(props:RapportinoCrudProps){
     }
 
     const validateMaxHours = ()=>{
-        if(MAX_HOURS){
+        if(MAX_HOURS && !disableExcept){
             let sum=0;
             if(values){
                 Object.keys(values).forEach((key)=>sum+=values[key]);
@@ -115,10 +118,14 @@ export default function RapportinoCrud(props:RapportinoCrudProps){
     }
 
     const handleSave = (holidayConfirm:boolean)=>{
+
+
         TimesheetsService.saveActivities(
             props.timesheetId,props.dates[0].toJSON(),
             props.dates[props.dates.length-1].toJSON(),
-            Object.keys(values).map((key)=>{
+            Object.keys(values).filter(key=>{
+                return  !disableExcept || key===disableExcept
+            }).map((key)=>{
                 return {
                     activity_id:parseInt(key),
                     hours:values[key],
@@ -152,6 +159,8 @@ export default function RapportinoCrud(props:RapportinoCrudProps){
                         !data.productive || !data.productive.length ?<p>Nessun attività produttiva assegnata per il range di date selezionate</p>
                         :data.productive.map((res)=>{
                             return <RapportinoInput 
+                                        type='H'
+                                        disabled={!!disableExcept && disableExcept!==res.Activity.id}
                                         value={values?values[res.Activity.id]:0} 
                                         key={res.Activity.id} 
                                         id={res.Activity.id} 
@@ -168,6 +177,8 @@ export default function RapportinoCrud(props:RapportinoCrudProps){
                         !data.unproductive || !data.unproductive.length ?<p>Nessun attività non produttiva assegnata per il range di date selezionate</p>
                         :data.unproductive.map((res)=>{
                             return <RapportinoInput 
+                                    type='H'
+                                    disabled={!!disableExcept && disableExcept!==res.Activity.id}
                                     value={values?values[res.Activity.id]:0} 
                                     key={res.Activity.id} 
                                     id={res.Activity.id} 
@@ -184,13 +195,22 @@ export default function RapportinoCrud(props:RapportinoCrudProps){
                         !data.holidays || !data.holidays.length ?<p>Non puoi richiedere ferie o permessi nel range date selezionato</p>
                         :<div >{data.holidays.map((res)=>{
                             return <RapportinoInput 
+                            disabled={!!disableExcept && disableExcept!==res.Activity.id}
+                            type={res.Activity.ActivityType.time_unit}
                             value={values?values[res.Activity.id]:0} 
                             key={res.Activity.id} 
                             id={res.Activity.id} 
                             description={res.Activity.description} 
                             onChange={(value)=>{
+                                if(res.Activity.ActivityType.time_unit==='D'){
+                                    if(value!==0)
+                                        setDisableExcept(res.Activity.id)
+                                    else
+                                        setDisableExcept(undefined);
+                                }
                                 onInputChange(res.Activity.id,value)
                             }}
+                        
                         />
                         })}
                         </div>
