@@ -114,7 +114,7 @@ export default function RapportinoCrud(props:RapportinoCrudProps){
         return "";
     }
 
-    const handleSave = ()=>{
+    const handleSave = (holidayConfirm:boolean)=>{
         TimesheetsService.saveActivities(
             props.timesheetId,props.dates[0].toJSON(),
             props.dates[props.dates.length-1].toJSON(),
@@ -124,7 +124,8 @@ export default function RapportinoCrud(props:RapportinoCrudProps){
                     hours:values[key],
                     minutes:0
                 }
-            })
+            }),
+            holidayConfirm
         ).then(res=>{
             NotificationActions.openModal(
                 { icon: true, style: "success" },
@@ -144,13 +145,6 @@ export default function RapportinoCrud(props:RapportinoCrudProps){
                 errors && <div className={styles.errorBox}>
                     <p>{errors}</p>
                 </div>
-            }
-            {
-                
-                
-            }
-            {
-                props.dates[props.dates.length-1]?.toJSON()
             }
             <div className='wrapper'>
                 <Accordion title="Produttive" defaultOpened={true}>
@@ -207,11 +201,13 @@ export default function RapportinoCrud(props:RapportinoCrudProps){
             <div className={styles.footer}>
                 <Button themeColor="success" onClick={()=>{
                     if(props.hasHoliday){
-                        NotificationActions.openConfirm('Vuoi includere i giorni fesivi compresi nella tua selezione?',
-                            handleSave
-                        ,'Conferma azione')
+                        NotificationActions.openConfirm('Vuoi includere i giorni festivi compresi nella tua selezione?',
+                        ()=>handleSave(true),
+                        'Conferma azione',
+                        ()=>handleSave(false)
+                    )
                     }else{
-                        handleSave()
+                        handleSave(false)
                     }
                 }}>Conferma</Button>
             </div>
