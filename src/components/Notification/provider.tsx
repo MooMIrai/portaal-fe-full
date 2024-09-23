@@ -12,7 +12,7 @@ const NotificationContext = createContext({
    
 const NotificationProviderActions:{
   openModal:(type:{ icon?: boolean; style?: "none" | "info" | "success" | "warning" | "error"; },message:string) =>void;
-  openConfirm:(message:string,callback:()=>void,title?:string)=>void
+  openConfirm:(message:string,callback:()=>void,title?:string,callbackFail?:()=>void)=>void
 } = {
   openModal:()=>{},
   openConfirm:(message:string,callback:()=>void,title?:string)=>{}
@@ -32,9 +32,9 @@ const NotificationProvider = (props:PropsWithChildren) => {
       
     }
 
-    const handleConfirmShow = (message:string,callback:()=>void,title?:string) =>{
+    const handleConfirmShow = (message:string,callback:()=>void,title?:string,callbackFail?:()=>void) =>{
       
-      setConfirm({message,callback,title});
+      setConfirm({message,callback,title,callbackFail});
       setShowConfirm(true);
       
     }
@@ -74,7 +74,11 @@ const NotificationProvider = (props:PropsWithChildren) => {
             </div>
             <DialogActionsBar layout={"stretched"}>
             
-            <Button type="button" themeColor={"primary"} onClick={()=>setShowConfirm(false)}>
+            <Button type="button" themeColor={"primary"} onClick={()=>{
+              if(confirm.callbackFail)
+                confirm.callbackFail();
+              setShowConfirm(false)
+              }}>
               No
             </Button>
             <Button type="button" onClick={()=>{
