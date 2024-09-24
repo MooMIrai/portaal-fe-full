@@ -14,29 +14,6 @@ interface CalendarMobileProps extends CalendarProps {
 }
 
 export default function CalendarMobile(props: CalendarMobileProps) {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  console.log(props.content);
-
-  const renderCell = (cellProp: any) => {
-    const { date } = cellProp;
-    const dayActivities = props.data.filter(
-      (activity) =>
-        new Date(activity.start).toDateString() === date.toDateString()
-    );
-
-    const handleClick = () => {
-      setSelectedDate(date);
-    };
-
-    return (
-      <CustomCell {...cellProp} onClick={handleClick}>
-        <div className={styles.calendarDay}>
-          {cellProp.children}
-          {dayActivities.length > 0 && <div className={styles.eventDot}></div>}
-        </div>
-      </CustomCell>
-    );
-  };
 
 
   const customCell = (cellProps:CalendarCellProps) => {
@@ -56,24 +33,14 @@ export default function CalendarMobile(props: CalendarMobileProps) {
               {FDate}
             </CalendarCell>;
   };
-  const closeModal = () => {
-    setSelectedDate(null);
-  };
-
-  const content =
-    selectedDate && props.content
-      ? props.content({ day: selectedDate.getDate() }, closeModal)
-      : null;
-
-  
-
+ 
   return (
     <div className={styles.calendarContainer}>
       <Calendar
         {...props}
         className={styles.container}
-        smoothScroll={false}
-        showOtherMonthDays={true}
+        smoothScroll={true}
+        showOtherMonthDays={false}
         mobileMode={true}
         navigation={false}
         cell={customCell}

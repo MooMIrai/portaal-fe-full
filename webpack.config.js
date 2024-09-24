@@ -31,6 +31,7 @@ const mfeConfig = {
 
     "./Accordion":"./src/components/Accordion/component",
     "./TimePicker":"./src/components/TimePicker/component",
+    "./SvgIcon":"./src/components/SvgIcon/component",
 
     "./services/AuthService": "./src/services/AuthService",
     "./services/BEService": "./src/services/BEService",
@@ -43,7 +44,7 @@ const mfeConfig = {
     "./hoc/AutoComplete": "./src/hoc/AutoComplete",
     "./hoc/SchedulerItem": "./src/hoc/SchedulerItemHoc",
 
-    "./icons": "@progress/kendo-svg-icons"
+    "./icons": "@progress/kendo-svg-icons",
   },
   shared: {
     ...deps,
