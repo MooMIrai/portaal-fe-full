@@ -6,6 +6,9 @@ import { useWindowSize } from "@uidotdev/usehooks";
 import RapportinoCrud from "../RapportinoCrud/component";
 import withScheduler from "common/hoc/SchedulerItem"
 import NotificationActions from 'common/providers/NotificationProvider'
+import {chevronLeftIcon,chevronRightIcon} from 'common/icons';
+import SvgIcon from 'common/SvgIcon'
+import Button from 'common/Button'
 
 const RapportinoItemView = (props: any) => {
 
@@ -55,7 +58,8 @@ const RapportinoItemView = (props: any) => {
     textAlign: "center",
     display:'flex',
     alignItems:'center',
-    justifyContent:'center'
+    justifyContent:'center',
+    fontSize:14
   }}>{!props.request?`${props.hours} ore - `:null} {props.title} {status}  {props.request && props.request.approved===null?
     <button style={{background:'transparent',border:'none',cursor:'pointer'}} title={"Cancella richiesta "+ props.title} onClick={(e)=>{e.preventDefault();
       deleteRequest(props.request,props.title)
@@ -70,6 +74,7 @@ export default function RapportinoCalendar() {
   const [data, setData] = useState<any>([]);
   const [holidays,setHolidays] = useState<Array<number>>();
   const [timeSheetsId, setTimeSheetsId] = useState<number>();
+  const [mobileSelectedDate, setMobileSelectedDate] = useState<Date>();
   const size = useWindowSize();
 
   const convertToISODateString = (year, month, day, hour, minute) => {
@@ -238,7 +243,7 @@ export default function RapportinoCalendar() {
             closeModalCallback();
             fetchTimesheet()
           }}
-          holidaysData={holidaysData}
+          //holidaysData={holidaysData}
           //onClose={closeModalCallback}
           //onActivitiesAdded={onActivitiesAdded}
         />
@@ -248,11 +253,71 @@ export default function RapportinoCalendar() {
   };
 
 
+  const renderContentMobile = (cellProps:any)=>{
+   
+
+    const ret = {
+      style:{},
+      hours:undefined
+    }
+
+    const isHoliday = holidays?.some((h)=>cellProps.value.getDate()===h && cellProps.value.getMonth() === date.getMonth());
+    const request = data.find(d=>d.day === cellProps.value.getDate() && cellProps.value.getMonth() === date.getMonth())?.request;
+    const activities = data.filter(d=>d.day === cellProps.value.getDate() && cellProps.value.getMonth() === date.getMonth());
+    if(isHoliday){
+      ret.style["color"]='red'
+    }
+    if(request){
+      if(request.approved===true){
+        ret.style["background"] = 'green';
+      }else if(request.approved===false){
+        ret.style["background"] = 'red';
+      }else{
+        ret.style["background"] = 'rgb(255, 192, 0)';
+      }
+      ret.hours= activities.reduce((aggregator,obj)=>aggregator+obj.hours,0)
+    }else if(activities.length){
+      ret.hours = activities.reduce((aggregator,obj)=>aggregator+obj.hours,0)
+    }
+    
+    return ret;
+  }
+
+  const getCrudMobile = ()=>{
+
+    const dates:Date[]=[];
+    const values = {};
+    let hasHolidayInSelection = false;
+
+    if(mobileSelectedDate){
+      hasHolidayInSelection=holidays?holidays.some(h=>h===mobileSelectedDate.getDate()):false;
+      dates.push(mobileSelectedDate);
+      values[mobileSelectedDate.getDate()]={};
+      const dataFiltered = data.filter(d=>d.day===mobileSelectedDate.getDate());
+      dataFiltered.forEach(d=>{
+        values[mobileSelectedDate.getDate()][d.activity.id]=d.hours
+      })
+      
+    }
+
+    return <RapportinoCrud
+          dates={dates}
+          timesheetId={timeSheetsId||0}
+          values={values}
+          hasHoliday={hasHolidayInSelection}
+          closeModal={()=>{
+            document.dispatchEvent(new CustomEvent("CalendarRefreshData"));
+          }}
+          
+          //onClose={closeModalCallback}
+          //onActivitiesAdded={onActivitiesAdded}
+        />
+  }
+
   return (
     <>
       {size.width && size.width >= 768 ? (
         <Calendar
-          
           date={date}
           model={{
             timeSheetsId: timeSheetsId,
@@ -266,14 +331,36 @@ export default function RapportinoCalendar() {
           item={RapportinoItem}
           holidays={holidays}
         />
-      ) : (
+      ) : (<>
         <CalendarMobile
           topView="month"
           navigation={true}
           focusedDate={date}
           data={data}
-          content={renderContent}
+          cellProps={renderContentMobile}
+          header={(p)=>{
+
+          return <>
+              <p style={{marginLeft:10}}>{p.headerTitleProps.value}</p>
+              <div style={{display:'flex',gap:10,marginRight:10}}>
+                <Button onClick={()=>{
+                  setDate(new Date(date.getFullYear(), date.getMonth() - 1, date.getDate()));
+                }}><SvgIcon icon={chevronLeftIcon} /></Button>
+                <Button onClick={()=>{
+                  setDate(new Date(date.getFullYear(), date.getMonth() + 1, date.getDate()));
+                }}><SvgIcon icon={chevronRightIcon} /></Button>
+              </div>
+          </>}}
+          min={new Date(date.getFullYear(), date.getMonth(), 1)}
+          max={new Date(date.getFullYear(), date.getMonth() + 1, 0)}
+          onChange={(ev)=>{
+            setMobileSelectedDate(ev.value);
+          }}
         />
+        {
+          mobileSelectedDate && getCrudMobile()
+        }
+        </>
       )}
     </>
   );

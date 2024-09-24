@@ -4,10 +4,19 @@ import { TimesheetsService } from '../../services/rapportinoService';
 import InputText from 'common/InputText';
 import Button from 'common/Button'
 import NotificationActions from 'common/providers/NotificationProvider'
-import TimePicker from 'common/TimePicker';
+
+
 import styles from './styles.module.scss';
 
 const MAX_HOURS=process.env.MAXIMUM_HOURS_WORK;
+
+export const dateWithoutTimezone = (date: Date) => {
+    const tzoffset = date.getTimezoneOffset() * 60000; //offset in milliseconds
+    const withoutTimezone = new Date(date.valueOf() - tzoffset)
+      .toISOString()
+      .slice(0, -1);
+    return withoutTimezone;
+  };
 
 interface RapportinoCrudProps {
     
@@ -16,7 +25,7 @@ interface RapportinoCrudProps {
     values:Record<number,Record<string,number>>;
     hasHoliday:boolean,
     closeModal:()=>void,
-    holidaysData:Record<number,Record<string,{start:Date,end:Date}>>,
+    
     
 }
 
@@ -71,11 +80,7 @@ export default function RapportinoCrud(props:RapportinoCrudProps){
                 if(props.values){
                     if(Object.keys(props.values).length===1){
                         setValues(props.values[Object.keys(props.values)[0]]);
-                        /*if(props.holidaysData ){
-                            if(Object.keys(props.holidaysData).length===1){
-                                setHolidayValues(props.holidaysData[Object.keys(props.holidaysData)[0]])
-                            }
-                        }*/
+                       
                     } 
                 }
             });
@@ -119,10 +124,9 @@ export default function RapportinoCrud(props:RapportinoCrudProps){
 
     const handleSave = (holidayConfirm:boolean)=>{
 
-
         TimesheetsService.saveActivities(
-            props.timesheetId,props.dates[0].toJSON(),
-            props.dates[props.dates.length-1].toJSON(),
+            props.timesheetId,dateWithoutTimezone(props.dates[0]),
+            dateWithoutTimezone(props.dates[props.dates.length-1]),
             Object.keys(values).filter(key=>{
                 return  !disableExcept || key===disableExcept
             }).map((key)=>{

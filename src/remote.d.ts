@@ -25,3 +25,6 @@ declare module "common/services/BaseHTTPService";
 declare module "common/hoc/Field"
 declare module "common/hoc/AutoComplete"
 declare module "common/hoc/SchedulerItem"
+
+declare module "common/SvgIcon"
+declare module "common/icons"
