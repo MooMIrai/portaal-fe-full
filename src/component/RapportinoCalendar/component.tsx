@@ -262,7 +262,7 @@ export default function RapportinoCalendar() {
     }
 
     const isHoliday = holidays?.some((h)=>cellProps.value.getDate()===h && cellProps.value.getMonth() === date.getMonth());
-    const request = data.find(d=>d.day === cellProps.value.getDate() && cellProps.value.getMonth() === date.getMonth())?.request;
+    const request = data.find(d=>d.day === cellProps.value.getDate() && cellProps.value.getMonth() === date.getMonth() && d.request);
     const activities = data.filter(d=>d.day === cellProps.value.getDate() && cellProps.value.getMonth() === date.getMonth());
     if(isHoliday){
       ret.style["color"]='red'
@@ -332,14 +332,19 @@ export default function RapportinoCalendar() {
           holidays={holidays}
         />
       ) : (<>
+        <div style={{display:'flex',justifyContent:"space-between",marginBottom:10}}>
+          <p>Tocca una data per inserire le ore di attività</p>
+          <Button themeColor="success">Consolida</Button>
+        </div>
         <CalendarMobile
           topView="month"
           navigation={true}
           focusedDate={date}
           data={data}
           cellProps={renderContentMobile}
+          
           header={(p)=>{
-
+          
           return <>
               <p style={{marginLeft:10}}>{p.headerTitleProps.value}</p>
               <div style={{display:'flex',gap:10,marginRight:10}}>
