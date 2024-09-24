@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Calendar, CalendarProps } from "@progress/kendo-react-dateinputs";
+import { Calendar, CalendarCell, CalendarCellProps, CalendarProps } from "@progress/kendo-react-dateinputs";
 import CustomCell from "./CustomCell/component";
 import styles from "./style.module.scss";
 import { useState } from "react";
@@ -10,6 +10,7 @@ interface CalendarMobileProps extends CalendarProps {
     slot: Record<string, any> | undefined,
     closeModalCallback: () => void
   ) => { component: JSX.Element; title: string };
+  cellProps?:(cellProps:CalendarCellProps)=>Record<string,any>
 }
 
 export default function CalendarMobile(props: CalendarMobileProps) {
@@ -37,6 +38,24 @@ export default function CalendarMobile(props: CalendarMobileProps) {
     );
   };
 
+
+  const customCell = (cellProps:CalendarCellProps) => {
+
+    let cellAttrs:any={}
+    if(props.cellProps){
+      cellAttrs= props.cellProps(cellProps);
+    }
+    const style = cellAttrs.style;
+    let FDate:React.ReactElement = <div style={{display:'flex',flexDirection:'column'}}>{cellProps.formattedValue}<small>NI</small></div>;
+   
+    if(cellAttrs.hours){
+      FDate= <div style={{display:'flex',flexDirection:'column'}}>{cellProps.formattedValue}<small>{cellAttrs.hours+' ore'}</small></div>
+    }
+    
+    return <CalendarCell {...cellProps}   style={style}  >
+              {FDate}
+            </CalendarCell>;
+  };
   const closeModal = () => {
     setSelectedDate(null);
   };
@@ -46,18 +65,21 @@ export default function CalendarMobile(props: CalendarMobileProps) {
       ? props.content({ day: selectedDate.getDate() }, closeModal)
       : null;
 
+  
+
   return (
     <div className={styles.calendarContainer}>
       <Calendar
+        {...props}
         className={styles.container}
         smoothScroll={false}
         showOtherMonthDays={true}
-        mobileMode={false}
+        mobileMode={true}
         navigation={false}
-        cell={renderCell}
-        {...props}
+        cell={customCell}
+        onChange={props.onChange}
       />
-      {props?.content?.({ day: 2 }, closeModal).component}
+      
     </div>
   );
 }
