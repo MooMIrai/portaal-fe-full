@@ -1,77 +1,255 @@
 import { OfferBEModel, OfferModel } from "../component/OffertaCrud/model";
 
-export function fromOfferBEModelToOfferModel(offerBE: OfferBEModel): OfferModel {
-    return {
-        id: offerBE.id,
-        protocol: offerBE.project_code, // mapping project_code to protocol
-        title: offerBE.name, // mapping name to title
-        start_date: new Date(offerBE.start_date),
-        end_date: offerBE.end_date?new Date(offerBE.end_date):undefined, // fallback if end_date is undefined
-        description: offerBE.other_details, // mapping other_details to description
-        rate: offerBE.rate, 
-        amount: offerBE.amount,
+export type locationOption = {
+  label: string;
+  value: number;
+};
+type LocationApiResponse = {
+  data: Array<{
+    id: number;
+    code: string;
+    description: string;
+  }>;
+  meta: {
+    total: number;
+  };
+};
+export const sedeAdapter = (
+  apiResponse: LocationApiResponse
+): locationOption[] => {
+  return apiResponse.data.map((country) => ({
+    label: country.description,
+    value: country.id,
+  }));
+};
 
-        customer_id: offerBE.customer_id ||0,
-        customer_name: offerBE.Customer?.name + ' '+offerBE.Customer?.name,
-        customer: {id:offerBE.customer_id||0,name:offerBE.Customer?offerBE.Customer.name:''},
-        
-        creation_date:offerBE.date_created?new Date(offerBE.date_created):undefined,
-        
-        accountManager_id: offerBE.accountManager_id ||0,
-        accountManager: {id:offerBE.accountManager_id||0,name:offerBE.AccountManager?.Person.firstName + ' ' +offerBE.AccountManager?.Person.lastName},
+export function fromOfferBEModelToOfferModel(
+  offerBE: OfferBEModel
+): OfferModel {
+  return {
+    id: offerBE.id,
+    protocol: offerBE.project_code, // mapping project_code to protocol
+    title: offerBE.name, // mapping name to title
+    /* start_date: new Date(offerBE.start_date), */
+    end_date: offerBE.deadline_date
+      ? new Date(offerBE.deadline_date)
+      : undefined, // fallback if end_date is undefined
+    description: offerBE.other_details, // mapping other_details to description
+    rate: offerBE.rate,
+    amount: offerBE.amount,
+    NoCollective: offerBE.noCollective || false,
+    customer_id: offerBE.customer_id || 0,
+    customer_name: offerBE.Customer?.name ,
+    customer: {
+      id: offerBE.customer_id || 0,
+      name: offerBE.Customer ? offerBE.Customer.name : "",
+    },
 
-        project_type_id: offerBE.project_type_id||0,
-        project_type:offerBE.ProjectType?{id:offerBE.ProjectType.id,name:offerBE.ProjectType.description}:undefined,
-
-        billing_type:{id:offerBE.billing_type,name:mapBillingTypeName(offerBE.billing_type)}, // hypothetical method for billing type conversion
-        outcome_type:offerBE.OutcomeType?{id:offerBE.OutcomeType,name:mapOutcomeTypeName(offerBE.OutcomeType)}:undefined,
-
-        year:new Date(offerBE.year,1,1),
-        days:offerBE.days
-        
-    };
+    creation_date: offerBE.date_created
+      ? new Date(offerBE.date_created)
+      : undefined,
+    approval_date: offerBE.approval_date
+      ? new Date(offerBE.approval_date)
+      : undefined,
+    accountManager_id: offerBE.accountManager_id || 0,
+    accountManager: {
+      id: offerBE.accountManager_id || 0,
+      name:
+        offerBE.AccountManager?.Person.firstName +
+        " " +
+        offerBE.AccountManager?.Person.lastName,
+    },
+   
+    project_type_id: offerBE.project_type_id || 0,
+    project_type: offerBE.ProjectType
+      ? { id: offerBE.ProjectType.id, name: offerBE.ProjectType.description }
+      : undefined,
+    location_id: offerBE.location_id,
+    attachment_id: offerBE.attachment_id,
+    billing_type: {
+      id: offerBE.billing_type,
+      name: mapBillingTypeName(offerBE.billing_type),
+    }, // hypothetical method for billing type conversion
+    outcome_type: offerBE.OutcomeType
+      ? {
+          id: offerBE.OutcomeType,
+          name: mapOutcomeTypeName(offerBE.OutcomeType),
+        }
+      : undefined,
+    attachment: offerBE?.Attachment?.file_name
+      ? [
+          {
+            name: offerBE?.Attachment?.file_name,
+            extension: offerBE?.Attachment?.content_type,
+            /*     progress: Person.Attachment?.file_name ?? 100, */
+          },
+        ]
+      : undefined,
+    existingFile: offerBE?.Attachment?.file_name
+      ? {
+          name: offerBE?.Attachment?.file_name,
+          /*     progress: Person.Attachment?.file_name ?? 100, */
+        }
+      : undefined,
+    year: new Date(offerBE.year, 1, 1),
+    days: offerBE.days,
+    thereisProject: offerBE.Project ? true : false
+  };
 }
 
-export function fromOfferModelToOfferBEModel(offerModel: OfferModel): OfferBEModel {
-    return {
-        id: offerModel.id,
-        project_code: offerModel.protocol, // mapping protocol to project_code
-        name: offerModel.title, // mapping title to name
-        start_date: offerModel.start_date.toISOString(),
-        end_date: offerModel.end_date?.toISOString() || undefined, // fallback to undefined if empty
-        other_details: offerModel.description || "", // mapping description to other_details
-        rate: offerModel.rate?parseFloat(offerModel.rate.toString()):0,
-        amount: offerModel.amount?parseFloat(offerModel.amount.toString()):0,
-        customer_id: offerModel.customer?.id,
-        accountManager_id: offerModel.accountManager?.id,
-        project_type_id: offerModel.project_type?.id,
-        billing_type: offerModel.billing_type?offerModel.billing_type.id:"", // hypothetical method for billing type conversion
-        OutcomeType: offerModel.outcome_type?.id,
-        year:offerModel.year.getFullYear(),
-        days:offerModel.days || 0
-    };
+export function fromOfferModelToOfferBEModel(
+  offerModel: OfferModel
+): OfferBEModel {
+  return {
+    id: offerModel.id,
+    project_code: offerModel.protocol, // mapping protocol to project_code
+    name: offerModel.title, // mapping title to name
+    Attachment: offerModel.attachment
+      ? {
+          file_name: offerModel.attachment[0].name,
+          content_type:
+            offerModel.attachment[0].extension === ".pdf"
+              ? "application/pdf"
+              : "application/octet-stream",
+          data: offerModel.attachment[0].data || [],
+        }
+      : undefined,
+    /* start_date: offerModel.start_date.toISOString(), */
+    deadline_date: offerModel.end_date?.toISOString() || undefined, // fallback to undefined if empty
+    other_details: offerModel.description || "", // mapping description to other_details
+    rate: offerModel.rate ? parseFloat(offerModel.rate.toString()) : 0,
+    amount: offerModel.amount ? parseFloat(offerModel.amount.toString()) : 0,
+    customer_id: offerModel.customer?.id,
+    location_id: offerModel.location?.id || 1,
+    accountManager_id: offerModel.accountManager?.id,
+    project_type_id: offerModel.project_type?.id,
+    billing_type: offerModel.billing_type ? offerModel.billing_type.id : "", // hypothetical method for billing type conversion
+    OutcomeType: offerModel.outcome_type?.id,
+    year: offerModel.year.getFullYear(),
+    days: Number(offerModel.days) || 0,
+    noCollective: offerModel.NoCollective,
+    approval_date: offerModel.approval_date?.toISOString() || undefined,
+    start_date: offerModel.start_date?.toISOString() || undefined,
+    end_date: offerModel.end_date?.toISOString() || undefined,
+    orderNum: offerModel.orderNum
+  };
 }
 
-export const mapBillingTypeName = (name:string)=>{
-    switch (name){
-        case "Daily":
-            return 'Fatturazione a giornata';
-        case "LumpSum":
-            return 'Fatturazione a corpo';
-    }
-    return "Nessuna Fatturazione";
-}
+// Funzione per convertire un oggetto modificato `OfferModel` in un oggetto `OfferBEModel`
+export const reverseOfferAdapterUpdate = (
+  modifiedData: Record<string, any>
+): Partial<OfferBEModel> => {
+  const result: Partial<OfferBEModel> = {}; //rende tutte le proprietà opzionali
 
-export const mapOutcomeTypeName = (name:string)=>{
-    switch (name){
-        case "P":
-            return 'Positivo';
-        case "N":
-            return 'Negativo';
-        case "A":
-            return 'Annullato';
-        case "R":
-            return 'Rimandato';
-    }
-    return "Nessun esito";
-}
+  // Mappatura dei campi base
+  if ("protocol" in modifiedData) {
+    result.project_code = modifiedData.protocol;
+  }
+
+  if ("title" in modifiedData) {
+    result.name = modifiedData.title;
+  }
+
+  if ("description" in modifiedData) {
+    result.other_details = modifiedData.description;
+  }
+
+  if ("rate" in modifiedData) {
+    result.rate = parseFloat(modifiedData.rate.toString()) || 0;
+  }
+
+  if ("amount" in modifiedData) {
+    result.amount = parseFloat(modifiedData.amount.toString()) || 0;
+  }
+
+  if ("customer" in modifiedData) {
+    result.customer_id = modifiedData.customer?.id;
+  }
+
+  if ("location" in modifiedData) {
+    result.location_id = modifiedData.location?.id;
+  }
+
+  if ("accountManager" in modifiedData) {
+    result.accountManager_id = modifiedData.accountManager.id;
+  }
+
+  if ("project_type" in modifiedData) {
+    result.project_type_id = modifiedData.project_type.id;
+  }
+
+  if ("billing_type" in modifiedData) {
+    result.billing_type = modifiedData.billing_type.id;
+  }
+
+  if ("outcome_type" in modifiedData) {
+    result.OutcomeType = modifiedData.outcome_type.id;
+  }
+
+  if ("end_date" in modifiedData) {
+    result.deadline_date = modifiedData.end_date?.toISOString();
+  }
+
+  if ("attachment" in modifiedData) {
+    result.Attachment = modifiedData.attachment
+      ? {
+          file_name: modifiedData.attachment[0].name,
+          content_type:
+            modifiedData.attachment[0].extension === ".pdf"
+              ? "application/pdf"
+              : "application/octet-stream",
+          data: modifiedData.attachment[0].data || [],
+        }
+      : undefined; // Rimuove l'allegato se undefined
+  }
+
+  if ("noCollective" in modifiedData) {
+    result.noCollective = modifiedData.noCollective;
+  }
+
+  if ("year" in modifiedData) {
+    result.year = new Date(modifiedData.year).getFullYear();
+  }
+
+  if ("days" in modifiedData) {
+    result.days = Number(modifiedData.days) || 0;
+  }
+
+  if ("approval_date" in modifiedData) {
+    result.approval_date = modifiedData.approval_date?.toISOString();
+  }
+  if("start_date" in modifiedData){
+    result.start_date = modifiedData.start_date?.toISOString()
+  }
+  if("end_date" in modifiedData){
+    result.end_date = modifiedData.end_date?.toISOString()
+  }
+  if("orderNum" in modifiedData){
+    result.orderNum = modifiedData.orderNum
+  }
+  return result;
+};
+
+export const mapBillingTypeName = (name: string) => {
+  switch (name) {
+    case "Daily":
+      return "Fatturazione a giornata";
+    case "LumpSum":
+      return "Fatturazione a corpo";
+  }
+  return "Nessuna Fatturazione";
+};
+
+export const mapOutcomeTypeName = (name: string) => {
+  switch (name) {
+    case "P":
+      return "Positivo";
+    case "N":
+      return "Negativo";
+    case "A":
+      return "Annullato";
+    case "R":
+      return "Rimandato";
+  }
+  return "Nessun esito";
+};

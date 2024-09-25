@@ -1,7 +1,7 @@
 export interface CustomerModel{
     id?:number,
     customer_code:string;
-    name?:string;
+    name:string;
     vatNumber?:string;
     website?:string;
     email?:string;
@@ -17,6 +17,7 @@ export interface CustomerBEModel {
     id?:number,
     customer_code: string;
     name: string;
+    surname:string;
     phoneNumber?: string;
     web_site?: string;
     fax?: string;

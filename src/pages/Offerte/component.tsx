@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import NotificationProviderActions from "common/providers/NotificationProvider";
 import GridTable from "common/Table";
 import { offertaService } from "../../services/offertaService";
-import { fromOfferBEModelToOfferModel } from "../../adapters/offertaAdapters";
+import { fromOfferBEModelToOfferModel, locationOption, sedeAdapter } from "../../adapters/offertaAdapters";
 import { OffertaCrud } from "../../component/OffertaCrud/component";
 import CountrySelector from "common/CountrySelector";
 
@@ -51,39 +51,81 @@ const columns = [
   },
 ];
 
-export default function OffertePage() {
-  const [filter, setFilter] = useState();
-  const [sorting, setSorting] = useState([]);
-  const [pagination] = useState({ currentPage: 1, pageSize: 10 });
+const mapColumnKey: { [key: string]: string } = {
+  "customer_name": "Customer.name",
+  "accountManager.name": "AccountManager.Person.lastName",
+  "protocol":"project_code",
+  "title":"name",
+  "description":"other_details",
+  "creation_date":"date_created"
+};
+// Filter mapping function
+const mapFilterFields = (filter: any | null): any => {
+  if (!filter || !filter.filters) {
+    return { logic: "or", filters: [] };
+  }
 
+  const mappedFilters = filter.filters.map((f) => {
+    if ("field" in f) {
+      const fd = f as any;
+      return { ...fd, field: mapColumnKey[fd.field as string] || fd.field };
+    } else {
+      const cf = f as any;
+      return mapFilterFields(cf);
+    }
+  });
+  return { ...filter, filters: mappedFilters };
+};
+export default function OffertePage() {
+
+
+  const [initialWidthWindow, setInitialWidthWindow] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setInitialWidthWindow(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
   const loadData = async (
     pagination: any,
     filter: any,
     sorting: any[],
     term?: string
   ) => {
+
     const include = true;
+    const mappedFilter = mapFilterFields(filter);
+    const mappedSorting = sorting.map((s) => ({
+      ...s,
+      field: mapColumnKey[s.field] || s.field,
+    }));
 
     const tableResponse = await offertaService.search(
       pagination.currentPage,
       pagination.pageSize,
-      filter,
-      sorting,
+      mappedFilter,
+      mappedSorting,
       term,
       include
     );
 
+  
+    const adaptedData = tableResponse.data.map(fromOfferBEModelToOfferModel);
+
+    console.log("Adapted Data: ", adaptedData); 
     return {
-      data: tableResponse.data.map(fromOfferBEModelToOfferModel),
+      data: adaptedData,
       meta: {
-        total: tableResponse.meta.model,
+        total: tableResponse.meta.total,
       },
     };
   };
 
-  useEffect(() => {
-    loadData(pagination, filter, sorting);
-  }, [pagination, filter, sorting]);
+
 
   const handleFormSubmit = (
     type: string,
@@ -116,29 +158,33 @@ export default function OffertePage() {
 
   return (
     <GridTable
-      filter={filter}
-      setFilter={setFilter}
       filterable={true}
-      initialPagination={pagination}
       sortable={true}
-      setSorting={setSorting}
-      sorting={sorting}
       getData={loadData}
       columns={columns}
+      pageable={true}
       resizableWindow={true}
-      initialHeightWindow={800}
-      draggableWindow={true}
-      initialWidthWindow={900}
+      initialHeightWindow={1000}
+      initialWidthWindow={initialWidthWindow} 
       resizable={true}
       actions={(row) => {
-        const actions: string[] = ["create", "show"];
+        const actions: string[] = ["create"]; 
+      
         if (row?.outcome_type?.id === "P") {
-          actions.push("delete");
+          if (row?.thereisProject) {
+            actions.push("show");
+          } else {
+            actions.push("show", "delete");
+          }
+        } else if (row?.thereisProject) {
+          actions.push("show", "edit");
         } else {
-          actions.push("edit", "delete");
+          actions.push("show", "edit", "delete");
         }
+      
         return actions;
       }}
+      
       formCrud={(
         row: any,
         type: string,

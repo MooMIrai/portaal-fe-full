@@ -13,7 +13,7 @@ declare module "common/CustomListView";
 declare module "common/ListBox"
 declare module "common/AutoComplete"
 declare module "common/CountrySelector"
-
+declare module "common/Loader"
 declare module "common/providers/NotificationProvider";
 
 declare module "common/services/BEService";

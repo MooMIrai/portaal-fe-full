@@ -22,7 +22,20 @@ const getDataCustomer= (filterP:string)=>{
         }
     });
 }
-
+const getDataLocation = () => {
+    return offertaService.fetchResources("location").then((res) => {
+        if (res && res.data && Array.isArray(res.data)) {
+            // Mappa sui dati correttamente
+            return res.data.filter(r => r.tenant_code === "TAAL").map(r => ({ id: r.id, name: r.description }));
+        } else {
+            console.warn("Formato della risposta non previsto:", res);
+            return []; // Ritorna un array vuoto se il formato non è quello atteso
+        }
+    }).catch(error => {
+        console.error("Errore nel recupero dei dati:", error);
+        return [];
+    });
+};
 const getDataCommerciale= (filterP:string)=>{
     return CrudGenericService.searchCommerciale(filterP).then((res)=>{
         if(res ){
@@ -45,6 +58,7 @@ export const offertaCustomFields = {
     "projecttype-selector":withField(withAutoComplete(getDataProjectType)),
     "commerciale-selector": withField(withAutoComplete(getDataCommerciale)),
     "customer-selector":withField(withAutoComplete(getDataCustomer)),
+    "sede-selector": withField(withAutoComplete(getDataLocation)),
     "outcometype-selector":withField(withAutoComplete(getDataOutcome)),
     "billingtype-selector":withField(withAutoComplete(getDataBilling))
 }

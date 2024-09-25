@@ -75,6 +75,7 @@ function Clienti() {
        debouncedSearchTerm: termValue,
      }} */
     filterable={true}
+    pageable={true}
     sortable={true}
     getData={loadData}
     columns={columns}
