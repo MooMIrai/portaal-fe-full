@@ -125,7 +125,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
         attachment: {
             name: "attachment",
             label: "Carica CV",
-            type: "upload",
+            type: "uploadSingleFile",
             withCredentials: false,
             disabled: (type === "view" || isViewOnly),
             value: formData.attachment || "",

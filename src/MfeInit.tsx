@@ -1,3 +1,5 @@
+import buildingBlocksIcon from "common/SvgIcon"
+
 export default function () {
   return {
     menuItems: [
@@ -15,6 +17,14 @@ export default function () {
         text: "Personale",
         route: "/personale",
         iconKey: "accessibilityIcon",
+      },
+      {
+        parentId: 5,
+        id: 52,
+        level: 2,
+        text: "Società",
+        route: "/societa",
+        svgIcon:buildingBlocksIcon
       },
       {
         parentId: 5,

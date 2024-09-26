@@ -1,7 +1,4 @@
-import {
-  CompositeFilterDescriptor,
-  SortDescriptor,
-} from "@progress/kendo-data-query";
+
 import client from "common/services/BEService";
 import BaseHttpService from "common/services/BaseHTTPService";
 
@@ -19,8 +16,8 @@ class CrudGenericServiceC {
   getAccounts = async (
     pageNum: number,
     pageSize: number,
-    filtering: CompositeFilterDescriptor,
-    sorting: Array<SortDescriptor>,
+    filtering: any,
+    sorting: any,
     include?: boolean
   ) => {
     try {

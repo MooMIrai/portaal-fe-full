@@ -16,7 +16,7 @@ declare module "common/CountrySelector"
 declare module "common/Accordion"
 declare module "common/InputText"
 declare module "common/TimePicker";
-
+declare module "common/SvgIcon"
 declare module "common/providers/NotificationProvider";
 
 declare module "common/services/BEService";
