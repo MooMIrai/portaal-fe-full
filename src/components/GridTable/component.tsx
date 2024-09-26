@@ -255,7 +255,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
       pageSize: event.page.take,
     };
     setPagination(newPagination);
-    refreshTable();
+   /*  refreshTable(); */
   };
 
   const handleSortChange = (e: GridSortChangeEvent) => {

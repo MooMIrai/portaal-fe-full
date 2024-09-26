@@ -17,7 +17,8 @@ import {
   CheckboxInput,
   DateInput,
   YearInput,
-  UploadInput
+  UploadSingleFileInput,
+  UploadMultipleFilesInput
 } from "./fieldComponents";
 import CountrySelector from "../CountrySelector/component";
 
@@ -45,8 +46,10 @@ const getFieldComponent = (type: FieldType) => {
       return YearInput;
     case 'country':
       return CountrySelector;
-      case 'upload':
-      return UploadInput;
+    case 'uploadSingleFile':
+      return UploadSingleFileInput;
+    case 'uploadMultipleFiles':
+    return UploadMultipleFilesInput;
     default:
       return TextInput;
   }
@@ -75,7 +78,8 @@ export type FieldType =
   | "select"
   | "year"
   | "country"
-  | "upload";
+  | "uploadSingleFile"
+  | "uploadMultipleFiles"
 
 export interface FieldConfig {
   name: string;
@@ -86,11 +90,11 @@ export interface FieldConfig {
   value: any;
   disabled?: boolean;
   required?: boolean;
-  conditions?:(values:any)=>boolean;
-  showLabel?:boolean
-  valueOnChange?: (name: string, value: any) => void; 
-  onDownload?:()=>void
-  multiple?:boolean
+  conditions?: (values: any) => boolean;
+  showLabel?: boolean
+  valueOnChange?: (name: string, value: any) => void;
+  onDownload?: () => void
+  multiple?: boolean
   existingFile?: { name: string };
   //onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
@@ -107,7 +111,7 @@ export interface DynamicFormProps {
   customDisabled?: boolean;
   submitText: string;
   addedFields?: Record<string, React.JSX.Element>
-  
+
 }
 
 const DynamicField = ({
@@ -118,35 +122,36 @@ const DynamicField = ({
 }: {
   field: FieldConfig;
   formRenderProps: FormRenderProps;
-  addedFields?:Record<string,React.JSX.Element>
+  addedFields?: Record<string, React.JSX.Element>
   valueOnChange?: (name: string, value: any) => void;
 
 }) => {
 
-  const { name, type, label, validator, options, disabled,required,showLabel = true ,onDownload,multiple,existingFile} = field;
-  let Component:any = getFieldComponent(type);
+  const { name, type, label, validator, options, disabled, required, showLabel = true, onDownload, multiple, existingFile } = field;
+  let Component: any = getFieldComponent(type);
 
-  if(addedFields && Object.keys(addedFields).some(s=>s===type)){
+  if (addedFields && Object.keys(addedFields).some(s => s === type)) {
     Component = addedFields[type];
   }
 
- 
+
   return (
     <Field
       name={name}
       component={Component}
-      label={label + (required?'*':'')}
+      label={label + (required ? '*' : '')}
       showLabel={showLabel}
       validator={validator}
       options={options}
       type={type}
       disabled={disabled}
+      files={formRenderProps.valueGetter(name)}
       multiple={multiple}
       onDownload={onDownload}
       existingFile={existingFile}
       value={formRenderProps.valueGetter(name)}
       onChange={(event) => {
-   
+
         let value = undefined;
         if (event.value) {
           value = event.value;
@@ -154,7 +159,7 @@ const DynamicField = ({
           value = event.target.value;
         }
 
-       
+
         formRenderProps.onChange(name, {
           value: value,
         });
@@ -168,8 +173,8 @@ const DynamicField = ({
   );
 };
 
-const DynamicForm = React.forwardRef<any,DynamicFormProps>((props,ref)=>{
-  
+const DynamicForm = React.forwardRef<any, DynamicFormProps>((props, ref) => {
+
   const {
     fields,
     formData,
@@ -185,57 +190,58 @@ const DynamicForm = React.forwardRef<any,DynamicFormProps>((props,ref)=>{
   } = props;
 
 
-  React.useEffect(()=>{
+  React.useEffect(() => {
     console.log(props.description + ' init')
-    return ()=> console.log(props.description + ' destroy')
-  },[])
+    return () => console.log(props.description + ' destroy')
+  }, [])
 
   return <Form
-  initialValues={formData}
-  onSubmit={(dataItem) => onSubmit(dataItem)}
-  ref={ref}
-  render={(formRenderProps: FormRenderProps) => (
-    <FormElement>
-      {children === undefined && (
-        <fieldset className={"k-form-fieldset"}>
-          <legend className={"k-form-legend"}>{description}</legend>
-          {fields.filter((field)=>{
-            const formRef:any = ref; 
-            return !field.conditions || (formRef && formRef.current && field.conditions(formRef.current.values))
-          }).map((field, index) => {
-            return (
-            <FieldWrapper key={index} style={field.type==='country' ?{gridColumn:'span 3'}:undefined /* || field.type === 'upload' ?{gridColumn:'span 2'}:undefined */}>
-                <DynamicField
-                  addedFields={addedFields}
-                  field={field}
-                  formRenderProps={formRenderProps}
-                  valueOnChange={field.valueOnChange} 
-                />
-              
-            </FieldWrapper>
-          )}
-          )}
-        </fieldset>
-      )}
-      {children}
-      <div className="k-form-buttons">
-        {extraButton && <Button onClick={extraBtnAction}>Cancel</Button>}
-        {showSubmit && (
-          <Button
-            themeColor={"primary"}
-            disabled={
-              children !== undefined || customDisabled === true
-                ? false
-                : !formRenderProps.allowSubmit
+    initialValues={formData}
+    onSubmit={(dataItem) => onSubmit(dataItem)}
+    ref={ref}
+    render={(formRenderProps: FormRenderProps) => (
+      <FormElement>
+        {children === undefined && (
+          <fieldset className={"k-form-fieldset"}>
+            <legend className={"k-form-legend"}>{description}</legend>
+            {fields.filter((field) => {
+              const formRef: any = ref;
+              return !field.conditions || (formRef && formRef.current && field.conditions(formRef.current.values))
+            }).map((field, index) => {
+              return (
+                <FieldWrapper key={index} style={field.type === 'country' ? { gridColumn: 'span 3' } : undefined /* || field.type === 'upload' ?{gridColumn:'span 2'}:undefined */}>
+                  <DynamicField
+                    addedFields={addedFields}
+                    field={field}
+                    formRenderProps={formRenderProps}
+                    valueOnChange={field.valueOnChange}
+                  />
+
+                </FieldWrapper>
+              )
             }
-          >
-            {submitText}
-          </Button>
+            )}
+          </fieldset>
         )}
-      </div>
-    </FormElement>
-  )}
-/>
+        {children}
+        <div className="k-form-buttons">
+          {extraButton && <Button onClick={extraBtnAction}>Cancel</Button>}
+          {showSubmit && (
+            <Button
+              themeColor={"primary"}
+              disabled={
+                children !== undefined || customDisabled === true
+                  ? false
+                  : !formRenderProps.allowSubmit
+              }
+            >
+              {submitText}
+            </Button>
+          )}
+        </div>
+      </FormElement>
+    )}
+  />
 })
 
 

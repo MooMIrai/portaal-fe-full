@@ -12,7 +12,7 @@ type CustomUploadProps = {
   existingFile?: { name: string;}; 
 };
 
-function UploadComponent(props: CustomUploadProps) {
+function UploadSingleFileComponent(props: CustomUploadProps) {
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -95,4 +95,4 @@ function UploadComponent(props: CustomUploadProps) {
   );
 }
 
-export default UploadComponent;
+export default UploadSingleFileComponent;

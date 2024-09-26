@@ -28,11 +28,6 @@ const mfeConfig = {
     "./CustomCard": "./src/components/CustomCard/component",
 
     "./Loader":"./src/components/Loader/component",
-    "./AutoComplete": "./src/components/AutoComplete/component",
-    "./CountrySelector": "./src/components/CountrySelector/component",
-    "./AvatarIcon": "./src/components/AvatarIcon/component",
-    "./CustomCard": "./src/components/CustomCard/component",
-
     "./Accordion":"./src/components/Accordion/component",
     "./TimePicker":"./src/components/TimePicker/component",
     "./SvgIcon":"./src/components/SvgIcon/component",
