@@ -129,6 +129,8 @@ interface TablePaginatedProps extends GridProps {
 
   // Custom Row Actions
   customRowActions?: CustomRowAction[];
+
+  forceRefresh?: number;
 }
 
 const MyPager = (props: PagerProps) => (
@@ -235,6 +237,13 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
     refreshTable();
   }, [pagination, debouncedFilterColumn, sorting]);
 
+  useEffect(() => {
+    if (props.forceRefresh) {
+      refreshTable();
+    }
+  }, [props.forceRefresh])
+
+
   useImperativeHandle(ref, () => ({
     refreshTable,
     grid: gridRef.current,
@@ -297,7 +306,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
       pageSize: event.page.take,
     };
     setPagination(newPagination);
-   /*  refreshTable(); */
+    /*  refreshTable(); */
   };
 
   const handleSortChange = (e: GridSortChangeEvent) => {
@@ -534,20 +543,20 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
           modal.open
             ? handleCloseModal
             : customActionModal.open
-            ? closeCustomActionModal
-            : cellModal.open
-            ? closeCellModal
-            : () => {}
+              ? closeCustomActionModal
+              : cellModal.open
+                ? closeCellModal
+                : () => { }
         }
         title={
           modal.open
             ? title
             : customActionModal.open && customActionModal.actionIndex !== null
-            ? props.customRowActions?.[customActionModal.actionIndex]
+              ? props.customRowActions?.[customActionModal.actionIndex]
                 ?.tooltip || ""
-            : cellModal.open && cellModal.title
-            ? `Azione su ${cellModal.title}`
-            : ""
+              : cellModal.open && cellModal.title
+                ? `Azione su ${cellModal.title}`
+                : ""
         }
         show={modal.open || customActionModal.open || cellModal.open}
         resizable={props.resizableWindow}
@@ -564,24 +573,24 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
       >
         {modal.open && props.formCrud && modal.type
           ? props.formCrud(
-              row,
-              new TableToFormTypeAdapter().adapt(modal.type),
-              handleCloseModal,
-              refreshTable
-            )
+            row,
+            new TableToFormTypeAdapter().adapt(modal.type),
+            handleCloseModal,
+            refreshTable
+          )
           : customActionModal.open &&
             customActionModal.actionIndex !== null &&
             props.customRowActions?.[customActionModal.actionIndex]
               ?.modalContent
-          ? props.customRowActions[customActionModal.actionIndex!]
+            ? props.customRowActions[customActionModal.actionIndex!]
               .modalContent!(
-              customActionModal.dataItem,
-              closeCustomActionModal,
-              refreshTable
-            )
-          : cellModal.open && cellModal.content
-          ? cellModal.content(cellModal.dataItem)
-          : null}
+                customActionModal.dataItem,
+                closeCustomActionModal,
+                refreshTable
+              )
+            : cellModal.open && cellModal.content
+              ? cellModal.content(cellModal.dataItem)
+              : null}
       </CustomWindow>
     </div>
   );
