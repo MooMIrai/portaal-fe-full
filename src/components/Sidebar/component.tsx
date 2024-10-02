@@ -16,7 +16,7 @@ import {
 } from "@progress/kendo-svg-icons";
 import { SVGIcon, SvgIcon } from "@progress/kendo-react-common";
 import styles from "./style.module.scss";
-import * as svgIcons from "@progress/kendo-svg-icons"; 
+import * as svgIcons from "@progress/kendo-svg-icons";
 import AuthService from "../../services/AuthService";
 import withAutocomplete from "../../hoc/AutoComplete";
 
@@ -32,15 +32,21 @@ interface CustomItemProps extends DrawerItemProps {
 
 
 const CustomItem = (props: CustomItemProps) => {
-  const { visible, parentId,iconKey, ...others } = props;
+  const { visible, parentId, iconKey, svgIcon, ...others } = props;
   const arrowDir = props.dataExpanded ? chevronDownIcon : chevronRightIcon;
-  const resolvedIcon: SVGIcon | undefined = iconKey ? (svgIcons as any)[iconKey] : undefined;
+  const resolvedIcon: SVGIcon | undefined = svgIcon  // uso o svgIcon direttamente con svgIcon oppure iconkey con il nome dell'icona  a stringa
+    ? svgIcon
+    : iconKey
+      ? (svgIcons as any)[iconKey]
+      : undefined;
+
+
   const itemStyle = parentId
-  ? { marginLeft: "2rem" }
-  : {};
+    ? { marginLeft: "2rem" }
+    : {};
   return props.visible === false ? null : (
     <DrawerItem {...others} style={itemStyle}>
-     {resolvedIcon && <SvgIcon icon={resolvedIcon} />} 
+      {resolvedIcon && <SvgIcon icon={resolvedIcon} />}
       <span className={"k-item-text"}>{props.text}</span>
       {props.dataExpanded !== undefined && (
         <SvgIcon
@@ -178,20 +184,20 @@ const Sidebar = ({ children, items }: SidebarPros) => {
           <span className="title">{""}</span>
         </div>
         <div className={styles.buttonToolBar}>
-        <div className={styles.autoComplete}>
-          {tenants.length > 1 && (
-            <TenantsSelector
-              value={selectedTenant}
-              onChange={handleTenantChange}
-            />
-          
-          )}
-           
-      </div>
-      <Button svgIcon={logoutIcon} /* fillMode="outline" */ themeColor="primary" onClick={logout}>Logout</Button>
-      </div>
+          <div className={styles.autoComplete}>
+            {tenants.length > 1 && (
+              <TenantsSelector
+                value={selectedTenant}
+                onChange={handleTenantChange}
+              />
+
+            )}
+
+          </div>
+          <Button svgIcon={logoutIcon} /* fillMode="outline" */ themeColor="primary" onClick={logout}>Logout</Button>
         </div>
-     
+      </div>
+
       <Drawer
         expanded={drawerExpanded}
         mode="push"

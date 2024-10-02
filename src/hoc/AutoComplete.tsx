@@ -45,8 +45,8 @@ const withAutocomplete = (fetchData:(filter:string)=>Promise<Array<{id:any,name:
                 setValue(""); 
             } else {
                 setValue({
-                    id: props.value.id,
-                    name: props.value.name
+                    id: props.value?.id,
+                    name: props.value?.name
                 });
             }
         } else {

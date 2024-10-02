@@ -10,8 +10,10 @@ import {
 import { Calendar, CalendarProps, DatePicker } from "@progress/kendo-react-dateinputs";
 
 import withField from "../../hoc/Field";
-import UploadComponent from "../UpLoad/component";
+import UploadComponent from "../UpLoadSingleFile/component";
 import { Button } from "@progress/kendo-react-buttons";
+import UploadMultipleFileComponent from "../UploadMultipleFiles/component";
+import UploadSingleFileComponent from "../UpLoadSingleFile/component";
 
 const TextInputC = (
   fieldRenderProps: FieldRenderProps & { disabled?: boolean }
@@ -105,8 +107,88 @@ const TextAreaInputC = (
   );
 };
 
+const UploadMutilpleInputC = (
+  fieldRenderProps: FieldRenderProps & { disabled?: boolean; label?: string, accept?: string, autoUpload?: boolean, onDownload?:()=>void, multiple?:boolean}
+) => {
+  const {
+    validationMessage,
+    visited,
+    disabled,
+    required,
+    value,
+    label,
+    files,
+    onDownload,
+    multiple,
+    ...others
+  } = fieldRenderProps;
 
-const UploadInputC = (
+  const [attachments, setAttachments] = useState<any[]>(fieldRenderProps.value || []);
+
+
+  const upLoadData = (event: any) => {
+    if (Array.isArray(event.affectedFiles)) {
+      const file = event.affectedFiles[0].getRawFile();
+      const reader = new FileReader();
+  
+      reader.onload = function (evt) {
+        const result = evt?.target?.result;
+  
+        if (result instanceof ArrayBuffer) {
+          // Converti ArrayBuffer in Uint8Array
+          const byteArray = new Uint8Array(result);
+          const byteArrayAsArray = Array.from(byteArray);
+          const newAttachment = {
+            name: event.affectedFiles[0].name,
+            extension: event.affectedFiles[0].extension,
+            data: byteArrayAsArray, // Dati in Uint8Array
+            size: event.affectedFiles[0].size,
+            progress: 100,
+            status: 2,
+            uid: event.affectedFiles[0].uid,
+          };
+  
+          setAttachments((prevAttachments) => [...prevAttachments, newAttachment]);
+          fieldRenderProps.onChange({ value: [...attachments, newAttachment] });
+        }
+      };
+
+      reader.readAsArrayBuffer(file);
+    } else {
+      console.error("affectedFiles non è un array:", event.affectedFiles);
+    }
+  };
+
+  const onChangeHandler = (event: any) => {
+    fieldRenderProps.onChange({ value: event.newState });
+    upLoadData(event);
+  };
+
+  const onRemoveHandler = (event: any) => {
+
+    const updatedAttachments = attachments.filter(
+      (file) => file.uid !== event.affectedFiles[0].uid
+    );
+    setAttachments(updatedAttachments);
+
+
+    fieldRenderProps.onChange({ value: updatedAttachments });
+  };
+  return (
+    <div>
+      <UploadMultipleFileComponent
+        files={files}
+        onAdd={onChangeHandler}
+        onRemove={onRemoveHandler}
+        multiple={false}
+        disabled={disabled}
+        onDownload={onDownload}
+        {...others}
+      />
+    </div>
+  );
+};
+const UploadSingleFIleInputC = (
   fieldRenderProps: FieldRenderProps & { disabled?: boolean; label?: string, accept?: string, autoUpload?: boolean, onDownload?: () => void, multiple?: boolean,existingFile?:{name:string} }
 ) => {
   const {
@@ -123,12 +205,11 @@ const UploadInputC = (
     ...others
   } = fieldRenderProps;
   const handleFileUpload = (fileDataArray: { name: string; extension: string; data: number[]; size: number; status: number }[]) => {
-    console.log("Files uploaded:", fileDataArray);
     fieldRenderProps.onChange({ value: fileDataArray });
   };
   return (
     <div>
-      <UploadComponent
+      <UploadSingleFileComponent
         onFileChange={handleFileUpload}
         multiple={multiple}
         existingFile={existingFile}
@@ -248,5 +329,5 @@ export const SelectInput = withField(SelectInputC);
 export const RadioGroupInput = withField(RadioGroupInputC);
 export const CheckboxInput = withField(CheckboxInputC);
 export const YearInput = withField(YearInputC);
-export const UploadInput = withField(UploadInputC)
-
+export const UploadSingleFileInput = withField(UploadSingleFIleInputC)
+export const UploadMultipleFilesInput = withField(UploadMutilpleInputC)

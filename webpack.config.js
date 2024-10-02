@@ -29,7 +29,6 @@ const mfeConfig = {
     "./CustomChip": "./src/components/CustomChip/component.tsx",
 
     "./Loader":"./src/components/Loader/component",
-
     "./Accordion":"./src/components/Accordion/component",
     "./TimePicker":"./src/components/TimePicker/component",
     "./SvgIcon":"./src/components/SvgIcon/component",
