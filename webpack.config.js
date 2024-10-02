@@ -26,6 +26,7 @@ const mfeConfig = {
     "./CountrySelector": "./src/components/CountrySelector/component",
     "./AvatarIcon": "./src/components/AvatarIcon/component",
     "./CustomCard": "./src/components/CustomCard/component",
+    "./CustomChip": "./src/components/CustomChip/component.tsx",
 
     "./Loader":"./src/components/Loader/component",
 

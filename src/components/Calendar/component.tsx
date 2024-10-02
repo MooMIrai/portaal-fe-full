@@ -35,9 +35,9 @@ interface CustomCalendarProps {
   handleDataChange: ({ deleted }: SchedulerDataChangeEvent) => void;
   handleDateChange: (args: SchedulerDateChangeEvent) => void;
   date?: Date;
-  
-  holidays?:Array<number>,
-  item?:ComponentType<SchedulerItemProps> | undefined
+
+  holidays?: Array<number>,
+  item?: ComponentType<SchedulerItemProps> | undefined
 }
 
 /*
@@ -57,49 +57,49 @@ export default function CustomCalendar(props: Readonly<CustomCalendarProps>) {
 
 
 
-  const {selectedEnd,selectedStart,setEnd,setStart,drag,setHolidays,setDate} = useContext(CalendarContext);
+  const { selectedEnd, selectedStart, setEnd, setStart, drag, setHolidays, setDate } = useContext(CalendarContext);
 
 
 
-  
-  const closeModal = ()=>{
+
+  const closeModal = () => {
     setEnd(undefined),
-    setStart(undefined);
+      setStart(undefined);
   }
 
-  const getEditModal = ()=>{
-    if(props.contentModal){
-      
-      const ret = props.contentModal({start:selectedStart,end:selectedEnd},closeModal);
-      if(ret ){
+  const getEditModal = () => {
+    if (props.contentModal) {
+
+      const ret = props.contentModal({ start: selectedStart, end: selectedEnd }, closeModal);
+      if (ret) {
         return {
-          component:ret.component || <></>,
-          title:ret.title
+          component: ret.component || <></>,
+          title: ret.title
         }
       }
     }
     return {
       component: <></>,
-      title:"error"
+      title: "error"
     }
-    
+
   }
 
-  useEffect(()=>{
-      setHolidays(props.holidays || []);
-  },[props.holidays])
+  useEffect(() => {
+    setHolidays(props.holidays || []);
+  }, [props.holidays])
 
-  useEffect(()=>{
+  useEffect(() => {
     setDate(props.date || new Date());
-  },[props.date])
+  }, [props.date])
 
   let modal = undefined;
 
-  if(selectedStart && selectedEnd && !drag){
-    modal=getEditModal();
+  if (selectedStart && selectedEnd && !drag) {
+    modal = getEditModal();
   }
 
-  
+
   return (<>
 
     <Scheduler
@@ -123,11 +123,11 @@ export default function CustomCalendar(props: Readonly<CustomCalendarProps>) {
       }}
     >
       {/* <WeekView /> */}
-      <MonthView  />
+      <MonthView />
     </Scheduler>
 
 
-    {modal && <CustomWindow style={{width:'80%',left:'50%',top:'50%',transform:'translate(-50%,-50%)'}}  show={true} onClose={closeModal} title={modal.title || ''} showModalFooter={false}>
+    {modal && <CustomWindow style={{ width: '80%', left: '50%', top: '50%', transform: 'translate(-50%,-50%)' }} show={true} onClose={closeModal} title={modal.title || ''} showModalFooter={false}>
       {
         modal.component
       }

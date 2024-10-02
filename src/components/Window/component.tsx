@@ -16,8 +16,8 @@ interface CustomWindowProps extends WindowProps {
   draggable?: boolean;
   resizable?: boolean;
   showModalFooter: boolean;
-  top?:number;
-  left?:number,
+  top?: number;
+  left?: number,
 }
 
 const CustomWindow = ({
@@ -50,7 +50,8 @@ const CustomWindow = ({
       modal={true}
       style={{
         ...style,
-        height:'fit-content',
+        height: 'fit-content',
+        maxHeight: '90%'
       }}
       minHeight={minHeight}
       minWidth={minWidth}
