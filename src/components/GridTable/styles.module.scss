@@ -11,13 +11,18 @@
 .commandButtons {
   display: flex;
   justify-content: center;
-  gap:10px;
+  gap: 10px;
 }
 
 .columnGrid {
   min-width: 200px;
 }
 
-.toolBarContainer{
+.toolBarContainer {
   border-radius: 5px;
+}
+
+.commandCustomButtons {
+  display: flex;
+  justify-content: center;
 }

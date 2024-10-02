@@ -46,6 +46,16 @@ import { WindowActionsEvent } from "@progress/kendo-react-dialogs";
 import { Loader } from "@progress/kendo-react-indicators";
 import CellAction from "./CellAction/component";
 
+interface CustomRowAction {
+  icon: any;
+  modalContent?: (
+    dataItem: any,
+    closeModal: () => void,
+    refreshTable: () => void
+  ) => JSX.Element;
+  tooltip?: string;
+}
+
 interface TablePaginatedProps extends GridProps {
   ref?: any;
   pageSizeOptions?: number[];
@@ -116,6 +126,9 @@ interface TablePaginatedProps extends GridProps {
   onStageChangeWindow?: (event: WindowActionsEvent) => void;
   classNameWindow?: string;
   classNameWindowDelete?: string;
+
+  // Custom Row Actions
+  customRowActions?: CustomRowAction[];
 }
 
 const MyPager = (props: PagerProps) => (
@@ -148,7 +161,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
     dataItem: any;
     field: string | null;
     content: ((dataItem: any) => JSX.Element) | null;
-    title: string | null; // Aggiunto
+    title: string | null;
   }>({
     open: false,
     dataItem: null,
@@ -156,15 +169,44 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
     content: null,
     title: null,
   });
-  const [total, setTotal] = useState<number>(0);
-  const [pagination, setPagination] = useState<PaginationModel>({
-    currentPage: 1,
-    pageSize: 10,
+
+  const [customActionModal, setCustomActionModal] = useState<{
+    open: boolean;
+    dataItem: any;
+    actionIndex: number | null;
+  }>({
+    open: false,
+    dataItem: null,
+    actionIndex: null,
   });
+
+  const openCustomActionModal = (dataItem: any, actionIndex: number) => {
+    setCustomActionModal({
+      open: true,
+      dataItem,
+      actionIndex,
+    });
+  };
+
+  const closeCustomActionModal = () => {
+    setCustomActionModal({
+      open: false,
+      dataItem: null,
+      actionIndex: null,
+    });
+  };
+
+  const [total, setTotal] = useState<number>(0);
+  const [pagination, setPagination] = useState<PaginationModel>(
+    props.initialPagination || {
+      currentPage: 1,
+      pageSize: 10,
+    }
+  );
   const [data, setData] = useState<Array<Record<string, any>>>();
   const [row, setRow] = useState<Record<string, any> | undefined>(undefined);
   const [filter, setFilter] = useState<any>({ logic: "or", filters: [] });
-  const [sorting, setSorting] = useState<any[]>([]);
+  const [sorting, setSorting] = useState<any[]>(props.sorting || []);
   const [loading, setLoading] = useState(false);
   const debouncedFilterColumn = useDebounce(filter, 650);
   const actionMode = props.actionMode ?? "row";
@@ -260,6 +302,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
 
   const handleSortChange = (e: GridSortChangeEvent) => {
     setSorting(e.sort);
+    props.setSorting?.(e.sort);
   };
 
   const modalConfig: Record<
@@ -288,12 +331,9 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
     },
   };
 
-  const title =
-    actionMode === "row" && modal.type ? modalConfig[modal.type]?.title : "";
+  const title = modal.open && modal.type ? modalConfig[modal.type]?.title : "";
   const callToAction =
-    actionMode === "row" && modal.type
-      ? modalConfig[modal.type]?.callToAction
-      : "";
+    modal.open && modal.type ? modalConfig[modal.type]?.callToAction : "";
 
   let expandedProps = {};
   if (props.expand?.enabled) {
@@ -308,7 +348,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
     setFilter(e.filter);
   };
   const windowClassName =
-    modal.type === TABLE_ACTION_TYPE.delete
+    modal.open && modal.type === TABLE_ACTION_TYPE.delete
       ? props.classNameWindowDelete
       : props.classNameWindow;
 
@@ -416,6 +456,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
           <GridColumn
             filterable={false}
             field="action"
+            title="Azioni"
             cell={(cellGrid: GridCellProps) => {
               const actions = props.actions?.(cellGrid.dataItem);
 
@@ -458,13 +499,57 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
             }}
           />
         )}
+
+        {/* Colonna delle azioni personalizzate */}
+        {props.customRowActions && (
+          <GridColumn
+            field="customActions"
+            filterable={false}
+            sortable={false}
+            title="Azioni Personalizzate"
+            cell={(cellGrid: GridCellProps) => (
+              <td>
+                <div className={styles.commandCustomButtons}>
+                  {props.customRowActions!.map((action, index) => (
+                    <Button
+                      key={index}
+                      svgIcon={action.icon}
+                      fillMode="link"
+                      onClick={() =>
+                        openCustomActionModal(cellGrid.dataItem, index)
+                      }
+                      title={action.tooltip}
+                    />
+                  ))}
+                </div>
+              </td>
+            )}
+          />
+        )}
       </Grid>
 
       <CustomWindow
         showModalFooter={false}
-        onClose={actionMode === "row" ? handleCloseModal : closeCellModal}
-        title={actionMode === "row" ? title : cellModal.title + ""}
-        show={actionMode === "row" ? modal.open : cellModal.open}
+        onClose={
+          modal.open
+            ? handleCloseModal
+            : customActionModal.open
+            ? closeCustomActionModal
+            : cellModal.open
+            ? closeCellModal
+            : () => {}
+        }
+        title={
+          modal.open
+            ? title
+            : customActionModal.open && customActionModal.actionIndex !== null
+            ? props.customRowActions?.[customActionModal.actionIndex]
+                ?.tooltip || ""
+            : cellModal.open && cellModal.title
+            ? `Azione su ${cellModal.title}`
+            : ""
+        }
+        show={modal.open || customActionModal.open || cellModal.open}
         resizable={props.resizableWindow}
         draggable={props.draggableWindow}
         initialHeight={props.initialHeightWindow}
@@ -473,19 +558,28 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
         top={props.topWindow}
         height={props.heightWindow}
         width={props.widthWindow}
-        callToAction={actionMode === "row" ? callToAction : undefined}
         stage={props.stageWindow}
         onStageChange={props.onStageChangeWindow}
         className={windowClassName}
       >
-        {actionMode === "row" && props.formCrud && modal.open
+        {modal.open && props.formCrud && modal.type
           ? props.formCrud(
               row,
               new TableToFormTypeAdapter().adapt(modal.type),
               handleCloseModal,
-              () => refreshTable()
+              refreshTable
             )
-          : actionMode === "cell" && cellModal.open && cellModal.content
+          : customActionModal.open &&
+            customActionModal.actionIndex !== null &&
+            props.customRowActions?.[customActionModal.actionIndex]
+              ?.modalContent
+          ? props.customRowActions[customActionModal.actionIndex!]
+              .modalContent!(
+              customActionModal.dataItem,
+              closeCustomActionModal,
+              refreshTable
+            )
+          : cellModal.open && cellModal.content
           ? cellModal.content(cellModal.dataItem)
           : null}
       </CustomWindow>
