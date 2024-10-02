@@ -16,7 +16,7 @@ const mfeConfig = (path, mode) => {
   if (mode === "production") {
     remotes = {
       common: "common@common/remoteEntry.js",
-      auth: "auth@auth/remoteEntry.js",
+      auth: "auth@lauth/remoteEntry.js",
       lookups: "lookups@lookups/remoteEntry.js",
       sales: "sales@sales/remoteEntry.js",
     };
