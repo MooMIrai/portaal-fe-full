@@ -2,58 +2,68 @@ import Accordion from 'common/Accordion'
 import React, { PropsWithChildren, useEffect, useState } from 'react'
 import { TimesheetsService } from '../../services/rapportinoService';
 import InputText from 'common/InputText';
-import Button from 'common/Button'
-import NotificationActions from 'common/providers/NotificationProvider'
+import Button from 'common/Button';
+import CustomChip from 'common/CustomChip';
+import NotificationActions from 'common/providers/NotificationProvider';
+import {
+    checkCircleIcon
+} from "@progress/kendo-svg-icons";
 
 
 import styles from './styles.module.scss';
 
-const MAX_HOURS=process.env.MAXIMUM_HOURS_WORK;
+const MAX_HOURS = process.env.MAXIMUM_HOURS_WORK;
 
 export const dateWithoutTimezone = (date: Date) => {
     const tzoffset = date.getTimezoneOffset() * 60000; //offset in milliseconds
     const withoutTimezone = new Date(date.valueOf() - tzoffset)
-      .toISOString()
-      .slice(0, -1);
+        .toISOString()
+        .slice(0, -1);
     return withoutTimezone;
-  };
+};
 
 interface RapportinoCrudProps {
-    
+
     dates: Date[];
     timesheetId: number;
-    values:Record<number,Record<string,number>>;
-    hasHoliday:boolean,
-    closeModal:()=>void,
-    
-    
+    values: Record<number, Record<string, number>>;
+    hasHoliday: boolean;
+    closeModal: () => void;
+    holidaysData: Record<number, Record<string, { hours: number, name: string, approved: Date }[]>>;
+
 }
 
-function RapportinoInput(props:PropsWithChildren<{
-        id:number,
-        description:string,
-        value:number,
-        onChange:(value:number)=>void,
-        type:"H"|"D",
-        disabled:boolean
-    }>){
+function RapportinoInput(props: PropsWithChildren<{
+    id: number,
+    description: string,
+    value: number,
+    onChange: (value: number) => void,
+    type: "H" | "D",
+    disabled: boolean
+}>) {
+
+    useEffect(() => {
+        if (props.value === 8 && props.type === 'D') {
+            props.onChange(8);
+        }
+    }, [props.value])
 
 
     return <div className={styles.rapportinoContainer}>
         <p>{props.description}</p>
-        {props.type==='H'?<InputText disabled={props.disabled} value={props.value} onChange={(e)=>{
-            if(e.value.length)
+        {props.type === 'H' ? <InputText disabled={props.disabled} value={props.value} clearable onChange={(e) => {
+            if (e.value.length)
                 props.onChange(parseInt(e.value))
             else
                 props.onChange(0)
-        }} />:
-        <input type='checkbox' disabled={props.disabled} style={{width:20,height:20}} onChange={(ev)=>{
-            if(ev.target.checked){
-                props.onChange(8)
-            }else{
-                props.onChange(0)
-            }
-        }}></input>
+        }} /> :
+            <input type='checkbox' disabled={props.disabled} style={{ width: 20, height: 20 }} checked={props.value === 8} onChange={(ev) => {
+                if (ev.target.checked) {
+                    props.onChange(8)
+                } else {
+                    props.onChange(0)
+                }
+            }}></input>
 
         }
     </div>
@@ -61,181 +71,228 @@ function RapportinoInput(props:PropsWithChildren<{
 }
 
 
-export default function RapportinoCrud(props:RapportinoCrudProps){
+export default function RapportinoCrud(props: RapportinoCrudProps) {
 
-    const [data,setData] = useState<Record<string,any>>();
-    const [values,setValues] = useState<Record<number,number>>({});
-    const [errors,setErrors] = useState<string>();
-    const [disableExcept,setDisableExcept] = useState();
+    const [data, setData] = useState<Record<string, any>>();
+    const [values, setValues] = useState<Record<number, number>>({});
+    const [errors, setErrors] = useState<string>();
+    const [disableExcept, setDisableExcept] = useState();
 
-    const updateData = ()=>{
-        return TimesheetsService.getActivitiesByListDates(props.dates, props.timesheetId).then(res=>{
+    const updateData = () => {
+        return TimesheetsService.getActivitiesByListDates(props.dates, props.timesheetId).then(res => {
             setData(res);
         });
     }
 
-    useEffect(()=>{
-        if(props.dates && props.dates.length){
-            updateData().then(()=>{
-                if(props.values){
-                    if(Object.keys(props.values).length===1){
-                        setValues(props.values[Object.keys(props.values)[0]]);
-                       
-                    } 
+    useEffect(() => {
+        if (props.dates && props.dates.length) {
+            updateData().then(() => {
+                if (props.values) {
+                    if (Object.keys(props.values).length === 1) {
+                        let day = Object.keys(props.values)[0];
+                        let ids = Object.keys(props.values[day]);
+                        let newObj = {};
+                        ids.forEach((id: string) => {
+                            let isApprovedHoliday = !!(props.holidaysData[day] && props.holidaysData[day][id]?.every(h => h.approved));
+                            if (!isApprovedHoliday) {
+                                newObj[id] = props.values[day][id];
+                            }
+                        })
+                        setValues(newObj);
+                    }
                 }
             });
         }
-    },[props.dates])
+    }, [props.dates])
 
-    useEffect(()=>{
-        const filteredKeys = Object.keys(values).filter(k=>values[k]!==0);
-        if(Object.keys(values).length != filteredKeys.length){
+    useEffect(() => {
+        const filteredKeys = Object.keys(values).filter(k => values[k] !== 0);
+        if (Object.keys(values).length != filteredKeys.length) {
             const newVal = {};
-            filteredKeys.forEach(k=>{newVal[k]=values[k]});
+            filteredKeys.forEach(k => { newVal[k] = values[k] });
             setValues(newVal)
-        }else{
+        } else {
             let validatorsMessage = validateMaxHours();
             setErrors(validatorsMessage);
         }
 
-    },[values])
+    }, [values])
 
 
 
-    const onInputChange = (activityId:number,hours:number)=>{
-        const newValues=JSON.parse(JSON.stringify(values));
-        newValues[activityId]=hours;
+    const onInputChange = (activityId: number, hours: number) => {
+        const newValues = JSON.parse(JSON.stringify(values));
+        newValues[activityId] = hours;
         setValues(newValues);
     }
 
-    const validateMaxHours = ()=>{
-        if(MAX_HOURS && !disableExcept){
-            let sum=0;
-            if(values){
-                Object.keys(values).forEach((key)=>sum+=values[key]);
+    const validateMaxHours = () => {
+        if (MAX_HOURS && !disableExcept) {
+            let sum = 0;
+            if (values) {
+                Object.keys(values).forEach((key) => sum += values[key]);
             }
-            
-            if(sum > parseInt(MAX_HOURS)){
-                return "\n Hai superato il limite massimo di "+ MAX_HOURS + " proseguendo registrerai degli straordinari.";
+
+            if (sum > parseInt(MAX_HOURS)) {
+                return "\n Hai superato il limite massimo di " + MAX_HOURS + " proseguendo registrerai degli straordinari.";
             }
         }
         return "";
     }
 
-    const handleSave = (holidayConfirm:boolean)=>{
+    const handleSave = (holidayConfirm: boolean) => {
 
         TimesheetsService.saveActivities(
-            props.timesheetId,dateWithoutTimezone(props.dates[0]),
-            dateWithoutTimezone(props.dates[props.dates.length-1]),
-            Object.keys(values).filter(key=>{
-                return  !disableExcept || key===disableExcept
-            }).map((key)=>{
+            props.timesheetId, dateWithoutTimezone(props.dates[0]),
+            dateWithoutTimezone(props.dates[props.dates.length - 1]),
+            Object.keys(values).filter(key => {
+                return !disableExcept || key == disableExcept
+            }).map((key) => {
                 return {
-                    activity_id:parseInt(key),
-                    hours:values[key],
-                    minutes:0
+                    activity_id: parseInt(key),
+                    hours: values[key],
+                    minutes: 0
                 }
             }),
             holidayConfirm
-        ).then(res=>{
+        ).then(res => {
             NotificationActions.openModal(
                 { icon: true, style: "success" },
                 "Operazione avvenuta con successo"
             );
-             props.closeModal();
+            props.closeModal();
         })
     }
 
+    const getApprovedPills = () => {
+        if (props.dates.length === 1) { //this makes sense only when clicking on one day, not multiple
+            let day = props.dates[0].getDate();
+            let approvedHolidayIds = props.holidaysData[day] ? Object.keys(props.holidaysData[day]).filter(h => props.holidaysData[day][h].find(hol => hol.approved)) : [];
+            return <div className={styles.chipsContainer}>
+                {approvedHolidayIds.map((id: string) => {
+                    let data = props.holidaysData[day][id].filter(h => h.approved);
+                    return data.map((d, index) => {
+                        return <CustomChip
+                            key={id + "_" + index}
+                            text={d.name + ": " + d.hours + "h"}
+                            removable={false}
+                            rounded={"small"}
+                            fillMode={"solid"}
+                            themeColor={"success"}
+                            svgIcon={checkCircleIcon}
+                        />
+                    })
+                })}
+            </div>
+        }
+        return null;
+    }
 
-    if(!data){
+    const isHolidayApproved = (id: number) => {
+        if (props.dates.length === 1) { //this makes sense only when clicking on one day, not multiple
+            let day = props.dates[0].getDate();
+            return !!(props.holidaysData[day] && props.holidaysData[day][id]?.find(h => h.approved));
+        }
+        return false;
+    }
+
+
+    if (!data) {
         return <p>loading...</p>
     }
 
     return <div>
-            {
-                errors && <div className={styles.errorBox}>
-                    <p>{errors}</p>
-                </div>
-            }
-            <div className='wrapper'>
-                <Accordion title="Produttive" defaultOpened={true}>
-                    {
-                        !data.productive || !data.productive.length ?<p>Nessun attività produttiva assegnata per il range di date selezionate</p>
-                        :data.productive.map((res)=>{
-                            return <RapportinoInput 
-                                        type='H'
-                                        disabled={!!disableExcept && disableExcept!==res.Activity.id}
-                                        value={values?values[res.Activity.id]:0} 
-                                        key={res.Activity.id} 
-                                        id={res.Activity.id} 
-                                        description={res.Activity.description} 
-                                        onChange={(value)=>{
-                                            onInputChange(res.Activity.id,value)
-                                        }}
-                                    />
-                        })
-                    }
-                </Accordion>
-                <Accordion title="Non Produttive" defaultOpened={true}>
-                    {
-                        !data.unproductive || !data.unproductive.length ?<p>Nessun attività non produttiva assegnata per il range di date selezionate</p>
-                        :data.unproductive.map((res)=>{
-                            return <RapportinoInput 
+        {
+            errors && <div className={styles.errorBox}>
+                <p>{errors}</p>
+            </div>
+        }
+        <div className='wrapper'>
+            <Accordion title="Produttive" defaultOpened={true}>
+                {
+                    !data.productive || !data.productive.length ? <p>Nessun attività produttiva assegnata per il range di date selezionate</p>
+                        : <>
+                            {data.productive.map((res) => {
+                                return <RapportinoInput
                                     type='H'
-                                    disabled={!!disableExcept && disableExcept!==res.Activity.id}
-                                    value={values?values[res.Activity.id]:0} 
-                                    key={res.Activity.id} 
-                                    id={res.Activity.id} 
-                                    description={res.Activity.description} 
-                                    onChange={(value)=>{
-                                        onInputChange(res.Activity.id,value)
+                                    disabled={!!disableExcept && disableExcept !== res.Activity.id}
+                                    value={values ? values[res.Activity.id] : 0}
+                                    key={res.Activity.id}
+                                    id={res.Activity.id}
+                                    description={res.Activity.description}
+                                    onChange={(value) => {
+                                        onInputChange(res.Activity.id, value)
                                     }}
                                 />
-                        })
-                    }
-                </Accordion>
-                <Accordion title="Richiedi P-F-M" defaultOpened={true}>
-                    {
-                        !data.holidays || !data.holidays.length ?<p>Non puoi richiedere ferie o permessi nel range date selezionato</p>
-                        :<div >{data.holidays.map((res)=>{
-                            return <RapportinoInput 
-                            disabled={!!disableExcept && disableExcept!==res.Activity.id}
-                            type={res.Activity.ActivityType.time_unit}
-                            value={values?values[res.Activity.id]:0} 
-                            key={res.Activity.id} 
-                            id={res.Activity.id} 
-                            description={res.Activity.description} 
-                            onChange={(value)=>{
-                                if(res.Activity.ActivityType.time_unit==='D'){
-                                    if(value!==0)
-                                        setDisableExcept(res.Activity.id)
-                                    else
-                                        setDisableExcept(undefined);
-                                }
-                                onInputChange(res.Activity.id,value)
-                            }}
-                        
-                        />
-                        })}
-                        </div>
-                        
-                    }
-                </Accordion>
-            </div>
-            <div className={styles.footer}>
-                <Button themeColor="success" onClick={()=>{
-                    if(props.hasHoliday){
-                        NotificationActions.openConfirm('Vuoi includere i giorni festivi compresi nella tua selezione?',
-                        ()=>handleSave(true),
-                        'Conferma azione',
-                        ()=>handleSave(false)
-                    )
-                    }else{
-                        handleSave(false)
-                    }
-                }}>Conferma</Button>
-            </div>
-            
+                            })}
+                        </>
+                }
+            </Accordion>
+            <Accordion title="Non Produttive" defaultOpened={true}>
+                {
+                    !data.unproductive || !data.unproductive.length ? <p>Nessun attività non produttiva assegnata per il range di date selezionate</p>
+                        : <>
+                            {data.unproductive.map((res) => {
+                                return <RapportinoInput
+                                    type='H'
+                                    disabled={!!disableExcept && disableExcept !== res.Activity.id}
+                                    value={values ? values[res.Activity.id] : 0}
+                                    key={res.Activity.id}
+                                    id={res.Activity.id}
+                                    description={res.Activity.description}
+                                    onChange={(value) => {
+                                        onInputChange(res.Activity.id, value)
+                                    }}
+                                />
+                            })}
+                        </>
+                }
+            </Accordion>
+            <Accordion title="Richiedi P-F-M" defaultOpened={true}>
+                {
+                    !data.holidays || !data.holidays.length ? <p>Non puoi richiedere ferie o permessi nel range date selezionato</p>
+                        : <>
+                            {getApprovedPills()}
+                            <div>
+                                {data.holidays.map((res) => {
+                                    return <RapportinoInput
+                                        disabled={(!!disableExcept && disableExcept !== res.Activity.id) || (data.holidays.some(res => res.Activity.ActivityType.time_unit === 'D' && isHolidayApproved(res.Activity.id)))}
+                                        type={res.Activity.ActivityType.time_unit}
+                                        value={values ? values[res.Activity.id] : 0}
+                                        key={res.Activity.id}
+                                        id={res.Activity.id}
+                                        description={res.Activity.description}
+                                        onChange={(value) => {
+                                            if (res.Activity.ActivityType.time_unit === 'D') {
+                                                if (value !== 0)
+                                                    setDisableExcept(res.Activity.id)
+                                                else
+                                                    setDisableExcept(undefined);
+                                            }
+                                            onInputChange(res.Activity.id, value)
+                                        }}
+
+                                    />
+                                })}
+                            </div>
+                        </>
+                }
+            </Accordion>
         </div>
+        <div className={styles.footer}>
+            <Button themeColor="success" onClick={() => {
+                if (props.hasHoliday) {
+                    NotificationActions.openConfirm('Vuoi includere i giorni festivi compresi nella tua selezione?',
+                        () => handleSave(true),
+                        'Conferma azione',
+                        () => handleSave(false)
+                    )
+                } else {
+                    handleSave(false)
+                }
+            }}>Conferma</Button>
+        </div>
+
+    </div>
 
 }

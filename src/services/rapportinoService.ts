@@ -69,12 +69,12 @@ class TimesheetsServiceC {
     }
   };
 
-  saveActivities = (timesheet_id:number,startdate:string,enddate:string,details:{activity_id:number,minutes:number,hours:number}[],accept_holidays:boolean)=>{
-    return client.post('api/v1/timesheets/syncDetails?accept_holidays='+accept_holidays,{
-      timesheet_id:timesheet_id,
-      start_date:startdate,
-      end_date:enddate,
-      TimeSheetDetails:details
+  saveActivities = (timesheet_id: number, startdate: string, enddate: string, details: { activity_id: number, minutes: number, hours: number }[], accept_holidays: boolean) => {
+    return client.post('api/v1/timesheets/syncDetails?accept_holidays=' + accept_holidays, {
+      timesheet_id: timesheet_id,
+      start_date: startdate,
+      end_date: enddate,
+      TimeSheetDetails: details
     });
   }
 
@@ -132,9 +132,37 @@ class TimesheetsServiceC {
     }
   };
 
-  deleteLeaveRequest(id:number){
-    return client.delete('api/v1/leave_requests/delete/'+id);
+  deleteLeaveRequest(id: number) {
+    return client.delete('api/v1/leave_requests/delete/' + id);
   }
+
+  finalizeTimesheet = async (
+    id: number,
+  ) => {
+    try {
+      const response = await client.patch(
+        `api/v1/timesheets/finalize/${id}`
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error finalizing timesheet:", error);
+      throw error;
+    }
+  };
+
+  deconsolidateTimesheet = async (
+    id: number,
+  ) => {
+    try {
+      const response = await client.patch(
+        `api/v1/timesheets/deconsolidate/${id}`
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error deconsolidating timesheet:", error);
+      throw error;
+    }
+  };
 }
 
 export const TimesheetsService = new TimesheetsServiceC();
