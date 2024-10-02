@@ -20,6 +20,7 @@ export enum TABLE_COLUMN_TYPE {
   "string" = "string",
   "date" = "date",
   "custom" = "custom",
+  "datetime" = "datetime"
 }
 
 export enum TABLE_ACTION_TYPE {

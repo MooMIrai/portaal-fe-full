@@ -433,6 +433,18 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
                 </td>
               );
             };
+          } if (column.type === TABLE_COLUMN_TYPE.datetime) {
+            cell = (cellGrid: GridCellProps) => {
+              const date = new Date(cellGrid.dataItem[column.key]);
+              const time = date.toLocaleTimeString().substring(0, 5);
+              return (
+                <td>
+                  <strong>
+                    <i>{date.toLocaleDateString() + " - " + time}</i>
+                  </strong>
+                </td>
+              );
+            };
           } else if (
             actionMode === "cell" &&
             column.hasCellAction &&
