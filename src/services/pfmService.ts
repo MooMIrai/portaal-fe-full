@@ -4,9 +4,10 @@ class PFMServiceC {
   getRequests = async (
     leaveType: "new" | "archived",
     filters?: any,
+    include?: boolean,
   ) => {
     try {
-      let params = filters ? `?pageNum=${filters.pageNum + 1}&pageSize=${filters.pageSize}` : "";
+      let params = filters ? `?pageNum=${filters.pageNum + 1}&pageSize=${filters.pageSize}&include=${!!include}` : "";
       const response = await client.post(`api/v1/leave_requests/type/${leaveType}${params || ""}`);
       return response.data;
     } catch (error) {

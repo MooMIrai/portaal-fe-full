@@ -1,18 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Button from "common/Button";
 import CustomListView from "common/CustomListView";
 import Tab from "common/Tab";
+import GenericGrid from "common/Table";
 import styles from "./styles.module.scss";
 import { PFMData } from "./pfmDataModel";
 import { PFMService } from "../../services/pfmService";
+import { checkOutlineIcon, xOutlineIcon, cancelOutlineIcon } from "@progress/kendo-svg-icons";
 
 const FeriePermessiSection = () => {
-
+  const [refreshRequests, setRefreshRequests] = useState<number>(0);
+  const [refreshArchive, setRefreshArchive] = useState<number>(0);
+  const requestsTableRef = useRef(null);
+  const archiveTableRef = useRef(null);
   const [selectedTab, setSelectedTab] = useState<number>(0);
   const [newRequests, setNewRequests] = useState<{ data: PFMData[], meta: any }>();
   const [archived, setArchived] = useState<{ data: PFMData[], meta: any }>();
-  const [loadingRequests, setLoadingRequests] = useState<boolean>(true);
-  const [loadingArchive, setLoadingArchive] = useState<boolean>(true);
   const [requestsPage, setRequestsPage] = useState({
     skip: 0,
     take: 10,
@@ -24,97 +27,97 @@ const FeriePermessiSection = () => {
     total: 0,
   });
 
-  const handleRequestsPageChange = (e: any) => {
-    setRequestsPage({
-      skip: e.skip,
-      take: e.take,
-      total: newRequests?.meta.total
-    });
-    getData({ pageNum: e.skip, pageSize: e.take });
-  };
-
-  const handleArchivePageChange = (e: any) => {
-    setArchivePage({
-      skip: e.skip,
-      take: e.take,
-      total: archived?.meta.total
-    });
-    getData({ pageNum: e.skip, pageSize: e.take });
-  };
+  const getColumns = (isArchive: boolean) => {
+    let ret = [
+      {
+        key: 'user_created',
+        label: isArchive ? 'Approvatore' : 'Richiedente',
+        sortable: false,
+        type: 'string',
+        filter: 'text',
+      },
+      {
+        key: 'ActivityType.description',
+        label: 'Tipo richiesta',
+        sortable: true,
+        type: 'number',
+        filter: 'number',
+      },
+      {
+        key: 'start_date',
+        label: 'Inizio',
+        sortable: true,
+        type: 'date',
+        filter: 'date'
+      },
+      {
+        key: 'end_date',
+        label: 'Fine',
+        sortable: true,
+        type: 'date',
+        filter: 'date'
+      },
+      {
+        key: 'TimesheetDetail.0.hours',
+        label: 'Durata (ore)',
+        sortable: true,
+        type: 'number',
+        filter: 'number'
+      },
+    ]
+    if (isArchive) {
+      ret.push({
+        key: 'approved',
+        label: 'Approvata',
+        sortable: true,
+        type: 'boolean',
+        filter: 'boolean'
+      })
+    }
+    return ret;
+  }
 
   const handleSelect = (e: any) => {
     setSelectedTab(e.selected);
   };
 
   const getData = (pagination: { pageNum: number, pageSize: number }) => {
-    if (selectedTab === 0) {
-      setLoadingRequests(true);
-    } else {
-      setLoadingArchive(true);
+    if (typeof pagination.pageNum !== "number") {
+      pagination.pageNum = 0
     }
 
-    PFMService.getRequests(selectedTab === 0 ? "new" : "archived", pagination).then(res => {
-      if (selectedTab === 0) {
-        setNewRequests(res);
-        setLoadingRequests(false);
-        setRequestsPage(prev => {
-          return {
-            ...prev,
-            total: res.meta.total,
-          }
-        })
-      } else {
-        setArchived(res);
-        setLoadingArchive(false);
-        setArchivePage(prev => {
-          return {
-            ...prev,
-            total: res.meta.total,
-          }
-        })
-      }
-    }).catch(err => {
-      console.error("An error occurred while fetching data:", err);
-    });
+    return PFMService.getRequests(selectedTab === 0 ? "new" : "archived", pagination, true);
   }
 
   useEffect(() => {
-    let pagination = {
-      pageNum: selectedTab === 0 ? requestsPage.skip : archivePage.skip,
-      pageSize: selectedTab === 0 ? requestsPage.take : archivePage.take
+    if (selectedTab === 0) {
+      setRefreshRequests(prev => prev + 1);
+    } else {
+      setRefreshArchive(prev => prev + 1);
     }
-    getData(pagination);
   }, [selectedTab]);
 
-  const MyHeader = () => {
-    return <div className={styles.header}>
-      {selectedTab === 0 ? "Richieste da approvare" : "Richieste approvate"}
-    </div>
-  };
-
-  const handleAction = (id: number, approve: boolean) => {
-    setLoadingRequests(true);
+  const handleAction = (id: number, approve: boolean, closeModal: () => void) => {
     PFMService.approveRejectRequest(id, approve).then(res => {
-      let pagination = {
-        pageNum: requestsPage.skip,
-        pageSize: requestsPage.take
+      if (res) {
+        setRefreshRequests(prev => prev + 1);
       }
-      getData(pagination);
+      closeModal();
     }).catch(err => {
       console.error("An error occurred while processing the action:", err);
+      closeModal();
     });
   }
 
-  const handleUndo = (id: number) => {
-    setLoadingArchive(true);
+  const handleUndo = (id: number, closeModal: () => void) => {
     PFMService.undoApproveReject(id).then(res => {
-      let pagination = {
-        pageNum: archivePage.skip,
-        pageSize: archivePage.take
+      if (res) {
+        setRefreshArchive(prev => prev + 1);
       }
-      getData(pagination);
+      closeModal();
     }).catch(err => {
       console.error("An error occurred while processing the action:", err);
+      closeModal();
     });
   }
 
@@ -128,9 +131,9 @@ const FeriePermessiSection = () => {
     const endDate = new Date(endIso);
 
     // Ensure start date is before end date
-    if (startDate > endDate) {
+    /* if (startDate > endDate) {
       throw new Error("Start date must be before end date");
-    }
+    } */
 
     let totalHours = 0;
 
@@ -207,100 +210,99 @@ const FeriePermessiSection = () => {
     return `${day}/${month}/${year} - ${hours}:${minutes}`;
   }
 
-  const MyItemRender = (props: { dataItem: PFMData; index?: number }) => {
-    let item = props.dataItem;
-    return (
-      <div
-        className={styles.itemContainer + " k-listview-item"}
-        style={{ margin: 0 }}
-      >
-        <div>
-          <h2
-            style={{ fontSize: 14, color: "#454545", marginBottom: 0 }}
-            className={styles.name}
-          >
-            {item.user_created || "Test nome"}
-          </h2>
-          <div style={{ fontSize: 12, color: "#a0a0a0" }}>ID Utente: {item.person_id}</div>
-        </div>
-        <div>
-          <span>Tipo richiesta: {item.activity_type_id}</span>
-        </div>
-        <div className={styles.datesContainer}>
-          <span>Inizio: {formatDate(item.start_date)}</span>
-          <span>Fine: {formatDate(item.end_date)}</span>
-        </div>
-        <div>
-          <span>Durata: {calculateWorkingTimeDifference(item.start_date, item.end_date)}</span>
-        </div>
-        {
-          selectedTab === 1 ? <>
-            {item.approved ? <h2 className={styles.approvedText}>Approvata</h2> : <h2 className={styles.rejectedText}>Rifiutata</h2>}
-          </> : null
-        }
-        <div>
-          {selectedTab === 0 ? <div className={styles.buttonsContainer}>
-            <Button onClick={() => handleAction(item.id, false)}>Rifiuta</Button>
-            <Button
-              themeColor="primary"
-              onClick={() => handleAction(item.id, true)}
-            >
-              {"Approva"}
-            </Button>
-          </div> : <div className={styles.buttonsContainer}>
-            <Button
-              themeColor="primary"
-              onClick={() => handleUndo(item.id)}
-            >
-              {"Annulla azione"}
-            </Button>
-          </div>}
-        </div>
-      </div>
-    );
-  };
-
   const getTabs = () => {
     return [
       {
         title: "Richieste",
-        children: <div className={styles.container + (loadingRequests ? " " + styles.loading : "")}>
-          <CustomListView
-            data={newRequests?.data}
-            item={MyItemRender}
-            style={{
-              width: "100%",
-            }}
-            header={MyHeader()}
-            loading={loadingRequests}
-            paginate={{
-              ...requestsPage,
-              onPageChange: handleRequestsPageChange,
-              className: styles.paginationContainer
-            }}
+        children: <div>
+          <GenericGrid
+            ref={requestsTableRef}
+            dropListLookup={false}
+            filterable={true}
+            sortable={true}
+            getData={getData}
+            columns={getColumns(false)}
+            resizable={true}
+            forceRefresh={refreshRequests}
+            pageable
+            customRowActions={[
+              {
+                icon: checkOutlineIcon,
+                tooltip: "Approva",
+                modalContent: (dataItem, closeModal, refreshTable) => {
+                  console.log(dataItem);
+                  return (
+                    <div>
+                      Confermando, approverai la richiesta.
+                      <div className={styles.actionButtonsContainer}>
+                        <Button onClick={closeModal}>Chiudi</Button>
+                        <Button themeColor="primary" onClick={() => {
+                          handleAction(dataItem.id, true, closeModal)
+                        }}>Conferma</Button>
+                      </div>
+                    </div>
+                  );
+                },
+              },
+              {
+                icon: xOutlineIcon,
+                tooltip: "Rifiuta",
+                modalContent: (dataItem, closeModal, refreshTable) => {
+                  console.log(dataItem);
+                  return (
+                    <div>
+                      Confermando, rifiuterai la richiesta.
+                      <div className={styles.actionButtonsContainer}>
+                        <Button onClick={closeModal}>Chiudi</Button>
+                        <Button themeColor="primary" onClick={() => {
+                          handleAction(dataItem.id, false, closeModal)
+                        }}>Conferma</Button>
+                      </div>
+                    </div>
+                  );
+                },
+              },
+            ]}
           />
         </div>,
-        contentClassName: styles.tabConten,
+        contentClassName: styles.tabContent,
       },
       {
         title: "Storico",
-        children: <div className={styles.container + (loadingArchive ? " " + styles.loading : "")}>
-          <CustomListView
-            data={archived?.data}
-            item={MyItemRender}
-            style={{
-              width: "100%",
-            }}
-            header={MyHeader()}
-            loading={loadingArchive}
-            paginate={{
-              ...archivePage,
-              onPageChange: handleArchivePageChange,
-              className: styles.paginationContainer
-            }}
+        children: <div>
+          <GenericGrid
+            ref={archiveTableRef}
+            dropListLookup={false}
+            filterable={true}
+            sortable={true}
+            getData={getData}
+            columns={getColumns(true)}
+            resizable={true}
+            forceRefresh={refreshArchive}
+            pageable
+            customRowActions={[
+              {
+                icon: cancelOutlineIcon,
+                tooltip: "Annulla approvazione",
+                modalContent: (dataItem, closeModal, refreshTable) => {
+                  console.log(dataItem);
+                  return (
+                    <div>
+                      Confermando, annullerai l'approvazione della richiesta.
+                      <div className={styles.actionButtonsContainer}>
+                        <Button onClick={closeModal}>Chiudi</Button>
+                        <Button themeColor="primary" onClick={() => {
+                          handleUndo(dataItem.id, closeModal)
+                        }}>Conferma</Button>
+                      </div>
+                    </div>
+                  );
+                },
+              },
+            ]}
           />
         </div>,
-        contentClassName: styles.tabConten,
+        contentClassName: styles.tabContent,
       }
     ]
   }
