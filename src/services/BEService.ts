@@ -4,7 +4,7 @@ import NotificationProviderActions from "../components/Notification/provider";
 
 const client = axios.create({
   //baseURL:'http://localhost:3001'
-  baseURL: "https://portaaldev.azurewebsites.net",
+  baseURL: process.env.BE_PATH,
   //baseURL: "https://portaaldev2-h9ach7bscvcpg8a5.eastus-01.azurewebsites.net/",
 });
 
