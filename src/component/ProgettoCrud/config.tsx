@@ -1,0 +1,51 @@
+export const columns = [
+  {
+    key: "account_manager",
+    label: "Commerciale",
+    type: "string",
+    sortable: true,
+    filter: "text",
+  },
+  {
+    key: "title",
+    label: "Titolo offerta",
+    type: "string",
+    sortable: true,
+    filter: "text",
+  },
+  {
+    key: "start_date",
+    label: "Data inizio",
+    type: "date",
+    sortable: true,
+    filter: "date",
+  },
+  {
+    key: "end_date",
+    label: "Data fine",
+    type: "date",
+    sortable: true,
+    filter: "date",
+  },
+  {
+    key: "amount",
+    label: "Importo",
+    type: "string",
+    sortable: true,
+    filter: "text",
+  },
+  {
+    key: "",
+    label: "Sal",
+    type: "string",
+    sortable: true,
+    filter: "text",
+  },
+  {
+    key: "",
+    label: "Sal Fatturato",
+    type: "string",
+    sortable: true,
+    filter: "text",
+  },
+];
