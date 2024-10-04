@@ -1,15 +1,11 @@
-import {
-  CompositeFilterDescriptor,
-  SortDescriptor,
-} from "@progress/kendo-data-query";
 import client from "common/services/BEService";
 
 class CrudGenericServiceC {
   getAccounts = async (
     pageNum: number,
     pageSize: number,
-    filtering: CompositeFilterDescriptor,
-    sorting: Array<SortDescriptor>,
+    filtering: any,
+    sorting: Array<any>,
     include?: boolean
   ) => {
     try {
@@ -30,7 +26,7 @@ class CrudGenericServiceC {
       throw error;
     }
   };
-  
+
   fetchResources = async (
     resourceType: string,
     pageNum?: number,
@@ -54,7 +50,7 @@ class CrudGenericServiceC {
     }
   };
 
-    
+
   fetchmodel = async (
   ) => {
     try {
@@ -91,13 +87,13 @@ class CrudGenericServiceC {
     }
   };
   getCV = async (
-    id:number
+    id: number
   ) => {
     try {
-   
+
       const response = await client.get(
-        `api/v1/files/stream/${id}`,{
-          responseType: 'blob', 
+        `api/v1/files/stream/${id}`, {
+        responseType: 'blob',
       });
       return response.data;
     } catch (error) {
@@ -105,7 +101,7 @@ class CrudGenericServiceC {
       throw error;
     }
   };
-  
+
   updateResource = async (
     id: number,
     resourceData: any
@@ -131,9 +127,9 @@ class CrudGenericServiceC {
       throw error;
     }
   };
-  
-  searchCommerciale = (text:string) =>{
-    return client.get(`api/v1/accounts/findCOM?search=${text}`).then(res=>res.data); 
+
+  searchCommerciale = (text: string) => {
+    return client.get(`api/v1/accounts/findCOM?search=${text}`).then(res => res.data);
   }
 
 }
