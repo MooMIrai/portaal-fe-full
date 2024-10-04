@@ -12,3 +12,6 @@ declare module 'lookups/Index'
 declare module 'sales/Routes';
 declare module 'sales/Index';
 
+declare module 'hr/Routes';
+declare module 'hr/Index';
+

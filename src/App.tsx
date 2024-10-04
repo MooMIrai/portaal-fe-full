@@ -10,6 +10,8 @@ import initLookupFn from "lookups/Index";
 import SalesRoutes from "sales/Routes";
 import initSalesFn from "sales/Index";
 import initProfileFn from "auth/Index";
+import initHrFn from "hr/Index";
+import HrRoutes from "hr/Routes";
 import "./index.scss";
 import { Routes, useNavigate } from "react-router-dom";
 
@@ -21,7 +23,7 @@ export const App = () => {
   useEffect(() => {
     try {
       setToken(authService.getToken());
-    } catch {}
+    } catch { }
   }, []);
 
   useEffect(() => {
@@ -31,7 +33,12 @@ export const App = () => {
       if (lookupConfig && lookupConfig.menuItems) {
         r = [...r, ...lookupConfig.menuItems];
       }
-      const hrConfig = initSalesFn();
+      const salesConfig = initSalesFn();
+      if (salesConfig && salesConfig.menuItems) {
+        r = [...r, ...salesConfig.menuItems];
+      }
+
+      const hrConfig = initHrFn();
       if (hrConfig && hrConfig.menuItems) {
         r = [...r, ...hrConfig.menuItems];
       }
@@ -66,6 +73,7 @@ export const App = () => {
       <Drawer items={routes}>
         <LookupsRoutes />
         <SalesRoutes />
+        <HrRoutes />
         <AuthVisibleRoutes />
       </Drawer>
     </Theme>
