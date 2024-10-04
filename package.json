@@ -1,5 +1,5 @@
 {
-  "name": "portaal-mfe-sales",
+  "name": "portaal-mfe-hr",
   "version": "1.0.0",
   "scripts": {
     "build": "webpack --mode production",

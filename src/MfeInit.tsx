@@ -24,7 +24,7 @@ export default function () {
         level: 2,
         text: "Società",
         route: "/societa",
-        svgIcon:buildingBlocksIcon
+        svgIcon: buildingBlocksIcon
       },
       {
         parentId: 5,
@@ -32,6 +32,14 @@ export default function () {
         level: 2,
         text: "Rapportino",
         route: "/rapportino",
+        iconKey: "calendarIcon",
+      },
+      {
+        parentId: 5,
+        id: 53,
+        level: 2,
+        text: "Gestione Ferie Permessi",
+        route: "/gestioneFeriePermessi",
         iconKey: "calendarIcon",
       },
     ],
