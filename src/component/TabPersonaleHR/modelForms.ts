@@ -25,8 +25,8 @@ export interface AnagraficaData {
         id: string;
         data?:string;  
       }];
-      attachment_id?:number;
-      existingFile?: { name: string };
+      attachment_id?:number[];
+      existingFile?: { name: string, id:string };
     cap?: number;
     cellulare?: number;
     telefonoCasa?: number;

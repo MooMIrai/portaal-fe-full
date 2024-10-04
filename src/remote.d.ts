@@ -19,7 +19,7 @@ declare module "common/TimePicker";
 declare module "common/CustomChip";
 declare module "common/SvgIcon"
 declare module "common/providers/NotificationProvider";
-
+declare module "common/Loader"
 declare module "common/services/BEService";
 declare module "common/services/BaseHTTPService";
 

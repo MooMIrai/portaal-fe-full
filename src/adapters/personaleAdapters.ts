@@ -26,9 +26,9 @@ const mapToAnagraficaData = (
     country: {
       id: Person?.CityRes?.Country?.id || Person?.CityRes?.Province?.Country?.id,
       name:
-        Person?.CityRes?.Country?.name || Person?.CityRes?.Province.Country?.name,
+        Person?.CityRes?.Country?.name || Person?.CityRes?.Province.Country?.name ,
       code:
-        Person?.CityRes?.Country?.code || Person?.CityRes?.Province.Country?.code,
+        Person?.CityRes?.Country?.code || Person?.CityRes?.Province.Country?.code ,
     },
     province:
       Person?.CityRes && Person?.CityRes?.Province
@@ -39,28 +39,11 @@ const mapToAnagraficaData = (
           }
         : undefined,
   },
-  attachment_id: Person?.attachment_id,
-  attachment:
-    Person?.Attachment?.file_name && Person?.Attachment?.id
-      ? [
-          {
-            name: Person?.Attachment?.file_name,
-            id: Person?.Attachment?.id,
-            status:2,
-            extension:"pdf",
-            size:20000
-            /*     progress: Person.Attachment?.file_name ?? 100, */
-          },
-        ]
-      : undefined,
-      existingFile: Person?.Attachment?.file_name && Person?.Attachment?.id
-      ? 
-          {
-            name: Person?.Attachment?.file_name,
-            /*     progress: Person.Attachment?.file_name ?? 100, */
-          }
-        
-      : undefined,
+  attachment_id: Array.isArray(Person.files)
+  ? Person.files.map((file) => ({
+      id:file.uniqueRecordIdentifier
+    }))
+  : [],
   nascita: {
     city: {
       id: Person?.CityBirth?.id,
@@ -617,22 +600,13 @@ export const reverseAdapter = (combinedData: {
   modifiedData: Record<string, any>;
   newFormTrattamentoEconomico: boolean;
 }) => {
-  console.log("Combined Data before transformation:", combinedData);
-  const firstAttachment = combinedData.anagrafica.attachment?.length
-    ? combinedData.anagrafica.attachment[0]
-    : null;
+  const attachments = combinedData.anagrafica.attachment?.map((att) => ({
+    file_name: att.name,
+    content_type: att.extension === ".pdf" ? "application/pdf" : "application/octet-stream",
+    data: att.data || [],
+  })) || [];
 
-  const attachment =
-    firstAttachment && firstAttachment.data
-      ? {
-          file_name: firstAttachment.name,
-          content_type:
-            firstAttachment.extension === ".pdf"
-              ? "application/pdf"
-              : "application/octet-stream",
-          data: firstAttachment.data || [],
-        }
-      : null;
+
   const permessiIDs =
     mapPermessiNamesToIDs(combinedData.permessi, combinedData.idPermessi) || [];
   return {
@@ -651,8 +625,8 @@ export const reverseAdapter = (combinedData: {
         combinedData.anagrafica.emailPrivata === ""
           ? null
           : combinedData.anagrafica.emailPrivata,
-      cityRes_id: combinedData.anagrafica.residenza?.city.id,
-      Attachment: attachment,
+      cityRes_id: combinedData.anagrafica.residenza?.city?.id,
+     Attachments: attachments.length > 0 ? attachments : null,
       location_id: combinedData.anagrafica.sede_autocomplete?.id || 1,
       provinceRes: combinedData.anagrafica.residenza,
 
@@ -739,7 +713,11 @@ export const reverseAdapterUpdate = (combinedData: {
     mapPermessiNamesToIDs(combinedData.permessi, combinedData.idPermessi) || [];
 
   const result: any = {};
-
+  const attachments = combinedData.anagrafica.attachment?.map((att) => ({
+    file_name: att.name,
+    content_type: att.extension === ".pdf" ? "application/pdf" : "application/octet-stream",
+    data: att.data || [],
+  })) || [];
   if (combinedData.anagrafica.accountStatus_id) {
     result.accountStatus_id = combinedData.anagrafica.accountStatus_id;
   }
@@ -776,18 +754,11 @@ export const reverseAdapterUpdate = (combinedData: {
   }
   
   if ('residenza' in combinedData.modifiedData) {
-    result.Person.cityRes_id = combinedData.modifiedData.residenza.city.id;
+    result.Person.cityRes_id = combinedData.modifiedData.residenza.city?.id || null;
   }
   
   if ('attachment' in combinedData.modifiedData) {
-    result.Person.Attachment = combinedData.modifiedData.attachment ? {
-      file_name: combinedData.modifiedData.attachment[0].name,
-      content_type:
-        combinedData.modifiedData.attachment[0].extension === '.pdf'
-          ? 'application/pdf'
-          : 'application/octet-stream',
-      data: combinedData.modifiedData.attachment[0].data || [],
-    } : null; // Se l'allegato è stato rimosso, impostalo su null
+    result.Person.Attachment = attachments.length > 0 ? attachments  : null; 
   }
   
   if ('sede_autocomplete' in combinedData.modifiedData) {

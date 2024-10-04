@@ -165,6 +165,12 @@
   border-radius: 4px !important;
 }
 
+.loader{
+  display:flex;
+  justify-content: center;
+}
+
+
 /*  .checkboxContainer:has(input[type="checkbox"]:checked) div[dir="ltr"] {
    background-color: #E1F5FE !important;
    color: #0497B8 !important;

@@ -106,7 +106,23 @@ class CrudGenericServiceC {
     }
   };
   
-
+   getCVaI = async (file) => {
+    const formData = new FormData();
+    formData.append('file', file); 
+  
+    try {
+      const response = await client.post('/api/v1/ai/upload_cv', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data', 
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      throw error;
+    }
+  };
+  
   fetchResource = async (resourceType: string, id: number) => {
     try {
       const response = await client.get(`crud/${resourceType}/${id}`);
@@ -145,6 +161,14 @@ class CrudGenericServiceC {
   
   searchCommerciale = (text:string) =>{
     return client.get(`api/v1/accounts/findCOM?search=${text}`).then(res=>res.data); 
+  }
+
+  async getFilesByIds(uniqueIdentifiers: string) {
+    const response = await client.get(`api/v1/files/get/${uniqueIdentifiers}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching resources:", error);
+    throw error;
   }
 
 }

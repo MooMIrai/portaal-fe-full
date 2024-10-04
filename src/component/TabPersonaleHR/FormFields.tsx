@@ -10,7 +10,7 @@ const createValidator = (isDisabled: boolean, validationFn: (value: any) => stri
     };
 };
 
-export const getFormAnagraficaFields = (formData: AnagraficaData, gender: genderOption[], type: any, isViewOnly: boolean, handleDownload: () => void, combinedValueOnChange: (name: string, value: any) => void, download: boolean, name_attachment: string | null, valueOnChange: (name: string, value: any) => void) => {
+export const getFormAnagraficaFields = (formData: AnagraficaData, gender: genderOption[], type: any, isViewOnly: boolean, handleDownload: () => void, combinedValueOnChange: (name: string, value: any) => void, download: boolean, name_attachment: string | null, valueOnChange: (name: string, value: any) => void, handleFileUpload: (file: File) => void,setExstingFile:any) => {
     const genderOptions = gender.map(company => company.label)
     const onlyLettersValidator = (value: any) => /^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/.test(value) ? "" : "Il campo deve contenere solo lettere";
 
@@ -129,13 +129,14 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             withCredentials: false,
             disabled: (type === "view" || isViewOnly),
             value: formData.attachment || "",
-            existingFile:formData.existingFile,
+            existingFile:setExstingFile,
             valueOnChange: (name: string, value: any) => {
                 combinedValueOnChange(name, value); // Usa la funzione combinata
             },
             accept: ".pdf",
             onDownload: download && name_attachment ? handleDownload : undefined,
             multiple: false,
+            onFileUpload: handleFileUpload,
         },
         residenza: {
             name: "residenza",

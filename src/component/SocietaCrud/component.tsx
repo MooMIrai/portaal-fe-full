@@ -56,7 +56,6 @@ export function CompanyCrud(props: PropsWithRef<CompanyCrudProps>) {
 
       if (!hasError) {
         if (props.type === "edit") {
-          console.log("modifiedfields", modifiedFields)
           const modifiedData = Object.keys(modifiedFields).reduce((result, key) => {
             if (modifiedFields[key] !== undefined) {
               result[key] = modifiedFields[key];
