@@ -14,6 +14,7 @@ import UploadComponent from "../UpLoadSingleFile/component";
 import { Button } from "@progress/kendo-react-buttons";
 import UploadMultipleFileComponent from "../UploadMultipleFiles/component";
 import UploadSingleFileComponent from "../UpLoadSingleFile/component";
+import { UploadListItemProps } from "@progress/kendo-react-upload";
 
 const TextInputC = (
   fieldRenderProps: FieldRenderProps & { disabled?: boolean }
@@ -108,7 +109,7 @@ const TextAreaInputC = (
 };
 
 const UploadMutilpleInputC = (
-  fieldRenderProps: FieldRenderProps & { disabled?: boolean; label?: string, accept?: string, autoUpload?: boolean, onDownload?:()=>void, multiple?:boolean}
+  fieldRenderProps: FieldRenderProps & { disabled?: boolean; label?: string, accept?: string, autoUpload?: boolean, onDownload?:()=>void, multiple?:boolean,listItemUI?: React.ComponentType<UploadListItemProps> | undefined}
 ) => {
   const {
     validationMessage,
@@ -120,6 +121,7 @@ const UploadMutilpleInputC = (
     files,
     onDownload,
     multiple,
+    listItemUI,
     ...others
   } = fieldRenderProps;
 
@@ -181,6 +183,7 @@ const UploadMutilpleInputC = (
         onAdd={onChangeHandler}
         onRemove={onRemoveHandler}
         multiple={false}
+        listItemUI={listItemUI}
         disabled={disabled}
         onDownload={onDownload}
         {...others}
@@ -189,7 +192,7 @@ const UploadMutilpleInputC = (
   );
 };
 const UploadSingleFIleInputC = (
-  fieldRenderProps: FieldRenderProps & { disabled?: boolean; label?: string, accept?: string, autoUpload?: boolean, onDownload?: () => void, multiple?: boolean,existingFile?:{name:string} }
+  fieldRenderProps: FieldRenderProps & { disabled?: boolean; label?: string, accept?: string, autoUpload?: boolean, onDownload?: () => void, multiple?: boolean,existingFile?:{name:string, id:string}[], onFileUpload: (file: File) => void;  }
 ) => {
   const {
     validationMessage,
@@ -202,6 +205,7 @@ const UploadSingleFIleInputC = (
     onDownload,
     multiple,
     existingFile,
+    onFileUpload,
     ...others
   } = fieldRenderProps;
   const handleFileUpload = (fileDataArray: { name: string; extension: string; data: number[]; size: number; status: number }[]) => {
@@ -215,7 +219,7 @@ const UploadSingleFIleInputC = (
         existingFile={existingFile}
         disabled={disabled}
         onDownload={onDownload}
-       
+       onFileUpload={onFileUpload}
       />
     </div>
   );
