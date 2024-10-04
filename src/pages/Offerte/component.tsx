@@ -80,10 +80,12 @@ export default function OffertePage() {
 
 
   const [initialWidthWindow, setInitialWidthWindow] = useState(window.innerWidth);
+  const [initialHeightWindow,setInitialHeightWindow]=useState(window.innerHeight)
 
   useEffect(() => {
     const handleResize = () => {
       setInitialWidthWindow(window.innerWidth);
+      setInitialHeightWindow(window.innerHeight)
     };
     window.addEventListener("resize", handleResize);
     return () => {
@@ -164,7 +166,7 @@ export default function OffertePage() {
       columns={columns}
       pageable={true}
       resizableWindow={true}
-      initialHeightWindow={1000}
+      initialHeightWindow={initialHeightWindow}
       initialWidthWindow={initialWidthWindow} 
       resizable={true}
       actions={(row) => {

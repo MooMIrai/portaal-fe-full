@@ -1,3 +1,5 @@
+import buildingBlocksIcon from "common/SvgIcon"
+
 export default function () {
   return {
     menuItems: [
@@ -6,7 +8,7 @@ export default function () {
         text: "Vendite",
         level: 0,
         route: "/Vendite",
-        iconKey: "globeOutlineIcon",
+        iconKey: "cartIcon",
       },
       {
         parentId: 6,
@@ -14,7 +16,7 @@ export default function () {
         level: 2,
         text: "Clienti",
         route: "/clienti",
-        iconKey: "",
+        iconKey: "myspaceIcon",
       },
       {
         parentId: 6,
@@ -22,7 +24,7 @@ export default function () {
         level: 2,
         text: "Offerte",
         route: "/offerte",
-        iconKey: "",
+        iconKey: "fileFooterIcon",
       },
       {
         parentId: 6,
@@ -30,7 +32,7 @@ export default function () {
         level: 2,
         text: "Progetti",
         route: "/progetti",
-        iconKey: "",
+        iconKey: "inboxIcon",
       },
     ],
   };
