@@ -36,6 +36,7 @@ const mfeConfig = {
     "./services/AuthService": "./src/services/AuthService",
     "./services/BEService": "./src/services/BEService",
     "./services/BaseHTTPService": "./src/services/BaseHTTPService",
+    "./services/FileService": "./src/services/FileService",
 
     "./providers/NotificationProvider":
     "./src/components/Notification/provider",

@@ -208,7 +208,15 @@ const UploadSingleFIleInputC = (
     onFileUpload,
     ...others
   } = fieldRenderProps;
-  const handleFileUpload = (fileDataArray: { name: string; extension: string; data: number[]; size: number; status: number }[]) => {
+  const handleFileUpload = (fileDataArray: {
+    name: string;
+    data: Uint8Array;
+    size: number;
+    status: number;
+    file_name: string;
+    content_type: string;
+    extension: string;
+}[]) => {
     fieldRenderProps.onChange({ value: fileDataArray });
   };
   return (

@@ -3,11 +3,20 @@ import { Button } from '@progress/kendo-react-buttons';
 import styles from './styles.module.scss';
 import { downloadIcon } from '@progress/kendo-svg-icons';
 import { Loader } from '@progress/kendo-react-indicators';
+import FileService from '../../services/FileService';
 
 type CustomUploadProps = {
   onDownload?: () => void;
   multiple?: boolean;
-  onFileChange: (fileData: { name: string; extension: string; data: number[]; size: number; status: number }[]) => void;
+  onFileChange: (fileData: {
+    name: string;
+    data: Uint8Array;
+    size: number;
+    status: number;
+    file_name: string;
+    content_type: string;
+    extension: string;
+}[]) => void;
   accept?: string;
   disabled?: boolean;
   onFileUpload?: (file: File) => void; 
@@ -24,7 +33,7 @@ function UploadSingleFileComponent(props: CustomUploadProps) {
 
   useEffect(() => {
     if (props.existingFile) {
-      console.log("existingFile:", props.existingFile);  
+
       setSelectedFileName(props.existingFile?.[0].name);
     }
   }, [props.existingFile]);
@@ -34,21 +43,9 @@ function UploadSingleFileComponent(props: CustomUploadProps) {
     const inputElement = event.target;
     const files = inputElement.files;
     if (files) {
+      const fileDataArray = await FileService.convertListToBE(files);
       const fileArray = Array.from(files);
-      const fileDataArray = await Promise.all(
-        fileArray.map(async (file) => {
-          const arrayBuffer = await file.arrayBuffer();
-          const byteArray = new Uint8Array(arrayBuffer);
-          const fileExtension = file.name.split('.').pop() || '';
-          return {
-            name: file.name,
-            extension: fileExtension,
-            data: Array.from(byteArray),
-            size: file.size,
-            status: 2,
-          };
-        })
-      );
+     
       setSelectedFileName(fileArray[0].name);
       setSelectedFile(fileArray[0]); 
       setShowGenerateAIButton(true); 
