@@ -58,9 +58,9 @@ function UploadSingleFileComponent(props: CustomUploadProps) {
   return (
     <div className={styles.uploadContainer}>
       {/* Bottone per triggerare il click sull'input file */}
-      <Button themeColor="primary" svgIcon={downloadIcon} onClick={triggerFileInputClick}>
+      {!props.disabled && <Button themeColor="primary" svgIcon={downloadIcon} onClick={triggerFileInputClick}>
         Scegli file
-      </Button>
+      </Button>}
 
 
       <input
