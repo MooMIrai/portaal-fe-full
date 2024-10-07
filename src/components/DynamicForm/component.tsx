@@ -94,6 +94,7 @@ export interface FieldConfig {
   showLabel?: boolean
   valueOnChange?: (name: string, value: any) => void;
   onDownload?: () => void
+  onFileUpload?: (file: File) => void; 
   multiple?: boolean
   existingFile?: { name: string };
   //onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -127,7 +128,7 @@ const DynamicField = ({
 
 }) => {
 
-  const { name, type, label, validator, options, disabled, required, showLabel = true, onDownload, multiple, existingFile } = field;
+  const { name, type, label, validator, options, disabled, required, showLabel = true, onDownload, multiple, existingFile,onFileUpload } = field;
   let Component: any = getFieldComponent(type);
 
   if (addedFields && Object.keys(addedFields).some(s => s === type)) {
@@ -148,6 +149,7 @@ const DynamicField = ({
       files={formRenderProps.valueGetter(name)}
       multiple={multiple}
       onDownload={onDownload}
+      onFileUpload={onFileUpload}
       existingFile={existingFile}
       value={formRenderProps.valueGetter(name)}
       onChange={(event) => {

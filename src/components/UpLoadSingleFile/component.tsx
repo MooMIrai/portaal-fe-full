@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { Button } from '@progress/kendo-react-buttons';
 import styles from './styles.module.scss';
 import { downloadIcon } from '@progress/kendo-svg-icons';
+import { Loader } from '@progress/kendo-react-indicators';
 
 type CustomUploadProps = {
   onDownload?: () => void;
@@ -9,17 +10,22 @@ type CustomUploadProps = {
   onFileChange: (fileData: { name: string; extension: string; data: number[]; size: number; status: number }[]) => void;
   accept?: string;
   disabled?: boolean;
-  existingFile?: { name: string;}; 
+  onFileUpload?: (file: File) => void; 
+  existingFile?: { id:string, name: string;}[]; 
 };
 
 function UploadSingleFileComponent(props: CustomUploadProps) {
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [showGenerateAIButton, setShowGenerateAIButton] = useState<boolean>(false); 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
 
   useEffect(() => {
-    if (props.existingFile && props.existingFile.name) {
-      setSelectedFileName(props.existingFile.name);
+    if (props.existingFile) {
+      console.log("existingFile:", props.existingFile);  
+      setSelectedFileName(props.existingFile?.[0].name);
     }
   }, [props.existingFile]);
 
@@ -44,7 +50,21 @@ function UploadSingleFileComponent(props: CustomUploadProps) {
         })
       );
       setSelectedFileName(fileArray[0].name);
+      setSelectedFile(fileArray[0]); 
+      setShowGenerateAIButton(true); 
       props.onFileChange(fileDataArray);
+ 
+      
+    }
+  };
+  const handleGenerateAIClick = async () => {
+    if (selectedFile && props.onFileUpload) {
+      setIsLoading(true); 
+      try {
+        await props.onFileUpload(selectedFile);  
+      } finally {
+        setIsLoading(false);  
+      }
     }
   };
 
@@ -73,9 +93,9 @@ function UploadSingleFileComponent(props: CustomUploadProps) {
         multiple={props.multiple}
       />
       <div className={styles.fileInfoContainer}>
-        {selectedFileName && props.onDownload && (
+        {props.existingFile && props.onDownload && (
           <p>
-            File caricato: <strong>{selectedFileName}</strong>
+            File caricato: <strong>{props.existingFile?.[0]?.name}</strong>
           </p>
         )}
         {selectedFileName && !props.onDownload && (
@@ -89,6 +109,20 @@ function UploadSingleFileComponent(props: CustomUploadProps) {
             </Button>
           </div>
 
+        )}
+          {showGenerateAIButton && (
+          <div>
+            {isLoading ? (  
+              <Loader size="medium" type="infinite-spinner" />
+            ) : ( 
+              <Button
+                themeColor="secondary"
+                onClick={handleGenerateAIClick}  
+              >
+                Genera AI
+              </Button>
+            )}
+          </div>
         )}
       </div>
     </div>
