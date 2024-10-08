@@ -33,6 +33,8 @@ const mfeConfig = {
     "./TimePicker":"./src/components/TimePicker/component",
     "./SvgIcon":"./src/components/SvgIcon/component",
 
+    "./SignDocumentScanner" : "./src/components/SignDocument/component",
+
     "./services/AuthService": "./src/services/AuthService",
     "./services/BEService": "./src/services/BEService",
     "./services/BaseHTTPService": "./src/services/BaseHTTPService",
