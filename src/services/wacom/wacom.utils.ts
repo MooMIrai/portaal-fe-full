@@ -5,7 +5,6 @@ export function checkSdk(){
     return new Promise((ok,ko)=>{
         //@ts-ignore
         let sdk= new WacomGSS_SignatureSDK(()=>{
-            debugger;
             setTimeout(()=>{
                 if(sdk.running) ok(sdk)
                 else ko('Signature SDK Service not detected.')
