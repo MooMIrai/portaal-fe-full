@@ -17,7 +17,6 @@ export interface CustomerBEModel {
     id?:number,
     customer_code: string;
     name: string;
-    surname:string;
     phoneNumber?: string;
     web_site?: string;
     fax?: string;

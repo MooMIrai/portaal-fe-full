@@ -48,8 +48,8 @@ class OffertaService extends BaseHttpService{
           throw error;
         }
       };
-      getCV = async (
-        id:number
+      getDownloadFile = async (
+        id:string
       ) => {
         try {
        
@@ -63,7 +63,15 @@ class OffertaService extends BaseHttpService{
           throw error;
         }
       };
-
-}
+      async getFilesByIds(uniqueIdentifiers: string) {
+        const response = await client.get(`api/v1/files/get/${uniqueIdentifiers}`);
+        return response.data;
+      } catch (error) {
+        console.error("Error fetching resources:", error);
+        throw error;
+      }
+    };
+        
+  
 
 export const offertaService = new OffertaService();

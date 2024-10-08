@@ -38,8 +38,8 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
   const [isrowLocationDataReady, setIsrowLocationDataReady] = useState(false);
   const [isDaily, setIsDaily] = useState<boolean>(false)
   const [showNewTaskModal, setShowNewTaskModal] = useState(false);
- const [rowLocation,setrowLocation]=useState<{id:number,name:string}>({ id: 0, name: '' }); 
-
+  const [rowLocation, setRowLocation] = useState<{ id: number, name: string }>({ id: 0, name: '' });
+  console.log("row", props.row)
   useEffect(() => {
     const fetchCountryData = async () => {
 
@@ -48,7 +48,56 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
         const adaptedLocation = sedeAdapter(sedeResponse);
         setSede(adaptedLocation);
 
-    
+        if (props.row?.existingFile && Array.isArray(props.row.existingFile) && props.row.existingFile.length > 0) {
+
+          const uniqueIdentifiers = props.row.existingFile
+            .map((attachment: { id?: string }) => attachment.id)
+            .join(',');
+
+          if (uniqueIdentifiers) {
+
+            const response = await offertaService.getFilesByIds(uniqueIdentifiers);
+
+            const fetchedAttachments = response.map((file: { uniqueIdentifier: string, file_name: string }) => ({
+              id: file.uniqueIdentifier,  
+              name: file.file_name      
+            }));
+            console.log(fetchedAttachments)
+            const updatedAttachments = props.row.existingFile?.map((attachment) => {
+              const fetchedAttachment = fetchedAttachments.find(
+                (f) => f.id === attachment.id
+              );
+              console.log("Attachment ID:", attachment.id);
+              console.log("Matched fetched attachment:", fetchedAttachment); // 
+              return {
+                ...attachment,
+                name: fetchedAttachment ? fetchedAttachment.name : "Name not found",
+              };
+            });
+
+            props.row.existingFile = updatedAttachments
+            console.log("Updated Attachments Array:", updatedAttachments);
+          }
+          if (props.type === "edit" || props.type === "view") {
+            if (Array.isArray(props.row.existingFile) && props.row.existingFile.length > 0) {
+              // Extract all attachment names
+              const attachmentNames = props.row.existingFile
+                .map((attachment) => attachment.name || null)
+                .filter(Boolean);
+
+              if (attachmentNames.length > 0) {
+                setAttachmentNameState(attachmentNames[0]);
+                setDownload(true);
+              } else {
+                setAttachmentNameState(null);
+                setDownload(false);
+              }
+            } else {
+              setAttachmentNameState(null);
+              setDownload(false);
+            }
+          }
+        }
         setIsLocationDataReady(true);
       } catch (error) {
         console.error("Error fetching country data:", error);
@@ -56,31 +105,23 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
     };
 
     fetchCountryData();
-  }, []);
-
-  useEffect(() => {
-    if (props.type === "edit" || props.type === "view") {
-      const attachmentName = props.row.attachment && props.row.attachment.length > 0
-        ? props.row.attachment[0].name
-        : null;
-
-      setAttachmentNameState(attachmentName);
-      setDownload(!!attachmentName);
-    }
   }, [props.row, props.type]);
+
+
+
 
 
   useEffect(() => {
     if (isLocationDataReady && (props.type === "edit" || props.type === "view")) {
       const locationLabel = getLocationLabel(sede, props.row.location_id);
       if (locationLabel) {
-        setrowLocation({ id: props.row.location_id, name: locationLabel });
+        setRowLocation({ id: props.row.location_id, name: locationLabel });
       }
       setIsrowLocationDataReady(true);
-    } 
+    }
   }, [sede, props.row.location_id, isLocationDataReady, props.type]);
-  
-  
+
+
 
   const openNewTaskModal = () => {
     setShowNewTaskModal(true);
@@ -89,30 +130,68 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
   const handleSelect = (e: any) => {
     setSelected(e.selected);
   };
-  const handleDownload = async () => {
+  const handleDownload = async (fileId: string, fileName: string) => {
     try {
-      if (props.row.attachment_id) {
-        const blob = await offertaService.getCV(props.row.attachment_id);
-        const fileUrl = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = fileUrl;
-        if (props.row?.existingFile?.name) {
-          link.download = props.row?.existingFile?.name
-        } else {
-          link.download = "Documento Scaricato"
-        }
+    
+      const blob = await offertaService.getDownloadFile(fileId);
+  
+      const fileUrl = URL.createObjectURL(blob);
+  
 
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(fileUrl);
-      }
+      const link = document.createElement('a');
+      link.href = fileUrl;
+  
+    
+      link.download = fileName || "Documento Scaricato";
 
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(fileUrl);
     } catch (error) {
       console.error('Errore durante il download del file:', error);
     }
   };
+  
+  useEffect(() => {
+    if (props.type === "edit" && isrowLocationDataReady) {
+      if (
+        formCustomerData.project_type?.name === "Consulenza" &&
+        formCustomerData.billing_type?.name === "Fatturazione a giornata"
+      ) {
+        setIsDaily(true);
+      } else {
+        setIsDaily(false);
+      }
+    }
+  }, [props.type, isrowLocationDataReady]);
+
+
+
+
   const valueOnChange = (name: string, value: any) => {
+    if (name === "project_type") {
+      if (value.name === "Consulenza") {
+        const updatedBillingType = { id: "Daily", name: "Fatturazione a giornata" };
+        formCustomer.current.values.billing_type = updatedBillingType;
+        setIsDaily(true)
+        if (props.type === "edit") {
+          setModifiedFields((prevState) => ({
+            ...prevState,
+            billing_type: updatedBillingType,
+          }));
+        }
+      } else {
+        formCustomer.current.values.billing_type = { id: undefined, name: undefined };
+        setIsDaily(false);
+        if (props.type === "edit") {
+          setModifiedFields((prevState) => ({
+            ...prevState,
+            billing_type: { id: undefined, name: undefined },
+          }));
+        }
+      }
+    }
     if (props.type === "edit") {
       const currentValue = modifiedFields[name];
       if (currentValue !== value) {
@@ -122,21 +201,22 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
         }));
 
         if (name === "location") {
-          setrowLocation(value);
+          setRowLocation(value);
         }
       }
     }
   };
 
-  
-  
+
+
   const getLocationLabel = (sedi: locationOption[], location_id: number) => {
     return Array.isArray(sedi) ? (sedi.find((sede) => sede.value === location_id)?.label || " ") : " ";
   };
-  
+
 
   const valueOnChangeByllingType = (name: string, value: any) => {
     if (value.name === "Fatturazione a giornata") {
+
       setIsDaily(true)
     } else {
       setIsDaily(false)
@@ -198,10 +278,10 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
         }
 
         setformCustomerData(combinedData);
-  
+
 
         saveOfferData(combinedData);
-  
+
 
         setShowNewTaskModal(false);
       }
@@ -258,11 +338,15 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
         }
         return result;
       }, {});
+      console.log("modifieddata", modifiedData)
       const formattedData = reverseOfferAdapterUpdate({ ...modifiedData });
+      console.log("formattedata", formattedData)
       props.onSubmit(props.type, formattedData, props.refreshTable, props.row.id, props.closeModalCallback);
 
     } else {
+      console.log("basedata", baseData)
       const formattedData = fromOfferModelToOfferBEModel({ ...baseData });
+      console.log("formattedata", formattedData)
       props.onSubmit(props.type, formattedData, props.refreshTable, props.row.id, props.closeModalCallback);
     }
   };
@@ -276,7 +360,7 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
   if (!isLocationDataReady || ((props.type !== 'create' && props.type !== "delete") && !isrowLocationDataReady)) {
     return <div className={styles.loader}><LoaderComponent type="pulsing"></LoaderComponent></div>;
   }
-  
+
 
 
   if (props.type === 'delete') {
@@ -351,12 +435,12 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
             />
           </div>
           <div className={styles.buttons}>
-          <Button  onClick={() => setShowNewTaskModal(false)}>
-            Annulla
-          </Button>
-          <Button  themeColor={"primary"}  onClick={handleCommessaSubmit}>
-            Salva
-          </Button>
+            <Button onClick={() => setShowNewTaskModal(false)}>
+              Annulla
+            </Button>
+            <Button themeColor={"primary"} onClick={handleCommessaSubmit}>
+              Salva
+            </Button>
           </div>
         </div>
       </Window>

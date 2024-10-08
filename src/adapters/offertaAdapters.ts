@@ -65,7 +65,7 @@ export function fromOfferBEModelToOfferModel(
       ? { id: offerBE.ProjectType.id, name: offerBE.ProjectType.description }
       : undefined,
     location_id: offerBE.location_id,
-    attachment_id: offerBE.attachment_id,
+
     billing_type: {
       id: offerBE.billing_type,
       name: mapBillingTypeName(offerBE.billing_type),
@@ -76,22 +76,13 @@ export function fromOfferBEModelToOfferModel(
           name: mapOutcomeTypeName(offerBE.OutcomeType),
         }
       : undefined,
-    attachment: offerBE?.Attachment?.file_name
-      ? [
-          {
-            name: offerBE?.Attachment?.file_name,
-            extension: offerBE?.Attachment?.content_type,
-            /*     progress: Person.Attachment?.file_name ?? 100, */
-          },
-        ]
-      : undefined,
-    existingFile: offerBE?.Attachment?.file_name
-      ? {
-          name: offerBE?.Attachment?.file_name,
-          /*     progress: Person.Attachment?.file_name ?? 100, */
-        }
-      : undefined,
-    year: new Date(offerBE.year, 1, 1),
+      existingFile: Array.isArray(offerBE.files)
+      ? offerBE.files.map((file) => ({
+          id:file.uniqueRecordIdentifier
+        }))
+      : [],
+      year: offerBE.year ? new Date(offerBE.year, 1, 1) : undefined,
+
     days: offerBE.days,
     thereisProject: offerBE.Project ? true : false
   };
@@ -105,15 +96,13 @@ export function fromOfferModelToOfferBEModel(
     project_code: offerModel.protocol, // mapping protocol to project_code
     name: offerModel.title, // mapping title to name
     Attachment: offerModel.attachment
-      ? {
-          file_name: offerModel.attachment[0].name,
-          content_type:
-            offerModel.attachment[0].extension === ".pdf"
-              ? "application/pdf"
-              : "application/octet-stream",
-          data: offerModel.attachment[0].data || [],
-        }
-      : undefined,
+    ? offerModel.attachment.map(file => ({
+        file_name: file.name,
+        content_type:
+          file.extension === ".pdf" ? "application/pdf" : "application/octet-stream",
+        data: file.data || [],
+      }))
+    : undefined,
     /* start_date: offerModel.start_date.toISOString(), */
     deadline_date: offerModel.end_date?.toISOString() || undefined, // fallback to undefined if empty
     other_details: offerModel.description || "", // mapping description to other_details
@@ -125,7 +114,7 @@ export function fromOfferModelToOfferBEModel(
     project_type_id: offerModel.project_type?.id,
     billing_type: offerModel.billing_type ? offerModel.billing_type.id : "", // hypothetical method for billing type conversion
     OutcomeType: offerModel.outcome_type?.id,
-    year: offerModel.year.getFullYear(),
+    year: offerModel.year ? offerModel.year.getFullYear() : undefined,
     days: Number(offerModel.days) || 0,
     noCollective: offerModel.NoCollective,
     approval_date: offerModel.approval_date?.toISOString() || undefined,
@@ -192,14 +181,14 @@ export const reverseOfferAdapterUpdate = (
 
   if ("attachment" in modifiedData) {
     result.Attachment = modifiedData.attachment
-      ? {
-          file_name: modifiedData.attachment[0].name,
+      ? modifiedData.attachment.map((file: any) => ({
+          file_name: file.name,
           content_type:
-            modifiedData.attachment[0].extension === ".pdf"
+            file.extension === ".pdf"
               ? "application/pdf"
               : "application/octet-stream",
-          data: modifiedData.attachment[0].data || [],
-        }
+          data: file.data || [],
+        }))
       : undefined; // Rimuove l'allegato se undefined
   }
 

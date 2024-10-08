@@ -15,7 +15,7 @@ declare module "common/AutoComplete"
 declare module "common/CountrySelector"
 declare module "common/Loader"
 declare module "common/providers/NotificationProvider";
-
+declare module "common/SvgIcon"
 declare module "common/services/BEService";
 declare module "common/services/BaseHTTPService";
 

@@ -5,14 +5,14 @@ import { OfferModel, Projects } from "./model";
 export const getFormOfferFields = (
     formData: OfferModel,
     type: string,
-    handleDownload: () => void,
+    handleDownload: (fileId: string, name: string) => void,
     combinedValueOnChangeAttchment: (name: string, value: any) => void,
     download: boolean,
     name_attachment: string | null,
-    rowLocation: {id:number,name:string} | undefined,
+    rowLocation: { id: number, name: string } | undefined,
     valueOnChange: (name: string, value: any) => void,
     isDaily: boolean,
-      combinedValueOnChangeBillyngType: (name: string, value: any) => void,
+    combinedValueOnChangeBillyngType: (name: string, value: any) => void,
 ) => {
 
     // Validators
@@ -24,11 +24,13 @@ export const getFormOfferFields = (
 
     const requiredIfDailyValidator = (value: any, fieldName: string) => isDaily && !value ? `Il campo ${fieldName} è obbligatorio quando la fatturazione è giornaliera` : "";
 
-    if(type === "edit" || type === "view"){
-    formData.location = rowLocation || formData.location;
-    } 
-    // Update formData with location
-   
+    if (type === "edit" || type === "view") {
+        formData.location = rowLocation || formData.location;
+    }
+
+
+
+    console.log("isdailu", isDaily)
 
     // Fields definition
     const fields: Record<string, any> = {
@@ -38,7 +40,7 @@ export const getFormOfferFields = (
             type: "date",
             value: formData.creation_date,
             disabled: true,
-           conditions: (formData: OfferModel) => type === "edit" || type === "view"
+            conditions: (formData: OfferModel) => type === "edit" || type === "view"
         },
         accountManager: {
             name: "accountManager",
@@ -56,9 +58,7 @@ export const getFormOfferFields = (
             type: "year",
             value: formData.year,
             valueOnChange: valueOnChange,
-            required: true,
             disabled: type === "view",
-            validator: (value: any) => (value ? "" : "Selezionare un anno valido")
         },
         project_type: {
             name: "project_type",
@@ -87,38 +87,38 @@ export const getFormOfferFields = (
             value: formData.billing_type,
             valueOnChange: combinedValueOnChangeBillyngType,
             required: true,
-            disabled: type === "view",
-            validator: (value: any) => (value ? "" : "Selezionare un Cliente valido")
+            disabled: type === "view" || isDaily,
+            validator: (value: any) => (value ? "" : "Selezionare un Tipo di fatturazione valida")
         },
-      
+
     };
 
-    if(isDaily){
-        fields.rate= {
-            name: "rate",
-            label: "Tariffa",
-            type: "number",
-            value: formData.rate,
-            valueOnChange: valueOnChange,
-            required: isDaily,
-            disabled: type === "view",
-            validator: (value: any) => requiredIfDailyValidator(value, "Tariffa"),
-            conditions: (formData: OfferModel) => formData.billing_type?.id === "Daily"
-        };
-        fields.days= {
-            name: "days",
-            label: "Giorni offerti",
-            type: "number",
-            value: formData.days,
-            valueOnChange: valueOnChange,
-            required: isDaily,
-            disabled: type === "view",
-            validator: (value: any) => requiredIfDailyValidator(value, "Giorni offerti"),
-            conditions: (formData: OfferModel) => formData.billing_type?.id === "Daily"
-        };
-    }
 
-    fields.amount= {
+    fields.rate = {
+        name: "rate",
+        label: "Tariffa",
+        type: "number",
+        value: formData.rate,
+        valueOnChange: valueOnChange,
+        required: isDaily,
+        disabled: type === "view",
+        validator: (value: any) => requiredIfDailyValidator(value, "Tariffa"),
+        conditions: (formData: OfferModel) => formData.billing_type?.id === "Daily"
+    };
+    fields.days = {
+        name: "days",
+        label: "Giorni offerti",
+        type: "number",
+        value: formData.days,
+        valueOnChange: valueOnChange,
+        required: isDaily,
+        disabled: type === "view",
+        validator: (value: any) => requiredIfDailyValidator(value, "Giorni offerti"),
+        conditions: (formData: OfferModel) => formData.billing_type?.id === "Daily"
+    };
+
+
+    fields.amount = {
         name: "amount",
         label: "Importo",
         type: "number",
@@ -128,27 +128,27 @@ export const getFormOfferFields = (
         disabled: type === "view",
         conditions: (formData: OfferModel) => formData.billing_type?.id !== "Daily"
     };
-        fields.title= {
-            name: "title",
-            label: "Titolo",
-            type: "text",
-            value: formData.title,
-            valueOnChange: valueOnChange,
-            required: true,
-            disabled: type === "view",
-            validator: (value: any) => (value ? "" : "Il campo Titolo è obbligatorio")
-        };
-        fields.protocol={
-            name: "protocol",
-            label: "Protocollo",
-            type: "text",
-            value: formData.protocol,
-            valueOnChange: valueOnChange,
-            required: true,
-            disabled:type === "view",
-            validator: (value: any) => value ? "" : "Il campo Protocollo è obbligatorio"
-        },
-        fields.location= {
+    fields.title = {
+        name: "title",
+        label: "Titolo",
+        type: "text",
+        value: formData.title,
+        valueOnChange: valueOnChange,
+        required: true,
+        disabled: type === "view",
+        validator: (value: any) => (value ? "" : "Il campo Titolo è obbligatorio")
+    };
+    fields.protocol = {
+        name: "protocol",
+        label: "Protocollo",
+        type: "text",
+        value: formData.protocol,
+        valueOnChange: valueOnChange,
+        required: true,
+        disabled: type === "view",
+        validator: (value: any) => value ? "" : "Il campo Protocollo è obbligatorio"
+    },
+        fields.location = {
             name: "location",
             label: "Sede",
             type: "sede-selector",
@@ -157,77 +157,79 @@ export const getFormOfferFields = (
             required: true,
             disabled: type === "view"
         };
-        fields.approval_date= {
-            name: "approval_date",
-            valueOnChange: valueOnChange,
-            label: "Data approvazione",
-            type: "date",
-            value: formData.approval_date,
-            disabled: type === "view"
-        };
-    
-        fields.end_date={
-            name: "end_date",
-            label: "Data scadenza",
-            type: "date",
-            valueOnChange: valueOnChange,
-            value: formData.end_date,
-            disabled: type === "view"
-        };
-        fields.outcome_type= {
-            name: "outcome_type",
-            label: "Tipo Esito",
-            type: "outcometype-selector",
-            valueOnChange: valueOnChange,
-            value: formData.outcome_type,
-            required: true,
-            disabled: type === "view",
-            validator: (value: any) => (value ? "" : "Selezionare un esito valido")
-        };
-        fields.attachment= {
-            name: "attachment",
-            label: "Carica CV",
-            type: "upload",
-            withCredentials: false,
-            disabled: type === "view",
-            value: formData.attachment || "",
-            existingFile: formData.existingFile,
-            valueOnChange:  combinedValueOnChangeAttchment,
-            accept: ".pdf",
-            onDownload: download && name_attachment ? handleDownload : undefined,
-            multiple: false
-        };
-    
-        fields.NoCollective={
-            name: 'NoCollective',
-            label: 'Fuori accordo quadro',
-            valueOnChange: valueOnChange,
-            type: 'checkbox',
-            showLabel: false,
-            value: formData.NoCollective || false,
-            disabled: type === "view"
-        };
-        fields.description= {
-            name: 'description',
-            label: 'Descrizione',
-            valueOnChange: valueOnChange,
-            type: 'textarea',
-            value: formData.description,
-            disabled: type === "view"
-        }
-    
+    fields.approval_date = {
+        name: "approval_date",
+        valueOnChange: valueOnChange,
+        label: "Data approvazione",
+        type: "date",
+        value: formData.approval_date,
+        disabled: type === "view"
+    };
+
+    fields.end_date = {
+        name: "end_date",
+        label: "Data scadenza",
+        type: "date",
+        valueOnChange: valueOnChange,
+        value: formData.end_date,
+        disabled: type === "view"
+    };
+    fields.outcome_type = {
+        name: "outcome_type",
+        label: "Tipo Esito",
+        type: "outcometype-selector",
+        valueOnChange: valueOnChange,
+        value: formData.outcome_type,
+        required: true,
+        disabled: type === "view",
+        validator: (value: any) => (value ? "" : "Selezionare un esito valido")
+    };
+
+    fields.NoCollective = {
+        name: 'NoCollective',
+        label: 'Fuori accordo quadro',
+        valueOnChange: valueOnChange,
+        type: 'checkbox',
+        showLabel: false,
+        value: formData.NoCollective || false,
+        disabled: type === "view"
+    };
+    fields.description = {
+        name: 'description',
+        label: 'Descrizione',
+        valueOnChange: valueOnChange,
+        type: 'textarea',
+        value: formData.description,
+        disabled: type === "view"
+    }
+    fields.attachment = {
+        name: "attachment",
+        label: "Carica CV",
+        type: "uploadMultipleFiles",
+        withCredentials: false,
+        disabled: type === "view",
+        files: formData.attachment || "",
+        valueOnChange: combinedValueOnChangeAttchment,
+        onDownload: download && name_attachment ?
+            (fileId: string, name: string) => handleDownload(fileId, name) : undefined,
+        multiple: true,
+        /*    listItemUI:formData.existingFile, */
+        existingFile: formData.existingFile
+    };
+
+    console.log("fields", fields)
     return fields;
 };
 
 
-export const getFormCommesseFields=(formData:Projects | undefined, valueOnChange: (name: string, value: any) => void,)=> {
+export const getFormCommesseFields = (formData: Projects | undefined, valueOnChange: (name: string, value: any) => void,) => {
     const fields: Record<string, any> = {
         start_date: {
             name: "start_date",
             label: "Data di inizio",
             type: "date",
             valueOnChange: valueOnChange,
-            required:true,
+            required: true,
             value: formData?.start_date,
             validator: (value: any) => (value ? "" : "Seleziona una data")
         },
@@ -237,7 +239,7 @@ export const getFormCommesseFields=(formData:Projects | undefined, valueOnChange
             type: "date",
             valueOnChange: valueOnChange,
             value: formData?.end_date,
-       
+
         },
         orderNum: {
             name: "orderNum",
@@ -245,9 +247,9 @@ export const getFormCommesseFields=(formData:Projects | undefined, valueOnChange
             valueOnChange: valueOnChange,
             type: "text",
             value: formData?.orderNum,
-            
+
         },
-       
+
     };
     return fields;
 }

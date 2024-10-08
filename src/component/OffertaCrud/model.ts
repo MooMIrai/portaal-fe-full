@@ -6,7 +6,14 @@ export interface OfferTypeBE {
   code: string;
   description: string;
 }
-
+export type FilesModel = {
+  file_name?: string;
+  uniqueRecordIdentifier?:string;
+  content_type?: string; // Estensione del file, opzionale
+  data?: number[]; // Array di byte del contenuto del file
+  size?: number; // Dimensione del file
+  uid?: string; // Identificativo univoco del file
+};
 export interface OfferBEModel {
   id?: number;
   accountManager_id?: number;
@@ -32,13 +39,10 @@ export interface OfferBEModel {
     Person: any;
   };
   attachment_id?:number;
-  year: number;
+  year?: number;
   location_id: number;
-  Attachment?: {
-    file_name: string;
-    content_type?: string;
-    data?: number[];
-  };
+  Attachment?: FilesModel[]
+  files?: FilesModel[];
   skill_ids?: number[];
   noCollective?: boolean;
   approval_date?: string;
@@ -74,17 +78,20 @@ export interface OfferModel {
   approval_date?: Date;
   project_type?: { id: number; name: string };
   project_type_id: number;
-  attachment?: [
-    {
-      extension?: string;
-      name: string;
-      data?: number[];
-    }
-  ];
+  existingFile?: Array<{
+    id?:string;
+    name?: string;
+  }>;
+  attachment?: Array<{
+    id?:string;
+    name?: string;
+    extension?: string;
+    data?: number[]; // Array di byte se necessario
+  }>;
   attachment_id?: number;
-  existingFile?: { name: string };
+
   outcome_type?: { id: string; name: string };
-  year: Date;
+  year?: Date;
   days?: number;
   orderNum?:string;
 }
