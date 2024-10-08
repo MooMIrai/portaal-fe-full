@@ -6,7 +6,11 @@ class DeviceService extends BaseHttpService {
         return 'stock';
       }
 
-    
+    getDeviceTypes(term:string){
+      return client.get('/api/v1/crud/deviceType?term='+term)
+    }
+
+
 
 }
 

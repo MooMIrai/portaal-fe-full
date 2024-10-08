@@ -1,4 +1,4 @@
-
+import FileService from 'common/services/FileService'
 
 export const getFormDeviceFields = (formData: any, type:string) => {
     
@@ -27,6 +27,15 @@ export const getFormDeviceFields = (formData: any, type:string) => {
             disabled:type === "view",
             validator: (value: any) => value ? "" : "Il campo modello è obbligatorio",
         },
+        DeviceType: {
+            name: "DeviceType",
+            label: "Tipo dispositivo",
+            type: "devicetype-selector",
+            value: formData.DeviceType,
+            required: true,
+            disabled: type === "view",
+            validator: (value: any) => (value ? "" : "Selezionare un tipo dispositivo")
+        },
         serial_number: {
             name: "serial_number",
             label: "Numero Seriale",
@@ -47,14 +56,12 @@ export const getFormDeviceFields = (formData: any, type:string) => {
             withCredentials: false,
             disabled: type === "view",
             value: formData.files || "",
-            existingFile:formData.files && formData.files.length?{name:'Fattura.pdf'}:undefined,
-            valueOnChange: (name: string, value: any) => {
-                //combinedValueOnChange(name, value); // Usa la funzione combinata
-                console.log(name,value)
-            },
+            existingFile:formData.files && formData.files.length?[{name:'Fattura.pdf'}]:undefined,
             accept: ".pdf",
             onDownload: (ev)=>{
                 //get file and download
+                FileService.getFileFromBE(formData.files[0].uniqueRecordIdentifier)
+                    .then(FileService.openFileFromBlob)
             },
             multiple: false,
         },

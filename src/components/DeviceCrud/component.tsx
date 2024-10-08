@@ -1,6 +1,12 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Form from 'common/Form';
 import { getFormDeviceFields } from './form';
+import Button from 'common/Button'
+import Tab from 'common/Tab'
+
+import styles from './style.module.scss'
+import { deviceService } from '../../services/deviceService';
+import { deviceCustomFields } from './customFields';
 
 type DeviceCrudProps = {
     row: any;
@@ -16,13 +22,76 @@ export default function DeviceCrud(props:DeviceCrudProps){
 
     const [formDeviceData,setformDeviceData] = useState<any>(props.row);
     
-    return <div>
-    <Form
-        ref={formDevice}
-        fields={Object.values(getFormDeviceFields(formDeviceData,props.type))}
-        formData={formDeviceData}
-        onSubmit={(data: any) => setformDeviceData(data)}
-        description="Dispositivo"
-    />
-</div>
-}
+    const handleSubmit = () => {
+      let hasError = false;
+ 
+      if (props.type === "create" || props.type === "edit" ) {
+        if (formDevice.current) {
+          formDevice.current.onSubmit();
+          hasError = !formDevice.current.isValid()
+        }
+
+  
+      if (!hasError) {
+
+        const formattedData = {
+          ...formDevice.current.values,
+          deviceType_id:formDevice.current.values.DeviceType.id,
+          Attachment:formDevice.current.values.files
+        }
+        //console.log("formattedData", formattedData);
+        props.onSubmit(props.type, formattedData, props.refreshTable,  props.row.id,props.closeModalCallback);
+        //props.refreshTable();
+        //props.closeModalCallback();
+      }
+    }
+    if(props.type==='delete'){
+        props.onSubmit(props.type, {}, props.refreshTable,  props.row.id,props.closeModalCallback);
+        //props.refreshTable();
+        //props.closeModalCallback();
+    }
+  }
+
+
+    if(props.type==='delete'){
+        return (
+          
+            <div className={styles.formDelete}>
+              <span>{"Sei sicuro di voler eliminare il record?"}</span>
+            
+            <div >
+              <Button onClick={()=>props.closeModalCallback()}>Cancel</Button>
+              <Button themeColor={"error"} onClick={handleSubmit}>
+                Elimina
+              </Button>
+            </div>
+            </div>
+          
+        )
+      }
+  
+      return <Tab 
+              tabs={
+                  [
+                      {
+                          title: "Dati Cliente",
+                          children: (
+                            <div className={styles.parentForm} >
+                               <Form
+                                    ref={formDevice}
+                                    fields={Object.values(getFormDeviceFields(formDeviceData,props.type))}
+                                    formData={formDeviceData}
+                                    onSubmit={(data) => setformDeviceData(data)}
+                                    addedFields={deviceCustomFields}
+                                />
+                            </div>
+                          ),
+                        },
+                  ]
+              }
+              onSelect={()=>{}}
+              selected={0}
+              button={{ label: props.type === 'view' ? "Esci" : "Salva", onClick: handleSubmit }}
+      />
+  }
+   
