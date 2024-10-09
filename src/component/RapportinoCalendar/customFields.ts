@@ -6,7 +6,7 @@ import { CrudGenericService } from "../../services/personaleServices";
 const getDataUtente= (filterP:string)=>{
     return CrudGenericService.searchAccount(filterP).then((res)=>{
         if(res ){
-            return res.map(r=>({id:r.person_id,name:r.Person.firstName+ ' '+r.Person.lastName}));
+            return res.map(r=>({id:r.person_id,name:r.firstName+ ' '+r.lastName}));
         }
         return []
     });
