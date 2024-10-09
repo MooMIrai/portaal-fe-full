@@ -163,6 +163,11 @@ class CrudGenericServiceC {
     return client.get(`api/v1/accounts/findCOM?search=${text}`).then(res=>res.data); 
   }
 
+  searchAccount = (text:string) =>{
+    return client.get(`api/v1/accounts/findByName?search=${text}`).then(res=>res.data); 
+  }
+
+
   async getFilesByIds(uniqueIdentifiers: string) {
     const response = await client.get(`api/v1/files/get/${uniqueIdentifiers}`);
     return response.data;

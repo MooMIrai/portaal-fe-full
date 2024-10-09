@@ -2,10 +2,10 @@ import client from "common/services/BEService";
 
 class TimesheetsServiceC {
   findOrCreate = async (
-    employeeId: number,
     year: number,
     month: number,
-    comments: string
+    comments: string,
+    employeeId?: number
   ) => {
     try {
       const response = await client.post(`api/v1/timesheets/findOrCreate`, {

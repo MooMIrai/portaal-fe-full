@@ -9,6 +9,7 @@ import NotificationActions from 'common/providers/NotificationProvider'
 import { chevronLeftIcon, chevronRightIcon } from 'common/icons';
 import SvgIcon from 'common/SvgIcon'
 import Button from 'common/Button'
+import { AutoCompletePerson } from "./customFields";
 
 const RapportinoItemView = (props: any) => {
 
@@ -70,12 +71,17 @@ const RapportinoItemView = (props: any) => {
 }
 const RapportinoItem = withScheduler(RapportinoItemView)
 
+const defaultPerson = {id:0,name:'(Me)'};
+
 export default function RapportinoCalendar() {
   const [date, setDate] = useState<Date>(new Date());
   const [data, setData] = useState<any>([]);
   const [holidays, setHolidays] = useState<Array<number>>();
   const [timeSheetsId, setTimeSheetsId] = useState<number>();
   const [mobileSelectedDate, setMobileSelectedDate] = useState<Date>();
+
+  const [userSelected,setUserSelected] = useState<{id:number,name:string}>(defaultPerson);
+
   const size = useWindowSize();
 
   const convertToISODateString = (year, month, day, hour, minute) => {
@@ -135,7 +141,7 @@ export default function RapportinoCalendar() {
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
 
-    TimesheetsService.findOrCreate(8, year, month, "")
+    TimesheetsService.findOrCreate(year, month, "",userSelected.id>0?userSelected.id:undefined)
       .then((response) => {
         setTimeSheetsId(response.id);
         setHolidays(response.holidays);
@@ -184,7 +190,7 @@ export default function RapportinoCalendar() {
     return () => {
       document.removeEventListener('CalendarRefreshData', fetchTimesheet);
     }
-  }, [date]);
+  }, [date,userSelected]);
 
 
 
@@ -374,8 +380,20 @@ export default function RapportinoCalendar() {
     <>
       <div style={{ display: 'flex', justifyContent: "space-between", marginBottom: 10 }}>
         <p>Tocca una data per inserire le ore di attività</p>
+        <div style={{ display: 'flex', justifyContent: "space-between",gap:15}}>
+          <div style={{width:300}}>Utente Selezionato <AutoCompletePerson label="" value={userSelected} onChange={(e)=>{
+          if(!e.value){
+            setUserSelected(defaultPerson)
+          }else{
+            setUserSelected(e.value)
+          }
+          
+        }} /></div>
         <Button themeColor="success" onClick={() => TimesheetsService.finalizeTimesheet(timeSheetsId || 0)}>Consolida</Button>
+        </div>
+        
       </div>
+
       {size.width && size.width >= 768 ? (
         <Calendar
           date={date}
