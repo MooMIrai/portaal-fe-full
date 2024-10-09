@@ -15,6 +15,6 @@ const getDataUtente= (filterP:string)=>{
 export const AutoCompletePerson = withField(withAutoComplete(getDataUtente))
 
 export const formFields = {
-    "sede-selector": AutoCompletePerson,
+    "account-selector": AutoCompletePerson,
     
 };
