@@ -29,9 +29,11 @@ const mfeConfig = {
     "./CustomChip": "./src/components/CustomChip/component.tsx",
 
     "./Loader":"./src/components/Loader/component",
+    "./Modal":"./src/components/Modal/component",
     "./Accordion":"./src/components/Accordion/component",
     "./TimePicker":"./src/components/TimePicker/component",
     "./SvgIcon":"./src/components/SvgIcon/component",
+    "./Fields":"./src/components/DynamicForm/fieldComponents",
 
     "./SignDocumentScanner" : "./src/components/SignDocument/component",
 
