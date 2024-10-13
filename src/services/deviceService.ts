@@ -9,15 +9,38 @@ class DeviceService extends BaseHttpService {
     return 'stock';
   }
 
+  searchMock(...args){
+    return Promise.resolve({meta:{total:15},data:[
+      { model: "Modello X1", serial_number: "SN123456789", DeviceType: { name: "Smartphone" } },
+      { model: "Modello Y1", serial_number: "SN987654321", DeviceType: { name: "Laptop" } },
+      { model: "Modello Z1", serial_number: "SN192837465", DeviceType: { name: "Tablet" } },
+      { model: "Modello X2", serial_number: "SN564738291", DeviceType: { name: "Smartwatch" } },
+      { model: "Modello Y2", serial_number: "SN102938475", DeviceType: { name: "Desktop" } },
+      { model: "Modello Z2", serial_number: "SN384756192", DeviceType: { name: "Smartphone" } },
+      { model: "Modello X3", serial_number: "SN475849302", DeviceType: { name: "Laptop" } },
+      { model: "Modello Y3", serial_number: "SN847362910", DeviceType: { name: "Tablet" } },
+      { model: "Modello Z3", serial_number: "SN293847561", DeviceType: { name: "Desktop" } },
+      { model: "Modello X4", serial_number: "SN657483920", DeviceType: { name: "Smartwatch" } },
+      { model: "Modello Y4", serial_number: "SN192030405", DeviceType: { name: "Smartphone" } },
+      { model: "Modello Z4", serial_number: "SN384920573", DeviceType: { name: "Laptop" } },
+      { model: "Modello X5", serial_number: "SN575839201", DeviceType: { name: "Tablet" } },
+      { model: "Modello Y5", serial_number: "SN203948576", DeviceType: { name: "Desktop" } },
+      { model: "Modello Z5", serial_number: "SN485930271", DeviceType: { name: "Smartphone" } },
+    ]}
+    )
+  }
+
   getDeviceTypes(term: string) {
     return client.get('/api/v1/crud/deviceType?term=' + term)
   }
 
-  getPerson(idPerson: number) {
+  getPerson(idPerson?: number) {
+    if(!idPerson)
+      return Promise.resolve(null)
     return client.get('/api/v1/crud/person/' + idPerson + '?include=true').then(res => res.data)
   }
 
-  produceAssignPdf(idPersona: number, data: Date, rows: Array<Array<string>>, signImage?: string) {
+  produceAssignPdf(idPersona: number | undefined, data: Date, rows: Array<Array<string>>, signImage?: string) {
 
     type CustomDoc = jsPDF & {
       lastAutoTable: {
@@ -34,7 +57,12 @@ class DeviceService extends BaseHttpService {
       doc.setFontSize(16);
       doc.text('Oggetto: Consegna materiale', 70, 55)
       doc.setFontSize(12);
-      doc.text(`Il sottoscritto ${person.firstName} ${person.lastName}. Nato a ${person.CityBirth.name} il ${new Date(person.dateBirth).toLocaleDateString()} in data ${data.toLocaleDateString()} riceve da Taal il sottostante materiale:`, 30, 65, { align: 'justify', maxWidth: 150 })
+      if(person){
+        doc.text(`Il sottoscritto ${person.firstName} ${person.lastName}. Nato a ${person.CityBirth.name} il ${new Date(person.dateBirth).toLocaleDateString()} in data ${data.toLocaleDateString()} riceve da Taal il sottostante materiale:`, 30, 65, { align: 'justify', maxWidth: 150 })
+      }else{
+        doc.text(`Il sottoscritto ___________________________. Nato a _______________ il ____________ in data ${data.toLocaleDateString()} riceve da Taal il sottostante materiale:`, 30, 65, { align: 'justify', maxWidth: 150 })
+      }
+      
 
      
       doc.autoTable({

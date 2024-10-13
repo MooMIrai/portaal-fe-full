@@ -23,3 +23,5 @@ declare module 'common/services/FileService'
 
 declare module "common/hoc/Field"
 declare module "common/hoc/AutoComplete"
+
+declare module 'common/Fields'
