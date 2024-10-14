@@ -29,11 +29,14 @@ client.interceptors.response.use(
         { icon: true, style: "error" },
         error.response.data.message
       );
+      throw new Error(error.response.data.message)
     } else {
+      
       NotificationProviderActions.openModal(
         { icon: true, style: "error" },
         "SERVER ERROR"
       );
+      throw new Error("SERVER ERROR")
     }
   }
 );
