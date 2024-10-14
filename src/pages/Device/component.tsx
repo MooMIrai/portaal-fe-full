@@ -34,7 +34,7 @@ export default function DevicePage(){
         filter: any,
         sorting: any[],
       )=>{
-       return deviceService.searchMock(pagination.currentPage,pagination.pageSize,filter,sorting,null,true)
+       return deviceService.search(pagination.currentPage,pagination.pageSize,filter,sorting,null,true)
     }
 
     const handleFormSubmit = (type: string, formData: any, refreshTable: any, id: any, closeModal: () => void) => {
@@ -98,6 +98,8 @@ export default function DevicePage(){
     title="Associa dispositivi"
     isOpen={showRelate}
     onClose={()=>setShowRelate(false)}
+    width="100%"
+    height="100%"
    >
       <RelateDevice devices={selectedRows} />
    </Modal>
