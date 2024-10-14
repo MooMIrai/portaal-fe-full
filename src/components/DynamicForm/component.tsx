@@ -21,6 +21,7 @@ import {
   UploadMultipleFilesInput
 } from "./fieldComponents";
 import CountrySelector from "../CountrySelector/component";
+import styles from "./styles.module.scss";
 
 const getFieldComponent = (type: FieldType) => {
   switch (type) {
@@ -49,7 +50,7 @@ const getFieldComponent = (type: FieldType) => {
     case 'uploadSingleFile':
       return UploadSingleFileInput;
     case 'uploadMultipleFiles':
-    return UploadMultipleFilesInput;
+      return UploadMultipleFilesInput;
     default:
       return TextInput;
   }
@@ -94,7 +95,7 @@ export interface FieldConfig {
   showLabel?: boolean
   valueOnChange?: (name: string, value: any) => void;
   onDownload?: () => void
-  onFileUpload?: (file: File) => void; 
+  onFileUpload?: (file: File) => void;
   multiple?: boolean
   existingFile?: { name: string };
   //onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -128,7 +129,7 @@ const DynamicField = ({
 
 }) => {
 
-  const { name, type, label, validator, options, disabled, required, showLabel = true, onDownload, multiple, existingFile,onFileUpload } = field;
+  const { name, type, label, validator, options, disabled, required, showLabel = true, onDownload, multiple, existingFile, onFileUpload } = field;
   let Component: any = getFieldComponent(type);
 
   if (addedFields && Object.keys(addedFields).some(s => s === type)) {
@@ -226,7 +227,7 @@ const DynamicForm = React.forwardRef<any, DynamicFormProps>((props, ref) => {
           </fieldset>
         )}
         {children}
-        <div className="k-form-buttons">
+        <div className={"k-form-buttons " + (styles.buttonsContainer ?? '')}>
           {extraButton && <Button onClick={extraBtnAction}>Cancel</Button>}
           {showSubmit && (
             <Button
