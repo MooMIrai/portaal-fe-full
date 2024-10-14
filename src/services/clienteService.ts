@@ -8,7 +8,7 @@ class CS extends BaseHttpService{
   }
 
   getHasProject(){
-    return client.get('api/v1/customers/findCustomersProjects');
+    return client.post('api/v1/customers/findCustomersProjects');
   }
 
 }
