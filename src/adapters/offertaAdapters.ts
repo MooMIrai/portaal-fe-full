@@ -28,7 +28,7 @@ export function fromOfferBEModelToOfferModel(
 ): OfferModel {
   return {
     id: offerBE.id,
-    protocol: offerBE.project_code, // mapping project_code to protocol
+    protocol: offerBE.offer_name, // mapping offer_name to protocol
     title: offerBE.name, // mapping name to title
     /* start_date: new Date(offerBE.start_date), */
     end_date: offerBE.deadline_date
@@ -39,7 +39,7 @@ export function fromOfferBEModelToOfferModel(
     amount: offerBE.amount,
     NoCollective: offerBE.noCollective || false,
     customer_id: offerBE.customer_id || 0,
-    customer_name: offerBE.Customer?.name ,
+    customer_name: offerBE.Customer?.name,
     customer: {
       id: offerBE.customer_id || 0,
       name: offerBE.Customer ? offerBE.Customer.name : "",
@@ -59,7 +59,7 @@ export function fromOfferBEModelToOfferModel(
         " " +
         offerBE.AccountManager?.Person.lastName,
     },
-   
+
     project_type_id: offerBE.project_type_id || 0,
     project_type: offerBE.ProjectType
       ? { id: offerBE.ProjectType.id, name: offerBE.ProjectType.description }
@@ -72,16 +72,16 @@ export function fromOfferBEModelToOfferModel(
     }, // hypothetical method for billing type conversion
     outcome_type: offerBE.OutcomeType
       ? {
-          id: offerBE.OutcomeType,
-          name: mapOutcomeTypeName(offerBE.OutcomeType),
-        }
+        id: offerBE.OutcomeType,
+        name: mapOutcomeTypeName(offerBE.OutcomeType),
+      }
       : undefined,
-      existingFile: Array.isArray(offerBE.files)
+    existingFile: Array.isArray(offerBE.files)
       ? offerBE.files.map((file) => ({
-          id:file.uniqueRecordIdentifier
-        }))
+        id: file.uniqueRecordIdentifier
+      }))
       : [],
-      year: offerBE.year ? new Date(offerBE.year, 1, 1) : undefined,
+    year: offerBE.year ? new Date(offerBE.year, 1, 1) : undefined,
 
     days: offerBE.days,
     thereisProject: offerBE.Project ? true : false
@@ -93,16 +93,16 @@ export function fromOfferModelToOfferBEModel(
 ): OfferBEModel {
   return {
     id: offerModel.id,
-    project_code: offerModel.protocol, // mapping protocol to project_code
+    offer_name: offerModel.protocol, // mapping protocol to offer_name
     name: offerModel.title, // mapping title to name
     Attachment: offerModel.attachment
-    ? offerModel.attachment.map(file => ({
+      ? offerModel.attachment.map(file => ({
         file_name: file.name,
         content_type:
           file.extension === ".pdf" ? "application/pdf" : "application/octet-stream",
         data: file.data || [],
       }))
-    : undefined,
+      : undefined,
     /* start_date: offerModel.start_date.toISOString(), */
     deadline_date: offerModel.end_date?.toISOString() || undefined, // fallback to undefined if empty
     other_details: offerModel.description || "", // mapping description to other_details
@@ -132,7 +132,7 @@ export const reverseOfferAdapterUpdate = (
 
   // Mappatura dei campi base
   if ("protocol" in modifiedData) {
-    result.project_code = modifiedData.protocol;
+    result.offer_name = modifiedData.protocol;
   }
 
   if ("title" in modifiedData) {
@@ -182,13 +182,13 @@ export const reverseOfferAdapterUpdate = (
   if ("attachment" in modifiedData) {
     result.Attachment = modifiedData.attachment
       ? modifiedData.attachment.map((file: any) => ({
-          file_name: file.name,
-          content_type:
-            file.extension === ".pdf"
-              ? "application/pdf"
-              : "application/octet-stream",
-          data: file.data || [],
-        }))
+        file_name: file.name,
+        content_type:
+          file.extension === ".pdf"
+            ? "application/pdf"
+            : "application/octet-stream",
+        data: file.data || [],
+      }))
       : undefined; // Rimuove l'allegato se undefined
   }
 
@@ -207,13 +207,13 @@ export const reverseOfferAdapterUpdate = (
   if ("approval_date" in modifiedData) {
     result.approval_date = modifiedData.approval_date?.toISOString();
   }
-  if("start_date" in modifiedData){
+  if ("start_date" in modifiedData) {
     result.start_date = modifiedData.start_date?.toISOString()
   }
-  if("end_date" in modifiedData){
+  if ("end_date" in modifiedData) {
     result.end_date = modifiedData.end_date?.toISOString()
   }
-  if("orderNum" in modifiedData){
+  if ("orderNum" in modifiedData) {
     result.orderNum = modifiedData.orderNum
   }
   return result;

@@ -1,13 +1,13 @@
 export const columns = [
   {
-    key: "account_manager",
+    key: "AccountManager",
     label: "Commerciale",
     type: "string",
     sortable: true,
     filter: "text",
   },
   {
-    key: "title",
+    key: "offer_name",
     label: "Titolo offerta",
     type: "string",
     sortable: true,
@@ -35,17 +35,107 @@ export const columns = [
     filter: "text",
   },
   {
-    key: "",
+    key: "sal_total",
     label: "Sal",
     type: "string",
     sortable: true,
     filter: "text",
   },
   {
-    key: "",
+    key: "bill_total",
     label: "Sal Fatturato",
     type: "string",
     sortable: true,
+    filter: "text",
+  },
+];
+
+export const SalColumns = [
+  {
+    key: "month",
+    label: "Mese",
+    type: "string",
+    sortable: true,
+    filter: "text",
+  },
+  {
+    key: "year",
+    label: "Anno",
+    type: "string",
+    sortable: true,
+    filter: "text",
+  },
+  {
+    key: "activity_id",
+    label: "ID Attività",
+    type: "string",
+    sortable: false,
+    filter: "text",
+  },
+  {
+    key: "amount",
+    label: "Importo",
+    type: "string",
+    sortable: true,
+    filter: "text",
+  },
+  {
+    key: "Bill",
+    label: "Fatturazione",
+    type: "string",
+    sortable: true,
+    filter: "text",
+  },
+  {
+    key: "SalState",
+    label: "Stato SAL",
+    type: "string",
+    sortable: true,
+    filter: "text",
+  },
+  {
+    key: "notes",
+    label: "Note",
+    type: "string",
+    sortable: false,
+    filter: "text",
+  },
+  {
+    key: "rate",
+    label: "Tariffa",
+    type: "int",
+    sortable: true,
+    filter: "number",
+  },
+];
+
+export const attivitaColumns = [
+  {
+    key: "description",
+    label: "Descrizione",
+    type: "string",
+    sortable: false,
+    filter: "text",
+  },
+  {
+    key: "start_date",
+    label: "Data inizio",
+    type: "date",
+    sortable: true,
+    filter: "date",
+  },
+  {
+    key: "end_date",
+    label: "Data fine",
+    type: "date",
+    sortable: true,
+    filter: "date",
+  },
+  {
+    key: "ActivityType.description",
+    label: "Tipo",
+    type: "string",
+    sortable: false,
     filter: "text",
   },
 ];

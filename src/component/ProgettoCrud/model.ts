@@ -1,5 +1,3 @@
-import { OfferBEModel } from "../OffertaCrud/model";
-
 /* START OF BE MODEL */
 
 export interface ProjectBEModel {
@@ -23,7 +21,7 @@ export interface ProjectBEModel {
 
 interface OfferProject {
   id: number;
-  project_code: string;
+  offer_name: string;
   year: number;
   name: string;
   days: any;
@@ -197,6 +195,7 @@ interface BillProject {
 
 /* START OF FE MODEL */
 export interface ProjectModel {
+  projectBE: ProjectBEModel;
   id: number;
   account_manager: string;
   title: string;

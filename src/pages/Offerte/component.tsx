@@ -54,10 +54,10 @@ const columns = [
 const mapColumnKey: { [key: string]: string } = {
   "customer_name": "Customer.name",
   "accountManager.name": "AccountManager.Person.lastName",
-  "protocol":"project_code",
-  "title":"name",
-  "description":"other_details",
-  "creation_date":"date_created"
+  "protocol": "offer_name",
+  "title": "name",
+  "description": "other_details",
+  "creation_date": "date_created"
 };
 // Filter mapping function
 const mapFilterFields = (filter: any | null): any => {
@@ -80,7 +80,7 @@ export default function OffertePage() {
 
 
   const [initialWidthWindow, setInitialWidthWindow] = useState(window.innerWidth);
-  const [initialHeightWindow,setInitialHeightWindow]=useState(window.innerHeight)
+  const [initialHeightWindow, setInitialHeightWindow] = useState(window.innerHeight)
 
   useEffect(() => {
     const handleResize = () => {
@@ -115,10 +115,10 @@ export default function OffertePage() {
       include
     );
 
-  
+
     const adaptedData = tableResponse.data.map(fromOfferBEModelToOfferModel);
 
-    console.log("Adapted Data: ", adaptedData); 
+    console.log("Adapted Data: ", adaptedData);
     return {
       data: adaptedData,
       meta: {
@@ -167,11 +167,11 @@ export default function OffertePage() {
       pageable={true}
       resizableWindow={true}
       initialHeightWindow={initialHeightWindow}
-      initialWidthWindow={initialWidthWindow} 
+      initialWidthWindow={initialWidthWindow}
       resizable={true}
       actions={(row) => {
-        const actions: string[] = ["create"]; 
-      
+        const actions: string[] = ["create"];
+
         if (row?.outcome_type?.id === "P") {
           if (row?.thereisProject) {
             actions.push("show");
@@ -183,10 +183,10 @@ export default function OffertePage() {
         } else {
           actions.push("show", "edit", "delete");
         }
-      
+
         return actions;
       }}
-      
+
       formCrud={(
         row: any,
         type: string,

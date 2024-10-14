@@ -12,7 +12,7 @@ export default function () {
       },
       {
         parentId: 6,
-        id: 52,
+        id: 62,
         level: 2,
         text: "Clienti",
         route: "/clienti",
@@ -20,7 +20,7 @@ export default function () {
       },
       {
         parentId: 6,
-        id: 53,
+        id: 63,
         level: 2,
         text: "Offerte",
         route: "/offerte",
@@ -28,7 +28,7 @@ export default function () {
       },
       {
         parentId: 6,
-        id: 54,
+        id: 64,
         level: 2,
         text: "Progetti",
         route: "/progetti",
