@@ -44,7 +44,7 @@ const DateInputC = (
   } = fieldRenderProps;
   return <DatePicker
     {...others}
-    value={value ?? null}
+    value={value ? typeof value === 'string' ? new Date(value) : value : null}
     required={required}
     disabled={disabled}
   />
@@ -109,7 +109,7 @@ const TextAreaInputC = (
 };
 
 const UploadMutilpleInputC = (
-  fieldRenderProps: FieldRenderProps & { disabled?: boolean; label?: string, accept?: string, autoUpload?: boolean, onDownload?:()=>void, multiple?:boolean,listItemUI?: React.ComponentType<UploadListItemProps> | undefined}
+  fieldRenderProps: FieldRenderProps & { disabled?: boolean; label?: string, accept?: string, autoUpload?: boolean, onDownload?: () => void, multiple?: boolean, listItemUI?: React.ComponentType<UploadListItemProps> | undefined }
 ) => {
   const {
     validationMessage,
@@ -132,10 +132,10 @@ const UploadMutilpleInputC = (
     if (Array.isArray(event.affectedFiles)) {
       const file = event.affectedFiles[0].getRawFile();
       const reader = new FileReader();
-  
+
       reader.onload = function (evt) {
         const result = evt?.target?.result;
-  
+
         if (result instanceof ArrayBuffer) {
           // Converti ArrayBuffer in Uint8Array
           const byteArray = new Uint8Array(result);
@@ -149,7 +149,7 @@ const UploadMutilpleInputC = (
             status: 2,
             uid: event.affectedFiles[0].uid,
           };
-  
+
           setAttachments((prevAttachments) => [...prevAttachments, newAttachment]);
           fieldRenderProps.onChange({ value: [...attachments, newAttachment] });
         }
@@ -192,7 +192,7 @@ const UploadMutilpleInputC = (
   );
 };
 const UploadSingleFIleInputC = (
-  fieldRenderProps: FieldRenderProps & { disabled?: boolean; label?: string, accept?: string, autoUpload?: boolean, onDownload?: () => void, multiple?: boolean,existingFile?:{name:string, id:string}[], onFileUpload: (file: File) => void;  }
+  fieldRenderProps: FieldRenderProps & { disabled?: boolean; label?: string, accept?: string, autoUpload?: boolean, onDownload?: () => void, multiple?: boolean, existingFile?: { name: string, id: string }[], onFileUpload: (file: File) => void; }
 ) => {
   const {
     validationMessage,
@@ -219,7 +219,7 @@ const UploadSingleFIleInputC = (
         existingFile={existingFile}
         disabled={disabled}
         onDownload={onDownload}
-       onFileUpload={onFileUpload}
+        onFileUpload={onFileUpload}
       />
     </div>
   );
