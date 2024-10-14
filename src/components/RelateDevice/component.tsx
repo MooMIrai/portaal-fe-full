@@ -7,7 +7,8 @@ import NotificationActions from 'common/providers/NotificationProvider';
 import { AutoCompletePerson } from "./customFields";
 import fileService from 'common/services/FileService';
 interface RelateDeviceProps {
-    devices: any[]
+    devices: any[],
+    onSubmit:()=>void
 }
 
 export function RelateDevice(props: RelateDeviceProps) {
@@ -94,7 +95,15 @@ export function RelateDevice(props: RelateDeviceProps) {
             </>
         }
 
-    {person && (uploadedFile || signedFile) ?<Button type="button" themeColor="success" onClick={()=>{alert('assegna')}}>
+    {person && (uploadedFile || signedFile) ?<Button type="button" themeColor="success" onClick={()=>{
+        deviceService.assignDevices(person.id,props.devices.map(p=>p.id),signedFile || uploadedFile).then(()=>{
+            NotificationActions.openModal(
+                { icon: true, style: "success" },
+                "Dispositivi associati"
+            );
+            props.onSubmit();
+        })
+    }}>
         Conferma Assegnazione
     </Button>:null}
     </div>

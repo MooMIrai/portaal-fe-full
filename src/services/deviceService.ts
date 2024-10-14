@@ -31,6 +31,19 @@ class DeviceService extends BaseHttpService {
     )
   }
 
+  assignDevices(personId:number,stockIds:number[],file:any){
+    return client.post('/api/v1/stock/allocate',{
+      allocations:stockIds.map(s=>{
+        return {
+          person_id:personId,
+          stock_id:s,
+          allocation_date:new Date().toISOString()
+        }
+      }),
+      Attachment:file
+    })
+  }
+
   getDeviceTypes(term: string) {
     return client.get('/api/v1/crud/deviceType?term=' + term)
   }

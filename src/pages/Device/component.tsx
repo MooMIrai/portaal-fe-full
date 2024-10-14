@@ -11,10 +11,11 @@ export default function DevicePage(){
 
   const [selectedRows,setSelectedRows] = useState<any[]>([]);
   const [showRelate,setShowRelate] = useState<boolean>(false);
+  const [refreshCount,setRefreshCount] = useState<number>(0);
 
     const columns = [
         { key: "model", label: " ", type: "custom", sortable: false, width:'35px', render:(row,refresh)=> <td >
-          <input title="Seleziona riga" type="checkbox" style={{width:15,height:15}} 
+          {!row.isCurrentlyAssigned && <input title="Seleziona riga" type="checkbox" style={{width:15,height:15}} 
           checked={selectedRows?.some(s=>s.serial_number===row.serial_number)} 
           onChange={()=>{
             if(selectedRows?.some(s=>s.serial_number===row.serial_number)){
@@ -22,7 +23,7 @@ export default function DevicePage(){
             }else{
               setSelectedRows([...selectedRows,row]);
             }
-          }} />
+          }} />}
         </td> },
         { key: "model", label: "Modello", type: "string", sortable: true, filter: "text" },
         { key: "serial_number", label: "Seriale", type: "string", sortable: true, filter: "text" },
@@ -70,6 +71,7 @@ export default function DevicePage(){
    {/*  <Button onClick={createPdf}>ppp</Button> */}
     <Button themeColor={"success"} disabled={!selectedRows.length} onClick={()=>{setShowRelate(true)}}>Associa dispositivi selezionati</Button>
     <GridTable
+     forceRefresh={refreshCount}
      filterable={true}
      sortable={true}
      getData={loadData}
@@ -101,7 +103,10 @@ export default function DevicePage(){
     width="100%"
     height="100%"
    >
-      <RelateDevice devices={selectedRows} />
+      <RelateDevice devices={selectedRows} onSubmit={()=>{
+        setShowRelate(false);
+        setRefreshCount(refreshCount+1);
+      }} />
    </Modal>
    </>
 }
