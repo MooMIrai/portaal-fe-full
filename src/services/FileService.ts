@@ -47,7 +47,6 @@ class FileService{
     }
 
     urlFromUint8(fileData:Uint8Array,contentType:string){
-        debugger;
         const uint8Array = new Uint8Array(fileData);
     
         // Crea un Blob dai dati

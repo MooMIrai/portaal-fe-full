@@ -32,18 +32,15 @@ const SignDocumentScanner = (props:SignDocumentScannerProps) => {
         return putLicense(sdkS, ctlS);
       })
       .then(() => {
-        debugger;
         setCtl(ctlS);
         setSdk(sdkS);
         setValid(true);
       })
       .catch(err => {
-        debugger;
         setValid(false);
         props.onError(err);
       })
       .finally(() => {
-        debugger;
         setLoading(false);
       });
 
