@@ -1,12 +1,11 @@
-import { PropsWithRef, useEffect, useRef, useState } from "react";
+import React, { PropsWithRef, useEffect, useRef, useState } from "react";
 import { OfferModel, Projects } from "./model";
 import Button from 'common/Button';
 import Form from "common/Form";
 import Tab from "common/Tab";
-import React from "react";
 import NotificationActions from 'common/providers/NotificationProvider'
 
-import styles from "./style.module.scss";
+
 import { getFormCommesseFields, getFormOfferFields } from "./form";
 import { offertaCustomFields } from "./customfields";
 import { fromOfferModelToOfferBEModel, locationOption, reverseOfferAdapterUpdate, sedeAdapter } from "../../adapters/offertaAdapters";
@@ -14,6 +13,7 @@ import { offertaService } from "../../services/offertaService";
 import LoaderComponent from "common/Loader"
 import Window from "common/Window";
 
+import styles from "./style.module.scss";
 
 type OffertaCrudProps = {
   row: OfferModel;
