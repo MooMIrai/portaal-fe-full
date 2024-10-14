@@ -55,7 +55,7 @@ const SignDocumentScanner = (props:SignDocumentScannerProps) => {
     }, 5000);*/
 
     //return () => clearTimeout(timeout); // Cleanup on unmount
-  }, [props.onError]);
+  }, []);
 
   const capture = () => {
     if (valid) {
