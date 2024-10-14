@@ -18,7 +18,8 @@ import {
   DateInput,
   YearInput,
   UploadSingleFileInput,
-  UploadMultipleFilesInput
+  UploadMultipleFilesInput,
+  ButtonInput
 } from "./fieldComponents";
 import CountrySelector from "../CountrySelector/component";
 import styles from "./styles.module.scss";
@@ -51,6 +52,8 @@ const getFieldComponent = (type: FieldType) => {
       return UploadSingleFileInput;
     case 'uploadMultipleFiles':
       return UploadMultipleFilesInput;
+    case 'buttonCustom':
+      return ButtonInput
     default:
       return TextInput;
   }
@@ -81,6 +84,7 @@ export type FieldType =
   | "country"
   | "uploadSingleFile"
   | "uploadMultipleFiles"
+  | "buttonCustom"
 
 export interface FieldConfig {
   name: string;
@@ -98,6 +102,7 @@ export interface FieldConfig {
   onFileUpload?: (file: File) => void;
   multiple?: boolean
   existingFile?: { name: string };
+  onClick?: React.MouseEventHandler<HTMLButtonElement> 
   //onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -129,7 +134,8 @@ const DynamicField = ({
 
 }) => {
 
-  const { name, type, label, validator, options, disabled, required, showLabel = true, onDownload, multiple, existingFile, onFileUpload } = field;
+  
+  const { name, type, label, validator, options, disabled, required, showLabel = true, onDownload, multiple, existingFile,onFileUpload, onClick } = field;
   let Component: any = getFieldComponent(type);
 
   if (addedFields && Object.keys(addedFields).some(s => s === type)) {
@@ -151,6 +157,7 @@ const DynamicField = ({
       multiple={multiple}
       onDownload={onDownload}
       onFileUpload={onFileUpload}
+      onClick={onClick}
       existingFile={existingFile}
       value={formRenderProps.valueGetter(name)}
       onChange={(event) => {

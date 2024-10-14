@@ -30,6 +30,7 @@ const mfeConfig = {
 
     "./Loader":"./src/components/Loader/component",
     "./Modal":"./src/components/Modal/component",
+
     "./Accordion":"./src/components/Accordion/component",
     "./TimePicker":"./src/components/TimePicker/component",
     "./SvgIcon":"./src/components/SvgIcon/component",

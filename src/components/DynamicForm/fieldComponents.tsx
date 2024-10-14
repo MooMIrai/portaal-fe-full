@@ -15,6 +15,7 @@ import { Button } from "@progress/kendo-react-buttons";
 import UploadMultipleFileComponent from "../UploadMultipleFiles/component";
 import UploadSingleFileComponent from "../UpLoadSingleFile/component";
 import { UploadListItemProps } from "@progress/kendo-react-upload";
+import FileService from "../../services/FileService";
 
 const TextInputC = (
   fieldRenderProps: FieldRenderProps & { disabled?: boolean }
@@ -109,7 +110,12 @@ const TextAreaInputC = (
 };
 
 const UploadMutilpleInputC = (
-  fieldRenderProps: FieldRenderProps & { disabled?: boolean; label?: string, accept?: string, autoUpload?: boolean, onDownload?: () => void, multiple?: boolean, listItemUI?: React.ComponentType<UploadListItemProps> | undefined }
+  fieldRenderProps: FieldRenderProps & {
+    disabled?: boolean; label?: string, accept?: string, autoUpload?: boolean,  onDownload?: (() => Promise<{
+      fileId: string;
+      fileName: string;
+  }>) | undefined | undefined, multiple?: boolean, listItemUI?: React.ComponentType<UploadListItemProps> | undefined
+  }
 ) => {
   const {
     validationMessage,
@@ -128,34 +134,18 @@ const UploadMutilpleInputC = (
   const [attachments, setAttachments] = useState<any[]>(fieldRenderProps.value || []);
 
 
-  const upLoadData = (event: any) => {
+  const upLoadData = async (event: any) => {
     if (Array.isArray(event.affectedFiles)) {
       const file = event.affectedFiles[0].getRawFile();
-      const reader = new FileReader();
+      
+      try {
+        const newAttachment = await FileService.convertToBE(file);
 
-      reader.onload = function (evt) {
-        const result = evt?.target?.result;
-
-        if (result instanceof ArrayBuffer) {
-          // Converti ArrayBuffer in Uint8Array
-          const byteArray = new Uint8Array(result);
-          const byteArrayAsArray = Array.from(byteArray);
-          const newAttachment = {
-            name: event.affectedFiles[0].name,
-            extension: event.affectedFiles[0].extension,
-            data: byteArrayAsArray, // Dati in Uint8Array
-            size: event.affectedFiles[0].size,
-            progress: 100,
-            status: 2,
-            uid: event.affectedFiles[0].uid,
-          };
-
-          setAttachments((prevAttachments) => [...prevAttachments, newAttachment]);
-          fieldRenderProps.onChange({ value: [...attachments, newAttachment] });
-        }
-      };
-
-      reader.readAsArrayBuffer(file);
+        setAttachments((prevAttachments) => [...prevAttachments, newAttachment]);
+        fieldRenderProps.onChange({ value: [...attachments, newAttachment] });
+      } catch (error) {
+        console.error('Errore durante la conversione del file:', error);
+      }
     } else {
       console.error("affectedFiles non è un array:", event.affectedFiles);
     }
@@ -192,7 +182,12 @@ const UploadMutilpleInputC = (
   );
 };
 const UploadSingleFIleInputC = (
-  fieldRenderProps: FieldRenderProps & { disabled?: boolean; label?: string, accept?: string, autoUpload?: boolean, onDownload?: () => void, multiple?: boolean, existingFile?: { name: string, id: string }[], onFileUpload: (file: File) => void; }
+  fieldRenderProps: FieldRenderProps & {
+    disabled?: boolean; label?: string, accept?: string, autoUpload?: boolean, onDownload?: (() => Promise<{
+      fileId: string;
+      fileName: string;
+  }>) | undefined | undefined, multiple?: boolean, existingFile?: { name: string, id: string }[]
+  }
 ) => {
   const {
     validationMessage,
@@ -205,7 +200,6 @@ const UploadSingleFIleInputC = (
     onDownload,
     multiple,
     existingFile,
-    onFileUpload,
     ...others
   } = fieldRenderProps;
   const handleFileUpload = (fileDataArray: any[]) => {
@@ -219,13 +213,45 @@ const UploadSingleFIleInputC = (
         existingFile={existingFile}
         disabled={disabled}
         onDownload={onDownload}
-        onFileUpload={onFileUpload}
       />
     </div>
   );
 };
 
+const ButtonInputC = (
+  fieldRenderProps: FieldRenderProps & { 
+    disabled?: boolean; 
+    label?: string; 
+    onClick?: (event?: React.MouseEvent<HTMLButtonElement>, customParam?: any) => void; 
+    customParam?: any; 
+  }
+) => {
+  const {
+    disabled,
+    label,
+    onClick,
+    customParam, 
+    ...others
+  } = fieldRenderProps;
 
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    if (onClick) {
+      onClick(event, customParam); 
+    }
+  };
+
+  return (
+    <Button
+      {...others}
+      disabled={disabled}
+      onClick={handleClick} 
+      themeColor={"primary"}
+    >
+      {label || "Submit"} 
+    </Button>
+  );
+};
 const SelectInputC = (
   fieldRenderProps: FieldRenderProps & { disabled?: boolean }
 ) => {
@@ -333,5 +359,6 @@ export const SelectInput = withField(SelectInputC);
 export const RadioGroupInput = withField(RadioGroupInputC);
 export const CheckboxInput = withField(CheckboxInputC);
 export const YearInput = withField(YearInputC);
+export const ButtonInput = withField(ButtonInputC);
 export const UploadSingleFileInput = withField(UploadSingleFIleInputC)
 export const UploadMultipleFilesInput = withField(UploadMutilpleInputC)
