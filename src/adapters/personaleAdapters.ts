@@ -5,6 +5,24 @@ import {
   PermessiData,
 } from "../component/TabPersonaleHR/modelForms";
 
+
+export const convertToFileObject = (fileObject: any) => {
+  if (fileObject && fileObject.data && fileObject.file_name) {
+    const fileBlob = new Blob([new Uint8Array(fileObject.data)], {
+      type: fileObject.content_type,
+    });
+
+    const file = new File([fileBlob], fileObject.file_name, {
+      type: fileObject.content_type,
+      lastModified: new Date().getTime(), 
+    });
+
+    return file;
+  }
+
+  return null; 
+};
+
 // map dal be al fe
 const mapToAnagraficaData = (
   Person: any,

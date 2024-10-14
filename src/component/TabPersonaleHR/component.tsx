@@ -11,8 +11,8 @@ import {
   getFormPermessiFields,
 } from "./FormFields";
 import { AnagraficaData, TrattamentoEconomicoData, RuoliData, PermessiData } from "./modelForms";
-import { ActivityTypeOption, cityAdapter, cityTypeOption, companyAdapter, companyOption, countryAdapter, countryOption, dataAdapter, genderAdapter, genderOption, locationOption, permessiAdapter, reverseAdapter, reverseAdapterUpdate, roleAdapter, RoleOption, sedeAdapter } from "../../adapters/personaleAdapters";
-import {CrudGenericService } from "../../services/personaleServices";
+import { ActivityTypeOption, cityAdapter, cityTypeOption, companyAdapter, companyOption, convertToFileObject, countryAdapter, countryOption, dataAdapter, genderAdapter, genderOption, locationOption, permessiAdapter, reverseAdapter, reverseAdapterUpdate, roleAdapter, RoleOption, sedeAdapter } from "../../adapters/personaleAdapters";
+import { CrudGenericService } from "../../services/personaleServices";
 import Button from "common/Button";
 import { formFields } from "./customfields";
 import NotificationProviderActions from "common/providers/NotificationProvider";
@@ -53,7 +53,7 @@ const isAutocompleteField = (value: any): value is AutocompleteField => {
 
 
 
-// migliorare l'aspetto dello storico e poi capire come rendere più fluido la transiciton quando clicco su si 
+
 const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeModalCallback, refreshTable, onSubmit }) => {
   const isCreate = type === "create";
   const isUpdate = type === "edit"
@@ -86,12 +86,12 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
   const [today, setToday] = useState<Date>(new Date());
   const [alert, setAlert] = useState<boolean>(false)
   const [isScadenzaEffettivaDisabled, setIsScadenzaEffettivaDisabled] = useState<boolean>(false);
-  const[download,setDownload]=useState<boolean>(false)
-  const[modifiedFields,setModifiedFields]=useState<Record<string, any>>({})
-  const[newFormTrattamentoUpdate,setNewFormTrattamentoUpdate]=useState<boolean>(false)
+  const [download, setDownload] = useState<boolean>(false)
+  const [modifiedFields, setModifiedFields] = useState<Record<string, any>>({})
+  const [newFormTrattamentoUpdate, setNewFormTrattamentoUpdate] = useState<boolean>(false)
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [isrowDataReady, setIsrowDataReady] = useState(false);
-  const[exstingFile,setExstingFile]=useState<any>()
+  const [exstingFile, setExstingFile] = useState<any>()
   //Ref
   const formAnagrafica = useRef<HTMLFormElement>(null);
   const formTrattamentoEconomico = useRef<HTMLFormElement>(null);
@@ -102,16 +102,24 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
 
   const isFirstTreatment = isCreate || (storicoTrattamentoData.length === 0 && isObjectEffectivelyEmpty(formTrattamentoEconomicoData));
   const isFirstTreatmentUpdate = (storicoTrattamentoData.length === 0 && isUpdate)
- 
-  
-  const[attachmentNameState,setAttachmentNameState]=useState(null)
+
+  const[fileJustUploaded,setFileJustUploaded]=useState<any>(null)
+  const [attachmentNameState, setAttachmentNameState] = useState(null)
 
   const isViewOnly = !!dataRecesso;
   //UseEffect
   const handleFieldChange = (name: string, value: any) => {
     const currentValue = modifiedFields[name];
-
-    // Verifica se il nuovo valore è effettivamente diverso dal valore corrente
+    if (name === "attachment") {
+      if (Array.isArray(value) && value.length > 0) {
+        const file = convertToFileObject(value?.[0]);
+        if (file) {
+          setFileJustUploaded(file); 
+        }
+      } else {
+        setFileJustUploaded(undefined);
+      }
+    }
     if (currentValue !== value) {
       setModifiedFields((prevState) => ({
         ...prevState,
@@ -125,19 +133,18 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
         if (type === "edit" || type === "view") {
 
           const attachmentId = row?.anagrafica?.attachment_id?.[0]?.id;
-  
+
           if (attachmentId) {
-            // Fetch the file details for the single attachment_id
             const response = await CrudGenericService.getFilesByIds(attachmentId);
-  
-            const fetchedAttachment = response?.[0]; 
-  
+
+            const fetchedAttachment = response?.[0];
+
             if (fetchedAttachment) {
               const updatedAttachment = {
                 ...row.anagrafica.existingFile?.[0],
                 name: fetchedAttachment.file_name || "Name not found",
               };
-  
+
               setExstingFile([updatedAttachment]);
               setAttachmentNameState(updatedAttachment.name);
               setDownload(true);
@@ -156,69 +163,69 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
         console.error("Error fetching attachment data:", error);
       }
     };
-  
+
     fetchCountryData();
   }, [row, type]);
-  
+
 
 
 
   useEffect(() => {
 
-      if (formAnagrafica.current) {
-        setFormAnagraficaData(formAnagrafica.current.values);
-      }
-      if (formTrattamentoEconomico.current) {
-        if (!newForm) {
-          setFormTrattamentoEconomicoData(formTrattamentoEconomico.current.values);
-          if (formTrattamentoEconomico?.current?.values.tipologiaContratto_autocomplete?.name === "Tempo Indeterminato") {
-            setIsScadenzaEffettivaDisabled(true);
-          } else {
-            setIsScadenzaEffettivaDisabled(false);
-          }
-        } else {
-          formTrattamentoEconomico.current.values = {}
-          formTrattamentoEconomico.current.values.dataInizioTrattamento = today
-          formTrattamentoEconomico.current.values.dataAssunzione = dataAssunzione
-          setFormTrattamentoEconomicoData(formTrattamentoEconomico.current.values)
-        }
-      }
-      if (formRuoli.current) {
-        setFormRuoliData(formRuoli.current.values);
-      }
-      if (formPermessi.current) {
-        setFormPermessiData(formPermessi.current.values);
-      
+    if (formAnagrafica.current) {
+      setFormAnagraficaData(formAnagrafica.current.values);
     }
-   
+    if (formTrattamentoEconomico.current) {
+      if (!newForm) {
+        setFormTrattamentoEconomicoData(formTrattamentoEconomico.current.values);
+        if (formTrattamentoEconomico?.current?.values.tipologiaContratto_autocomplete?.name === "Tempo Indeterminato") {
+          setIsScadenzaEffettivaDisabled(true);
+        } else {
+          setIsScadenzaEffettivaDisabled(false);
+        }
+      } else {
+        formTrattamentoEconomico.current.values = {}
+        formTrattamentoEconomico.current.values.dataInizioTrattamento = today
+        formTrattamentoEconomico.current.values.dataAssunzione = dataAssunzione
+        setFormTrattamentoEconomicoData(formTrattamentoEconomico.current.values)
+      }
+    }
+    if (formRuoli.current) {
+      setFormRuoliData(formRuoli.current.values);
+    }
+    if (formPermessi.current) {
+      setFormPermessiData(formPermessi.current.values);
+
+    }
+
   }, [selected, newForm, formTrattamentoEconomico?.current?.onchange]);
 
   useEffect(() => {
-   
-      const fetchData = async () => {
-        try {
-     
-          const roleResponse = await CrudGenericService.fetchResources("role");
-          const adaptedRoles = roleAdapter(roleResponse);
-          setRoles(adaptedRoles);
-          const companyResponse = await CrudGenericService.fetchResources("Company");
-          const adaptedCompany = companyAdapter(companyResponse);
-          setCompany(adaptedCompany);
-  
-          const genderResponse = await CrudGenericService.fetchResources("Gender");
-          const adaptedGender = genderAdapter(genderResponse);
-          setGender(adaptedGender);
-  
-          const activityTypeResponse = await CrudGenericService.fetchResources("ActivityType");
-          const adaptedActivities = permessiAdapter(activityTypeResponse);
-          setActivity(adaptedActivities)
-          
-  
-        } catch (error) {
-          console.error("Error fetching data:", error);
+
+    const fetchData = async () => {
+      try {
+
+        const roleResponse = await CrudGenericService.fetchResources("role");
+        const adaptedRoles = roleAdapter(roleResponse);
+        setRoles(adaptedRoles);
+        const companyResponse = await CrudGenericService.fetchResources("Company");
+        const adaptedCompany = companyAdapter(companyResponse);
+        setCompany(adaptedCompany);
+
+        const genderResponse = await CrudGenericService.fetchResources("Gender");
+        const adaptedGender = genderAdapter(genderResponse);
+        setGender(adaptedGender);
+
+        const activityTypeResponse = await CrudGenericService.fetchResources("ActivityType");
+        const adaptedActivities = permessiAdapter(activityTypeResponse);
+        setActivity(adaptedActivities)
+
+
+      } catch (error) {
+        console.error("Error fetching data:", error);
       };
     }
-   
+
 
     fetchData();
   }, []);
@@ -306,14 +313,14 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
       trattamentoEconomico: formTrattamentoEconomicoData,
       ruoli: formRuoliData,
       permessi: formPermessiData,
-      modifiedData:modifiedData,
+      modifiedData: modifiedData,
       newFormTrattamentoEconomico: newFormTrattamentoUpdate
     };
 
-  
+
 
     if (!hasError) {
-      if(isCreate){
+      if (isCreate) {
         const formattedData = reverseAdapter(combinedData);
         console.log("formattedData", formattedData);
         const idrow = row.id;
@@ -330,77 +337,78 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
         refreshTable();
         closeModalCallback();
         setNewFormTrattamentoUpdate(false)
-       
+
       }
-     
-    
+
+
     }
-   
+
   };
 
   const handleFileUpload = async (file: File) => {
+    console.log("files",file)
     try {
       const response = await CrudGenericService.getCVaI(file);
       let genderValue = response.gender;
-  
+
       if (genderValue === 'M') {
-        genderValue = '1'; 
+        genderValue = '1';
       } else if (genderValue === 'F') {
-        genderValue = '2'; 
+        genderValue = '2';
       }
       const genderLabel = gender.find(genderOption => genderOption.value == genderValue)?.label;
       const updatedFormAnagraficaData = {
         ...formAnagraficaData,
-        nome: response.firstName && response.firstName !== " " 
-          ? response.firstName 
+        nome: response.firstName && response.firstName !== " "
+          ? response.firstName
           : (modifiedFields.nome || formAnagraficaData.nome),
-        cognome: response.lastName && response.lastName !== " " 
-          ? response.lastName 
+        cognome: response.lastName && response.lastName !== " "
+          ? response.lastName
           : (modifiedFields.cognome || formAnagraficaData.cognome),
-        cellulare: response.phoneNumber && response.phoneNumber !== " " 
-          ? response.phoneNumber 
+        cellulare: response.phoneNumber && response.phoneNumber !== " "
+          ? response.phoneNumber
           : (modifiedFields.cellulare || formAnagraficaData.cellulare),
-        telefonoCasa: response.phoneNumber2 && response.phoneNumber2 !== " " 
-          ? response.phoneNumber2 
+        telefonoCasa: response.phoneNumber2 && response.phoneNumber2 !== " "
+          ? response.phoneNumber2
           : (modifiedFields.telefonoCasa || formAnagraficaData.telefonoCasa),
-        indirizzoResidenza: response.address && response.address !== " " 
-          ? response.address 
+        indirizzoResidenza: response.address && response.address !== " "
+          ? response.address
           : (modifiedFields.indirizzoResidenza || formAnagraficaData.indirizzoResidenza),
-        emailPrivata: response.privateEmail && response.privateEmail !== " " 
-          ? response.privateEmail 
+        emailPrivata: response.privateEmail && response.privateEmail !== " "
+          ? response.privateEmail
           : (modifiedFields.emailPrivata || formAnagraficaData.emailPrivata),
-        sesso: genderLabel && genderLabel !== " " 
-          ? genderLabel 
+        sesso: genderLabel && genderLabel !== " "
+          ? genderLabel
           : (modifiedFields.sesso || formAnagraficaData.sesso),
-        iban: response.bankAdress && response.bankAdress !== " " 
-          ? response.bankAdress 
+        iban: response.bankAdress && response.bankAdress !== " "
+          ? response.bankAdress
           : (modifiedFields.iban || formAnagraficaData.iban),
-        residenza: response.cityRes && response.cityRes !== " " 
-          ? response.cityRes 
+        residenza: response.cityRes && response.cityRes !== " "
+          ? response.cityRes
           : (modifiedFields.residenza || formAnagraficaData.residenza),
-        nascita: response.cityBirth && response.cityBirth !== " " 
-          ? response.cityBirth 
+        nascita: response.cityBirth && response.cityBirth !== " "
+          ? response.cityBirth
           : (modifiedFields.nascita || formAnagraficaData.nascita),
-        dataNascita: response.dateBirth && response.dateBirth !== " " 
-          ? new Date(response.dateBirth) 
+        dataNascita: response.dateBirth && response.dateBirth !== " "
+          ? new Date(response.dateBirth)
           : (modifiedFields.dataNascita || formAnagraficaData.dataNascita),
-        cap: response.zipCode && response.zipCode !== " " 
-          ? response.zipCode 
+        cap: response.zipCode && response.zipCode !== " "
+          ? response.zipCode
           : (modifiedFields.cap || formAnagraficaData.cap),
-        codiceFiscale: response.taxCode && response.taxCode !== " " 
-          ? response.taxCode 
+        codiceFiscale: response.taxCode && response.taxCode !== " "
+          ? response.taxCode
           : (modifiedFields.codiceFiscale || formAnagraficaData.codiceFiscale),
-        partitaIva: response.vatNumber && response.vatNumber !== " " 
-          ? response.vatNumber 
+        partitaIva: response.vatNumber && response.vatNumber !== " "
+          ? response.vatNumber
           : (modifiedFields.partitaIva || formAnagraficaData.partitaIva),
-          sede_autocomplete: response.location_id ?? ( modifiedFields.sede_autocomplete || formAnagraficaData.sede_autocomplete),
-          matricola: response.employee_id ?? ( modifiedFields.matricola || formAnagraficaData.matricola),
-          email:response.email ?? ( modifiedFields.email || formAnagraficaData.email)
+        sede_autocomplete: response.location_id ?? (modifiedFields.sede_autocomplete || formAnagraficaData.sede_autocomplete),
+        matricola: response.employee_id ?? (modifiedFields.matricola || formAnagraficaData.matricola),
+        email: response.email ?? (modifiedFields.email || formAnagraficaData.email)
       };
-  
+
       // Aggiorna formAnagraficaData con i nuovi valori
       setFormAnagraficaData(updatedFormAnagraficaData);
-  
+
       // Aggiorna `modifiedFields` con i nuovi valori che differiscono da quelli originali
       const newModifiedFields = {};
       Object.keys(updatedFormAnagraficaData).forEach(key => {
@@ -408,48 +416,38 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
           newModifiedFields[key] = updatedFormAnagraficaData[key];
         }
       });
-  
+
       setModifiedFields((prevState) => ({
         ...prevState,
         ...newModifiedFields
       }));
-  
+
       setTriggerUpdate(true);
       console.log("File caricato e dati aggiornati:", updatedFormAnagraficaData);
     } catch (error) {
       console.error("Errore durante l'upload del file:", error);
     }
   };
-  
-  
+
+
   useEffect(() => {
     if (triggerUpdate && formAnagrafica.current) {
       formAnagrafica.current.values = formAnagraficaData;
       setTriggerUpdate(false);
     }
   }, [formAnagraficaData, triggerUpdate]);
-  
+
 
   const handleDownload = async () => {
-    try {
-      if( row.anagrafica.attachment_id){
-        const blob = await CrudGenericService.getCV(row.anagrafica.attachment_id?.[0].id);
-        const fileUrl = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = fileUrl;
-        link.download = exstingFile?.[0].name
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(fileUrl);
-      }
-    
-    } catch (error) {
-        console.error('Errore durante il download del file:', error);
+    return {
+      fileId: row.anagrafica.attachment_id?.[0].id,
+      fileName: exstingFile?.[0].name,
     }
-};
 
-  
+  };
+
+
+
 
   const handleNewContract = () => {
     setShowNewContractModal(true);
@@ -551,13 +549,13 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
     if (files === undefined || files.length === 0) {
       setDownload(false);
       if (formAnagrafica.current) {
-      setAttachmentNameState(formAnagrafica.current.values.attachment.name)
+        setAttachmentNameState(formAnagrafica.current.values.attachment.name)
       }
-    } else  {
+    } else {
       const attachmentName = files[0].name;
       setAttachmentNameState(attachmentName);
       setDownload(false)
-    } 
+    }
   };
 
 
@@ -590,20 +588,20 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
   // Definisce la classe CSS dinamica in base alla presenza di storici
   const trattamentoEconomicoClass = sortedStoricoTrattamentoData.length > 0 ? styles.trattamentoEconomicoConStorici : styles.trattamentoEconomicoSenzaStorici;
   const combinedValueOnChange = (name: string, value: any) => {
-  
+
     handleDownloadChange(name, value);
-    
- 
+
+
     handleFieldChange(name, value);
   };
 
   const combinedValueOnChangeContractType = (name: string, value: any) => {
-  
+
     handleContractTypeChange(name, value);
-    
+
     handleFieldChange(name, value);
   };
-  
+
   if (!isrowDataReady || ((type !== 'create' && type !== "delete") && !isrowDataReady)) {
     return <div className={styles.loader}><LoaderComponent type="pulsing"></LoaderComponent></div>;
   }
@@ -616,7 +614,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
         <div className={styles.parentForm}>
           <Form
             ref={formAnagrafica}
-            fields={Object.values(getFormAnagraficaFields(formAnagraficaData, gender, type, isViewOnly,handleDownload,combinedValueOnChange,download,attachmentNameState,handleFieldChange,handleFileUpload,exstingFile))}
+            fields={Object.values(getFormAnagraficaFields(formAnagraficaData, gender, type, isViewOnly, handleDownload, combinedValueOnChange, download, attachmentNameState, handleFieldChange, handleFileUpload, exstingFile,fileJustUploaded))}
             formData={formAnagraficaData}
             onSubmit={(data: AnagraficaData) => setFormAnagraficaData(data)}
             description="Ana"
@@ -635,7 +633,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
           <div className={` ${trattamentoEconomicoClass}`}>
             <Form
               ref={formTrattamentoEconomico}
-              fields={Object.values(getFormTrattamentoEconomicoFields(formTrattamentoEconomicoData, company, type, isFirstTreatment, newForm, combinedValueOnChangeContractType, isScadenzaEffettivaDisabled, isFirstTreatmentUpdate, isViewOnly,handleFieldChange))}
+              fields={Object.values(getFormTrattamentoEconomicoFields(formTrattamentoEconomicoData, company, type, isFirstTreatment, newForm, combinedValueOnChangeContractType, isScadenzaEffettivaDisabled, isFirstTreatmentUpdate, isViewOnly, handleFieldChange))}
               formData={formTrattamentoEconomicoData}
               onSubmit={(data: TrattamentoEconomicoData) => setFormTrattamentoEconomicoData(data)}
               description={isViewOnly ? "Trattamento dipendente" : "TE"}
@@ -662,7 +660,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
         <div className={styles.checkboxContainer}>
           <Form
             ref={formRuoli}
-            fields={Object.values(getFormRuoliFields(formRuoliData, roles, type, isViewOnly,handleFieldChange))}
+            fields={Object.values(getFormRuoliFields(formRuoliData, roles, type, isViewOnly, handleFieldChange))}
             formData={formRuoliData}
             onSubmit={(data: RuoliData) => setFormRuoliData(data)}
             description="PR"
@@ -676,7 +674,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
         <div className={styles.checkboxContainer}>
           <Form
             ref={formPermessi}
-            fields={Object.values(getFormPermessiFields(formPermessiData, activity, type, isViewOnly,handleFieldChange))}
+            fields={Object.values(getFormPermessiFields(formPermessiData, activity, type, isViewOnly, handleFieldChange))}
             formData={formPermessiData}
             onSubmit={(data: PermessiData) => setFormPermessiData(data)}
             description="per"

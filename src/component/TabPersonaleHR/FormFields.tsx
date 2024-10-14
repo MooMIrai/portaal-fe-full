@@ -10,7 +10,7 @@ const createValidator = (isDisabled: boolean, validationFn: (value: any) => stri
     };
 };
 
-export const getFormAnagraficaFields = (formData: AnagraficaData, gender: genderOption[], type: any, isViewOnly: boolean, handleDownload: () => void, combinedValueOnChange: (name: string, value: any) => void, download: boolean, name_attachment: string | null, valueOnChange: (name: string, value: any) => void, handleFileUpload: (file: File) => void,setExstingFile:any) => {
+export const getFormAnagraficaFields = (formData: AnagraficaData, gender: genderOption[], type: any, isViewOnly: boolean, handleDownload: () => void, combinedValueOnChange: (name: string, value: any) => void, download: boolean, name_attachment: string | null, valueOnChange: (name: string, value: any) => void, handleFileUpload: (file: File) => void,setExstingFile:any,fileJustUploaded) => {
     const genderOptions = gender.map(company => company.label)
     const onlyLettersValidator = (value: any) => /^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/.test(value) ? "" : "Il campo deve contenere solo lettere";
 
@@ -51,7 +51,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
 
 
 
-    const fields = {
+    const fields: Record<string, any> = {
         sede_autocomplete: {
             name: "sede_autocomplete",
             label: "Sede",
@@ -114,7 +114,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             name: "sesso",
             label: "Sesso",
             type: "select",
-            showLabel: false,
+            show: false,
             disabled: (type === "view" || isViewOnly),
             value: formData.sesso || "",
             required: true,
@@ -122,6 +122,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             valueOnChange: valueOnChange,
             validator: (value: any) => value ? "" : "Il campo sesso è obbligatorio",
         },
+        
         attachment: {
             name: "attachment",
             label: "Carica CV",
@@ -136,9 +137,20 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             accept: ".pdf",
             onDownload: download && name_attachment ? handleDownload : undefined,
             multiple: false,
-            onFileUpload: handleFileUpload,
-        },
-        residenza: {
+        }
+    }
+
+    if (fileJustUploaded) {
+        fields.generaInputAi = {
+            name: "generaInputAi",
+            label: "Genera Input AI",
+            type: "buttonCustom",
+            valueOnChange: valueOnChange,
+            onClick: () => handleFileUpload(fileJustUploaded),
+            disabled: (type === "view" || isViewOnly),
+        };
+    }
+        fields.residenza= {
             name: "residenza",
             label: "Comune di Residenza",
             type: "country",
@@ -147,7 +159,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             value: formData.residenza,
 
         },
-        nascita: {
+        fields.nascita= {
             name: "nascita",
             label: "Comune di nascita",
             type: "country",
@@ -155,7 +167,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             disabled: (type === "view" || isViewOnly),
             value: formData.nascita,
         },
-        dataNascita: {
+        fields.dataNascita= {
             name: "dataNascita",
             label: "Data di Nascita",
             type: "date",
@@ -165,7 +177,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             valueOnChange: valueOnChange,
             validator: createValidator(type === "view" || isViewOnly, dateValidator),
         },
-        indirizzoResidenza: {
+        fields.indirizzoResidenza= {
             name: "indirizzoResidenza",
             label: "Indirizzo di Residenza",
             type: "text",
@@ -173,7 +185,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             disabled: (type === "view" || isViewOnly),
             value: formData.indirizzoResidenza || "",
         },
-        cap: {
+        fields.cap= {
             name: "cap",
             label: "CAP di Residenza",
             type: "text",
@@ -184,7 +196,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
                 optionalCapValidator(value) ? "" : "Il campo CAP deve contenere solo 5 numeri"
             ),
         },
-        cellulare: {
+        fields.cellulare= {
             name: "cellulare",
             label: "Cellulare",
             type: "text",
@@ -195,7 +207,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
                 optionalCellulareValidator(value) ? "" : "Il campo Cellulare deve essere nel formato +39XXXXXXXXXX o XXXXXXXXXX"
             ),
         },
-        telefonoCasa: {
+        fields.telefonoCasa= {
             name: "telefonoCasa",
             label: "Telefono di Casa",
             type: "text",
@@ -206,7 +218,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
                 optionalTelefonoCasaValidator(value) ? "" : "Il campo Telefono di Casa deve essere nel formato +0XXXXXXXXX"
             ),
         },
-        telefonoLavoro: {
+        fields.telefonoLavoro= {
             name: "telefonoLavoro",
             label: "Telefono di Lavoro",
             type: "text",
@@ -218,7 +230,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
                 optionalCellulareValidator(value) ? "" : "Il campo Telefono di Lavoro deve essere nel formato +39XXXXXXXXXX o XXXXXXXXXX"
             ),
         },
-        emailPrivata: {
+        fields.emailPrivata= {
             name: "emailPrivata",
             label: "Email Privata",
             type: "email",
@@ -227,7 +239,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             disabled: (type === "view" || isViewOnly),
             value: formData.emailPrivata || "",
         },
-        iban: {
+        fields.iban= {
             name: "iban",
             label: "IBAN",
             type: "text",
@@ -235,7 +247,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             disabled: (type === "view" || isViewOnly),
             value: formData.iban || "",
         },
-        codiceFiscale: {
+        fields.codiceFiscale= {
             name: "codiceFiscale",
             label: "Codice Fiscale",
             valueOnChange: valueOnChange,
@@ -243,7 +255,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             disabled: (type === "view" || isViewOnly),
             value: formData.codiceFiscale || "",
         },
-        partitaIva: {
+        fields.partitaIva= {
             name: "partitaIva",
             label: "Partita Iva",
             valueOnChange: valueOnChange,
@@ -251,7 +263,10 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             disabled: (type === "view" || isViewOnly),
             value: formData.partitaIva || "",
         }
-    }
+    
+
+  
+
     return fields
 
 };

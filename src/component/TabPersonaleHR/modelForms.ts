@@ -8,13 +8,9 @@ export interface AnagraficaData {
     matricola?: string;
     sesso?: any;
     stato?:any;
-    //Provincianascita?: string;
-    //comuneNascita?: string;
-    //residenza?: string;
-    //comuneResidenza?: string;
     indirizzoResidenza?: string;
     dataNascita?: any;
-    
+    generaInputAi?:any;
     residenza?:{country:{id:number,name:string,code:string},province?:{id:number,name:string,code:string},city:{id:number,name:string,code:string}},
     nascita?:{country:{id:number,name:string,code:string},province?:{id:number,name:string,code:string},city:{id:number,name:string,code:string}},
     attachment?: [{
