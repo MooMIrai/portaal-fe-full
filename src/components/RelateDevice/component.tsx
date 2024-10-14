@@ -94,7 +94,9 @@ export function RelateDevice(props: RelateDeviceProps) {
             </>
         }
 
-
+    {person && (uploadedFile || signedFile) ?<Button type="button" themeColor="success" onClick={()=>{alert('assegna')}}>
+        Conferma Assegnazione
+    </Button>:null}
     </div>
     <div style={{flex:1}}>
         
