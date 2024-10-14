@@ -10,7 +10,7 @@ type CustomUploadProps = {
   multiple?: boolean;
   onFileChange: (fileData: {
     name: string;
-    data: Uint8Array;
+    data: Array<any>;
     size: number;
     status: number;
     file_name: string;
@@ -29,14 +29,6 @@ function UploadSingleFileComponent(props: CustomUploadProps) {
   const [showGenerateAIButton, setShowGenerateAIButton] = useState<boolean>(false); 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
-
-
-  useEffect(() => {
-    if (props.existingFile) {
-
-      setSelectedFileName(props.existingFile?.[0].name);
-    }
-  }, [props.existingFile]);
 
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,7 +67,7 @@ function UploadSingleFileComponent(props: CustomUploadProps) {
   return (
     <div className={styles.uploadContainer}>
       {/* Bottone per triggerare il click sull'input file */}
-      {!props.disabled && <Button themeColor="primary" svgIcon={downloadIcon} onClick={triggerFileInputClick}>
+      {!props.disabled && <Button  type='button' themeColor="primary" svgIcon={downloadIcon} onClick={triggerFileInputClick}>
         Scegli file
       </Button>}
 
@@ -90,19 +82,19 @@ function UploadSingleFileComponent(props: CustomUploadProps) {
         multiple={props.multiple}
       />
       <div className={styles.fileInfoContainer}>
-        {props.existingFile && props.onDownload && (
+        {props.existingFile && !selectedFileName && (
           <p>
             File caricato: <strong>{props.existingFile?.[0]?.name}</strong>
           </p>
         )}
-        {selectedFileName && !props.onDownload && (
+        {selectedFileName &&  (
           <p>
             File selezionato: <strong>{selectedFileName}</strong>
           </p>
         )}
-        {props.onDownload && props.existingFile && (
+        {props.onDownload && props.existingFile && !selectedFile && (
           <div>
-            <Button themeColor={"primary"} svgIcon={downloadIcon} onClick={props.onDownload}>
+            <Button  type='button' themeColor={"primary"} svgIcon={downloadIcon} onClick={props.onDownload}>
             </Button>
           </div>
 
@@ -113,6 +105,7 @@ function UploadSingleFileComponent(props: CustomUploadProps) {
               <Loader size="medium" type="infinite-spinner" />
             ) : ( 
               <Button
+                type='button'
                 themeColor="secondary"
                 onClick={handleGenerateAIClick}  
               >

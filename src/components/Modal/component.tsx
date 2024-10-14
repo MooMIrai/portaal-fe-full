@@ -10,6 +10,8 @@ interface ModalProps {
   onClose?: () => void;
   onSubmit?: () => void;
   children?: ReactNode;
+  width?:number | string;
+  height?:number | string
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -20,16 +22,20 @@ const Modal: React.FC<ModalProps> = ({
   children,
   callToAction,
   showModalFooter,
+  width,
+  height
 }) => (
   <>
     {isOpen && (
       <Dialog
         title={title}
         onClose={onClose}
-        width={500}
+        width={width || 500}
+        height={height || 500}
         modal={true}
         overlayStyle={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
         themeColor="primary"
+        
         contentStyle={{ marginBottom: 30 }}
       >
         {children}

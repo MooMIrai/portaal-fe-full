@@ -21,10 +21,21 @@ export default abstract class BaseHTTPService{
         if (typeof term === "string" && term.trim() !== "") {
           params.term = term;
         }
+
+        const queryParams:any = {};
+        if(filtering){
+          queryParams.filtering=filtering
+        }
+        if(sorting){
+          queryParams.sorting=sorting
+        }
+        if(include){
+          queryParams.include=true
+        }
     
         const response = await client.post(
           `/api/v1/${this.getTableName()}`,
-          (!filtering || filtering.length===0) && (!sorting ||sorting.length==0)?undefined:{ filtering, sorting }, 
+          queryParams, 
           { params }
         );
         return response.data;

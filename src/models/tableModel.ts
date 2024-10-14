@@ -14,6 +14,7 @@ export interface TableColumn {
   hasCellAction?: boolean;
   cellActionIcon?: SVGIcon;
   cellModalContent?: (dataItem: any) => JSX.Element;
+  width?:number | string
 }
 
 export enum TABLE_COLUMN_TYPE {

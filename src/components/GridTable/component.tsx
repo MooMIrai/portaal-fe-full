@@ -418,7 +418,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
         </GridToolbar>
 
         {props.columns.map((column: TableColumn, idx: number) => {
-          let cell: React.ComponentType<GridCellProps> | undefined;
+          let cell: React.ComponentType<GridCellProps> | undefined ;
           if (column.type === TABLE_COLUMN_TYPE.date) {
             cell = (cellGrid: GridCellProps) => {
               const date = new Date(cellGrid.dataItem[column.key]);
@@ -433,7 +433,8 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
                 </td>
               );
             };
-          } if (column.type === TABLE_COLUMN_TYPE.datetime) {
+          } 
+          if (column.type === TABLE_COLUMN_TYPE.datetime) {
             cell = (cellGrid: GridCellProps) => {
               const date = new Date(cellGrid.dataItem[column.key]);
               const time = date.toLocaleTimeString().substring(0, 5);
@@ -460,6 +461,8 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
                 columnLabel={column.label}
               />
             );
+          } else if (column.type === TABLE_COLUMN_TYPE.custom){
+            cell =  (cellGrid: GridCellProps)=><>{column.render?column.render(cellGrid.dataItem,refreshTable):null}</>
           }
           return (
             <GridColumn
@@ -467,7 +470,9 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
               field={column.key}
               title={column.label}
               filter={column.filter}
+              filterable={!!column.filter}
               sortable={column.sortable}
+              width={column.width}
               cell={cell}
             />
           );

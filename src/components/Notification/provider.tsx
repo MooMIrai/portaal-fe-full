@@ -7,15 +7,18 @@ const NotificationContext = createContext({
     openModal:(type:{ icon?: boolean; style?: "none" | "info" | "success" | "warning" | "error"; },message:string)=>{},
     modal:{},
     openConfirm:(message:string,callback:()=>void,title?:string)=>{},
-    confirm:{}
+    confirm:{},
+    openFilePreview:(url:string)=>{}
   });
    
 const NotificationProviderActions:{
   openModal:(type:{ icon?: boolean; style?: "none" | "info" | "success" | "warning" | "error"; },message:string) =>void;
-  openConfirm:(message:string,callback:()=>void,title?:string,callbackFail?:()=>void)=>void
+  openConfirm:(message:string,callback:()=>void,title?:string,callbackFail?:()=>void)=>void,
+  openFilePreview:(url:string)=>void
 } = {
   openModal:()=>{},
-  openConfirm:(message:string,callback:()=>void,title?:string)=>{}
+  openConfirm:(message:string,callback:()=>void,title?:string)=>{},
+  openFilePreview:(url:string)=>{}
 }
 
 const NotificationProvider = (props:PropsWithChildren) => {
@@ -24,6 +27,9 @@ const NotificationProvider = (props:PropsWithChildren) => {
 
     const [showConfirm, setShowConfirm] = useState<boolean>();
     const [confirm,setConfirm] = useState<any>();
+
+    const [showFile, setShowFile] = useState<boolean>();
+    const [urlFile,setUrlFile] = useState<string>();
    
     const handleShow = (type:{ icon?: boolean; style?: "none" | "info" | "success" | "warning" | "error"; },message:string) =>{
       
@@ -39,11 +45,19 @@ const NotificationProvider = (props:PropsWithChildren) => {
       
     }
 
+    const handleFilePreview = (url:string) =>{
+      
+      setShowFile(true);
+      setUrlFile(url);
+      
+    }
+
     NotificationProviderActions.openModal = handleShow;
     NotificationProviderActions.openConfirm = handleConfirmShow;
+    NotificationProviderActions.openFilePreview = handleFilePreview;
 
     return (
-      <NotificationContext.Provider value={{ openModal:handleShow,modal:modal, openConfirm:handleConfirmShow,confirm }}>
+      <NotificationContext.Provider value={{ openModal:handleShow,modal:modal, openConfirm:handleConfirmShow,confirm,openFilePreview:handleFilePreview }}>
         {props.children}
         <NotificationGroup
             
@@ -88,6 +102,12 @@ const NotificationProvider = (props:PropsWithChildren) => {
               Si
             </Button>
           </DialogActionsBar>
+          </Dialog>
+        }
+        
+        {showFile && <Dialog title={"Anteprima File"} width={"100%"} height={'100%'} onClose={()=>setShowFile(false)} >
+            <iframe src={urlFile}  width={'100%'} height={'100%'}>
+            </iframe>
           </Dialog>
         }
       </NotificationContext.Provider>
