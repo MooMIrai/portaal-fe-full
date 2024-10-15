@@ -1,16 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import GridTable from "common/Table";
 import { deviceService } from "../../services/deviceService";
-import NotificationProviderActions from "common/providers/NotificationProvider";
-
 import { CellCheckbox } from "./CellCheckbox";
-
 
 export  function DeviceAssigned(props:{user:number}){
 
 
     const columns = [
-        { key: "model", label: " ", type: "custom", sortable: false, width:'35px', render:(row,refresh)=> <CellCheckbox idGroup={props.user} row={row} />},
+        { key: "model", label: " ", type: "custom", sortable: false, width:'35px', render:(row)=> <CellCheckbox idGroup={props.user} row={row} />},
         { key: "Stock.model", label: "Modello", type: "string", sortable: true, filter: "text" },
         { key: "Stock.serial_number", label: "Seriale", type: "string", sortable: true, filter: "text" },
         { key: "Stock.DeviceType.name", label: "Tipo dispositivo", type: "string", sortable: false}

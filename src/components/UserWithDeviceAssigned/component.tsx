@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { deviceService } from '../../services/deviceService'
 import GridTable from 'common/Table';
 import { DeviceAssigned } from '../DeviceAssigned/component';
@@ -6,9 +6,6 @@ import { DeviceAssignedProvider } from './context';
 import { UnassignDevices } from '../UnassignDevice/component';
 
 export function UserWithDeviceAssigned(){
-
-
-    
 
     const columns = [
        
@@ -24,7 +21,6 @@ export function UserWithDeviceAssigned(){
       )=>{
        return deviceService.searchUserWithAllocation(pagination.currentPage,pagination.pageSize,filter,sorting,undefined,true)
     }
-
 
 
     return <DeviceAssignedProvider>
@@ -46,11 +42,6 @@ export function UserWithDeviceAssigned(){
         draggableWindow={true}
         initialWidthWindow={900}
         resizable={true}
-        /* actions={()=>[
-        
-        ]} */
-
-        //formCrud={(row: any, type: string, closeModalCallback: any, refreshTable: any) => <></>}
     />
     </DeviceAssignedProvider>
 }

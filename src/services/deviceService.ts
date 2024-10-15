@@ -135,7 +135,7 @@ class DeviceService extends BaseHttpService {
   };
   
 
-  searchMock(...args){
+  searchMock(){
     return Promise.resolve({meta:{total:15},data:[
       { model: "Modello X1", serial_number: "SN123456789", DeviceType: { name: "Smartphone" } },
       { model: "Modello Y1", serial_number: "SN987654321", DeviceType: { name: "Laptop" } },
