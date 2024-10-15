@@ -401,7 +401,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
           )}
         </GridNoRecords>
 
-        <GridToolbar className={styles.toolBarContainer}>
+        {props.customToolBarComponent || hasActionCreate() ?<GridToolbar className={styles.toolBarContainer}>
           {props.customToolBarComponent?.(refreshTable)}
 
           {hasActionCreate() && (
@@ -415,7 +415,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
               </Button>
             </div>
           )}
-        </GridToolbar>
+        </GridToolbar>:null}
 
         {props.columns.map((column: TableColumn, idx: number) => {
           let cell: React.ComponentType<GridCellProps> | undefined ;
