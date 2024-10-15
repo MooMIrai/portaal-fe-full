@@ -15,8 +15,9 @@ interface TabComponentProps extends TabStripProps {
 }
 
 const TabComponent = (props: TabComponentProps) => {
+  
   return <div className={styles.containerTab}>
-    <TabStrip selected={props.selected} onSelect={props.onSelect} renderAllContent={true} animation={false} >
+    <TabStrip  selected={props.selected} onSelect={props.onSelect} renderAllContent={props.renderAllContent!==undefined?props.renderAllContent: true} animation={false} >
       {props.tabs.map((tab, index) => (
         <TabStripTab key={"tab_el" + tab.title} title={tab.title}>
           {tab.children}
