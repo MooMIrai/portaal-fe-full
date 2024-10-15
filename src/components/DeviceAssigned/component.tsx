@@ -24,29 +24,6 @@ export  function DeviceAssigned(props:{user:number}){
        return deviceService.searchAssignedByUser(props.user,pagination.currentPage,pagination.pageSize,filter,sorting,undefined,true)
     }
 
-    const handleFormSubmit = (type: string, formData: any, refreshTable: any, id: any, closeModal: () => void) => {
-      let promise: Promise<any> | undefined = undefined;
-  
-      if (type === "create") {
-        promise = deviceService.createResource(formData);
-      } else if (type === "edit") {
-        promise = deviceService.updateResource(id, formData);
-      } else if (type === "delete") {
-        promise = deviceService.deleteResource(id);
-      }
-  
-      if (promise) {
-        promise.then(() => {
-          NotificationProviderActions.openModal({ icon: true, style: 'success' }, "Operazione avvenuta con successo");
-          refreshTable();
-          closeModal();
-        })
-      }
-  
-    }
-
-   
-  
 
     return <GridTable
         
@@ -60,8 +37,6 @@ export  function DeviceAssigned(props:{user:number}){
         initialWidthWindow={900}
         resizable={true}
         
-    
-        formCrud={(row: any, type: string, closeModalCallback: any, refreshTable: any) => <></>}
     />
    
    
