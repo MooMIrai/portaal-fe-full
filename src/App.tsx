@@ -12,6 +12,8 @@ import initSalesFn from "sales/Index";
 import initProfileFn from "auth/Index";
 import initHrFn from "hr/Index";
 import HrRoutes from "hr/Routes";
+import initStockFn from "stock/Index";
+import StockRoutes from "stock/Routes";
 import "./index.scss";
 import { Routes, useNavigate } from "react-router-dom";
 
@@ -47,6 +49,12 @@ export const App = () => {
       if (profileConfig && profileConfig.menuItems) {
         r = [...r, ...profileConfig.menuItems];
       }
+
+      const stockConfig = initStockFn();
+      if (stockConfig && stockConfig.menuItems) {
+        r = [...r, ...stockConfig.menuItems];
+      }
+
       window.addEventListener(
         "LOGOUT",
         () => {
@@ -75,6 +83,7 @@ export const App = () => {
         <SalesRoutes />
         <HrRoutes />
         <AuthVisibleRoutes />
+        <StockRoutes />
       </Drawer>
     </Theme>
   );

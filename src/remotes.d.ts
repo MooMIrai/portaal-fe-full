@@ -15,3 +15,6 @@ declare module 'sales/Index';
 declare module 'hr/Routes';
 declare module 'hr/Index';
 
+declare module 'stock/Routes';
+declare module 'stock/Index';
+
