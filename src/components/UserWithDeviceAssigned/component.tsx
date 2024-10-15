@@ -2,14 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { deviceService } from '../../services/deviceService'
 import GridTable from 'common/Table';
 import { DeviceAssigned } from '../DeviceAssigned/component';
-import { DeviceAssignedProvider, useDeviceAssignedContext } from './context';
-import Button from 'common/Button';
+import { DeviceAssignedProvider } from './context';
 import { UnassignDevices } from '../UnassignDevice/component';
 
 export function UserWithDeviceAssigned(){
 
 
-    const { checkboxes } = useDeviceAssignedContext();
+    
 
     const columns = [
        
@@ -31,8 +30,8 @@ export function UserWithDeviceAssigned(){
     return <DeviceAssignedProvider>
       
         <GridTable
-        customToolBarComponent={()=>{
-            return   <UnassignDevices />
+        customToolBarComponent={(refresh)=>{
+            return   <UnassignDevices handleRefresh={refresh} />
         }}
         expand={{
             enabled: true,

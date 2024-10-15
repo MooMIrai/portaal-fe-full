@@ -12,7 +12,7 @@ export default function DevicePage(){
   };
 
 
-  return <Tab selected={selectedTab} onSelect={handleSelect} tabs={[
+  return <Tab renderAllContent={false} selected={selectedTab} onSelect={handleSelect} tabs={[
     {
       title:'Non Assegnati',children:<DeviceNotAssigned />
     },
