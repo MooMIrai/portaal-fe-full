@@ -1,6 +1,6 @@
 import NotificationProviderActions from "../components/Notification/provider";
 import client from "./BEService";
-
+import { saveAs } from '@progress/kendo-file-saver';
 class FileService{
 
     convertToBE(file:File){
@@ -54,8 +54,8 @@ class FileService{
         // Crea un URL temporaneo per il blob
        return URL.createObjectURL(blob);
     }
-
-    downloadFileFromUint8(fileData:Uint8Array,contentType:string,name:string){
+ 
+downloadFileFromUint8(fileData:Uint8Array,name:string,contentType?:string,){
         const uint8Array = new Uint8Array(fileData);
     
         // Crea un Blob dai dati
@@ -77,6 +77,25 @@ class FileService{
         URL.revokeObjectURL(link.href);
     }
 
+    downloadBlobFile(blob: Blob, name: string) {
+        const link = document.createElement('a');
+        
+
+        link.href = URL.createObjectURL(blob);
+        
+
+        link.download = name;
+        
+       
+        link.click();
+        
+      
+        URL.revokeObjectURL(link.href);
+    }
+    
+    onDownloadFile(data:Blob,fileName:string){
+        return saveAs(data,fileName)
+    }
 }
 
 export default new FileService();

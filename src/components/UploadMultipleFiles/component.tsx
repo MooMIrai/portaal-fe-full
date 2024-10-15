@@ -3,10 +3,12 @@ import { Upload, UploadProps } from "@progress/kendo-react-upload";
 import { Button } from '@progress/kendo-react-buttons';
 import { downloadIcon } from '@progress/kendo-svg-icons';
 import styles from "./styles.module.scss"
+import { saveAs } from '@progress/kendo-file-saver';
+import FileService from '../../services/FileService';
 type CustomUploadProps = {
-  onDownload?: (id: string, name:string) => void;
+  onDownload?: (id: string, name: string) => Promise<{ fileId: string, fileName: string }>;
   multiple?: boolean;
-  existingFile?: { name: string; id: string }[];  // Array of files
+  existingFile?: { name: string; id: string }[];
 } & UploadProps;
 
 const UploadMultipleFileComponent: React.FC<CustomUploadProps> = (props) => {
@@ -18,12 +20,25 @@ const UploadMultipleFileComponent: React.FC<CustomUploadProps> = (props) => {
     }
   }, [props.existingFile]);
 
+
+  const handleFileDownload = async (fileId: string, fileName: string) => {
+    try {
+      if (props.onDownload) {
+        await props.onDownload(fileId, fileName);
+        console.log("fieldid", fileId)
+        const blob = await FileService.getFileFromBE(fileId);
+        console.log("blob", blob)
+        FileService.onDownloadFile(blob, fileName)
+      }
+    } catch (error) {
+      console.error('Errore durante il download del file:', error);
+    }
+  };
   return (
     <div>
-      {/* Upload Component */}
       <Upload
-        {...props} 
-        files={props.files || []} 
+        {...props}
+        files={props.files || []}
         multiple={props.multiple ?? true}
       />
 
@@ -38,7 +53,7 @@ const UploadMultipleFileComponent: React.FC<CustomUploadProps> = (props) => {
                   <Button
                     themeColor={"primary"}
                     svgIcon={downloadIcon}
-                    onClick={() => props.onDownload && props.onDownload(file.id, file.name)}   // Pass file ID to download handler
+                    onClick={() => handleFileDownload(file.id, file.name)}
                   >
                   </Button>
                 </li>
