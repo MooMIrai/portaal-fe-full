@@ -10,6 +10,131 @@ class DeviceService extends BaseHttpService {
     return 'stock';
   }
 
+  searchAssignedByUser = async (
+    userId:number,
+    pageNum: number,
+    pageSize: number,
+    filtering: any,
+    sorting: Array<any>,
+    term?: string,
+    include?: boolean
+  ) => {
+    try {
+      const params:any = {
+        pageNum,
+        pageSize,
+        include,
+      };
+      if (typeof term === "string" && term.trim() !== "") {
+        params.term = term;
+      }
+
+      const queryParams:any = {};
+      if(filtering){
+        queryParams.filtering=filtering
+      }
+      if(sorting){
+        queryParams.sorting=sorting
+      }
+      if(include){
+        queryParams.include=true
+      }
+  
+      const response = await client.post(
+        `/api/v1/stock/getCurrentAllocations/${userId}`,
+        queryParams, 
+        { params }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching resources:", error);
+      throw error;
+    }
+  };
+
+  searchUserWithAllocation = async (
+    pageNum: number,
+    pageSize: number,
+    filtering: any,
+    sorting: Array<any>,
+    term?: string,
+    include?: boolean
+  ) => {
+    try {
+      const params:any = {
+        pageNum,
+        pageSize,
+        include,
+      };
+      if (typeof term === "string" && term.trim() !== "") {
+        params.term = term;
+      }
+
+      const queryParams:any = {};
+      if(filtering){
+        queryParams.filtering=filtering
+      }
+      if(sorting){
+        queryParams.sorting=sorting
+      }
+      if(include){
+        queryParams.include=true
+      }
+  
+      const response = await client.post(
+        `/api/v1/stock/getEmployeesWithAllocations`,
+        queryParams, 
+        { params }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching resources:", error);
+      throw error;
+    }
+  };
+
+  searchUnassigned = async (
+    pageNum: number,
+    pageSize: number,
+    filtering: any,
+    sorting: Array<any>,
+    term?: string,
+    include?: boolean
+  ) => {
+    try {
+      const params:any = {
+        pageNum,
+        pageSize,
+        include,
+      };
+      if (typeof term === "string" && term.trim() !== "") {
+        params.term = term;
+      }
+
+      const queryParams:any = {};
+      if(filtering){
+        queryParams.filtering=filtering
+      }
+      if(sorting){
+        queryParams.sorting=sorting
+      }
+      if(include){
+        queryParams.include=true
+      }
+  
+      const response = await client.post(
+        `/api/v1/stock/getUnallocated`,
+        queryParams, 
+        { params }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching resources:", error);
+      throw error;
+    }
+  };
+  
+
   searchMock(...args){
     return Promise.resolve({meta:{total:15},data:[
       { model: "Modello X1", serial_number: "SN123456789", DeviceType: { name: "Smartphone" } },

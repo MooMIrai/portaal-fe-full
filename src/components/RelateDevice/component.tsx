@@ -40,11 +40,13 @@ export function RelateDevice(props: RelateDeviceProps) {
     return <div style={{display:"flex",justifyContent:'space-between',height:'100%',gap:15}}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 15 }}>
         <table style={{ border: '1px solid #000' }}>
+            <tbody>
             {props.devices.map(d => <tr key={d.serial_number}>
                 <td>{d.DeviceType.name}</td>
                 <td>{d.model}</td>
                 <td>{d.serial_number}</td>
             </tr>)}
+            </tbody>
         </table>
         <AutoCompletePerson label="Seleziona dipendente" value={person} onChange={(e)=>{
             setPerson(e.value);
