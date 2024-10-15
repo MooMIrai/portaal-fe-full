@@ -13,7 +13,7 @@ export  function DeviceAssigned(props:{user:number}){
         { key: "model", label: " ", type: "custom", sortable: false, width:'35px', render:(row,refresh)=> <CellCheckbox idGroup={props.user} row={row} />},
         { key: "Stock.model", label: "Modello", type: "string", sortable: true, filter: "text" },
         { key: "Stock.serial_number", label: "Seriale", type: "string", sortable: true, filter: "text" },
-        //{ key: "Stock.DeviceType.name", label: "Tipo dispositivo", type: "string", sortable: false, filter: "text" }
+        { key: "Stock.DeviceType.name", label: "Tipo dispositivo", type: "string", sortable: false}
     ];
       
     const loadData = (

@@ -63,13 +63,6 @@ export  function DeviceNotAssigned(){
   
 
     return <>
-    {/* <SignDocumentScanner 
-      name="calogero" surname="miraglia" description="Firma il documento e non rompe" 
-      onSign={(data)=>{console.log(data)}}
-      onError={(err)=>console.log(err)}
-    /> */}
-   {/*  <Button onClick={createPdf}>ppp</Button> */}
-    
     <GridTable
       customToolBarComponent={()=>{
         return <Button themeColor={"success"} disabled={!selectedRows.length} onClick={()=>{setShowRelate(true)}}>Associa dispositivi selezionati</Button>
