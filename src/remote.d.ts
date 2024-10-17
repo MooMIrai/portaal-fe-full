@@ -26,3 +26,6 @@ declare module "common/hoc/Field"
 declare module "common/hoc/AutoComplete"
 
 declare module 'common/Fields'
+
+declare module 'common/SvgIcon'
+declare module 'common/icons'

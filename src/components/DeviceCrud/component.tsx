@@ -1,12 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import Form from 'common/Form';
 import { getFormDeviceFields } from './form';
 import Button from 'common/Button'
 import Tab from 'common/Tab'
+import { deviceCustomFields } from './customFields';
+import { DeviceHistory } from '../DeviceHistory/component';
 
 import styles from './style.module.scss'
-import { deviceService } from '../../services/deviceService';
-import { deviceCustomFields } from './customFields';
 
 type DeviceCrudProps = {
     row: any;
@@ -21,6 +21,8 @@ export default function DeviceCrud(props:DeviceCrudProps){
     const formDevice = useRef<any>();
 
     const [formDeviceData,setformDeviceData] = useState<any>(props.row);
+
+    const [selectedTab,setSelectedTab] = useState<number>(0)
     
     const handleSubmit = () => {
       let hasError = false;
@@ -70,27 +72,40 @@ export default function DeviceCrud(props:DeviceCrudProps){
         )
       }
   
+
+      const tabs = [
+        {
+            title: "Dati Cliente",
+            children: (
+              <div className={styles.parentForm} >
+                 <Form
+                      ref={formDevice}
+                      fields={Object.values(getFormDeviceFields(formDeviceData,props.type))}
+                      formData={formDeviceData}
+                      onSubmit={(data) => setformDeviceData(data)}
+                      addedFields={deviceCustomFields}
+                  />
+              </div>
+            ),
+          } 
+    ]
+
+    if((props.type==='edit' || props.type==='view') && props.row){
+      tabs.push({
+        title: "Storico Assegnazioni",
+        children: (
+          <DeviceHistory id={props.row.id} />
+        ),
+      },)
+    }
+
       return <Tab 
-              tabs={
-                  [
-                      {
-                          title: "Dati Cliente",
-                          children: (
-                            <div className={styles.parentForm} >
-                               <Form
-                                    ref={formDevice}
-                                    fields={Object.values(getFormDeviceFields(formDeviceData,props.type))}
-                                    formData={formDeviceData}
-                                    onSubmit={(data) => setformDeviceData(data)}
-                                    addedFields={deviceCustomFields}
-                                />
-                            </div>
-                          ),
-                        },
-                  ]
-              }
-              onSelect={()=>{}}
-              selected={0}
+
+              tabs={tabs}
+              onSelect={(e)=>{
+                setSelectedTab(e.selected)
+              }}
+              selected={selectedTab}
               button={{ label: props.type === 'view' ? "Esci" : "Salva", onClick: handleSubmit }}
       />
   }
