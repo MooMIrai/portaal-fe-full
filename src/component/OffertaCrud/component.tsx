@@ -59,16 +59,13 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
             const response = await offertaService.getFilesByIds(uniqueIdentifiers);
 
             const fetchedAttachments = response.map((file: { uniqueIdentifier: string, file_name: string }) => ({
-              id: file.uniqueIdentifier,  
-              name: file.file_name      
+              id: file.uniqueIdentifier,
+              name: file.file_name
             }));
-            console.log(fetchedAttachments)
             const updatedAttachments = props.row.existingFile?.map((attachment) => {
               const fetchedAttachment = fetchedAttachments.find(
                 (f) => f.id === attachment.id
               );
-              console.log("Attachment ID:", attachment.id);
-              console.log("Matched fetched attachment:", fetchedAttachment); // 
               return {
                 ...attachment,
                 name: fetchedAttachment ? fetchedAttachment.name : "Name not found",
@@ -130,29 +127,15 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
   const handleSelect = (e: any) => {
     setSelected(e.selected);
   };
+
   const handleDownload = async (fileId: string, fileName: string) => {
-    try {
-    
-      const blob = await offertaService.getDownloadFile(fileId);
-  
-      const fileUrl = URL.createObjectURL(blob);
-  
-
-      const link = document.createElement('a');
-      link.href = fileUrl;
-  
-    
-      link.download = fileName || "Documento Scaricato";
-
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(fileUrl);
-    } catch (error) {
-      console.error('Errore durante il download del file:', error);
+    return {
+      fileId: fileId,
+      fileName: fileName
     }
+
   };
-  
+
   useEffect(() => {
     if (props.type === "edit" && isrowLocationDataReady) {
       if (

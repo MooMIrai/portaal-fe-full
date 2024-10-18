@@ -80,6 +80,7 @@ export const getFormOfferFields = (
             disabled: type === "view",
             validator: (value: any) => (value ? "" : "Selezionare un Cliente valido")
         },
+       
         billing_type: {
             name: "billing_type",
             label: "Tipo Fatturazione",
@@ -202,9 +203,18 @@ export const getFormOfferFields = (
         value: formData.description,
         disabled: type === "view"
     }
+  /*   fields.googleDriveLink= {
+        name: "googleDriveLink",
+        label: "Google Drive Link",
+        type: "urlInput",
+        value: formData.googleDriveLink,
+        valueOnChange: valueOnChange,
+        disabled: type === "view",
+        existingLink:"https://mail.google.com/chat/u/0/#chat/dm/uR59YcAAAAE"
+    }, */
     fields.attachment = {
         name: "attachment",
-        label: "Carica CV",
+        label: "Carica Offerta",
         type: "uploadMultipleFiles",
         withCredentials: false,
         disabled: type === "view",
@@ -213,8 +223,8 @@ export const getFormOfferFields = (
         onDownload: download && name_attachment ?
             (fileId: string, name: string) => handleDownload(fileId, name) : undefined,
         multiple: true,
-        /*    listItemUI:formData.existingFile, */
-        existingFile: formData.existingFile
+        existingFile: formData.existingFile,
+        isDroppable:true
     };
 
     console.log("fields", fields)

@@ -33,8 +33,8 @@ export function fromOfferBEModelToOfferModel(
     /* start_date: new Date(offerBE.start_date), */
     end_date: offerBE.deadline_date
       ? new Date(offerBE.deadline_date)
-      : undefined, // fallback if end_date is undefined
-    description: offerBE.other_details, // mapping other_details to description
+      : undefined,
+    description: offerBE.other_details,
     rate: offerBE.rate,
     amount: offerBE.amount,
     NoCollective: offerBE.noCollective || false,
@@ -182,13 +182,13 @@ export const reverseOfferAdapterUpdate = (
   if ("attachment" in modifiedData) {
     result.Attachment = modifiedData.attachment
       ? modifiedData.attachment.map((file: any) => ({
-        file_name: file.name,
-        content_type:
-          file.extension === ".pdf"
-            ? "application/pdf"
-            : "application/octet-stream",
-        data: file.data || [],
-      }))
+          file_name: file.name,
+          content_type:
+            file.extension === ".pdf"
+              ? "application/pdf"
+              : "application/octet-stream",
+          data: file.data || [],
+        }))
       : undefined; // Rimuove l'allegato se undefined
   }
 

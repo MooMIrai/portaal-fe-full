@@ -93,7 +93,9 @@ export interface OfferModel {
   outcome_type?: { id: string; name: string };
   year?: Date;
   days?: number;
-  orderNum?: string;
+  orderNum?:string;
+  googleDriveLink?:string;
+  existingLink?:string;
 }
 export interface Projects {
   start_date: Date;
