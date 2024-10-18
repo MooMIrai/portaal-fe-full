@@ -22,7 +22,7 @@ declare module "common/providers/NotificationProvider";
 declare module "common/Loader"
 declare module "common/services/BEService";
 declare module "common/services/BaseHTTPService";
-
+declare module "common/HoursDaysFilterCell"
 declare module "common/hoc/Field"
 declare module "common/hoc/AutoComplete"
 declare module "common/hoc/SchedulerItem"

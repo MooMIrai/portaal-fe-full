@@ -114,11 +114,21 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             name: "sesso",
             label: "Sesso",
             type: "select",
-            show: false,
+            showLabel: false,
             disabled: (type === "view" || isViewOnly),
             value: formData.sesso || "",
             required: true,
             options: genderOptions,
+            valueOnChange: valueOnChange,
+            validator: (value: any) => value ? "" : "Il campo sesso è obbligatorio",
+        },
+        skill: {
+            name: "skill",
+            label: "Skill",
+            type: "skill",
+            showLabel: false,
+            disabled: (type === "view" || isViewOnly),
+           /*  value: formData.sesso || "", */
             valueOnChange: valueOnChange,
             validator: (value: any) => value ? "" : "Il campo sesso è obbligatorio",
         },
@@ -134,7 +144,6 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             valueOnChange: (name: string, value: any) => {
                 combinedValueOnChange(name, value); // Usa la funzione combinata
             },
-            accept: ".pdf",
             onDownload: download && name_attachment ? handleDownload : undefined,
             multiple: false,
         }
@@ -144,8 +153,10 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
         fields.generaInputAi = {
             name: "generaInputAi",
             label: "Genera Input AI",
+            showLabel:false,
             type: "buttonCustom",
             valueOnChange: valueOnChange,
+            loader:true,
             onClick: () => handleFileUpload(fileJustUploaded),
             disabled: (type === "view" || isViewOnly),
         };
