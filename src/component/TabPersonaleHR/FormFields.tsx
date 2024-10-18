@@ -122,16 +122,15 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             valueOnChange: valueOnChange,
             validator: (value: any) => value ? "" : "Il campo sesso è obbligatorio",
         },
-        skill: {
+      /*   skill: {
             name: "skill",
             label: "Skill",
             type: "skill",
             showLabel: false,
             disabled: (type === "view" || isViewOnly),
-           /*  value: formData.sesso || "", */
             valueOnChange: valueOnChange,
             validator: (value: any) => value ? "" : "Il campo sesso è obbligatorio",
-        },
+        }, */
         
         attachment: {
             name: "attachment",
