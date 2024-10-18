@@ -1,3 +1,4 @@
+import { GridFilterCellProps } from "@progress/kendo-react-grid";
 import { SVGIcon } from "@progress/kendo-svg-icons";
 
 export interface TableColumn {
@@ -11,6 +12,7 @@ export interface TableColumn {
   render?: (row: any, refreshTable?: () => void) => JSX.Element;
   filter?: any;
   hidden?: boolean;
+  filterCell?: React.ComponentType<GridFilterCellProps>
   hasCellAction?: boolean;
   cellActionIcon?: SVGIcon;
   cellModalContent?: (dataItem: any) => JSX.Element;

@@ -58,9 +58,7 @@ function UploadSingleFileComponent(props: CustomUploadProps) {
       if (props.onDownload) {
         const fileforDowload = await props.onDownload();  
         const { fileId, fileName} = fileforDowload
-        console.log("fieldid",fileId)
         const blob = await FileService.getFileFromBE(fileId);  
-       console.log("blob",blob)
        FileService.downloadBlobFile(blob,fileName)
       }
     } catch (error) {

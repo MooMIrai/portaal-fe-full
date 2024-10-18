@@ -19,10 +19,13 @@ import {
   YearInput,
   UploadSingleFileInput,
   UploadMultipleFilesInput,
-  ButtonInput
+  ButtonInput,
+  UrlInput
 } from "./fieldComponents";
 import CountrySelector from "../CountrySelector/component";
 import styles from "./styles.module.scss";
+import SkillMultiSelect from "../SkillsSelector/component";
+import { MultiSelectFilterChangeEvent } from "@progress/kendo-react-dropdowns";
 
 const getFieldComponent = (type: FieldType) => {
   switch (type) {
@@ -53,7 +56,11 @@ const getFieldComponent = (type: FieldType) => {
     case 'uploadMultipleFiles':
       return UploadMultipleFilesInput;
     case 'buttonCustom':
-      return ButtonInput
+      return ButtonInput;
+    case 'urlInput':
+      return UrlInput;
+    case 'skill':
+      return SkillMultiSelect
     default:
       return TextInput;
   }
@@ -85,6 +92,8 @@ export type FieldType =
   | "uploadSingleFile"
   | "uploadMultipleFiles"
   | "buttonCustom"
+  | "urlInput"
+  | "skill"
 
 export interface FieldConfig {
   name: string;
@@ -102,7 +111,11 @@ export interface FieldConfig {
   onFileUpload?: (file: File) => void;
   multiple?: boolean
   existingFile?: { name: string };
-  onClick?: React.MouseEventHandler<HTMLButtonElement> 
+  onClick?: React.MouseEventHandler<HTMLButtonElement>
+  loader?: boolean
+  existingLink?: string;
+  onFileDrop?: ((files: File[]) => void)
+  isDroppable?:boolean
   //onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -134,8 +147,8 @@ const DynamicField = ({
 
 }) => {
 
-  
-  const { name, type, label, validator, options, disabled, required, showLabel = true, onDownload, multiple, existingFile,onFileUpload, onClick } = field;
+
+  const { name, type, label, validator, options, disabled, required, showLabel = true, onDownload, multiple, existingFile, onFileUpload, onClick, loader, existingLink, onFileDrop,isDroppable } = field;
   let Component: any = getFieldComponent(type);
 
   if (addedFields && Object.keys(addedFields).some(s => s === type)) {
@@ -155,9 +168,13 @@ const DynamicField = ({
       disabled={disabled}
       files={formRenderProps.valueGetter(name)}
       multiple={multiple}
+      onFileDrop={onFileDrop}
       onDownload={onDownload}
       onFileUpload={onFileUpload}
+      isDroppable={isDroppable}
       onClick={onClick}
+      existingLink={existingLink}
+      loader={loader}
       existingFile={existingFile}
       value={formRenderProps.valueGetter(name)}
       onChange={(event) => {
@@ -219,7 +236,10 @@ const DynamicForm = React.forwardRef<any, DynamicFormProps>((props, ref) => {
               return !field.conditions || (formRef && formRef.current && field.conditions(formRef.current.values))
             }).map((field, index) => {
               return (
-                <FieldWrapper key={index} style={field.type === 'country' ? { gridColumn: 'span 3' } : undefined /* || field.type === 'upload' ?{gridColumn:'span 2'}:undefined */}>
+                <FieldWrapper key={index} style={  field.type === 'country' || 
+                  (field.type === 'uploadMultipleFiles' && field.isDroppable) 
+                    ? { gridColumn: 'span 3' } 
+                    : undefined}>
                   <DynamicField
                     addedFields={addedFields}
                     field={field}

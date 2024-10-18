@@ -48,6 +48,7 @@ import CellAction from "./CellAction/component";
 
 interface CustomRowAction {
   icon: any;
+  themeColor?: "base" | "info" | "primary" | "secondary" | "tertiary" | "success" | "warning" | "error" | "dark" | "light" | "inverse" | null | undefined;
   modalContent?: (
     dataItem: any,
     closeModal: () => void,
@@ -418,7 +419,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
         </GridToolbar>:null}
 
         {props.columns.map((column: TableColumn, idx: number) => {
-          let cell: React.ComponentType<GridCellProps> | undefined ;
+          let cell: React.ComponentType<GridCellProps> | undefined;
           if (column.type === TABLE_COLUMN_TYPE.date) {
             cell = (cellGrid: GridCellProps) => {
               const date = new Date(cellGrid.dataItem[column.key]);
@@ -433,7 +434,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
                 </td>
               );
             };
-          } 
+          }
           if (column.type === TABLE_COLUMN_TYPE.datetime) {
             cell = (cellGrid: GridCellProps) => {
               const date = new Date(cellGrid.dataItem[column.key]);
@@ -461,8 +462,8 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
                 columnLabel={column.label}
               />
             );
-          } else if (column.type === TABLE_COLUMN_TYPE.custom){
-            cell =  (cellGrid: GridCellProps)=><>{column.render?column.render(cellGrid.dataItem,refreshTable):null}</>
+          } else if (column.type === TABLE_COLUMN_TYPE.custom) {
+            cell = (cellGrid: GridCellProps) => <>{column.render ? column.render(cellGrid.dataItem, refreshTable) : null}</>
           }
           return (
             <GridColumn
@@ -470,6 +471,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
               field={column.key}
               title={column.label}
               filter={column.filter}
+              filterCell={column.filterCell}
               filterable={!!column.filter}
               sortable={column.sortable}
               width={column.width}
@@ -539,6 +541,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
                   {props.customRowActions!.map((action, index) => (
                     <Button
                       key={index}
+                      themeColor={action.themeColor}
                       svgIcon={action.icon}
                       fillMode="link"
                       onClick={() =>

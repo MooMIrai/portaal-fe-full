@@ -27,7 +27,7 @@ const mfeConfig = {
     "./AvatarIcon": "./src/components/AvatarIcon/component",
     "./CustomCard": "./src/components/CustomCard/component",
     "./CustomChip": "./src/components/CustomChip/component.tsx",
-
+    "./HoursDaysFilterCell":"./src/components/HoursDaysFilterCell/component.tsx",
     "./Loader":"./src/components/Loader/component",
     "./Modal":"./src/components/Modal/component",
 

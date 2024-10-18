@@ -16,6 +16,7 @@ import UploadMultipleFileComponent from "../UploadMultipleFiles/component";
 import UploadSingleFileComponent from "../UpLoadSingleFile/component";
 import { UploadListItemProps } from "@progress/kendo-react-upload";
 import FileService from "../../services/FileService";
+import { Loader } from "@progress/kendo-react-indicators";
 
 const TextInputC = (
   fieldRenderProps: FieldRenderProps & { disabled?: boolean }
@@ -111,10 +112,10 @@ const TextAreaInputC = (
 
 const UploadMutilpleInputC = (
   fieldRenderProps: FieldRenderProps & {
-    disabled?: boolean; label?: string, accept?: string, autoUpload?: boolean,  onDownload?: (() => Promise<{
+    disabled?: boolean; label?: string, accept?: string, autoUpload?: boolean, isDroppable?: boolean, onDownload?: (() => Promise<{
       fileId: string;
       fileName: string;
-  }>) | undefined | undefined, multiple?: boolean, listItemUI?: React.ComponentType<UploadListItemProps> | undefined
+    }>) | undefined | undefined, multiple?: boolean, onFileDrop?: ((files: File[]) => void), listItemUI?: React.ComponentType<UploadListItemProps> | undefined
   }
 ) => {
   const {
@@ -128,6 +129,8 @@ const UploadMutilpleInputC = (
     onDownload,
     multiple,
     listItemUI,
+    onFileDrop,
+    isDroppable,
     ...others
   } = fieldRenderProps;
 
@@ -137,7 +140,7 @@ const UploadMutilpleInputC = (
   const upLoadData = async (event: any) => {
     if (Array.isArray(event.affectedFiles)) {
       const file = event.affectedFiles[0].getRawFile();
-      
+
       try {
         const newAttachment = await FileService.convertToBE(file);
 
@@ -166,16 +169,28 @@ const UploadMutilpleInputC = (
 
     fieldRenderProps.onChange({ value: updatedAttachments });
   };
+
+  const handleFileDrop = async (droppedFiles: File[]) => {
+    try {
+      const newAttachments = await Promise.all(droppedFiles.map(FileService.convertToBE));
+      setAttachments((prevAttachments) => [...prevAttachments, ...newAttachments]);
+      fieldRenderProps.onChange({ value: [...attachments, ...newAttachments] });
+      console.log("newAtt", newAttachments)
+    } catch (error) {
+      console.error('Errore durante il caricamento dei file:', error);
+    }
+  };
   return (
     <div>
       <UploadMultipleFileComponent
         files={files}
         onAdd={onChangeHandler}
         onRemove={onRemoveHandler}
+        isDroppable={isDroppable}
         multiple={false}
-        listItemUI={listItemUI}
         disabled={disabled}
         onDownload={onDownload}
+        onFileDrop={handleFileDrop}
         {...others}
       />
     </div>
@@ -186,7 +201,7 @@ const UploadSingleFIleInputC = (
     disabled?: boolean; label?: string, accept?: string, autoUpload?: boolean, onDownload?: (() => Promise<{
       fileId: string;
       fileName: string;
-  }>) | undefined | undefined, multiple?: boolean, existingFile?: { name: string, id: string }[]
+    }>) | undefined | undefined, multiple?: boolean, existingFile?: { name: string, id: string }[]
   }
 ) => {
   const {
@@ -218,40 +233,109 @@ const UploadSingleFIleInputC = (
   );
 };
 
+
+
 const ButtonInputC = (
-  fieldRenderProps: FieldRenderProps & { 
-    disabled?: boolean; 
-    label?: string; 
-    onClick?: (event?: React.MouseEvent<HTMLButtonElement>, customParam?: any) => void; 
-    customParam?: any; 
+  fieldRenderProps: FieldRenderProps & {
+    disabled?: boolean;
+    label?: string;
+    onClick?: (event?: React.MouseEvent<HTMLButtonElement>, customParam?: any) => void;
+    customParam?: any;
+    loader?: boolean;
   }
 ) => {
   const {
     disabled,
     label,
     onClick,
-    customParam, 
+    customParam,
+    loader = false,
     ...others
   } = fieldRenderProps;
 
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
     if (onClick) {
-      onClick(event, customParam); 
+      if (loader) {
+        setIsLoading(true);
+      }
+
+      try {
+        await onClick(event, customParam);
+      } finally {
+        if (loader) {
+          setIsLoading(false);
+        }
+      }
     }
   };
 
   return (
-    <Button
-      {...others}
-      disabled={disabled}
-      onClick={handleClick} 
-      themeColor={"primary"}
-    >
-      {label || "Submit"} 
-    </Button>
+    <div>
+      {isLoading ? (
+        <Loader size="medium" type="converging-spinner" />
+      ) : (
+        <Button
+          {...others}
+          disabled={disabled}
+          onClick={handleClick}
+          themeColor={"primary"}
+        >
+          {label || "Submit"}
+        </Button>
+      )}
+    </div>
   );
 };
+
+export default ButtonInputC;
+
+const UrlInputC = (
+  fieldRenderProps: FieldRenderProps & {
+    disabled?: boolean;
+    existingLink?: string;
+  }
+) => {
+  const { validationMessage, visited, disabled, required, value, label, existingLink, ...others } = fieldRenderProps;
+
+
+
+  return (
+    <div>
+
+      <Input
+        type="url"
+        {...others}
+        value={value ?? ""}
+        required={required}
+        disabled={disabled}
+        placeholder="Inserisci l'URL"
+      />
+      {value && (
+        <div>
+          <h4>Link caricato</h4>
+          <a href={value} target="_blank" rel="noopener noreferrer">
+            {value}
+          </a>
+        </div>
+      )}
+
+      {existingLink && (
+        <div style={{ marginTop: "8px" }}>
+          <h4>Link esistente:</h4>
+          <a href={existingLink} target="_blank" rel="noopener noreferrer">
+            {existingLink || "Clicca qui per aprire il link esistente"}
+          </a>
+        </div>
+      )}
+
+    </div>
+  );
+};
+
+
 const SelectInputC = (
   fieldRenderProps: FieldRenderProps & { disabled?: boolean }
 ) => {
@@ -362,3 +446,4 @@ export const YearInput = withField(YearInputC);
 export const ButtonInput = withField(ButtonInputC);
 export const UploadSingleFileInput = withField(UploadSingleFIleInputC)
 export const UploadMultipleFilesInput = withField(UploadMutilpleInputC)
+export const UrlInput = withField(UrlInputC)

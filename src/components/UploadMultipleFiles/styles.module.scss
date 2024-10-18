@@ -1,16 +1,63 @@
+
+.container {
+  display: flex;
+/*   justify-content: space-between;  */
+  /* align-items: flex-start; */
+  gap: 50px; 
+}
+
+
+.uploadAndDropContainer {
+  display: flex;
+  flex-direction: column;
+  width: 50%; 
+}
+
+.droppableContainer {
+  border: 2px dashed #007bff;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+
+  &:hover {
+    border-color: #0056b3;
+    box-shadow: 0px 4px 12px rgba(0, 123, 255, 0.2);
+  }
+
+  .droppableText {
+    color: #007bff;
+    font-size: 16px;
+    text-align: center;
+    margin: 0;
+  }
+}
+
+
+.existingFilesList button {
+  margin-left: 10px;
+}
+
+
 .existingFilesContainer {
-    max-height: 200px;
-    overflow-y: auto;
-    border-radius: 10px;
-    border: 1px solid #ccc;
-    padding: 10px;
-  }
-  
-  .existingFilesList {
-    margin-bottom: 10px;
-  }
-  
-  .existingFilesList button {
-    margin-left: 10px;
-  }
-  
+  max-height: 200px;
+  overflow-y: auto;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.existingFilesList {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+}
+
+.existingFilesTitle{
+  margin:0 !important
+}
+
