@@ -100,7 +100,7 @@ export interface FieldConfig {
   label: string;
   type: FieldType;
   validator?: (value: any) => string | undefined;
-  options?: string[];
+  options?: string[] | any[];
   value: any;
   disabled?: boolean;
   required?: boolean;
@@ -178,7 +178,6 @@ const DynamicField = ({
       existingFile={existingFile}
       value={formRenderProps.valueGetter(name)}
       onChange={(event) => {
-
         let value = undefined;
         if (event.value) {
           value = event.value;
