@@ -115,7 +115,15 @@ const mapToAnagraficaData = (
           }
         : undefined,
   },
-
+  skills: Person?.PersonSkillAreas
+    ? Person.PersonSkillAreas.map((skillArea: any) => ({
+        id: skillArea.SkillArea?.id,
+        name: skillArea.SkillArea?.name,
+        skillCategory_id: skillArea.SkillArea?.skillCategory_id,
+        description:skillArea.SkillArea?.description,
+        seniority: skillArea?.Seniority,
+      }))
+    : [],
   indirizzoResidenza: Person?.address || "",
   dataNascita: Person?.dateBirth ? new Date(Person.dateBirth) : null,
   cap: Person?.zipCode ? parseInt(Person.zipCode, 10) : 0,
@@ -278,6 +286,7 @@ export const dataAdapter = (row: Record<string, any>) => {
     residenza: row.anagrafica.residenza || undefined,
     nascita: row.anagrafica.nascita || undefined,
     existingFile: row.anagrafica.existingFile || undefined,
+    skills: row.anagrafica.skills,
     //comuneResidenza: row.anagrafica.comuneResidenza || "",
     indirizzoResidenza: row.anagrafica.indirizzoResidenza || "",
     dataNascita: row.anagrafica.dataNascita
@@ -645,7 +654,9 @@ export const reverseAdapter = (combinedData: {
   permessi: PermessiData;
   modifiedData: Record<string, any>;
   newFormTrattamentoEconomico: boolean;
+  skills: MappedSkill[]
 }) => {
+
   const attachments =
     combinedData.anagrafica.attachment?.map((att) => ({
       file_name: att.name,
@@ -655,7 +666,15 @@ export const reverseAdapter = (combinedData: {
           : "application/octet-stream",
       data: att.data || [],
     })) || [];
-
+    const personSkillAreas =
+    combinedData.anagrafica.skills?.map((skill) => {
+      const skillId = skill.id || combinedData.skills.find(s => s.name === skill.name)?.id; 
+   
+      return {
+        skillArea_id: skillId,
+        Seniority: skill.seniority || null,
+      };
+    }) || [];
   const permessiIDs =
     mapPermessiNamesToIDs(combinedData.permessi, combinedData.idPermessi) || [];
   return {
@@ -696,6 +715,7 @@ export const reverseAdapter = (combinedData: {
         combinedData.anagrafica.cap.toString().trim() !== ""
           ? combinedData.anagrafica.cap
           : null,
+      PersonSkillAreas: personSkillAreas,
       taxCode:
         !combinedData.anagrafica.codiceFiscale ||
         combinedData.anagrafica.codiceFiscale === ""
@@ -756,6 +776,29 @@ export const reverseAdapter = (combinedData: {
   };
 };
 
+
+interface SkillArea {
+  id: number;
+  code: string;
+  name: string;
+  description: string | null;
+  skillCategory_id: number;
+  date_created: string;
+  date_modified: string;
+}
+
+export interface MappedSkill {
+  id: number;
+  name: string;
+}
+
+export const mapSkillAreas = (skillAreas: SkillArea[]): MappedSkill[] => {
+  return skillAreas.map(skill => ({
+      id: skill.id,
+      name: skill.name
+  }));
+};
+
 export const reverseAdapterUpdate = (combinedData: {
   id: any;
   idRuoli: any[];
@@ -768,6 +811,7 @@ export const reverseAdapterUpdate = (combinedData: {
   permessi: PermessiData;
   modifiedData: Record<string, any>;
   newFormTrattamentoEconomico: boolean;
+  skills: MappedSkill[]
 }) => {
   const permessiIDs =
     mapPermessiNamesToIDs(combinedData.permessi, combinedData.idPermessi) || [];
@@ -878,6 +922,17 @@ export const reverseAdapterUpdate = (combinedData: {
   if ("sesso" in combinedData.modifiedData) {
     result.Person.gender_id =
       mapGenderToID(combinedData.modifiedData.sesso, combinedData.gender) || 1;
+  }
+  if ("skills" in combinedData.modifiedData) {
+    result.Person.PersonSkillAreas =
+    combinedData.modifiedData.skills.map((skill) => {
+      const skillId = skill.id || combinedData.skills.find(s => s.name === skill.name)?.id; // Trova ID se non esiste
+      console.log(skillId)
+      return {
+        skillArea_id: skillId,
+        Seniority: skill.seniority || null,
+      };
+    }) || [];
   }
 
   // Trattamento Economico - solo i campi modificati
@@ -1040,7 +1095,8 @@ export const anagraficaAiButtonAdapter = (
   data: any,
   formAnagraficaData: AnagraficaData,
   modifiedFields: any,
-  gender: genderOption[]
+  gender: genderOption[],
+  skillData:any[]
 ) => {
   const genderValue = data.gender_id;
   const genderLabel = gender.find(
@@ -1051,9 +1107,16 @@ export const anagraficaAiButtonAdapter = (
       ? value
       : fallback;
   };
+  const skills = skillData?.map(skill => ({
+    id: skill.id,
+    name: skill.name,
+    code: skill.code,
+    skillCategory_id: skill.skillCategory_id,
+})) || modifiedFields.skills || formAnagraficaData.skills || [];
 
   return {
     ...formAnagraficaData,
+    skills,
     nome: fallbackIfEmpty(
       data.firstName,
       modifiedFields.nome || formAnagraficaData.nome || ""

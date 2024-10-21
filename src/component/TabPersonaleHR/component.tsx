@@ -11,7 +11,7 @@ import {
   getFormPermessiFields,
 } from "./FormFields";
 import { AnagraficaData, TrattamentoEconomicoData, RuoliData, PermessiData } from "./modelForms";
-import { ActivityTypeOption, anagraficaAiButtonAdapter, cityAdapter, cityTypeOption, companyAdapter, companyOption, convertToFileObjectBlob, countryAdapter, countryOption, dataAdapter, genderAdapter, genderOption, locationOption, permessiAdapter, reverseAdapter, reverseAdapterUpdate, roleAdapter, RoleOption, sedeAdapter } from "../../adapters/personaleAdapters";
+import { ActivityTypeOption, anagraficaAiButtonAdapter, cityAdapter, cityTypeOption, companyAdapter, companyOption, convertToFileObjectBlob, countryAdapter, countryOption, dataAdapter, genderAdapter, genderOption, locationOption, MappedSkill, mapSkillAreas, permessiAdapter, reverseAdapter, reverseAdapterUpdate, roleAdapter, RoleOption, sedeAdapter } from "../../adapters/personaleAdapters";
 import { CrudGenericService } from "../../services/personaleServices";
 import Button from "common/Button";
 import { formFields } from "./customfields";
@@ -128,6 +128,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [isrowDataReady, setIsrowDataReady] = useState(false);
   const [exstingFile, setExstingFile] = useState<any>()
+  const[skills,setSkills]=useState<MappedSkill[] | undefined>()
   //Ref
   const formAnagrafica = useRef<HTMLFormElement>(null);
   const formTrattamentoEconomico = useRef<HTMLFormElement>(null);
@@ -255,8 +256,12 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
         const activityTypeResponse = await CrudGenericService.fetchResources("ActivityType");
         const adaptedActivities = permessiAdapter(activityTypeResponse);
         setActivity(adaptedActivities)
-
-
+        const skillsAreaResponse = await CrudGenericService.getSkillArea(true);
+        if (Array.isArray(skillsAreaResponse.data)) {
+          const adaptedSkillsArea = skillsAreaResponse.data.map(r => ({ id: r.id, name: r.name }))
+          setSkills(adaptedSkillsArea);
+      }
+         
       } catch (error) {
         console.error("Error fetching data:", error);
       };
@@ -350,7 +355,8 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
       ruoli: formRuoliData,
       permessi: formPermessiData,
       modifiedData: modifiedData,
-      newFormTrattamentoEconomico: newFormTrattamentoUpdate
+      newFormTrattamentoEconomico: newFormTrattamentoUpdate,
+      skills: skills || []
     };
 
 
@@ -383,15 +389,16 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
 
   };
 
-  // Funzione che verifica se un valore è vuoto e restituisce un fallback
 
   const handleFileUpload = async (file: File) => {
     try {
       const response = await CrudGenericService.getCVaI(file);
+      const skillsData = await CrudGenericService.getSkillAI(file);
+      console.log("skills data", skillsData);
       const data = response.jsonData;
-      console.log("response", data);
+      const dataSKill = skillsData.jsonData
 
-      const updatedFormAnagraficaData = anagraficaAiButtonAdapter(data, formAnagraficaData, modifiedFields, gender);
+      const updatedFormAnagraficaData = anagraficaAiButtonAdapter(data, formAnagraficaData, modifiedFields, gender, dataSKill);
 
       setFormAnagraficaData(updatedFormAnagraficaData);
 
@@ -406,6 +413,8 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
         ...prevState,
         ...newModifiedFields
       }));
+
+      console.log("form", formAnagraficaData)
 
       setTriggerUpdate(true);
       console.log("File caricato e dati aggiornati:", updatedFormAnagraficaData);
