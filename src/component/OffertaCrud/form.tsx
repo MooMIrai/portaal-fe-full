@@ -248,7 +248,7 @@ export const getFormCommesseFields = (formData: Projects | undefined, valueOnCha
             label: "Data di fine",
             type: "date",
             valueOnChange: valueOnChange,
-            value: formData?.end_date,
+            value: formData?.end_dateP,
 
         },
         orderNum: {
@@ -259,6 +259,14 @@ export const getFormCommesseFields = (formData: Projects | undefined, valueOnCha
             value: formData?.orderNum,
 
         },
+        waitingForOrder:{
+            name: "waitingForOrder",
+            label: "In Attesa di ordine",
+            type: "checkbox",
+            valueOnChange: valueOnChange,
+            showLabel: false,
+            value: formData?.waitingForOrder || false,
+        }
 
     };
     return fields;

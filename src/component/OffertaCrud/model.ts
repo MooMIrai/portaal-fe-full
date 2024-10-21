@@ -38,10 +38,11 @@ export interface OfferBEModel {
     person_id: string;
     Person: any;
   };
+  ProjectData?: ProjectsBeModel;
   attachment_id?: number;
   year?: number;
   location_id: number;
-  Attachment?: FilesModel[]
+  Attachment?: FilesModel[];
   files?: FilesModel[];
   skill_ids?: number[];
   noCollective?: boolean;
@@ -50,14 +51,13 @@ export interface OfferBEModel {
   start_date?: string;
   end_date?: string;
   orderNum?: string;
-
 }
 
 export interface OfferModel {
   id?: number;
   protocol: string;
   title: string;
-  start_date?: Date;
+  
   end_date?: Date;
   creation_date?: Date;
   description: string;
@@ -67,11 +67,11 @@ export interface OfferModel {
   customer_id: number;
   customer_name?: string;
   customer?: { id: number; name: string };
-  location_id: number
+  location_id: number;
   location?: { id: number; name: string };
   accountManager_id: number;
   accountManager_name?: string;
-  locations?: locationOption[]
+  locations?: locationOption[];
   accountManager?: { id: number; name: string };
   NoCollective?: boolean;
   billing_type?: { id: string; name: string };
@@ -89,16 +89,27 @@ export interface OfferModel {
     data?: number[]; // Array di byte se necessario
   }>;
   attachment_id?: number;
-
+  orderNum?: string;
+  start_date?: Date;
+  waitingForOrder?: boolean;
+  ProjectData?: ProjectsBeModel;
+  end_dateP?:Date;
   outcome_type?: { id: string; name: string };
   year?: Date;
   days?: number;
-  orderNum?:string;
-  googleDriveLink?:string;
-  existingLink?:string;
+  googleDriveLink?: string;
+  existingLink?: string;
+}
+
+export interface ProjectsBeModel {
+  start_date: string;
+  end_date?: string;
+  orderNum?: string;
+  waitingForOrder?: boolean;
 }
 export interface Projects {
   start_date: Date;
-  end_date?: Date;
+  end_dateP?: Date;
   orderNum?: string;
+  waitingForOrder?: boolean;
 }
