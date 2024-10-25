@@ -75,7 +75,7 @@ export default function DeviceCrud(props:DeviceCrudProps){
 
       const tabs = [
         {
-            title: "Dati Cliente",
+            title: "Dati Dispositivo",
             children: (
               <div className={styles.parentForm} >
                  <Form
