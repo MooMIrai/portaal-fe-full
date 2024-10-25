@@ -5,6 +5,7 @@ import { downloadIcon, googleBoxIcon, googleIcon } from '@progress/kendo-svg-ico
 import FileService from '../../services/FileService';
 import NotificationProviderActions from '../Notification/provider';
 
+
 type CustomUploadProps = {
   onDownload?: () => void;
   multiple?: boolean;
@@ -126,12 +127,12 @@ function UploadSingleFileComponent(props: CustomUploadProps) {
       <div className={styles.fileInfoContainer}>
         {props.existingFile && !selectedFileName && (
           <p>
-            File caricato: <strong>{props.existingFile?.[0]?.name}</strong>
+            File caricato: <strong><small>{props.existingFile?.[0]?.name}</small></strong>
           </p>
         )}
         {selectedFileName && (
           <p>
-            File selezionato: <strong>{selectedFileName}</strong>
+            File selezionato: <strong><small>{selectedFileName}</small></strong>
           </p>
         )}
         {props.onDownload && props.existingFile && !selectedFile && !selectedLink && (
@@ -147,7 +148,7 @@ function UploadSingleFileComponent(props: CustomUploadProps) {
           </div>
         )}
         {
-           selectedLink && !selectedFileName && (<div>
+          /* selectedLink && !selectedFileName && (<div>
             <Button
               type='button'
               themeColor={"primary"}
@@ -156,7 +157,7 @@ function UploadSingleFileComponent(props: CustomUploadProps) {
             >
               Visualizza il file Google
             </Button>
-          </div>)
+          </div>)*/
         }
       </div>
     </div>
