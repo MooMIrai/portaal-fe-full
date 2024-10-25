@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import NotificationProviderActions from "common/providers/NotificationProvider";
 import GridTable from "common/Table";
 import { offertaService } from "../../services/offertaService";
-import { fromOfferBEModelToOfferModel, locationOption, sedeAdapter } from "../../adapters/offertaAdapters";
+import { fromOfferBEModelToOfferModel } from "../../adapters/offertaAdapters";
 import { OffertaCrud } from "../../component/OffertaCrud/component";
-import CountrySelector from "common/CountrySelector";
+
 
 const columns = [
   {
@@ -54,11 +54,12 @@ const columns = [
 const mapColumnKey: { [key: string]: string } = {
   "customer_name": "Customer.name",
   "accountManager.name": "AccountManager.Person.lastName",
-  "protocol": "offer_name",
+  "protocol": "project_code",
   "title": "name",
   "description": "other_details",
   "creation_date": "date_created"
 };
+
 // Filter mapping function
 const mapFilterFields = (filter: any | null): any => {
   if (!filter || !filter.filters) {
@@ -92,6 +93,8 @@ export default function OffertePage() {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+
   const loadData = async (
     pagination: any,
     filter: any,
