@@ -6,16 +6,18 @@ import FileService from '../../services/FileService';
 import NotificationProviderActions from '../Notification/provider';
 
 type CustomUploadProps = {
-  onDownload?: () => Promise<{fileId:string,fileName:string}>;
+  onDownload?: () => void;
   multiple?: boolean;
   onFileChange: (fileData: {
-    name: string;
-    data: Array<any>;
-    size: number;
-    status: number;
-    file_name: string;
-    content_type: string;
-    extension: string;
+    name?: string;
+    data?: Array<any>;
+    size?: number;
+    status?: number;
+    file_name?: string;
+    content_type?: string;
+    extension?: string;
+    provider?:string,
+    direct_link?:string
   }[]) => void;
   accept?: string;
   disabled?: boolean;
@@ -37,7 +39,7 @@ function UploadSingleFileComponent(props: CustomUploadProps) {
 
       setSelectedFileName(fileArray[0].name);
       setSelectedFile(fileArray[0]);
-      
+      setSelectedLink(undefined);
       props.onFileChange(fileDataArray);
 
 
@@ -52,16 +54,19 @@ function UploadSingleFileComponent(props: CustomUploadProps) {
   };
 
   const handleFileDownload = async () => {
-    try {
+    /* try {
       if (props.onDownload) {
         const fileforDowload = await props.onDownload();  
         const { fileId } = fileforDowload
         const blob = await FileService.getFileFromBE(fileId);  
-       FileService.openFileFromBlob(blob)
+        FileService.openFileFromBlob(blob)
       }
     } catch (error) {
       console.error('Errore durante il download del file:', error);
-    }
+    } */
+   if(props.onDownload){
+    props.onDownload();
+   }
   };
 
   const handlePasteLink = ()=> {
@@ -76,7 +81,14 @@ function UploadSingleFileComponent(props: CustomUploadProps) {
         // Verifica che il testo sia un link di Google Drive
         const googleDriveRegex = /^https:\/\/(drive|docs)\.google\.com\/(?:file\/d\/|open\?id=)[\w-]+/;
         if (googleDriveRegex.test(text)) {
-          setSelectedLink(text);
+          
+          FileService.convertLinkToBE(text).then(res=>{
+            props.onFileChange([res]);
+            setSelectedFileName(text);
+            setSelectedFile(null);
+            setSelectedLink(text);
+          });
+         
         } else {
           NotificationProviderActions.openModal({style:"warning",icon:true},"Il contenuto della clipboard non è un link valido di Google Drive.");
         }
@@ -135,10 +147,7 @@ function UploadSingleFileComponent(props: CustomUploadProps) {
           </div>
         )}
         {
-          props.onDownload && selectedLink && !selectedFileName && (<div>
-            <p>
-              Link incollato: <strong>{selectedLink}</strong>
-            </p>
+           selectedLink && !selectedFileName && (<div>
             <Button
               type='button'
               themeColor={"primary"}

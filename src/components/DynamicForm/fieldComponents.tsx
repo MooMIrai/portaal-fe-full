@@ -172,7 +172,7 @@ const UploadMutilpleInputC = (
 
   const handleFileDrop = async (droppedFiles: File[]) => {
     try {
-      const newAttachments = await Promise.all(droppedFiles.map(FileService.convertToBE));
+      const newAttachments = await Promise.all(droppedFiles.map((item)=>FileService.convertToBE(item)));
       setAttachments((prevAttachments) => [...prevAttachments, ...newAttachments]);
       fieldRenderProps.onChange({ value: [...attachments, ...newAttachments] });
       console.log("newAtt", newAttachments)
@@ -220,6 +220,16 @@ const UploadSingleFIleInputC = (
   const handleFileUpload = (fileDataArray: any[]) => {
     fieldRenderProps.onChange({ value: fileDataArray });
   };
+
+  const handleDownload = ()=>{
+    
+    if(value && value[0]){
+      
+      FileService.openFromBE(value[0])
+    }
+    
+  }
+
   return (
     <div>
       <UploadSingleFileComponent
@@ -227,7 +237,7 @@ const UploadSingleFIleInputC = (
         multiple={multiple}
         existingFile={existingFile}
         disabled={disabled}
-        onDownload={onDownload}
+        onDownload={handleDownload}
       />
     </div>
   );

@@ -88,6 +88,16 @@ class FileService{
     downloadBlobFile(blob: Blob, name: string) {
         return saveAs(blob,name)
     }
+
+    openFromBE(value:any){
+        if(value.provider==='DRIVE'){
+            window.open(value.google_drive.view_link);
+         }else{
+            this.getFileFromBE(value.uniqueRecordIdentifier)
+                       .then(this.openFileFromBlob)
+         }
+       
+    }
     
 }
 
