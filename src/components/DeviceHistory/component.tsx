@@ -16,9 +16,10 @@ export function DeviceHistory(props:{id:number}){
                 return <td>
                         {new Date(row.allocation_date).toLocaleDateString()}
                         {
-                            row.waiver? <Button themeColor="error" fillMode="clear" size="small" onClick={() => {
-                                fileService.getFileFromBE(row.waiver.uniqueRecordIdentifier).then(fileService.openFileFromBlob)
-                              }}><SvgIcon size="large" icon={filePdfIcon} /></Button>
+                            row.waiver? <Button themeColor="error" fillMode="clear" size="small" 
+                                onClick={() => fileService.openFromBE(row.waiver)}>
+                                    <SvgIcon size="large" icon={filePdfIcon} />
+                                </Button>
                               :null
                         }
                     </td>
@@ -30,9 +31,9 @@ export function DeviceHistory(props:{id:number}){
                     return <td>
                         {new Date(row.restituition_date).toLocaleDateString()}
                         {
-                            row.receipt ? <Button themeColor="error" fillMode="clear" size="small" onClick={() => {
-                                fileService.getFileFromBE(row.receipt.uniqueRecordIdentifier).then(fileService.openFileFromBlob)
-                              }}><SvgIcon size="large" icon={filePdfIcon} /></Button>
+                            row.receipt ? <Button themeColor="error" fillMode="clear" size="small"  onClick={() => fileService.openFromBE(row.receipt)}>
+                                <SvgIcon size="large" icon={filePdfIcon} />
+                            </Button>
                               :null
                         }
                         </td>;

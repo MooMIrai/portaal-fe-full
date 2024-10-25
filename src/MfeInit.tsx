@@ -6,7 +6,7 @@ export default function(){
     menuItems:[
       {
         id: 99,
-        text: "Magazzino",
+        text: "Approvigionamenti",
         level: 0,
         route: "/device",
         iconKey: "tablePropertiesIcon",

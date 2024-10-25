@@ -1,4 +1,4 @@
-import FileService from 'common/services/FileService'
+
 
 export const getFormDeviceFields = (formData: any, type:string) => {
     
@@ -58,11 +58,6 @@ export const getFormDeviceFields = (formData: any, type:string) => {
             value: formData.files || "",
             existingFile:formData.files && formData.files.length?[{name:'Fattura.pdf'}]:undefined,
             accept: ".pdf",
-            onDownload: (ev)=>{
-                //get file and download
-                FileService.getFileFromBE(formData.files[0].uniqueRecordIdentifier)
-                    .then(FileService.openFileFromBlob)
-            },
             multiple: false,
         },
     }
