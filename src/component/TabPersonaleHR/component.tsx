@@ -389,10 +389,12 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
   };
 
 
-  const handleFileUpload = async (file: File) => {
-    try {
-      const response = await CrudGenericService.getCVaI(file);
-      const skillsData = await CrudGenericService.getSkillAI(file);
+  const handleFileUpload = async () => {
+    
+      if(formAnagrafica.current && formAnagrafica.current.values.attachment && formAnagrafica.current.values.attachment.length){
+
+      const response = await CrudGenericService.getCVaI(formAnagrafica.current.values.attachment[0]);
+      const skillsData = await CrudGenericService.getSkillAI(formAnagrafica.current.values.attachment[0]);
       
       const data = response.jsonData;
       const dataSKill = skillsData.jsonData
@@ -412,13 +414,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
         ...prevState,
         ...newModifiedFields
       }));
-
-      console.log("form", formAnagraficaData)
-
       setTriggerUpdate(true);
-      console.log("File caricato e dati aggiornati:", updatedFormAnagraficaData);
-    } catch (error) {
-      console.error("Errore durante l'upload del file:", error);
     }
   };
 

@@ -126,9 +126,9 @@ class CrudGenericServiceC {
     }
   };
   
-   getCVaI = (file) => client.post('/api/v1/ai/upload_cv', {file:file}).then(res=>res.data); 
+   getCVaI = (file) => client.post('/api/v1/ai/upload_cv', {Attachment:file}).then(res=>res.data); 
 
-  getSkillAI = (file) =>  client.post('/api/v1/ai/upload_cv_ts', {file:file}).then(res=>res.data);
+  getSkillAI = (file) =>  client.post('/api/v1/ai/upload_cv_ts', {Attachment:file}).then(res=>res.data);
   
   
   fetchResource = async (resourceType: string, id: number) => {
