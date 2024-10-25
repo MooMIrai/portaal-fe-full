@@ -60,7 +60,6 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
 
   //state
   const [newForm, setNewForm] = useState<boolean>(false);
-  const [country, setCountry] = useState<countryOption[]>([]);
   const { anagrafica, trattamentoEconomico, ruoli, permessi } = isCreate ? {
     anagrafica: {
       nascita: {
@@ -394,7 +393,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
     try {
       const response = await CrudGenericService.getCVaI(file);
       const skillsData = await CrudGenericService.getSkillAI(file);
-      console.log("skills data", skillsData);
+      
       const data = response.jsonData;
       const dataSKill = skillsData.jsonData
 
@@ -611,7 +610,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
         <div className={styles.parentForm}>
           <Form
             ref={formAnagrafica}
-            fields={Object.values(getFormAnagraficaFields(formAnagraficaData, gender, type, isViewOnly, handleDownload, combinedValueOnChange, download, attachmentNameState, handleFieldChange, handleFileUpload, exstingFile, fileJustUploaded))}
+            fields={Object.values(getFormAnagraficaFields(formAnagraficaData, gender, type, isViewOnly, handleFieldChange, handleFileUpload))}
             formData={formAnagraficaData}
             onSubmit={(data: AnagraficaData) => setFormAnagraficaData(data)}
             description="Ana"

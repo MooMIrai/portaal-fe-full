@@ -10,7 +10,7 @@ const createValidator = (isDisabled: boolean, validationFn: (value: any) => stri
     };
 };
 
-export const getFormAnagraficaFields = (formData: AnagraficaData, gender: genderOption[], type: any, isViewOnly: boolean, handleDownload: () => void, combinedValueOnChange: (name: string, value: any) => void, download: boolean, name_attachment: string | null, valueOnChange: (name: string, value: any) => void, handleFileUpload: (file: File) => void, setExstingFile: any, fileJustUploaded) => {
+export const getFormAnagraficaFields = (formData: AnagraficaData, gender: genderOption[], type: any, isViewOnly: boolean,valueOnChange: (name: string, value: any) => void, handleFileUpload: (file:any) => void) => {
     const genderOptions = gender.map(company => company.label)
     const onlyLettersValidator = (value: any) => /^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/.test(value) ? "" : "Il campo deve contenere solo lettere";
 
@@ -138,27 +138,23 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             withCredentials: false,
             disabled: (type === "view" || isViewOnly),
             value: formData.attachment || "",
-            existingFile: setExstingFile,
-            valueOnChange: (name: string, value: any) => {
-                combinedValueOnChange(name, value);
-            },
-            onDownload: download && name_attachment ? handleDownload : undefined,
+            existingFile:formData.attachment && formData.attachment.length?[{name:'CV.pdf'}]:undefined,
+            //onDownload: download && name_attachment ? handleDownload : undefined,
             multiple: false,
-        }
-    }
-
-    if (fileJustUploaded) {
-        fields.generaInputAi = {
+        },
+        generaInputAi :{
             name: "generaInputAi",
             label: "Genera Input AI",
             showLabel: false,
             type: "buttonCustom",
             valueOnChange: valueOnChange,
             loader: true,
-            onClick: () => handleFileUpload(fileJustUploaded),
+            conditions:(formD)=> formD.attachment && formD.attachment.length ,
+            onClick: () => handleFileUpload(formData.attachment),
             disabled: (type === "view" || isViewOnly),
-        };
+        }
     }
+
     fields.residenza = {
         name: "residenza",
         label: "Comune di Residenza",

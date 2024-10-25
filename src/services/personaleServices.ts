@@ -126,39 +126,9 @@ class CrudGenericServiceC {
     }
   };
   
-   getCVaI = async (file) => {
-    const formData = new FormData();
-    formData.append('file', file); 
-  
-    try {
-      const response = await client.post('/api/v1/ai/upload_cv', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data', 
-        },
-      });
-      return response.data;
-    } catch (error) {
-      console.error("Error uploading file:", error);
-      throw error;
-    }
-  };
+   getCVaI = (file) => client.post('/api/v1/ai/upload_cv', {file:file}).then(res=>res.data); 
 
-  getSkillAI = async (file) => {
-    const formData = new FormData();
-    formData.append('file', file); 
-  
-    try {
-      const response = await client.post('/api/v1/ai/upload_cv_ts', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data', 
-        },
-      });
-      return response.data;
-    } catch (error) {
-      console.error("Error uploading file:", error);
-      throw error;
-    }
-  };
+  getSkillAI = (file) =>  client.post('/api/v1/ai/upload_cv_ts', {file:file}).then(res=>res.data);
   
   
   fetchResource = async (resourceType: string, id: number) => {
