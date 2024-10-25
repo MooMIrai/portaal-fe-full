@@ -30,7 +30,7 @@ const UploadMultipleFileComponent: React.FC<CustomUploadProps> = (props) => {
       if (props.onDownload) {
         await props.onDownload(fileId, fileName);
         const blob = await FileService.getFileFromBE(fileId);
-        FileService.onDownloadFile(blob, fileName);
+        FileService.openFileFromBlob(blob);
       }
     } catch (error) {
       console.error('Errore durante il download del file:', error);

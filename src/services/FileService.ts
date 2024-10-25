@@ -3,7 +3,7 @@ import client from "./BEService";
 import { saveAs } from '@progress/kendo-file-saver';
 class FileService{
 
-    convertToBE(file:File){
+    convertToBE(file:File,provider?:"DRIVE"|"DATABASE"){
         return file.arrayBuffer().then(arrayBuffer=>{
             return {
                 name:file.name,
@@ -12,9 +12,17 @@ class FileService{
                 status:2,
                 file_name:file.name,
                 content_type: file.type,
-                extension:file.name.split('.').pop() || ''
+                extension:file.name.split('.').pop() || '',
+                provider:provider || "DRIVE"
             }
         })
+    }
+
+    convertLinkToBE(link:string,provider?:"DRIVE"|"DATABASE"){
+        return Promise.resolve({
+            provider:provider || "DRIVE",
+            direct_link: link
+        });
     }
 
     convertBlobToBE(file:Blob,filename?:'string'){
@@ -55,7 +63,7 @@ class FileService{
        return URL.createObjectURL(blob);
     }
  
-downloadFileFromUint8(fileData:Uint8Array,name:string,contentType?:string,){
+    downloadFileFromUint8(fileData:Uint8Array,name:string,contentType?:string,){
         const uint8Array = new Uint8Array(fileData);
     
         // Crea un Blob dai dati
@@ -78,24 +86,9 @@ downloadFileFromUint8(fileData:Uint8Array,name:string,contentType?:string,){
     }
 
     downloadBlobFile(blob: Blob, name: string) {
-        const link = document.createElement('a');
-        
-
-        link.href = URL.createObjectURL(blob);
-        
-
-        link.download = name;
-        
-       
-        link.click();
-        
-      
-        URL.revokeObjectURL(link.href);
+        return saveAs(blob,name)
     }
     
-    onDownloadFile(data:Blob,fileName:string){
-        return saveAs(data,fileName)
-    }
 }
 
 export default new FileService();
