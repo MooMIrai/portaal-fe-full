@@ -105,7 +105,7 @@ export const SalColumns = [
     label: "Tariffa",
     type: "int",
     sortable: true,
-    filter: "number",
+    filter: "numeric",
   },
 ];
 
@@ -139,3 +139,72 @@ export const attivitaColumns = [
     filter: "text",
   },
 ];
+
+export const attivitaAssegnazioneColumns = [
+  {
+    key: "Person.firstName",
+    label: "Nome",
+    type: "string",
+    sortable: false,
+    filter: "text",
+  },
+  {
+    key: "Person.lastName",
+    label: "Cognome",
+    type: "string",
+    sortable: false,
+    filter: "text",
+  },
+  {
+    key: "start_date",
+    label: "Data inizio",
+    type: "date",
+    sortable: true,
+    filter: "date",
+  },
+  {
+    key: "end_date",
+    label: "Data fine",
+    type: "date",
+    sortable: true,
+    filter: "date",
+  },
+  {
+    key: "expectedDays",
+    label: "Giorni previsti",
+    type: "int",
+    sortable: true,
+    filter: "numeric",
+  },
+]
+
+export const costiCommessaColumns = [
+  {
+    key: "description",
+    label: "Descrizione",
+    type: "string",
+    sortable: false,
+    filter: "text",
+  },
+  {
+    key: "amount",
+    label: "Importo",
+    type: "string",
+    sortable: true,
+    filter: "text",
+  },
+  {
+    key: "payment_date",
+    label: "Data pagamento",
+    type: "date",
+    sortable: true,
+    filter: "date",
+  },
+  {
+    key: "ProjectExpensesType.description",
+    label: "Tipo",
+    type: "string",
+    sortable: false,
+    filter: "text",
+  }
+]

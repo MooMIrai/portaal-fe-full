@@ -5,7 +5,7 @@ const deps = require("./package.json").dependencies;
 const { FederatedTypesPlugin } = require("@module-federation/typescript");
 const webpack = require("webpack");
 
-const mfeConfig = (path, mode) => ({
+const mfeConfig = (path, pathHr, mode) => ({
   name: "sales",
   filename: "remoteEntry.js",
   remotes: {
@@ -13,6 +13,11 @@ const mfeConfig = (path, mode) => ({
       "common@" +
       path +
       (mode === "production" ? "/common" : "") +
+      "/remoteEntry.js",
+    hr:
+      "hr@" +
+      pathHr +
+      (mode === "production" ? "/hr" : "") +
       "/remoteEntry.js",
   },
   exposes: {
@@ -73,7 +78,7 @@ module.exports = (_, argv) => {
       ],
     },
     plugins: [
-      new ModuleFederationPlugin(mfeConfig(process.env.REMOTE_PATH, argv.mode)),
+      new ModuleFederationPlugin(mfeConfig(process.env.REMOTE_PATH, process.env.REMOTE_PATH_HR, argv.mode)),
       //new FederatedTypesPlugin({ federationConfig: mfeConfig }),
       new HtmlWebPackPlugin({
         template: "./src/index.html",

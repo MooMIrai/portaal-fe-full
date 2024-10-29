@@ -3,15 +3,15 @@ import Button from "common/Button";
 import DynamicForm from "common/Form";
 import React, { useEffect, useState } from "react";
 import { attivitaService } from "../../../services/attivitaService";
-import { attivitaColumns } from "../../ProgettoCrud/config";
+import { attivitaColumns, costiCommessaColumns } from "../../ProgettoCrud/config";
 import {
   detailSectionIcon,
   trashIcon
 } from "common/icons";
-import { formFields } from "./customFields";
 import styles from "./styles.module.scss";
-import AttivitaCrud from "./AttivitaCrud/component";
-import AssigningTable from "./AttivitaCrud/AssigningTable/component";
+import CostiCommessaCrud from "./CostiCommessaCrud/component";
+import { progettoService } from "../../../services/progettoServices";
+import { projectExpensesCustomFields } from "./customfields";
 
 const determineFieldType = (
   value: any
@@ -36,20 +36,20 @@ const determineFieldType = (
   return "text";
 };
 
-export interface AttivitaModalProps {
+export interface CostiCommessamodalProps {
   dataItem: any;
   closeModal: Function;
   refreshTable: Function;
   handleFormSubmit: Function;
 }
 
-const AttivitaModal = (props: AttivitaModalProps) => {
+const CostiCommessamodal = (props: CostiCommessamodalProps) => {
 
   const [innerCRUDFields, setInnerCRUDFields] = useState<any>({});
 
   const loadModel = async () => {
     try {
-      const resources = await attivitaService.getGridModel();
+      const resources = await progettoService.getProjectExpensesCreateDtoModel();
       if (!resources) {
         throw new Error("No resources found");
       }
@@ -58,27 +58,27 @@ const AttivitaModal = (props: AttivitaModalProps) => {
       resources
         /* .filter((item: any) => !excludedKeys.includes(item.name)) */
         .forEach((item: any) => {
-          const name = item.name === "activityManager_id"
-            ? 'manager-selector'
-            : item.name === 'activityType_id'
-              ? 'activity-type-selector'
+          const name = item.name === "projectExpensesType_id"
+            ? 'project-type-selector'
+            : item.name === "Attachment"
+              ? 'files'
               : item.name;
           newModel[name] = {
-            name: item.name,
-            type: item.name === "activityManager_id"
-              ? 'manager-selector'
-              : item.name === "activityType_id"
-                ? 'activity-type-selector'
+            name: item.name === "Attachment"
+              ? "files"
+              : item.name,
+            type: item.name === "projectExpensesType_id"
+              ? 'project-type-selector'
+              : item.name === "Attachment"
+                ? "uploadSingleFile"
                 : determineFieldType(item.type),
-            label: item.name === "activityManager_id"
-              ? "Commerciale"
-              : item.name === "activityType_id"
-                ? "Tipo attività"
-                : item.name.charAt(0).toUpperCase() + item.name.slice(1),
-            value: item.name === "project_id" ? props.dataItem.id : "",
-            disabled: item.readOnly || item.name === "project_id",
+            label: item.name === "projectExpensesType_id"
+              ? "Tipologia spesa"
+              : item.name.charAt(0).toUpperCase() + item.name.slice(1),
+            value: "",
+            disabled: item.readOnly,
             required: item.required,
-            options: item.type.toLocaleLowerCase() === "projectstate" ? ["OPEN", "CLOSED", "INPROGRESS"] : [],
+            options: [],
             showLabel: true,
             readOnly: item.readOnly,
           };
@@ -96,7 +96,7 @@ const AttivitaModal = (props: AttivitaModalProps) => {
   }, []);
 
   const loadData = async (pagination: any, filter: any, sorting: any[]) => {
-    const tableResponse = await attivitaService.getActivitiesByProject(
+    const tableResponse = await progettoService.getExpensesByProjectId(
       props.dataItem.id,
       pagination.currentPage,
       pagination.pageSize,
@@ -114,12 +114,13 @@ const AttivitaModal = (props: AttivitaModalProps) => {
 
   const handleFormSubmit = (dataItem: { [name: string]: any }, refreshTable: () => void, closeModalCallback: () => void, isEdit?: boolean) => {
     if (!isEdit) {
-      attivitaService.createResource(
-        {
-          ...dataItem,
-          activityType_id: dataItem.activityType_id.id,
-          activityManager_id: dataItem.activityManager_id.id
-        }
+      progettoService.createProjectExpense(
+        props.dataItem.id,
+        dataItem.description,
+        parseInt(dataItem.amount),
+        dataItem.payment_date,
+        dataItem.projectExpensesType_id.id,
+        dataItem.files
       ).then(res => {
         if (res) {
           closeModalCallback();
@@ -127,13 +128,13 @@ const AttivitaModal = (props: AttivitaModalProps) => {
         }
       })
     } else {
-      attivitaService.updateResource(
+      progettoService.updateProjectExpense(
         dataItem.id,
-        {
-          ...dataItem,
-          activityType_id: dataItem.activityType_id.id,
-          activityManager_id: dataItem.activityManager_id.id
-        }
+        dataItem.description,
+        parseInt(dataItem.amount),
+        dataItem.payment_date,
+        dataItem.projectExpensesType_id.id,
+        dataItem.files
       ).then(res => {
         if (res) {
           closeModalCallback();
@@ -144,14 +145,10 @@ const AttivitaModal = (props: AttivitaModalProps) => {
   }
 
   return <GridTable
-    expand={{
-      enabled: true,
-      render: (rowProps) => <AssigningTable activity_id={rowProps.dataItem.id} />,
-    }}
     filterable={true}
     sortable={true}
     getData={loadData}
-    columns={attivitaColumns}
+    columns={costiCommessaColumns}
     resizableWindow={true}
     draggableWindow={true}
     initialHeightWindow={800}
@@ -171,16 +168,16 @@ const AttivitaModal = (props: AttivitaModalProps) => {
             }).map((e: any) => {
               return {
                 ...e,
-                disabled: e.name === "project_id"
+                disabled: e.name === "project_id",
               }
             })}
-            addedFields={formFields}
             showSubmit={true}
             extraButton={true}
             extraBtnAction={closeModalCallback}
             onSubmit={(dataItem: { [name: string]: any }) => {
               handleFormSubmit(dataItem, refreshTable, closeModalCallback);
             }}
+            addedFields={projectExpensesCustomFields}
           />
         </div>
       );
@@ -191,12 +188,17 @@ const AttivitaModal = (props: AttivitaModalProps) => {
         icon: detailSectionIcon,
         tooltip: "Modifica",
         modalContent: (dataItem, closeModal, refreshTable) => {
-          return <AttivitaCrud
+          return <CostiCommessaCrud
             dataItem={dataItem}
             closeModal={closeModal}
             refreshTable={refreshTable}
-            addedFields={formFields}
-            fields={innerCRUDFields}
+            fields={Object.values(innerCRUDFields).map((f: any) => {
+              return {
+                ...f,
+                existingFile: f.name === "files" ? dataItem.files && dataItem.files.length ? [{ name: dataItem.files[0].file_name }] : undefined : undefined,
+              }
+            })}
+            addedFields={projectExpensesCustomFields}
             handleFormSubmit={(dataItem, refreshTable, closeModal) => handleFormSubmit(dataItem, refreshTable, closeModal, true)}
           />
         },
@@ -210,7 +212,7 @@ const AttivitaModal = (props: AttivitaModalProps) => {
             <div className={styles.buttonsContainer}>
               <Button onClick={() => closeModal()}>Annulla</Button>
               <Button themeColor={"error"} onClick={async () => {
-                await attivitaService.deleteActivity(dataItem.id);
+                await progettoService.deleteProjectExpense(dataItem.id);
                 refreshTable();
                 closeModal();
               }}>
@@ -224,4 +226,4 @@ const AttivitaModal = (props: AttivitaModalProps) => {
   />
 }
 
-export default AttivitaModal;
+export default CostiCommessamodal;
