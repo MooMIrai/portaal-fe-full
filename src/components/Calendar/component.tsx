@@ -37,7 +37,10 @@ interface CustomCalendarProps {
   date?: Date;
 
   holidays?: Array<number>,
-  item?: ComponentType<SchedulerItemProps> | undefined
+  item?: ComponentType<SchedulerItemProps> | undefined;
+
+  disableDrag?: boolean;
+  isFinalized?: boolean;
 }
 
 /*
@@ -111,10 +114,10 @@ export default function CustomCalendar(props: Readonly<CustomCalendarProps>) {
       timezone={"Etc/UTC"}
       onDataChange={props.handleDataChange}
       onDateChange={props.handleDateChange}
-      viewSlot={CustomViewSlot}
+      viewSlot={(sched) => CustomViewSlot({ ...sched, disableDrag: props.disableDrag, isFinalized: props.isFinalized })}
       item={props.item}
       editable={{
-        add: true,
+        add: false,
         remove: false,
         drag: false,
         resize: false,
