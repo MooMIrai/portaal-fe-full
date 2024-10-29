@@ -1,3 +1,4 @@
+import { base } from "@progress/kendo-react-common";
 import { OfferBEModel, OfferModel } from "../component/OffertaCrud/model";
 
 export type locationOption = {
@@ -28,13 +29,13 @@ export function fromOfferBEModelToOfferModel(
 ): OfferModel {
   return {
     id: offerBE.id,
-    protocol: offerBE.offer_name, // mapping offer_name to protocol
+    protocol: offerBE.offer_name || offerBE.project_code, // mapping offer_name to protocol
     title: offerBE.name, // mapping name to title
     /* start_date: new Date(offerBE.start_date), */
     end_date: offerBE.deadline_date
       ? new Date(offerBE.deadline_date)
-      : undefined, // fallback if end_date is undefined
-    description: offerBE.other_details, // mapping other_details to description
+      : undefined,
+    description: offerBE.other_details,
     rate: offerBE.rate,
     amount: offerBE.amount,
     NoCollective: offerBE.noCollective || false,
@@ -44,7 +45,6 @@ export function fromOfferBEModelToOfferModel(
       id: offerBE.customer_id || 0,
       name: offerBE.Customer ? offerBE.Customer.name : "",
     },
-
     creation_date: offerBE.date_created
       ? new Date(offerBE.date_created)
       : undefined,
@@ -59,32 +59,30 @@ export function fromOfferBEModelToOfferModel(
         " " +
         offerBE.AccountManager?.Person.lastName,
     },
-
     project_type_id: offerBE.project_type_id || 0,
     project_type: offerBE.ProjectType
       ? { id: offerBE.ProjectType.id, name: offerBE.ProjectType.description }
       : undefined,
     location_id: offerBE.location_id,
-
     billing_type: {
       id: offerBE.billing_type,
       name: mapBillingTypeName(offerBE.billing_type),
     }, // hypothetical method for billing type conversion
     outcome_type: offerBE.OutcomeType
       ? {
-        id: offerBE.OutcomeType,
-        name: mapOutcomeTypeName(offerBE.OutcomeType),
-      }
+          id: offerBE.OutcomeType,
+          name: mapOutcomeTypeName(offerBE.OutcomeType),
+        }
       : undefined,
     existingFile: Array.isArray(offerBE.files)
       ? offerBE.files.map((file) => ({
-        id: file.uniqueRecordIdentifier
-      }))
+          id: file.uniqueRecordIdentifier,
+        }))
       : [],
     year: offerBE.year ? new Date(offerBE.year, 1, 1) : undefined,
 
     days: offerBE.days,
-    thereisProject: offerBE.Project ? true : false
+    thereisProject: offerBE.Project ? true : false,
   };
 }
 
@@ -93,40 +91,47 @@ export function fromOfferModelToOfferBEModel(
 ): OfferBEModel {
   return {
     id: offerModel.id,
-    offer_name: offerModel.protocol, // mapping protocol to offer_name
-    name: offerModel.title, // mapping title to name
+    offer_name: offerModel.protocol, 
+    project_code:offerModel.protocol,
+    name: offerModel.title, 
     Attachment: offerModel.attachment
-      ? offerModel.attachment.map(file => ({
-        file_name: file.name,
-        content_type:
-          file.extension === ".pdf" ? "application/pdf" : "application/octet-stream",
-        data: file.data || [],
-      }))
+      ? offerModel.attachment.map((file) => ({
+          file_name: file.name,
+          content_type:
+            file.extension === ".pdf"
+              ? "application/pdf"
+              : "application/octet-stream",
+          data: file.data || [],
+        }))
       : undefined,
-    /* start_date: offerModel.start_date.toISOString(), */
-    deadline_date: offerModel.end_date?.toISOString() || undefined, // fallback to undefined if empty
-    other_details: offerModel.description || "", // mapping description to other_details
+    deadline_date: offerModel.end_date?.toISOString() || undefined, 
+    other_details: offerModel.description || "", 
     rate: offerModel.rate ? parseFloat(offerModel.rate.toString()) : 0,
     amount: offerModel.amount ? parseFloat(offerModel.amount.toString()) : 0,
     customer_id: offerModel.customer?.id,
     location_id: offerModel.location?.id || 1,
     accountManager_id: offerModel.accountManager?.id,
     project_type_id: offerModel.project_type?.id,
-    billing_type: offerModel.billing_type ? offerModel.billing_type.id : "", // hypothetical method for billing type conversion
+    billing_type: offerModel.billing_type ? offerModel.billing_type.id : "", 
     OutcomeType: offerModel.outcome_type?.id,
     year: offerModel.year ? offerModel.year.getFullYear() : undefined,
     days: Number(offerModel.days) || 0,
     noCollective: offerModel.NoCollective,
     approval_date: offerModel.approval_date?.toISOString() || undefined,
-    start_date: offerModel.start_date?.toISOString() || undefined,
-    end_date: offerModel.end_date?.toISOString() || undefined,
-    orderNum: offerModel.orderNum
+    ProjectData: offerModel.start_date ? {
+          start_date: offerModel.start_date?.toISOString() || "",
+          end_date: offerModel.end_dateP?.toISOString() || undefined,
+          orderNum: offerModel.orderNum || undefined,
+          waitingForOrder: offerModel.waitingForOrder || false,
+        } : undefined
+      
   };
 }
 
 // Funzione per convertire un oggetto modificato `OfferModel` in un oggetto `OfferBEModel`
 export const reverseOfferAdapterUpdate = (
-  modifiedData: Record<string, any>
+  modifiedData: Record<string, any>,
+  baseData: OfferModel
 ): Partial<OfferBEModel> => {
   const result: Partial<OfferBEModel> = {}; //rende tutte le proprietà opzionali
 
@@ -141,10 +146,6 @@ export const reverseOfferAdapterUpdate = (
 
   if ("description" in modifiedData) {
     result.other_details = modifiedData.description;
-  }
-
-  if ("rate" in modifiedData) {
-    result.rate = parseFloat(modifiedData.rate.toString()) || 0;
   }
 
   if ("amount" in modifiedData) {
@@ -182,14 +183,14 @@ export const reverseOfferAdapterUpdate = (
   if ("attachment" in modifiedData) {
     result.Attachment = modifiedData.attachment
       ? modifiedData.attachment.map((file: any) => ({
-        file_name: file.name,
-        content_type:
-          file.extension === ".pdf"
-            ? "application/pdf"
-            : "application/octet-stream",
-        data: file.data || [],
-      }))
-      : undefined; // Rimuove l'allegato se undefined
+          file_name: file.name,
+          content_type:
+            file.extension === ".pdf"
+              ? "application/pdf"
+              : "application/octet-stream",
+          data: file.data || [],
+        }))
+      : undefined; 
   }
 
   if ("noCollective" in modifiedData) {
@@ -200,21 +201,24 @@ export const reverseOfferAdapterUpdate = (
     result.year = new Date(modifiedData.year).getFullYear();
   }
 
-  if ("days" in modifiedData) {
-    result.days = Number(modifiedData.days) || 0;
-  }
-
-  if ("approval_date" in modifiedData) {
-    result.approval_date = modifiedData.approval_date?.toISOString();
-  }
+    if ("days" in modifiedData) {
+      result.days = Number(modifiedData.days) || 0;
+    } else{
+      result.days = Number(baseData.days)
+    }
+    if ("rate" in modifiedData) {
+      result.rate = parseFloat(modifiedData.rate.toString()) || 0;
+    } else{
+      result.rate = parseFloat(baseData.rate.toString())
+    }
+  
   if ("start_date" in modifiedData) {
-    result.start_date = modifiedData.start_date?.toISOString()
-  }
-  if ("end_date" in modifiedData) {
-    result.end_date = modifiedData.end_date?.toISOString()
-  }
-  if ("orderNum" in modifiedData) {
-    result.orderNum = modifiedData.orderNum
+    result.ProjectData = {
+      start_date: modifiedData.start_date?.toISOString(),
+      end_date: modifiedData.end_date?.toISOString(),
+      orderNum: modifiedData.orderNum,
+      waitingForOrder: modifiedData.waitingForOrder || false,
+    };
   }
   return result;
 };
@@ -239,6 +243,8 @@ export const mapOutcomeTypeName = (name: string) => {
       return "Annullato";
     case "R":
       return "Rimandato";
+    case "W":
+      return "In Attesa";
   }
   return "Nessun esito";
 };

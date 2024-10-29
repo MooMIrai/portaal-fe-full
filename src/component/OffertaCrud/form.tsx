@@ -12,6 +12,7 @@ export const getFormOfferFields = (
     rowLocation: { id: number, name: string } | undefined,
     valueOnChange: (name: string, value: any) => void,
     isDaily: boolean,
+    isLupsum: boolean,
     combinedValueOnChangeBillyngType: (name: string, value: any) => void,
 ) => {
 
@@ -29,8 +30,6 @@ export const getFormOfferFields = (
     }
 
 
-
-    console.log("isdailu", isDaily)
 
     // Fields definition
     const fields: Record<string, any> = {
@@ -80,6 +79,7 @@ export const getFormOfferFields = (
             disabled: type === "view",
             validator: (value: any) => (value ? "" : "Selezionare un Cliente valido")
         },
+
         billing_type: {
             name: "billing_type",
             label: "Tipo Fatturazione",
@@ -92,7 +92,6 @@ export const getFormOfferFields = (
         },
 
     };
-
 
     fields.rate = {
         name: "rate",
@@ -124,9 +123,15 @@ export const getFormOfferFields = (
         type: "number",
         value: formData.amount,
         valueOnChange: valueOnChange,
-        required: false,
+        required: isLupsum,
         disabled: type === "view",
-        conditions: (formData: OfferModel) => formData.billing_type?.id !== "Daily"
+        conditions: (formData: OfferModel) => formData.billing_type?.id !== "Daily",
+        validator: (value: any) => {
+            if (!value && isLupsum) {
+                return "Il campo Importo è obbligatorio";
+            }
+            return "";
+        }
     };
     fields.title = {
         name: "title",
@@ -202,9 +207,18 @@ export const getFormOfferFields = (
         value: formData.description,
         disabled: type === "view"
     }
+    /*   fields.googleDriveLink= {
+          name: "googleDriveLink",
+          label: "Google Drive Link",
+          type: "urlInput",
+          value: formData.googleDriveLink,
+          valueOnChange: valueOnChange,
+          disabled: type === "view",
+          existingLink:"https://mail.google.com/chat/u/0/#chat/dm/uR59YcAAAAE"
+      }, */
     fields.attachment = {
         name: "attachment",
-        label: "Carica CV",
+        label: "Carica Offerta",
         type: "uploadMultipleFiles",
         withCredentials: false,
         disabled: type === "view",
@@ -213,11 +227,9 @@ export const getFormOfferFields = (
         onDownload: download && name_attachment ?
             (fileId: string, name: string) => handleDownload(fileId, name) : undefined,
         multiple: true,
-        /*    listItemUI:formData.existingFile, */
-        existingFile: formData.existingFile
+        existingFile: formData.existingFile,
+        isDroppable: true
     };
-
-    console.log("fields", fields)
     return fields;
 };
 
@@ -238,7 +250,7 @@ export const getFormCommesseFields = (formData: Projects | undefined, valueOnCha
             label: "Data di fine",
             type: "date",
             valueOnChange: valueOnChange,
-            value: formData?.end_date,
+            value: formData?.end_dateP,
 
         },
         orderNum: {
@@ -249,6 +261,14 @@ export const getFormCommesseFields = (formData: Projects | undefined, valueOnCha
             value: formData?.orderNum,
 
         },
+        waitingForOrder: {
+            name: "waitingForOrder",
+            label: "In Attesa di ordine",
+            type: "checkbox",
+            valueOnChange: valueOnChange,
+            showLabel: false,
+            value: formData?.waitingForOrder || false,
+        }
 
     };
     return fields;
