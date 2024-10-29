@@ -9,6 +9,7 @@ import NotificationActions from 'common/providers/NotificationProvider'
 import { chevronLeftIcon, chevronRightIcon } from 'common/icons';
 import SvgIcon from 'common/SvgIcon'
 import Button from 'common/Button'
+import Modal from 'common/Modal'
 import { AutoCompletePerson } from "./customFields";
 
 const RapportinoItemView = (props: any) => {
@@ -71,16 +72,22 @@ const RapportinoItemView = (props: any) => {
 }
 const RapportinoItem = withScheduler(RapportinoItemView)
 
-const defaultPerson = {id:0,name:'(Me)'};
+export interface RapportinoCalendarProps {
+  forcePerson?: { id: number, name: string };
+}
 
-export default function RapportinoCalendar() {
+export default function RapportinoCalendar(props: RapportinoCalendarProps) {
+  const defaultPerson = props.forcePerson || { id: 0, name: '(Me)' };
+
   const [date, setDate] = useState<Date>(new Date());
   const [data, setData] = useState<any>([]);
   const [holidays, setHolidays] = useState<Array<number>>();
   const [timeSheetsId, setTimeSheetsId] = useState<number>();
   const [mobileSelectedDate, setMobileSelectedDate] = useState<Date>();
+  const [showConsolidaConfirmModal, setShowConsolidaConfirmModal] = useState<boolean>(false);
+  const [isFinalized, setIsFinalized] = useState<boolean | undefined>(undefined);
 
-  const [userSelected,setUserSelected] = useState<{id:number,name:string}>(defaultPerson);
+  const [userSelected, setUserSelected] = useState<{ id: number, name: string }>(defaultPerson);
 
   const size = useWindowSize();
 
@@ -141,11 +148,14 @@ export default function RapportinoCalendar() {
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
 
-    TimesheetsService.findOrCreate(year, month, "",userSelected.id>0?userSelected.id:undefined)
+    TimesheetsService.findOrCreate(year, month, "", userSelected.id > 0 ? userSelected.id : undefined)
       .then((response) => {
         setTimeSheetsId(response.id);
         setHolidays(response.holidays);
         TimesheetsService.getSingleTimesheets(response.id, true).then((res) => {
+
+          setIsFinalized(!!res?.finalized);
+
           let activities: any = [];
 
           res?.TimesheetDetail.forEach((el) => {
@@ -176,13 +186,11 @@ export default function RapportinoCalendar() {
       });
   };
 
-  const handleDateChange =
-    (event: any) => {
-      //const dateObject = new Date(event.value);
-      //fetchTimesheet(dateObject);
-      setDate(event.value);
-    }
-    ;
+  const handleDateChange = (event: any) => {
+    //const dateObject = new Date(event.value);
+    //fetchTimesheet(dateObject);
+    setDate(event.value);
+  };
 
   useEffect(() => {
     fetchTimesheet();
@@ -190,7 +198,7 @@ export default function RapportinoCalendar() {
     return () => {
       document.removeEventListener('CalendarRefreshData', fetchTimesheet);
     }
-  }, [date,userSelected]);
+  }, [date, userSelected]);
 
 
 
@@ -267,6 +275,7 @@ export default function RapportinoCalendar() {
             fetchTimesheet()
           }}
           holidaysData={holidaysData}
+          editLocked={!!props.forcePerson || isFinalized}
         //onClose={closeModalCallback}
         //onActivitiesAdded={onActivitiesAdded}
         />
@@ -296,7 +305,9 @@ export default function RapportinoCalendar() {
       ret.style["color"] = 'red'
     }
     if (request) {
-      if (request.request.approved === true) {
+      if (isFinalized) {
+        ret.style["background"] = '#e9ecef';
+      } else if (request.request.approved === true) {
         ret.style["background"] = 'green';
       } else if (request.request && request.request.approved === false) {
         ret.style["background"] = 'red';
@@ -370,6 +381,7 @@ export default function RapportinoCalendar() {
         document.dispatchEvent(new CustomEvent("CalendarRefreshData"));
       }}
       holidaysData={holidaysData}
+      editLocked={!!props.forcePerson || isFinalized}
 
     //onClose={closeModalCallback}
     //onActivitiesAdded={onActivitiesAdded}
@@ -378,21 +390,51 @@ export default function RapportinoCalendar() {
 
   return (
     <>
-      <div style={{ display: 'flex', justifyContent: "space-between", marginBottom: 10 }}>
+      {!props.forcePerson ? <div style={{ display: 'flex', flexDirection: size.width && size.width >= 768 ? 'row' : 'column', justifyContent: "space-between", marginBottom: 10 }}>
         <p>Tocca una data per inserire le ore di attività</p>
-        <div style={{ display: 'flex', justifyContent: "space-between",gap:15}}>
-          <div style={{width:300}}>Utente Selezionato <AutoCompletePerson label="" value={userSelected} onChange={(e)=>{
-          if(!e.value){
-            setUserSelected(defaultPerson)
-          }else{
-            setUserSelected(e.value)
-          }
-          
-        }} /></div>
-        <Button themeColor="success" onClick={() => TimesheetsService.finalizeTimesheet(timeSheetsId || 0)}>Consolida</Button>
+        <div style={{ display: 'flex', justifyContent: "space-between", alignItems: 'flex-end', gap: 15 }}>
+          <div style={{ width: 300 }}>Utente Selezionato <AutoCompletePerson label="" value={userSelected} onChange={(e) => {
+            if (!e.value) {
+              setUserSelected(defaultPerson)
+            } else {
+              setUserSelected(e.value)
+            }
+          }} />
+          </div>
+          {isFinalized != undefined && <Button style={{ maxHeight: 'min-content' }} themeColor="success" onClick={() => setShowConsolidaConfirmModal(true)}>{isFinalized ? "Deconsolida" : "Consolida"}</Button>}
         </div>
-        
-      </div>
+
+      </div> : null}
+
+      <Modal
+        title={isFinalized ? "Deconsolida" : "Consolida"}
+        callToAction="Conferma"
+        showModalFooter
+        height={250}
+        isOpen={!!showConsolidaConfirmModal}
+        onClose={() => setShowConsolidaConfirmModal(false)}
+        onSubmit={() => {
+          if (!isFinalized) {
+            TimesheetsService.finalizeTimesheet(timeSheetsId || 0).then(res => {
+              if (res) {
+                setIsFinalized(true);
+              }
+            }).finally(() => {
+              setShowConsolidaConfirmModal(false);
+            })
+          } else {
+            TimesheetsService.deconsolidateTimesheet(timeSheetsId || 0).then(res => {
+              if (res) {
+                setIsFinalized(false);
+              }
+            }).finally(() => {
+              setShowConsolidaConfirmModal(false);
+            });
+          }
+        }}
+      >
+        L'operazione è irreversibile.
+      </Modal>
 
       {size.width && size.width >= 768 ? (
         <Calendar
@@ -408,6 +450,8 @@ export default function RapportinoCalendar() {
           contentModal={renderContent}
           item={RapportinoItem}
           holidays={holidays}
+          disableDrag={!!props.forcePerson}
+          isFinalized={!props.forcePerson && isFinalized}
         />
       ) : (<>
         <CalendarMobile
@@ -436,6 +480,7 @@ export default function RapportinoCalendar() {
           onChange={(ev) => {
             setMobileSelectedDate(ev.value);
           }}
+          isFinalized={!props.forcePerson && isFinalized}
         />
         {
           mobileSelectedDate && getCrudMobile()
