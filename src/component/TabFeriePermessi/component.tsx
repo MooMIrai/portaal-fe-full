@@ -7,6 +7,7 @@ import styles from "./styles.module.scss";
 import { PFMData } from "./pfmDataModel";
 import { PFMService } from "../../services/pfmService";
 import { checkOutlineIcon, xOutlineIcon, cancelOutlineIcon } from "@progress/kendo-svg-icons";
+import HoursDaysFilterCell from "common/HoursDaysFilterCell"
 
 const FeriePermessiSection = () => {
   const [refreshRequests, setRefreshRequests] = useState<number>(0);
@@ -41,7 +42,7 @@ const FeriePermessiSection = () => {
         label: 'Tipo richiesta',
         sortable: true,
         type: 'number',
-        filter: 'number',
+        filter: 'text',
       },
       {
         key: 'start_date',
@@ -51,18 +52,12 @@ const FeriePermessiSection = () => {
         filter: 'date'
       },
       {
-        key: 'end_date',
-        label: 'Fine',
+        key: 'hours',
+        label: 'Durata',
         sortable: true,
-        type: 'date',
-        filter: 'date'
-      },
-      {
-        key: 'TimesheetDetail.0.hours',
-        label: 'Durata (ore)',
-        sortable: true,
+        filter:"numeric",
         type: 'number',
-        filter: 'number'
+        filterCell: (props) => <HoursDaysFilterCell {...props} />
       },
     ]
     if (isArchive) {
@@ -81,13 +76,55 @@ const FeriePermessiSection = () => {
     setSelectedTab(e.selected);
   };
 
-  const getData = (pagination: { pageNum: number, pageSize: number }) => {
+  const getData = (pagination: any, filtering: any, sorting: any[]) => {
     if (typeof pagination.pageNum !== "number") {
-      pagination.pageNum = 0
+      pagination.pageNum = 0;
     }
+  
+    return PFMService.getRequests(
+      selectedTab === 0 ? "new" : "archived",
+      pagination.currentPage,
+      pagination.pageSize,
+      filtering,
+      sorting,
+      true
+    ).then((response: any) => {
+      const transformedData = response.data.map((dataItem: any) => {
+        let hours = '';
+        const timeUnit = dataItem.ActivityType.time_unit; 
+  
+        if (dataItem.TimesheetDetail.length > 0) {
+          const totalHours = dataItem.TimesheetDetail[0].hours; 
+  
+          if (timeUnit === "D") {
+            const fullDays = Math.floor(totalHours / 8); 
+            const remainingHours = totalHours % 8; 
+  
+            if (fullDays > 0 && remainingHours > 0) {
+              hours = `${fullDays} giorno/i e ${remainingHours} ora/e`;
+            } else if (fullDays > 0) {
+              hours = `${fullDays} giorno/i`;
+            } else {
+              hours = `${remainingHours} ora/e`;
+            }
+          } else {
+            hours = `${totalHours} ora/e`;
+          }
+        }
+  
+        // Ritorna l'elemento dati con la nuova proprietà 'hours'
+        return { ...dataItem, hours }; 
+      });
+  
+      return {
+        ...response,
+        data: transformedData
+      };
+    });
+  };
+  
 
-    return PFMService.getRequests(selectedTab === 0 ? "new" : "archived", pagination, true);
-  }
+  
 
   useEffect(() => {
     if (selectedTab === 0) {
@@ -228,6 +265,7 @@ const FeriePermessiSection = () => {
             customRowActions={[
               {
                 icon: checkOutlineIcon,
+                themeColor: 'success',
                 tooltip: "Approva",
                 modalContent: (dataItem, closeModal, refreshTable) => {
                   console.log(dataItem);
@@ -247,6 +285,7 @@ const FeriePermessiSection = () => {
               {
                 icon: xOutlineIcon,
                 tooltip: "Rifiuta",
+                themeColor: 'error',
                 modalContent: (dataItem, closeModal, refreshTable) => {
                   console.log(dataItem);
                   return (
@@ -283,6 +322,7 @@ const FeriePermessiSection = () => {
             customRowActions={[
               {
                 icon: cancelOutlineIcon,
+                themeColor: 'warning',
                 tooltip: "Annulla approvazione",
                 modalContent: (dataItem, closeModal, refreshTable) => {
                   console.log(dataItem);

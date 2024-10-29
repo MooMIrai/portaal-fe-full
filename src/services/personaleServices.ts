@@ -38,6 +38,26 @@ class CrudGenericServiceC {
       throw error;
     }
   };
+
+  getSkillArea = async (
+    include?: boolean
+  ) => {
+    try {
+      const params = {
+        include,
+      };
+
+      const response = await client.post(
+        `api/v1/skillArea`,
+        { params }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching resources:", error);
+      throw error;
+    }
+  };
+  
   
   fetchResources = async (
     resourceType: string,
@@ -106,22 +126,10 @@ class CrudGenericServiceC {
     }
   };
   
-   getCVaI = async (file) => {
-    const formData = new FormData();
-    formData.append('file', file); 
+   getCVaI = (file) => client.post('/api/v1/ai/upload_cv', {Attachment:file}).then(res=>res.data); 
+
+  getSkillAI = (file) =>  client.post('/api/v1/ai/upload_cv_ts', {Attachment:file}).then(res=>res.data);
   
-    try {
-      const response = await client.post('/api/v1/ai/upload_cv', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data', 
-        },
-      });
-      return response.data;
-    } catch (error) {
-      console.error("Error uploading file:", error);
-      throw error;
-    }
-  };
   
   fetchResource = async (resourceType: string, id: number) => {
     try {
@@ -175,6 +183,7 @@ class CrudGenericServiceC {
     console.error("Error fetching resources:", error);
     throw error;
   }
+
 
 }
 

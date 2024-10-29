@@ -3,19 +3,31 @@ import client from "common/services/BEService";
 class PFMServiceC {
   getRequests = async (
     leaveType: "new" | "archived",
-    filters?: any,
+    pageNum: number,
+    pageSize: number,
+    filtering?: any,
+    sorting?: any,
     include?: boolean,
   ) => {
     try {
-      let params = filters ? `?pageNum=${filters.pageNum + 1}&pageSize=${filters.pageSize}&include=${!!include}` : "";
-      const response = await client.post(`api/v1/leave_requests/type/${leaveType}${params || ""}`);
+      const params = {
+        pageNum,
+        pageSize,
+        include,
+      };
+
+      const response = await client.post(
+        `api/v1/leave_requests/type/${leaveType}`,
+        { filtering, sorting },
+        { params }
+      );
       return response.data;
     } catch (error) {
       console.error("Error fetching resources:", error);
       throw error;
     }
   };
-
+  
   approveRejectRequest = async (
     requestId: number,
     approve: boolean,

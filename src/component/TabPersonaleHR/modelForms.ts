@@ -23,6 +23,14 @@ export interface AnagraficaData {
       }];
       attachment_id?:number[];
       existingFile?: { name: string, id:string };
+      skills?:{
+        id: number;
+        name: string;
+        code?: string;
+        seniority?:string;
+        description?: string;
+        skillCategory_id?: number;
+      }[];
     cap?: number;
     cellulare?: number;
     telefonoCasa?: number;
