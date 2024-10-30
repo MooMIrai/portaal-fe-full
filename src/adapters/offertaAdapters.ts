@@ -91,9 +91,9 @@ export function fromOfferModelToOfferBEModel(
 ): OfferBEModel {
   return {
     id: offerModel.id,
-    offer_name: offerModel.protocol, 
-    project_code:offerModel.protocol,
-    name: offerModel.title, 
+    offer_name: offerModel.protocol,
+    project_code: offerModel.protocol,
+    name: offerModel.title,
     Attachment: offerModel.attachment
       ? offerModel.attachment.map((file) => ({
           file_name: file.name,
@@ -104,27 +104,28 @@ export function fromOfferModelToOfferBEModel(
           data: file.data || [],
         }))
       : undefined,
-    deadline_date: offerModel.end_date?.toISOString() || undefined, 
-    other_details: offerModel.description || "", 
+    deadline_date: offerModel.end_date?.toISOString() || undefined,
+    other_details: offerModel.description || "",
     rate: offerModel.rate ? parseFloat(offerModel.rate.toString()) : 0,
     amount: offerModel.amount ? parseFloat(offerModel.amount.toString()) : 0,
     customer_id: offerModel.customer?.id,
     location_id: offerModel.location?.id || 1,
     accountManager_id: offerModel.accountManager?.id,
     project_type_id: offerModel.project_type?.id,
-    billing_type: offerModel.billing_type ? offerModel.billing_type.id : "", 
+    billing_type: offerModel.billing_type ? offerModel.billing_type.id : "",
     OutcomeType: offerModel.outcome_type?.id,
     year: offerModel.year ? offerModel.year.getFullYear() : undefined,
     days: Number(offerModel.days) || 0,
     noCollective: offerModel.NoCollective,
     approval_date: offerModel.approval_date?.toISOString() || undefined,
-    ProjectData: offerModel.start_date ? {
+    ProjectData: offerModel.start_date
+      ? {
           start_date: offerModel.start_date?.toISOString() || "",
           end_date: offerModel.end_dateP?.toISOString() || undefined,
           orderNum: offerModel.orderNum || undefined,
           waitingForOrder: offerModel.waitingForOrder || false,
-        } : undefined
-      
+        }
+      : undefined,
   };
 }
 
@@ -134,7 +135,7 @@ export const reverseOfferAdapterUpdate = (
   baseData: OfferModel
 ): Partial<OfferBEModel> => {
   const result: Partial<OfferBEModel> = {}; //rende tutte le proprietà opzionali
-
+  console.log();
   // Mappatura dei campi base
   if ("protocol" in modifiedData) {
     result.offer_name = modifiedData.protocol;
@@ -190,7 +191,7 @@ export const reverseOfferAdapterUpdate = (
               : "application/octet-stream",
           data: file.data || [],
         }))
-      : undefined; 
+      : undefined;
   }
 
   if ("noCollective" in modifiedData) {
@@ -201,17 +202,19 @@ export const reverseOfferAdapterUpdate = (
     result.year = new Date(modifiedData.year).getFullYear();
   }
 
+  if ("days" in modifiedData || "rate" in modifiedData) {
     if ("days" in modifiedData) {
       result.days = Number(modifiedData.days) || 0;
-    } else{
-      result.days = Number(baseData.days)
+    } else {
+      result.days = Number(baseData.days);
     }
     if ("rate" in modifiedData) {
       result.rate = parseFloat(modifiedData.rate.toString()) || 0;
-    } else{
-      result.rate = parseFloat(baseData.rate.toString())
+    } else {
+      result.rate = parseFloat(baseData.rate?.toString());
     }
-  
+  }
+
   if ("start_date" in modifiedData) {
     result.ProjectData = {
       start_date: modifiedData.start_date?.toISOString(),
