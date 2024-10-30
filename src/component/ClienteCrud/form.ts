@@ -32,6 +32,7 @@ export const getFormCustomerFields = (formData: CustomerModel, type:string) => {
             label: "Ragione sociale",
             type: "text",
             value: formData.name || "",
+            required: true,
             disabled:type === "view",
             validator: (value: any) => optional(value,onlyLettersValidator)
         },
