@@ -25,7 +25,7 @@ export const getFormCustomerFields = (formData: CustomerModel, type:string) => {
             value: formData.customer_code || "",
             required: true,
             disabled:type === "view",
-            validator: (value: any) => value ? "" : "Il campo sede è obbligatorio",
+            validator: (value: any) => value ? "" : "Il campo Codice Cliente è obbligatorio",
         },
         name: {
             name: "name",
@@ -34,7 +34,7 @@ export const getFormCustomerFields = (formData: CustomerModel, type:string) => {
             value: formData.name || "",
             required: true,
             disabled:type === "view",
-            validator: (value: any) => optional(value,onlyLettersValidator)
+            validator: (value: any) => value ? "" : "Il campo Ragione Sociale è obbligatorio",
         },
         vatNumber: {
             name: "vatNumber",
