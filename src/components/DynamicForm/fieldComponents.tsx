@@ -17,6 +17,7 @@ import UploadSingleFileComponent from "../UpLoadSingleFile/component";
 import { UploadListItemProps } from "@progress/kendo-react-upload";
 import FileService from "../../services/FileService";
 import { Loader } from "@progress/kendo-react-indicators";
+import UploadMultiple from "../UploadMultiple/component";
 
 const TextInputC = (
   fieldRenderProps: FieldRenderProps & { disabled?: boolean }
@@ -196,6 +197,46 @@ const UploadMutilpleInputC = (
     </div>
   );
 };
+
+const UploadMutilpleInputNew = (
+  fieldRenderProps: FieldRenderProps & {
+    disabled?: boolean; label?: string, accept?: string, autoUpload?: boolean, isDroppable?: boolean, onDownload?: (() => Promise<{
+      fileId: string;
+      fileName: string;
+    }>) | undefined | undefined, multiple?: boolean, onFileDrop?: ((files: File[]) => void), listItemUI?: React.ComponentType<UploadListItemProps> | undefined
+  }
+) => {
+  const {
+    validationMessage,
+    visited,
+    disabled,
+    required,
+    value,
+    label,
+    files,
+    onDownload,
+    multiple,
+    listItemUI,
+    onFileDrop,
+    isDroppable,
+    existingFile,
+    ...others
+  } = fieldRenderProps;
+
+  
+  return (
+    <div>
+      <UploadMultiple
+        existingFiles={existingFile}
+        isReadOnly={!!disabled}
+        onChange={(value)=>{
+          fieldRenderProps.onChange({value})
+        }}
+      />
+    </div>
+  );
+};
+
 const UploadSingleFIleInputC = (
   fieldRenderProps: FieldRenderProps & {
     disabled?: boolean; label?: string, accept?: string, autoUpload?: boolean, onDownload?: (() => Promise<{
@@ -217,6 +258,7 @@ const UploadSingleFIleInputC = (
     existingFile,
     ...others
   } = fieldRenderProps;
+  
   const handleFileUpload = (fileDataArray: any[]) => {
     fieldRenderProps.onChange({ value: fileDataArray });
   };
@@ -455,5 +497,5 @@ export const CheckboxInput = withField(CheckboxInputC);
 export const YearInput = withField(YearInputC);
 export const ButtonInput = withField(ButtonInputC);
 export const UploadSingleFileInput = withField(UploadSingleFIleInputC)
-export const UploadMultipleFilesInput = withField(UploadMutilpleInputC)
+export const UploadMultipleFilesInput = withField(UploadMutilpleInputNew)
 export const UrlInput = withField(UrlInputC)

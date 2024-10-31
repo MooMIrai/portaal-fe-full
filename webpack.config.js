@@ -35,6 +35,7 @@ const mfeConfig = {
     "./TimePicker":"./src/components/TimePicker/component",
     "./SvgIcon":"./src/components/SvgIcon/component",
     "./Fields":"./src/components/DynamicForm/fieldComponents",
+    "./UploadMultiple":"./src/components/UploadMultiple/component",
 
     "./SignDocumentScanner" : "./src/components/SignDocument/component",
 
