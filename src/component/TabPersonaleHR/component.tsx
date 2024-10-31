@@ -430,15 +430,6 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
   }, [formAnagraficaData, triggerUpdate]);
 
 
-  const handleDownload = async () => {
-    return {
-      fileId: row.anagrafica.attachment_id?.[0].id,
-      fileName: exstingFile?.[0].name,
-    }
-
-  };
-
-
 
 
   const handleNewContract = () => {
