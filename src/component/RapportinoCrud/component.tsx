@@ -30,7 +30,7 @@ interface RapportinoCrudProps {
     hasHoliday: boolean;
     closeModal: () => void;
     holidaysData: Record<number, Record<string, { hours: number, name: string, approved: Date }[]>>;
-
+    editLocked?: boolean;
 }
 
 function RapportinoInput(props: PropsWithChildren<{
@@ -215,7 +215,7 @@ export default function RapportinoCrud(props: RapportinoCrudProps) {
                             {data.productive.map((res) => {
                                 return <RapportinoInput
                                     type='H'
-                                    disabled={!!disableExcept && disableExcept !== res.Activity.id}
+                                    disabled={!!props.editLocked || (!!disableExcept && disableExcept !== res.Activity.id)}
                                     value={values ? values[res.Activity.id] : 0}
                                     key={res.Activity.id}
                                     id={res.Activity.id}
@@ -235,7 +235,7 @@ export default function RapportinoCrud(props: RapportinoCrudProps) {
                             {data.unproductive.map((res) => {
                                 return <RapportinoInput
                                     type='H'
-                                    disabled={!!disableExcept && disableExcept !== res.Activity.id}
+                                    disabled={!!props.editLocked || (!!disableExcept && disableExcept !== res.Activity.id)}
                                     value={values ? values[res.Activity.id] : 0}
                                     key={res.Activity.id}
                                     id={res.Activity.id}
@@ -256,7 +256,7 @@ export default function RapportinoCrud(props: RapportinoCrudProps) {
                             <div>
                                 {data.holidays.map((res) => {
                                     return <RapportinoInput
-                                        disabled={(!!disableExcept && disableExcept !== res.Activity.id) || (data.holidays.some(res => res.Activity.ActivityType.time_unit === 'D' && isHolidayApproved(res.Activity.id)))}
+                                        disabled={!!props.editLocked || (!!disableExcept && disableExcept !== res.Activity.id) || (data.holidays.some(res => res.Activity.ActivityType.time_unit === 'D' && isHolidayApproved(res.Activity.id)))}
                                         type={res.Activity.ActivityType.time_unit}
                                         value={values ? values[res.Activity.id] : 0}
                                         key={res.Activity.id}
@@ -279,19 +279,25 @@ export default function RapportinoCrud(props: RapportinoCrudProps) {
                 }
             </Accordion>
         </div>
-        <div className={styles.footer}>
-            <Button themeColor="success" onClick={() => {
-                if (props.hasHoliday) {
-                    NotificationActions.openConfirm('Vuoi includere i giorni festivi compresi nella tua selezione?',
-                        () => handleSave(true),
-                        'Conferma azione',
-                        () => handleSave(false)
-                    )
-                } else {
-                    handleSave(false)
-                }
-            }}>Conferma</Button>
-        </div>
+        {
+            !props.editLocked ? <div className={styles.footer}>
+                <Button themeColor="success" onClick={() => {
+                    if (props.hasHoliday) {
+                        NotificationActions.openConfirm('Vuoi includere i giorni festivi compresi nella tua selezione?',
+                            () => handleSave(true),
+                            'Conferma azione',
+                            () => handleSave(false)
+                        )
+                    } else {
+                        handleSave(false)
+                    }
+                }}>Conferma</Button>
+            </div> : <div className={styles.footer}>
+                <Button themeColor="primary" onClick={() => {
+                    props.closeModal();
+                }}>Chiudi</Button>
+            </div>
+        }
 
     </div>
 

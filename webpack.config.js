@@ -18,6 +18,7 @@ const mfeConfig = (path, mode) => ({
   exposes: {
     "./Index": "./src/MfeInit",
     "./Routes": "./src/App",
+    "./RapportinoCalendar": "./src/component/RapportinoCalendar/component",
   },
   shared: {
     ...deps,
