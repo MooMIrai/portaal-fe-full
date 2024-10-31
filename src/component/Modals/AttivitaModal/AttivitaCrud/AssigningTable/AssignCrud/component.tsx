@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { progettoService } from "../../../services/progettoServices";
 import DynamicForm from "common/Form";
 
-export interface DatiOrdineModalProps {
+export interface AssignCrudProps {
   dataItem: any;
   closeModal: Function;
   refreshTable: Function;
@@ -11,36 +10,31 @@ export interface DatiOrdineModalProps {
   fields: any[];
 }
 
-const DatiOrdineModal = (props: DatiOrdineModalProps) => {
+const AssignCrud = (props: AssignCrudProps) => {
   const [data, setData] = useState<any | undefined>(undefined);
 
   useEffect(() => {
-    progettoService.getProjectById(
-      props.dataItem.id,
-      true
-    ).then(res => setData(res));
-  }, []);
+    if (props.dataItem) {
+      setData({
+        ...props.dataItem,
+        person_id: { id: props.dataItem.Person.id, name: props.dataItem.Person.firstName + " " + props.dataItem.Person.lastName },
+      })
+    }
+  }, [props.dataItem]);
 
   return (
     <div>
-      <h3>Dettagli per {props.dataItem.offer_name}</h3>
+      <h3>Dettagli per {data ? data.Person.firstName + " " + data.Person.lastName : ""}</h3>
       {data ? <DynamicForm
         submitText={"Salva"}
         customDisabled={false}
-        formData={{
-          ...data,
-          offer_id: { id: data.offer_id, name: data.Offer.name }
-        }}
+        formData={data}
         fields={Object.values(props.fields).filter((e: any) => {
           return e.name !== "id"
         }).map((e: any) => {
           return {
             ...e,
-            disabled: e.name === "user_created" ||
-              e.name === "user_modified" ||
-              e.name === "date_modified" ||
-              e.name === "date_created" ||
-              e.name === "offer_id"
+            disabled: e.name === "person_id" || e.name === "activity_id"
           }
         })}
         addedFields={props.addedFields}
@@ -48,11 +42,11 @@ const DatiOrdineModal = (props: DatiOrdineModalProps) => {
         extraButton={true}
         extraBtnAction={props.closeModal}
         onSubmit={(dataItem: { [name: string]: any }) => {
-          props.handleFormSubmit(dataItem, props.refreshTable, dataItem.id, props.closeModal, true);
+          props.handleFormSubmit(dataItem, props.refreshTable, props.closeModal, true);
         }}
       /> : null}
     </div>
   );
 }
 
-export default DatiOrdineModal;
+export default AssignCrud;

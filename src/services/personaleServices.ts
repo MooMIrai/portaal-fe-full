@@ -132,6 +132,10 @@ class CrudGenericServiceC {
     return client.get(`api/v1/accounts/findCOM?search=${text}`).then(res => res.data);
   }
 
+  searchAccount = (text: string) => {
+    return client.get(`api/v1/accounts/findByName?search=${text}`).then(res => res.data);
+  }
+
 }
 
 export const CrudGenericService = new CrudGenericServiceC();

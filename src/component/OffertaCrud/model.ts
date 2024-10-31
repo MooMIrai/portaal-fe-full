@@ -9,10 +9,10 @@ export interface OfferTypeBE {
 export type FilesModel = {
   file_name?: string;
   uniqueRecordIdentifier?: string;
-  content_type?: string; // Estensione del file, opzionale
-  data?: number[]; // Array di byte del contenuto del file
-  size?: number; // Dimensione del file
-  uid?: string; // Identificativo univoco del file
+  content_type?: string; 
+  data?: number[]; 
+  size?: number; 
+  uid?: string; 
 };
 export interface OfferBEModel {
   id?: number;
@@ -58,7 +58,6 @@ export interface OfferModel {
   id?: number;
   protocol: string;
   title: string;
-  
   end_date?: Date;
   creation_date?: Date;
   description: string;
@@ -84,7 +83,7 @@ export interface OfferModel {
     id?: string;
     name?: string;
     extension?: string;
-    data?: number[]; // Array di byte se necessario
+    data?: number[]; 
   }>;
   attachment_id?: number;
   orderNum?: string;
@@ -104,6 +103,8 @@ export interface ProjectsBeModel {
   end_date?: string;
   orderNum?: string;
   waitingForOrder?: boolean;
+  googleDriveLink?:string;
+  existingLink?:string;
 }
 export interface Projects {
   start_date: Date;

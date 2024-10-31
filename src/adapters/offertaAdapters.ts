@@ -1,3 +1,4 @@
+import { base } from "@progress/kendo-react-common";
 import { OfferBEModel, OfferModel } from "../component/OffertaCrud/model";
 
 export type locationOption = {
@@ -44,7 +45,6 @@ export function fromOfferBEModelToOfferModel(
       id: offerBE.customer_id || 0,
       name: offerBE.Customer ? offerBE.Customer.name : "",
     },
-
     creation_date: offerBE.date_created
       ? new Date(offerBE.date_created)
       : undefined,
@@ -59,13 +59,11 @@ export function fromOfferBEModelToOfferModel(
         " " +
         offerBE.AccountManager?.Person.lastName,
     },
-
     project_type_id: offerBE.project_type_id || 0,
     project_type: offerBE.ProjectType
       ? { id: offerBE.ProjectType.id, name: offerBE.ProjectType.description }
       : undefined,
     location_id: offerBE.location_id,
-
     billing_type: {
       id: offerBE.billing_type,
       name: mapBillingTypeName(offerBE.billing_type),
@@ -103,28 +101,30 @@ export function fromOfferModelToOfferBEModel(
     location_id: offerModel.location?.id || 1,
     accountManager_id: offerModel.accountManager?.id,
     project_type_id: offerModel.project_type?.id,
-    billing_type: offerModel.billing_type ? offerModel.billing_type.id : "", // hypothetical method for billing type conversion
+    billing_type: offerModel.billing_type ? offerModel.billing_type.id : "",
     OutcomeType: offerModel.outcome_type?.id,
     year: offerModel.year ? offerModel.year.getFullYear() : undefined,
     days: Number(offerModel.days) || 0,
     noCollective: offerModel.NoCollective,
     approval_date: offerModel.approval_date?.toISOString() || undefined,
-    ProjectData: {
+    ProjectData: offerModel.start_date
+      ? {
           start_date: offerModel.start_date?.toISOString() || "",
           end_date: offerModel.end_dateP?.toISOString() || undefined,
-          orderNum: offerModel.orderNum || "",
+          orderNum: offerModel.orderNum || undefined,
           waitingForOrder: offerModel.waitingForOrder || false,
         }
-      
+      : undefined,
   };
 }
 
 // Funzione per convertire un oggetto modificato `OfferModel` in un oggetto `OfferBEModel`
 export const reverseOfferAdapterUpdate = (
-  modifiedData: Record<string, any>
+  modifiedData: Record<string, any>,
+  baseData: OfferModel
 ): Partial<OfferBEModel> => {
   const result: Partial<OfferBEModel> = {}; //rende tutte le proprietà opzionali
-
+  console.log();
   // Mappatura dei campi base
   if ("protocol" in modifiedData) {
     result.project_code = modifiedData.protocol;
@@ -136,10 +136,6 @@ export const reverseOfferAdapterUpdate = (
 
   if ("description" in modifiedData) {
     result.other_details = modifiedData.description;
-  }
-
-  if ("rate" in modifiedData) {
-    result.rate = parseFloat(modifiedData.rate.toString()) || 0;
   }
 
   if ("amount" in modifiedData) {
@@ -186,13 +182,19 @@ export const reverseOfferAdapterUpdate = (
     result.year = new Date(modifiedData.year).getFullYear();
   }
 
-  if ("days" in modifiedData) {
-    result.days = Number(modifiedData.days) || 0;
+  if ("days" in modifiedData || "rate" in modifiedData) {
+    if ("days" in modifiedData) {
+      result.days = Number(modifiedData.days) || 0;
+    } else {
+      result.days = Number(baseData.days);
+    }
+    if ("rate" in modifiedData) {
+      result.rate = parseFloat(modifiedData.rate.toString()) || 0;
+    } else {
+      result.rate = parseFloat(baseData.rate?.toString());
+    }
   }
 
-  if ("approval_date" in modifiedData) {
-    result.approval_date = modifiedData.approval_date?.toISOString();
-  }
   if ("start_date" in modifiedData) {
     result.ProjectData = {
       start_date: modifiedData.start_date?.toISOString(),

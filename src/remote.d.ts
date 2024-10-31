@@ -19,6 +19,8 @@ declare module "common/SvgIcon"
 declare module "common/services/BEService";
 declare module "common/services/BaseHTTPService";
 
+declare module "hr/RapportinoCalendar";
+
 declare module "common/hoc/Field"
 declare module "common/hoc/AutoComplete"
 declare module "common/icons"

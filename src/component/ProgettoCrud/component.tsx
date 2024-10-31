@@ -19,6 +19,7 @@ import styles from "./styles.module.scss";
 import DatiOrdineModal from "../Modals/DatiOrdineModal/component";
 import SalModal from "../Modals/SalModal/component";
 import AttivitaModal from "../Modals/AttivitaModal/component";
+import CostiCommessaModal from "../Modals/CostiCommessaModal/component";
 
 const determineFieldType = (
   value: any
@@ -45,6 +46,7 @@ const determineFieldType = (
 
 const ProjectTable = (props: { customer: number }) => {
   const [innerCRUDFields, setInnerCRUDFields] = useState<any>({});
+  const [innerCRUDFieldsUpdate, setInnerCRUDFieldsUpdate] = useState<any>({});
 
   const loadData = async (pagination: any, filter: any, sorting: any[]) => {
     const include = true;
@@ -75,9 +77,9 @@ const ProjectTable = (props: { customer: number }) => {
     };
   };
 
-  const loadModel = async () => {
+  const loadModel = async (update?: boolean) => {
     try {
-      const resources = await progettoService.getGridModel();
+      const resources = !update ? await progettoService.getCreateDTOModel() : await progettoService.getUpdateDTOModel();
       if (!resources) {
         throw new Error("No resources found");
       }
@@ -87,27 +89,48 @@ const ProjectTable = (props: { customer: number }) => {
         /* .filter((item: any) => !excludedKeys.includes(item.name)) */
         .forEach((item: any) => {
           const name = item.name === "offer_id" ? 'offerte-selector' : item.name;
-          newModel[name] = {
-            name: item.name,
-            type: item.name === "offer_id" ? 'offerte-selector' : determineFieldType(item.type),
-            label: item.name === "offer_id" ? "Offerta" : item.name.charAt(0).toUpperCase() + item.name.slice(1),
-            value: "",
-            disabled: item.readOnly,
-            required: item.required,
-            options: item.type.toLocaleLowerCase() === "projectstate" ? ["OPEN", "CLOSED", "INPROGRESS"] : [],
-            showLabel: item.type.toLocaleLowerCase() !== "projectstate" && item.type.toLocaleLowerCase() !== 'boolean'
-          };
+          if (item.nested) {
+            item.nested.forEach((i: any) => {
+              newModel[i.name] = {
+                name: i.name,
+                type: i.name === "offer_id" ? 'offerte-selector' : determineFieldType(i.type),
+                label: i.name === "offer_id" ? "Offerta" : i.name.charAt(0).toUpperCase() + i.name.slice(1),
+                value: "",
+                disabled: i.readOnly,
+                required: i.required,
+                options: i.enum || [],
+                showLabel: !i.enum && i.type.toLocaleLowerCase() !== 'boolean',
+                parentObject: item.name,
+              };
+            });
+          } else {
+            newModel[name] = {
+              name: item.name,
+              type: item.name === "offer_id"
+                ? 'offerte-selector'
+                : item.enum
+                  ? 'select'
+                  : determineFieldType(item.type),
+              label: item.name === "offer_id" ? "Offerta" : item.name.charAt(0).toUpperCase() + item.name.slice(1),
+              value: "",
+              disabled: item.readOnly,
+              required: item.required,
+              options: item.enum || [],
+              showLabel: !item.enum && item.type.toLocaleLowerCase() !== 'boolean'
+            };
+          }
         });
 
-      setInnerCRUDFields(newModel);
+      !update ? setInnerCRUDFields(newModel) : setInnerCRUDFieldsUpdate(newModel);
     } catch (error) {
       console.error("Error loading fields:", error);
-      setInnerCRUDFields({});
+      !update ? setInnerCRUDFields({}) : setInnerCRUDFieldsUpdate({});
     }
   };
 
   useEffect(() => {
     loadModel();
+    loadModel(true);
   }, []);
 
   const handleFormSubmit = (
@@ -117,11 +140,39 @@ const ProjectTable = (props: { customer: number }) => {
     closeModal: () => void,
     isCreate?: boolean,
   ) => {
+    //add parent object structure if needed
+    let newFormData = {};
+
+    Object.keys(formData).forEach(k => {
+      let parent = innerCRUDFields[k]?.parentObject;
+      if (parent && !newFormData[parent]) {
+        newFormData[parent] = { [k]: formData[k] }
+      } else if (parent && newFormData[parent]) {
+        newFormData[parent] = {
+          ...newFormData[parent],
+          [k]: formData[k]
+        }
+      } else {
+        newFormData[k] = formData[k];
+      }
+    });
+
+    newFormData["offer_id"] = newFormData["offer_id"]?.id;
+    if (newFormData["rate"]) {
+      newFormData["rate"] = parseInt(newFormData["rate"]);
+    }
+    if (newFormData["amount"]) {
+      newFormData["amount"] = parseInt(newFormData["amount"]);
+    }
+    if (newFormData["workedDays"]) {
+      newFormData["workedDays"] = parseInt(newFormData["workedDays"]);
+    }
+
     let promise: Promise<any> | undefined = undefined;
     if (!isCreate) {
-      promise = progettoService.updateResource(id, formData);
+      promise = progettoService.updateResource(id, newFormData);
     } else {
-      promise = progettoService.createResource(formData);
+      promise = progettoService.createResource(newFormData);
     }
 
     if (promise) {
@@ -144,9 +195,9 @@ const ProjectTable = (props: { customer: number }) => {
       getData={loadData}
       columns={columns}
       resizableWindow={true}
-      initialHeightWindow={800}
+      initialHeightWindow={1000}
       draggableWindow={true}
-      initialWidthWindow={900}
+      initialWidthWindow={1200}
       resizable={true}
       actions={() => ["create"]}
       formCrud={(row, type, closeModalCallback, refreshTable) => {
@@ -157,7 +208,10 @@ const ProjectTable = (props: { customer: number }) => {
               customDisabled={false}
               formData={row}
               fields={Object.values(innerCRUDFields).filter((e: any) => {
-                return e.name !== "id"
+                return e.name !== "id" && e.name !== "date_created" &&
+                  e.name !== "date_modified" &&
+                  e.name !== "user_created" &&
+                  e.name !== "user_modified"
               }).map((e: any) => {
                 return {
                   ...e,
@@ -185,7 +239,7 @@ const ProjectTable = (props: { customer: number }) => {
               closeModal={closeModal}
               refreshTable={refreshTable}
               addedFields={formFields}
-              fields={innerCRUDFields}
+              fields={innerCRUDFieldsUpdate}
               handleFormSubmit={handleFormSubmit}
             />
           },
@@ -218,30 +272,13 @@ const ProjectTable = (props: { customer: number }) => {
           icon: bookIcon,
           tooltip: "Costi Commessa",
           modalContent: (dataItem, closeModal, refreshTable) => (
-            <div>
-              <h3>Dettagli per {dataItem.nome}</h3>
-
-              <button onClick={closeModal}>Chiudi</button>
-            </div>
+            <CostiCommessaModal
+              dataItem={dataItem}
+              closeModal={closeModal}
+              refreshTable={refreshTable}
+              handleFormSubmit={handleFormSubmit}
+            />
           ),
-        },
-        {
-          icon: infoCircleIcon,
-          tooltip: "Riepilogo Commessa",
-          modalContent: (dataItem, closeModal, refreshTable) => {
-            const data = progettoService.getProjectById(
-              dataItem.id,
-              true
-            );
-
-            return (
-              <div>
-                <h3>Dettagli per {dataItem.nome}</h3>
-
-                <button onClick={closeModal}>Chiudi</button>
-              </div>
-            )
-          },
         },
         {
           icon: trashIcon,

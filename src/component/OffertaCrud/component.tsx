@@ -38,6 +38,7 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
   const [isLocationDataReady, setIsLocationDataReady] = useState(false);
   const [isrowLocationDataReady, setIsrowLocationDataReady] = useState(false);
   const [isDaily, setIsDaily] = useState<boolean>(false)
+  const [isLumpSum, setIsLumpSum] =useState(false)
   const [showNewTaskModal, setShowNewTaskModal] = useState(false);
   const [rowLocation, setRowLocation] = useState<{ id: number, name: string }>({ id: 0, name: '' });
 
@@ -175,6 +176,12 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
             billing_type: { id: undefined, name: undefined },
           }));
         }
+      }
+    } if(name === "billing_type"){
+      if(value.name === "Fatturazione a corpo"){
+        setIsLumpSum(true)
+      } else{
+        setIsLumpSum(false)
       }
     }
     if (props.type === "edit") {
@@ -323,8 +330,14 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
         }
         return result;
       }, {});
+<<<<<<< HEAD
       
       const formattedData = reverseOfferAdapterUpdate({ ...modifiedData });
+=======
+      console.log("modifieddata", modifiedData)
+      const formattedData = reverseOfferAdapterUpdate(modifiedData, baseData);
+      console.log("formattedata", formattedData)
+>>>>>>> d8a2f72a3b16c38be395aae4e463063abe1ff9ce
       props.onSubmit(props.type, formattedData, props.refreshTable, props.row.id, props.closeModalCallback);
 
     } else {
@@ -383,6 +396,7 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
                   rowLocation,
                   valueOnChange,
                   isDaily,
+                  isLumpSum,
                   combinedValueOnChangeBillyngType
                 ))}
                 formData={formCustomerData}
