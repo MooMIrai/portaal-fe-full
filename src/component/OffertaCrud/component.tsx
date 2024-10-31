@@ -330,14 +330,9 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
         }
         return result;
       }, {});
-<<<<<<< HEAD
       
-      const formattedData = reverseOfferAdapterUpdate({ ...modifiedData });
-=======
-      console.log("modifieddata", modifiedData)
       const formattedData = reverseOfferAdapterUpdate(modifiedData, baseData);
-      console.log("formattedata", formattedData)
->>>>>>> d8a2f72a3b16c38be395aae4e463063abe1ff9ce
+      
       props.onSubmit(props.type, formattedData, props.refreshTable, props.row.id, props.closeModalCallback);
 
     } else {
