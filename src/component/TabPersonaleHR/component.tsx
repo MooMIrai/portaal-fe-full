@@ -189,7 +189,6 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
               setDownload(false);
             }
           } else {
-            // No attachment found
             setAttachmentNameState(null);
             setDownload(false);
           }
@@ -256,6 +255,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
         const adaptedActivities = permessiAdapter(activityTypeResponse);
         setActivity(adaptedActivities)
         const skillsAreaResponse = await CrudGenericService.getSkillArea(true);
+        console.log("skill",skillsAreaResponse)
         if (Array.isArray(skillsAreaResponse.data)) {
           const adaptedSkillsArea = skillsAreaResponse.data.map(r => ({ id: r.id, name: r.name }))
           setSkills(adaptedSkillsArea);
@@ -397,9 +397,10 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
       const skillsData = await CrudGenericService.getSkillAI(formAnagrafica.current.values.attachment[0]);
       
       const data = response.jsonData;
-      const dataSKill = skillsData.jsonData
+      const dataSKill = skillsData.jsonData.skills
+      const seniority= skillsData.jsonData.seniority
 
-      const updatedFormAnagraficaData = anagraficaAiButtonAdapter(data, formAnagraficaData, modifiedFields, gender, dataSKill);
+      const updatedFormAnagraficaData = anagraficaAiButtonAdapter(data, formAnagraficaData, modifiedFields, gender, dataSKill,seniority);
 
       setFormAnagraficaData(updatedFormAnagraficaData);
 

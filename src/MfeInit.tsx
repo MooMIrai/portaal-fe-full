@@ -1,4 +1,4 @@
-import buildingBlocksIcon from "common/SvgIcon"
+
 
 export default function () {
   return {
@@ -24,7 +24,7 @@ export default function () {
         level: 2,
         text: "Società",
         route: "/societa",
-        svgIcon: buildingBlocksIcon
+        iconKey: "buildingBlocksIcon"
       },
       {
         parentId: 5,

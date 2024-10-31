@@ -10,7 +10,7 @@ const createValidator = (isDisabled: boolean, validationFn: (value: any) => stri
     };
 };
 
-export const getFormAnagraficaFields = (formData: AnagraficaData, gender: genderOption[], type: any, isViewOnly: boolean,valueOnChange: (name: string, value: any) => void, handleFileUpload: (file:any) => void) => {
+export const getFormAnagraficaFields = (formData: AnagraficaData, gender: genderOption[], type: any, isViewOnly: boolean, valueOnChange: (name: string, value: any) => void, handleFileUpload: (file: any) => void) => {
     const genderOptions = gender.map(company => company.label)
     const onlyLettersValidator = (value: any) => /^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/.test(value) ? "" : "Il campo deve contenere solo lettere";
 
@@ -130,6 +130,16 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             disabled: (type === "view" || isViewOnly),
             valueOnChange: valueOnChange,
         },
+        seniority: {
+            name: "seniority",
+            label: "Seniority",
+            type: "select",
+            showLabel: false,
+            value: formData.seniority,
+            options: ["J", "M", "S"],
+            valueOnChange: valueOnChange,
+            disabled: (type === "view" || isViewOnly),
+        },
 
         attachment: {
             name: "attachment",
@@ -138,18 +148,19 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             withCredentials: false,
             disabled: (type === "view" || isViewOnly),
             value: formData.attachment || "",
-            existingFile:formData.attachment && formData.attachment.length?[{name:'CV.pdf'}]:undefined,
+            valueOnChange: valueOnChange,
+            existingFile: formData.attachment && formData.attachment.length ? [{ name: 'CV.pdf' }] : undefined,
             //onDownload: download && name_attachment ? handleDownload : undefined,
             multiple: false,
         },
-        generaInputAi :{
+        generaInputAi: {
             name: "generaInputAi",
             label: "Genera Input AI",
             showLabel: false,
             type: "buttonCustom",
             valueOnChange: valueOnChange,
             loader: true,
-            conditions:(formD)=> formD.attachment && formD.attachment.length ,
+            conditions: (formD) => formD.attachment && formD.attachment.length,
             onClick: () => handleFileUpload(formData.attachment),
             disabled: (type === "view" || isViewOnly),
         }
@@ -544,7 +555,7 @@ export const getFormTrattamentoEconomicoFields = (
             value: formData?.note || "",
         },
     }
-   
+
     return fields
 
 };
