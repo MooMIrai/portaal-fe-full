@@ -216,18 +216,13 @@ export const getFormOfferFields = (
         name: "attachment",
         label: "Carica Offerta",
         type: "uploadMultipleFiles",
-        withCredentials: false,
+        valueOnChange: valueOnChange,
         disabled: type === "view",
-        files: formData.attachment || "",
-        valueOnChange: combinedValueOnChangeAttchment,
-        onDownload: download && name_attachment ?
-            (fileId: string, name: string) => handleDownload(fileId, name) : undefined,
-        multiple: true,
         existingFile: formData.existingFile,
-        isDroppable:true
     };
 
-    console.log("fields", fields)
+  
+
     return fields;
 };
 

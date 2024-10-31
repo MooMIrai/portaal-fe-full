@@ -28,7 +28,7 @@ export function fromOfferBEModelToOfferModel(
 ): OfferModel {
   return {
     id: offerBE.id,
-    protocol: offerBE.offer_name, // mapping offer_name to protocol
+    protocol: offerBE.project_code, // mapping offer_name to protocol
     title: offerBE.name, // mapping name to title
     /* start_date: new Date(offerBE.start_date), */
     end_date: offerBE.deadline_date
@@ -76,16 +76,14 @@ export function fromOfferBEModelToOfferModel(
           name: mapOutcomeTypeName(offerBE.OutcomeType),
         }
       : undefined,
-    existingFile: Array.isArray(offerBE.files)
-      ? offerBE.files.map((file) => ({
-          id: file.uniqueRecordIdentifier,
-        }))
-      : [],
+    existingFile: offerBE.files,
     year: offerBE.year ? new Date(offerBE.year, 1, 1) : undefined,
 
     days: offerBE.days,
     thereisProject: offerBE.Project ? true : false,
+    files:offerBE.files
   };
+  
 }
 
 export function fromOfferModelToOfferBEModel(
@@ -93,18 +91,9 @@ export function fromOfferModelToOfferBEModel(
 ): OfferBEModel {
   return {
     id: offerModel.id,
-    offer_name: offerModel.protocol, // mapping protocol to offer_name
+    project_code: offerModel.protocol, // mapping protocol to offer_name
     name: offerModel.title, // mapping title to name
-    Attachment: offerModel.attachment
-      ? offerModel.attachment.map((file) => ({
-          file_name: file.name,
-          content_type:
-            file.extension === ".pdf"
-              ? "application/pdf"
-              : "application/octet-stream",
-          data: file.data || [],
-        }))
-      : undefined,
+    Attachment: offerModel.attachment,
     /* start_date: offerModel.start_date.toISOString(), */
     deadline_date: offerModel.end_date?.toISOString() || undefined, // fallback to undefined if empty
     other_details: offerModel.description || "", // mapping description to other_details
@@ -138,7 +127,7 @@ export const reverseOfferAdapterUpdate = (
 
   // Mappatura dei campi base
   if ("protocol" in modifiedData) {
-    result.offer_name = modifiedData.protocol;
+    result.project_code = modifiedData.protocol;
   }
 
   if ("title" in modifiedData) {
@@ -187,15 +176,6 @@ export const reverseOfferAdapterUpdate = (
 
   if ("attachment" in modifiedData) {
     result.Attachment = modifiedData.attachment
-      ? modifiedData.attachment.map((file: any) => ({
-          file_name: file.name,
-          content_type:
-            file.extension === ".pdf"
-              ? "application/pdf"
-              : "application/octet-stream",
-          data: file.data || [],
-        }))
-      : undefined; // Rimuove l'allegato se undefined
   }
 
   if ("noCollective" in modifiedData) {

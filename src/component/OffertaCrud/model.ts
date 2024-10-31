@@ -23,7 +23,7 @@ export interface OfferBEModel {
   date_created?: string;
   name: string;
   other_details: string;
-  offer_name: string;
+  project_code: string;
   project_type_id?: number;
   rate: number;
   Project?: any;
@@ -54,6 +54,7 @@ export interface OfferBEModel {
 }
 
 export interface OfferModel {
+  files: any;
   id?: number;
   protocol: string;
   title: string;
@@ -78,10 +79,7 @@ export interface OfferModel {
   approval_date?: Date;
   project_type?: { id: number; name: string };
   project_type_id: number;
-  existingFile?: Array<{
-    id?: string;
-    name?: string;
-  }>;
+  existingFile?: Array<any>;
   attachment?: Array<{
     id?: string;
     name?: string;

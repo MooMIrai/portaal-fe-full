@@ -13,6 +13,7 @@ import { offertaService } from "../../services/offertaService";
 import LoaderComponent from "common/Loader"
 import Window from "common/Window";
 
+
 import styles from "./style.module.scss";
 
 type OffertaCrudProps = {
@@ -39,7 +40,8 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
   const [isDaily, setIsDaily] = useState<boolean>(false)
   const [showNewTaskModal, setShowNewTaskModal] = useState(false);
   const [rowLocation, setRowLocation] = useState<{ id: number, name: string }>({ id: 0, name: '' });
-  console.log("row", props.row)
+
+
   useEffect(() => {
     const fetchCountryData = async () => {
 
@@ -48,7 +50,7 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
         const adaptedLocation = sedeAdapter(sedeResponse);
         setSede(adaptedLocation);
 
-        if (props.row?.existingFile && Array.isArray(props.row.existingFile) && props.row.existingFile.length > 0) {
+      /*   if (props.row?.existingFile && Array.isArray(props.row.existingFile) && props.row.existingFile.length > 0) {
 
           const uniqueIdentifiers = props.row.existingFile
             .map((attachment: { id?: string }) => attachment.id)
@@ -94,7 +96,7 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
               setDownload(false);
             }
           }
-        }
+        } */
         setIsLocationDataReady(true);
       } catch (error) {
         console.error("Error fetching country data:", error);
@@ -321,15 +323,13 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
         }
         return result;
       }, {});
-      console.log("modifieddata", modifiedData)
+      
       const formattedData = reverseOfferAdapterUpdate({ ...modifiedData });
-      console.log("formattedata", formattedData)
       props.onSubmit(props.type, formattedData, props.refreshTable, props.row.id, props.closeModalCallback);
 
     } else {
-      console.log("basedata", baseData)
+
       const formattedData = fromOfferModelToOfferBEModel({ ...baseData });
-      console.log("formattedata", formattedData)
       props.onSubmit(props.type, formattedData, props.refreshTable, props.row.id, props.closeModalCallback);
     }
   };
@@ -370,6 +370,7 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
           title: "Dati Offerta",
           children: (
             <div className={styles.parentForm}>
+              
               <Form
                 ref={formCustomer}
                 fields={Object.values(getFormOfferFields(
