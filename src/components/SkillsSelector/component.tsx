@@ -8,7 +8,8 @@ import "@progress/kendo-theme-default/dist/all.css";
 import client from "../../services/BEService";
 import CustomWindow from "../Window/component";
 import DynamicForm from "../DynamicForm/component";
-import { Error, Label } from '@progress/kendo-react-labels';
+import { Button } from "@progress/kendo-react-buttons";
+import styles from "./styles.module.scss"
 
 interface Skill {
     id: number;
@@ -24,11 +25,9 @@ export interface SkillCategory {
 
 interface SkillMultiSelectProps {
     initialSelectedSkills?: Skill[];
-    validationMessage?: string; // Aggiungi queste props
 }
-const SkillMultiSelect: React.FC<SkillMultiSelectProps> =(props:any) => {
+const SkillMultiSelect: React.FC<SkillMultiSelectProps> = (props: any) => {
     const {
-        validationMessage,
         onChange,
         value,
         disabled,
@@ -41,6 +40,8 @@ const SkillMultiSelect: React.FC<SkillMultiSelectProps> =(props:any) => {
     const [loading, setLoading] = useState<boolean>(false);
     const [showModal, setShowModal] = useState<boolean>(false);
     const [newSkillName, setNewSkillName] = useState<string>("");
+    const [filter, setFilter] = useState<string>(""); 
+    const multiselectRef = useRef<any>(null);
 
     useEffect(() => {
         fetchSkills();
@@ -48,10 +49,8 @@ const SkillMultiSelect: React.FC<SkillMultiSelectProps> =(props:any) => {
     }, []);
 
     useEffect(() => {
-        setSelectedSkills(value); 
+        setSelectedSkills(value);
     }, [value]);
-
-
 
     const fetchSkills = async () => {
         setLoading(true);
@@ -80,34 +79,21 @@ const SkillMultiSelect: React.FC<SkillMultiSelectProps> =(props:any) => {
         }
     };
 
-    const handleSelectChange = (event: MultiSelectChangeEvent) => {
+    const handleChange = (event: MultiSelectChangeEvent) => {
         const currentValue = event?.target?.value || [];
-        const lastInputValue = currentValue[currentValue.length - 1];
-        if (lastInputValue && lastInputValue.name) {
-            const skillExists = skills.some(skill => skill.name === lastInputValue.name);
-            if (!skillExists) {
-                setNewSkillName(lastInputValue.name);
-                setShowModal(true);
-            } else {
-                setSelectedSkills(currentValue);
-            }
-        } else {
-            setSelectedSkills(currentValue);
-        }
+        setSelectedSkills(currentValue);
         if (onChange) {
-            onChange({value:currentValue});
+            onChange({ value: currentValue });
         }
     };
-
     const timeout = useRef<any>();
- 
-
     const handleSearch = (event: MultiSelectFilterChangeEvent) => {
         const filterValue = event?.filter?.value || "";
+        setFilter(filterValue);
         clearTimeout(timeout.current);
         timeout.current = setTimeout(() => {
             fetchFilteredSkills(filterValue);
-        }, 1000);
+        }, 800);
     };
 
     const fetchFilteredSkills = async (filterValue: string) => {
@@ -118,7 +104,7 @@ const SkillMultiSelect: React.FC<SkillMultiSelectProps> =(props:any) => {
                 filters: [
                     {
                         field: "name",
-                        operator: "contains",
+                        operator: "equals",
                         value: filterValue
                     }
                 ]
@@ -138,13 +124,24 @@ const SkillMultiSelect: React.FC<SkillMultiSelectProps> =(props:any) => {
         if (selectedCategory && categoryMap.has(selectedCategory)) {
             const categoryId = categoryMap.get(selectedCategory);
             try {
-                await client.post("api/v1/skillArea/create", {
+                const response = await client.post("api/v1/skillArea/create", {
                     code: newSkillName,
                     name: newSkillName,
                     description: `${newSkillName}`,
                     skillCategory_id: categoryId || 1,
                 });
                 setShowModal(false);
+                const newSkill = response.data;
+                const updatedSkills = [...(selectedSkills || []), newSkill];
+            
+                setSelectedSkills(updatedSkills); 
+    
+                if (onChange) {
+                    onChange({ value: updatedSkills });
+                }
+                setFilter(""); 
+                setNewSkillName("");
+                
                 fetchSkills();
             } catch (error) {
                 console.error("Errore nella creazione della skill:", error);
@@ -158,7 +155,14 @@ const SkillMultiSelect: React.FC<SkillMultiSelectProps> =(props:any) => {
         setSelectedCategory(value);
     };
 
-    const fields:any = [
+    const handleNewSkill = () => {
+        if (filter) {
+            setNewSkillName(filter);
+            setShowModal(true);
+        }
+    };
+
+    const fields: any = [
         {
             name: "category",
             label: "Seleziona Categoria",
@@ -172,19 +176,39 @@ const SkillMultiSelect: React.FC<SkillMultiSelectProps> =(props:any) => {
         }
     ];
 
+    const listNoDataRender = (element: React.ReactElement<HTMLDivElement>) => {
+        const noData = (
+            <div className={styles.noDataRender}>
+                <h4>
+                    Nessun Risultato
+                </h4>
+                <div className={styles.paragraphContainer}>
+                <p>Vuoi Aggiungere una nuova skill?</p>
+                <Button className={styles.button} type="button" themeColor={"primary"} onClick={handleNewSkill}>
+                    Si
+                </Button>
+                </div>
+            </div>
+        );
+
+        return React.cloneElement(element, { ...element.props }, noData);
+    };
+
     return (
         <div>
             <MultiSelect
                 data={skills}
+                ref={multiselectRef}
                 value={selectedSkills}
                 filterable={true}
+                filter={filter} 
+                onFilterChange={handleSearch} 
                 label="Skill"
-                onChange={handleSelectChange}
-                onFilterChange={handleSearch}
+                onChange={handleChange}
+                listNoDataRender={listNoDataRender}
                 placeholder="Seleziona o cerca skill..."
                 textField="name"
                 dataItemKey="id"
-                allowCustom={true}
                 loading={loading}
             />
             {showModal && (
@@ -209,3 +233,4 @@ const SkillMultiSelect: React.FC<SkillMultiSelectProps> =(props:any) => {
 };
 
 export default SkillMultiSelect;
+
