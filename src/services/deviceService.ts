@@ -198,6 +198,7 @@ class DeviceService extends BaseHttpService {
   }
 
   assignDevices(personId:number,stockIds:number[],file:any){
+    const attachment =fileService.combineDataToBE([file],undefined,'waiver');
     return client.post('/api/v1/stock/allocate',{
       allocations:stockIds.map(s=>{
         return {
@@ -206,15 +207,16 @@ class DeviceService extends BaseHttpService {
           allocation_date:new Date().toISOString()
         }
       }),
-      Attachment:file
+      Attachment:attachment
     })
   }
 
   unassignDevices(allocationIds:number[],file:any){
+    const attachment =fileService.combineDataToBE([file],undefined,'receipt');
     return client.post('/api/v1/stock/updateAllocation',{
         "allocation_ids": allocationIds,
         "restituition_date": new Date().toISOString(),
-        "Attachment": file
+        "Attachment": attachment
     })
   }
 

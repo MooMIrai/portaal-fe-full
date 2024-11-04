@@ -59,11 +59,11 @@ export function RelateDevice(props: RelateDeviceProps) {
                 <span>Scegli scaricare il modulo non firmato (dalla preview alla tua destra) e ricaricalo <br/> firmato da qui</span>
   
                 <UploadSingleFileInput  onChange={(e) => {
-                    if(e.value?.length){
-                        setUploadedFile(e.value[0]);
+                    if(e.value?.create){
+                        setUploadedFile(e.value.create[0]);
                         setSignedFile(undefined)
                     }  
-                    }} value={uploadedFile} />
+                    }} value={uploadedFile} name="waiver" />
 
                 <span>Oppure fai firmare con il tablet il documento</span>
                 <SignDocumentScanner
@@ -90,6 +90,7 @@ export function RelateDevice(props: RelateDeviceProps) {
         }
 
     {person && (uploadedFile || signedFile) ?<Button type="button" themeColor="success" onClick={()=>{
+        
         deviceService.assignDevices(person.id,props.devices.map(p=>p.id),signedFile || uploadedFile).then(()=>{
             NotificationActions.openModal(
                 { icon: true, style: "success" },

@@ -56,7 +56,8 @@ export const getFormDeviceFields = (formData: any, type:string) => {
             withCredentials: false,
             disabled: type === "view",
             value: formData.files || "",
-            existingFile:formData.files && formData.files.length?[{name:'Fattura.pdf'}]:undefined,
+            existingFile:formData.files && formData.files.length?formData.files.map(f=>({name:f.file_name,id:f.uniqueIdentifier}))
+                :undefined,
             accept: ".pdf",
             multiple: false,
         },

@@ -102,6 +102,7 @@ export  function DeviceNotAssigned(){
       <RelateDevice devices={selectedRows} onSubmit={()=>{
         setShowRelate(false);
         setRefreshCount(refreshCount+1);
+        
       }} />
    </Modal>
    </>

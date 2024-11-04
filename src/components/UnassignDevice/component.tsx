@@ -64,9 +64,9 @@ function ModalComponent(props:{onSubmit:()=>void}) {
             </table>
             <span>Scegli scaricare il modulo non firmato (dalla preview alla tua destra) e ricaricalo <br /> firmato da qui</span>
 
-            <UploadSingleFileInput onChange={(e) => {
-                if (e.value?.length) {
-                    setUploadedFile(e.value[0]);
+            <UploadSingleFileInput name="receipt" onChange={(e) => {
+                if (e.value?.create) {
+                    setUploadedFile(e.value.create[0]);
                     setSignedFile(undefined)
                 }
             }} value={uploadedFile} />
