@@ -198,7 +198,7 @@ const UploadMutilpleInputC = (
   );
 };
 
-const UploadMutilpleInputNew = (
+const UploadMultipleInputNew = (
   fieldRenderProps: FieldRenderProps & {
     disabled?: boolean; label?: string, accept?: string, autoUpload?: boolean, isDroppable?: boolean, onDownload?: (() => Promise<{
       fileId: string;
@@ -499,5 +499,5 @@ export const CheckboxInput = withField(CheckboxInputC);
 export const YearInput = withField(YearInputC);
 export const ButtonInput = withField(ButtonInputC);
 export const UploadSingleFileInput = withField(UploadSingleFIleInputC)
-export const UploadMultipleFilesInput = withField(UploadMutilpleInputNew)
+export const UploadMultipleFilesInput = withField(UploadMultipleInputNew)
 export const UrlInput = withField(UrlInputC)
