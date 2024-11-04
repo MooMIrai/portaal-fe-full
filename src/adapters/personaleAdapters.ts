@@ -658,15 +658,9 @@ export const reverseAdapter = (combinedData: {
   newFormTrattamentoEconomico: boolean;
   skills: MappedSkill[];
 }) => {
+  debugger;
   const attachments =
-    combinedData.anagrafica.attachment?.map((att) => ({
-      file_name: att.name,
-      content_type:
-        att.extension === ".pdf"
-          ? "application/pdf"
-          : "application/octet-stream",
-      data: att.data || [],
-    })) || [];
+    combinedData.anagrafica.attachment;
   const personSkillAreas =
     combinedData.anagrafica.skills?.map((skill) => {
       const skillId =
@@ -679,6 +673,12 @@ export const reverseAdapter = (combinedData: {
     }) || [];
   const permessiIDs =
     mapPermessiNamesToIDs(combinedData.permessi, combinedData.idPermessi) || [];
+
+  let attachmentFiles = attachments;
+  if(attachments && attachmentFiles.create){
+    attachmentFiles.create = attachmentFiles.create.map(p=>({...p,property:'files'}))
+  }
+
   return {
     email: combinedData.anagrafica.email,
     accountStatus_id: combinedData.anagrafica.accountStatus_id,
@@ -700,7 +700,7 @@ export const reverseAdapter = (combinedData: {
         combinedData.anagrafica.residenza?.city?.id.toString() === ""
           ? null
           : combinedData.anagrafica.residenza?.city?.id,
-      Attachment: attachments.length > 0 ? attachments : null,
+      Attachment: attachments  ,
       location_id: combinedData.anagrafica.sede_autocomplete?.id || 1,
       cityBirth_id:
         !combinedData.anagrafica.nascita?.city?.id ||
@@ -819,14 +819,7 @@ export const reverseAdapterUpdate = (combinedData: {
 
   const result: any = {};
   const attachments =
-    combinedData.modifiedData.attachment?.map((att) => ({
-      file_name: att.name,
-      content_type:
-        att.extension === ".pdf"
-          ? "application/pdf"
-          : "application/octet-stream",
-      data: att.data || [],
-    })) || [];
+    combinedData.modifiedData.attachment? combinedData.modifiedData.attachment.create.map(o=>({...o,property:'files'})):null;
   if (combinedData.anagrafica.accountStatus_id) {
     result.accountStatus_id = combinedData.anagrafica.accountStatus_id;
   }
@@ -869,7 +862,7 @@ export const reverseAdapterUpdate = (combinedData: {
   }
 
   if ("attachment" in combinedData.modifiedData) {
-    result.Person.Attachment = attachments.length > 0 ? attachments : null;
+    result.Person.Attachment = attachments;
   }
 
   if ("sede_autocomplete" in combinedData.modifiedData) {

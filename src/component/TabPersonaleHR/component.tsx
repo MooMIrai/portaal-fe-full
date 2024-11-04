@@ -125,7 +125,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
   const [modifiedFields, setModifiedFields] = useState<Record<string, any>>({})
   const [newFormTrattamentoUpdate, setNewFormTrattamentoUpdate] = useState<boolean>(false)
   const [triggerUpdate, setTriggerUpdate] = useState(false);
-  const [isrowDataReady, setIsrowDataReady] = useState(false);
+  const [isrowDataReady, setIsrowDataReady] = useState(true);
   const [exstingFile, setExstingFile] = useState<any>()
   const[skills,setSkills]=useState<MappedSkill[] | undefined>()
   //Ref
@@ -139,23 +139,23 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
   const isFirstTreatment = isCreate || (storicoTrattamentoData.length === 0 && isObjectEffectivelyEmpty(formTrattamentoEconomicoData));
   const isFirstTreatmentUpdate = (storicoTrattamentoData.length === 0 && isUpdate)
 
-  const [fileJustUploaded, setFileJustUploaded] = useState<any>(null)
-  const [attachmentNameState, setAttachmentNameState] = useState(null)
+  // const [fileJustUploaded, setFileJustUploaded] = useState<any>(null)
+  //const [attachmentNameState, setAttachmentNameState] = useState(null) 
 
   const isViewOnly = !!dataRecesso;
   //UseEffect
   const handleFieldChange = (name: string, value: any) => {
     const currentValue = modifiedFields[name];
-    if (name === "attachment") {
-      if (Array.isArray(value) && value.length > 0) {
-        const file = convertToFileObjectBlob(value?.[0]);
+     /*if (name === "attachment") {
+      if (value.create && Array.isArray(value.create) && value.create.length > 0) {
+        const file = convertToFileObjectBlob(value.create[0]);
         if (file) {
           setFileJustUploaded(file);
         }
       } else {
         setFileJustUploaded(undefined);
       }
-    }
+    } */
     if (currentValue !== value) {
       setModifiedFields((prevState) => ({
         ...prevState,
@@ -163,7 +163,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
       }));
     }
   };
-  useEffect(() => {
+/*   useEffect(() => {
     const fetchCountryData = async () => {
       try {
         if (type === "edit" || type === "view") {
@@ -200,7 +200,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
     };
 
     fetchCountryData();
-  }, [row, type]);
+  }, [row, type]); */
 
 
 
@@ -281,7 +281,6 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
 
   const handleSubmit = () => {
     let hasError = false;
-
     if (type === "create" || type === "edit") {
       if (newForm) {
         setAlert(true);
@@ -341,8 +340,6 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
       return result;
     }, {});
 
-    console.log("modifiedata", modifiedData)
-
     const combinedData = {
       id: row.id,
       idRuoli: roles,
@@ -372,9 +369,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
         setNewFormTrattamentoUpdate(false)
 
       } else {
-        console.log("combinedara", combinedData)
         const formattedData = reverseAdapterUpdate(combinedData);
-        console.log("formattedData", formattedData);
         const idrow = row.id;
         onSubmit(type, formattedData, refreshTable, idrow);
         refreshTable();
@@ -390,11 +385,10 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
 
 
   const handleFileUpload = async () => {
-    
-      if(formAnagrafica.current && formAnagrafica.current.values.attachment && formAnagrafica.current.values.attachment.length){
+      if(formAnagrafica.current && formAnagrafica.current.values.attachment && formAnagrafica.current.values.attachment.create && formAnagrafica.current.values.attachment.create.length){
 
-      const response = await CrudGenericService.getCVaI(formAnagrafica.current.values.attachment[0]);
-      const skillsData = await CrudGenericService.getSkillAI(formAnagrafica.current.values.attachment[0]);
+      const response = await CrudGenericService.getCVaI(formAnagrafica.current.values.attachment.create[0]);
+      const skillsData = await CrudGenericService.getSkillAI(formAnagrafica.current.values.attachment.create[0]);
       
       const data = response.jsonData;
       const dataSKill = skillsData.jsonData.skills
@@ -532,12 +526,12 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
   const handleDownloadChange = (name, files) => {
     if (files === undefined || files.length === 0) {
       setDownload(false);
-      if (formAnagrafica.current) {
+      /* if (formAnagrafica.current) {
         setAttachmentNameState(formAnagrafica.current.values.attachment.name)
-      }
+      } */
     } else {
-      const attachmentName = files[0].name;
-      setAttachmentNameState(attachmentName);
+      //const attachmentName = files[0].name;
+      //setAttachmentNameState(attachmentName);
       setDownload(false)
     }
   };

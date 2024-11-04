@@ -20,16 +20,7 @@ export interface AnagraficaData {
     province?: { id: number; name: string; code: string };
     city: { id: number; name: string; code: string };
   };
-  attachment?: [
-    {
-      extension?: string;
-      name: string;
-      size?: number;
-      status?: number;
-      id: string;
-      data?: string;
-    }
-  ];
+  attachment?: any;
   attachment_id?: number[];
   existingFile?: { name: string; id: string };
   skills?: {

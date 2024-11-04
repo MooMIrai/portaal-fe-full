@@ -149,7 +149,9 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             disabled: (type === "view" || isViewOnly),
             value: formData.attachment || "",
             valueOnChange: valueOnChange,
-            existingFile: formData.attachment && formData.attachment.length ? [{ name: 'CV.pdf' }] : undefined,
+            existingFile: formData.attachment && formData.attachment.length ?
+            formData.attachment
+            :undefined,
             //onDownload: download && name_attachment ? handleDownload : undefined,
             multiple: false,
         },
@@ -160,7 +162,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             type: "buttonCustom",
             valueOnChange: valueOnChange,
             loader: true,
-            conditions: (formD) => formD.attachment && formD.attachment.length,
+            conditions: (formD) => formD.attachment && formD.attachment.create,
             onClick: () => handleFileUpload(formData.attachment),
             disabled: (type === "view" || isViewOnly),
         }
