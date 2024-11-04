@@ -61,11 +61,11 @@ const CostiCommessamodal = (props: CostiCommessamodalProps) => {
           const name = item.name === "projectExpensesType_id"
             ? 'project-type-selector'
             : item.name === "Attachment"
-              ? 'files'
+              ? 'file'
               : item.name;
           newModel[name] = {
             name: item.name === "Attachment"
-              ? "files"
+              ? "file"
               : item.name,
             type: item.name === "projectExpensesType_id"
               ? 'project-type-selector'
@@ -120,7 +120,7 @@ const CostiCommessamodal = (props: CostiCommessamodalProps) => {
         parseInt(dataItem.amount),
         dataItem.payment_date,
         dataItem.projectExpensesType_id.id,
-        dataItem.files
+        dataItem.file
       ).then(res => {
         if (res) {
           closeModalCallback();
@@ -134,7 +134,7 @@ const CostiCommessamodal = (props: CostiCommessamodalProps) => {
         parseInt(dataItem.amount),
         dataItem.payment_date,
         dataItem.projectExpensesType_id.id,
-        dataItem.files
+        dataItem.file
       ).then(res => {
         if (res) {
           closeModalCallback();
@@ -195,7 +195,7 @@ const CostiCommessamodal = (props: CostiCommessamodalProps) => {
             fields={Object.values(innerCRUDFields).map((f: any) => {
               return {
                 ...f,
-                existingFile: f.name === "files" ? dataItem.files && dataItem.files.length ? [{ name: dataItem.files[0].file_name }] : undefined : undefined,
+                existingFile: f.name === "files" ? dataItem.files && dataItem.files.length ? dataItem.files.map(p=>({name:p.file_name,id:f.uniqueIdentifier})) : undefined : undefined,
               }
             })}
             addedFields={projectExpensesCustomFields}
