@@ -1,7 +1,7 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import { Button } from '@progress/kendo-react-buttons';
 import styles from './styles.module.scss';
-import { downloadIcon, googleBoxIcon, googleIcon } from '@progress/kendo-svg-icons';
+import { downloadIcon, googleIcon } from '@progress/kendo-svg-icons';
 import FileService from '../../services/FileService';
 import NotificationProviderActions from '../Notification/provider';
 
@@ -23,6 +23,7 @@ type CustomUploadProps = {
   accept?: string;
   disabled?: boolean;
   existingFile?: { id: string, name: string; }[];
+  name:string
 };
 
 function UploadSingleFileComponent(props: CustomUploadProps) {
@@ -41,7 +42,8 @@ function UploadSingleFileComponent(props: CustomUploadProps) {
       setSelectedFileName(fileArray[0].name);
       setSelectedFile(fileArray[0]);
       setSelectedLink(undefined);
-      props.onFileChange(fileDataArray);
+
+      props.onFileChange(FileService.combineDataToBE(fileDataArray,props.existingFile?.map(p=>p.id),props.name));
 
 
     }

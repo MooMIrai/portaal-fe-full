@@ -25,6 +25,35 @@ class FileService{
         });
     }
 
+    combineDataToBE(data:{
+        name: string;
+        data: number[];
+        size: number;
+        status: number;
+        file_name: string;
+        content_type: string;
+        extension: string;
+        provider: "DRIVE" | "DATABASE";
+    }[],toDelete?:string[],property?:string){
+        const ret:any = {
+            create:data
+        }
+        if(toDelete && toDelete.length){
+            ret.delete={
+                deletedFiles:[{
+                    uniqueIdentifiers:toDelete,
+                    property:property
+                }
+                ],
+                deleteFilesFromProvider: true
+            }
+        }
+        if(property){
+            ret.create = ret.create.map((d:any)=>({...d,property}));
+        }
+        return ret;
+    }
+
     convertBlobToBE(file:Blob,filename?:'string'){
         return file.arrayBuffer().then(arrayBuffer=>{
             return {

@@ -275,6 +275,7 @@ const UploadSingleFIleInputC = (
   return (
     <div>
       <UploadSingleFileComponent
+        name={others.name}
         onFileChange={handleFileUpload}
         multiple={multiple}
         existingFile={existingFile}
