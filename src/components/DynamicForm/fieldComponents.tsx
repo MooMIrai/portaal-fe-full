@@ -227,6 +227,7 @@ const UploadMutilpleInputNew = (
   return (
     <div>
       <UploadMultiple
+      name={others.name}
         existingFiles={existingFile}
         isReadOnly={!!disabled}
         onChange={(value)=>{

@@ -9,7 +9,8 @@ import { Button, ButtonGroup } from "@progress/kendo-react-buttons";
 interface UploadMultipleProps {
     isReadOnly:boolean;
     onChange?: (value:Array<any>)=>void;
-    existingFiles?:Array<any>
+    existingFiles?:Array<any>,
+    name:string
 }
 
 export default function UploadMultiple(props:UploadMultipleProps){
@@ -106,7 +107,7 @@ export default function UploadMultiple(props:UploadMultipleProps){
             showModalFooter={true}>
 
         <UploadSingleFileComponent 
-            onFileChange={setCurrentSingle} />
+                onFileChange={setCurrentSingle} name={props.name} />
         </Modal>
     </>
 
