@@ -34,7 +34,7 @@ class FileService{
         content_type: string;
         extension: string;
         provider: "DRIVE" | "DATABASE";
-    }[],toDelete?:string[],property?:string){
+    }[],toDelete?:string[],property?:string,deleteOnDrive?:boolean){
         const ret:any = {
             create:data
         }
@@ -45,7 +45,7 @@ class FileService{
                     property:property
                 }
                 ],
-                deleteFilesFromProvider: true
+                deleteFilesFromProvider: deleteOnDrive === undefined?false:deleteOnDrive
             }
         }
         if(property){

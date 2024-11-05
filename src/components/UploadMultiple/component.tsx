@@ -5,6 +5,7 @@ import styles from './styles.module.scss';
 import {  downloadIcon, plusIcon, trashIcon } from "@progress/kendo-svg-icons";
 import { Button, ButtonGroup } from "@progress/kendo-react-buttons";
 import FileService from "../../services/FileService";
+import NotificationProviderActions from "../Notification/provider";
 
 interface UploadMultipleProps {
     isReadOnly:boolean;
@@ -19,10 +20,11 @@ export default function UploadMultiple(props:UploadMultipleProps){
     const [currentSingle,setCurrentSingle] = useState<any>();
     const [values,setValues] = useState<any[]>([]);
     const [removedExisting,setRemovedExisting] = useState<Array<string>>([]);
+    const [deleteOnDrive,setDeleteOnDrive] = useState<boolean | undefined>();
 
     useEffect(()=>{
         if(props.onChange){
-            const value = FileService.combineDataToBE(values,removedExisting,props.name)
+            const value = FileService.combineDataToBE(values,removedExisting,props.name,deleteOnDrive)
             props.onChange(value);
         }
     },[values,removedExisting])
@@ -41,7 +43,18 @@ export default function UploadMultiple(props:UploadMultipleProps){
 
     const handleRemoveExisting = (data:any)=>{
         setRemovedExisting([...removedExisting,data.uniqueIdentifier])
+        if(removedExisting === undefined)
+        {    
+            NotificationProviderActions.openConfirm(
+                "Vuoi eliminare il file anche su drive?",
+                ()=>setDeleteOnDrive(true),
+                'Conferma operazione',
+                ()=>setDeleteOnDrive(false)
+            )
+        }
     }
+
+
 
     const handleCloseSingle = ()=> setOpenSingle(false)
 
