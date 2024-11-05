@@ -31,6 +31,7 @@ function UploadSingleFileComponent(props: CustomUploadProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [selectedLink,setSelectedLink] = useState<string>();
+  const [deleteDrive,setDeleteDrive] = useState<boolean | undefined>();
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputElement = event.target;
@@ -43,7 +44,24 @@ function UploadSingleFileComponent(props: CustomUploadProps) {
       setSelectedFile(fileArray[0]);
       setSelectedLink(undefined);
 
-      props.onFileChange(FileService.combineDataToBE(fileDataArray,props.existingFile?.map(p=>p.id),props.name));
+      if(deleteDrive===undefined && props.existingFile && props.existingFile.length){
+          NotificationProviderActions.openConfirm(
+            "Vuoi eliminare il file anche su drive?",
+            ()=>{
+              setDeleteDrive(true);
+              props.onFileChange(FileService.combineDataToBE(fileDataArray,props.existingFile?.map(p=>p.id),props.name,true));
+            },
+            'Conferma operazione',
+            ()=>{
+              setDeleteDrive(false);
+              props.onFileChange(FileService.combineDataToBE(fileDataArray,props.existingFile?.map(p=>p.id),props.name,false));
+            }
+          )
+      }else{
+        props.onFileChange(FileService.combineDataToBE(fileDataArray,props.existingFile?.map(p=>p.id),props.name,deleteDrive));
+      }
+
+      
 
 
     }
