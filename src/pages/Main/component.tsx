@@ -181,6 +181,7 @@ const LookUps = () => {
         )}
         filterable={true}
         sortable={true}
+        pageable={true}
         getData={loadData}
         columns={columns}
         resizable={true}
