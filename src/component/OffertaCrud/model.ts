@@ -18,7 +18,7 @@ export interface OfferBEModel {
   id?: number;
   accountManager_id?: number;
   amount: number;
-  billing_type: string;
+  billing_type?: string;
   customer_id?: number;
   date_created?: string;
   name: string;
@@ -38,6 +38,7 @@ export interface OfferBEModel {
     person_id: string;
     Person: any;
   };
+  thereIsFile?:boolean;
   ProjectData?: ProjectsBeModel;
   attachment_id?: number;
   year?: number;
@@ -74,6 +75,7 @@ export interface OfferModel {
   locations?: locationOption[];
   accountManager?: { id: number; name: string };
   NoCollective?: boolean;
+  thereIsFile?:boolean;
   billing_type?: { id: string; name: string };
   approval_date?: Date;
   project_type?: { id: number; name: string };
