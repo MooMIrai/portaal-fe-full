@@ -49,7 +49,6 @@ function Clienti() {
 
   const handleFormSubmit = (type: string, formData: any, refreshTable: any, id: any, closeModal: () => void) => {
     let promise: Promise<any> | undefined = undefined;
-
     if (type === "create") {
       promise = customerService.createResource(formData);
     } else if (type === "edit") {
