@@ -15,6 +15,7 @@ export interface AnagraficaData {
     province?: { id: number; name: string; code: string };
     city: { id: number; name: string; code: string };
   };
+  thereIsFile?:boolean
   nascita?: {
     country: { id: number; name: string; code: string };
     province?: { id: number; name: string; code: string };
@@ -22,7 +23,6 @@ export interface AnagraficaData {
   };
   attachment?: any;
   attachment_id?: number[];
-  existingFile?: { name: string; id: string };
   skills?: {
     id: number;
     name: string;

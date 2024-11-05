@@ -17,6 +17,7 @@ import Button from "common/Button";
 import { formFields } from "./customfields";
 import NotificationProviderActions from "common/providers/NotificationProvider";
 import LoaderComponent from "common/Loader"
+import NotificationActions from 'common/providers/NotificationProvider'
 
 
 type PersonaleSectionProps = {
@@ -24,7 +25,7 @@ type PersonaleSectionProps = {
   type: any;
   closeModalCallback: () => void;
   refreshTable: () => void;
-  onSubmit: (type: any, formData: any, refreshTable: () => void, id: any) => void;
+  onSubmit: (type: any, formData: any, refreshTable: () => void, id: any, closeModal: () => void) => void;
 };
 
 interface AutocompleteField {
@@ -127,7 +128,8 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [isrowDataReady, setIsrowDataReady] = useState(true);
   const [exstingFile, setExstingFile] = useState<any>()
-  const[skills,setSkills]=useState<MappedSkill[] | undefined>()
+  const [skills, setSkills] = useState<MappedSkill[] | undefined>()
+  const [deleteFiles, setDeleteFiles] = useState<boolean>(false)
   //Ref
   const formAnagrafica = useRef<HTMLFormElement>(null);
   const formTrattamentoEconomico = useRef<HTMLFormElement>(null);
@@ -146,16 +148,16 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
   //UseEffect
   const handleFieldChange = (name: string, value: any) => {
     const currentValue = modifiedFields[name];
-     /*if (name === "attachment") {
-      if (value.create && Array.isArray(value.create) && value.create.length > 0) {
-        const file = convertToFileObjectBlob(value.create[0]);
-        if (file) {
-          setFileJustUploaded(file);
-        }
-      } else {
-        setFileJustUploaded(undefined);
-      }
-    } */
+    /*if (name === "attachment") {
+     if (value.create && Array.isArray(value.create) && value.create.length > 0) {
+       const file = convertToFileObjectBlob(value.create[0]);
+       if (file) {
+         setFileJustUploaded(file);
+       }
+     } else {
+       setFileJustUploaded(undefined);
+     }
+   } */
     if (currentValue !== value) {
       setModifiedFields((prevState) => ({
         ...prevState,
@@ -163,44 +165,44 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
       }));
     }
   };
-/*   useEffect(() => {
-    const fetchCountryData = async () => {
-      try {
-        if (type === "edit" || type === "view") {
-
-          const attachmentId = row?.anagrafica?.attachment_id?.[0]?.id;
-
-          if (attachmentId) {
-            const response = await CrudGenericService.getFilesByIds(attachmentId);
-
-            const fetchedAttachment = response?.[0];
-
-            if (fetchedAttachment) {
-              const updatedAttachment = {
-                ...row.anagrafica.existingFile?.[0],
-                name: fetchedAttachment.file_name || "Name not found",
-              };
-
-              setExstingFile([updatedAttachment]);
-              setAttachmentNameState(updatedAttachment.name);
-              setDownload(true);
+  /*   useEffect(() => {
+      const fetchCountryData = async () => {
+        try {
+          if (type === "edit" || type === "view") {
+  
+            const attachmentId = row?.anagrafica?.attachment_id?.[0]?.id;
+  
+            if (attachmentId) {
+              const response = await CrudGenericService.getFilesByIds(attachmentId);
+  
+              const fetchedAttachment = response?.[0];
+  
+              if (fetchedAttachment) {
+                const updatedAttachment = {
+                  ...row.anagrafica.existingFile?.[0],
+                  name: fetchedAttachment.file_name || "Name not found",
+                };
+  
+                setExstingFile([updatedAttachment]);
+                setAttachmentNameState(updatedAttachment.name);
+                setDownload(true);
+              } else {
+                setAttachmentNameState(null);
+                setDownload(false);
+              }
             } else {
               setAttachmentNameState(null);
               setDownload(false);
             }
-          } else {
-            setAttachmentNameState(null);
-            setDownload(false);
           }
+          setIsrowDataReady(true);
+        } catch (error) {
+          console.error("Error fetching attachment data:", error);
         }
-        setIsrowDataReady(true);
-      } catch (error) {
-        console.error("Error fetching attachment data:", error);
-      }
-    };
-
-    fetchCountryData();
-  }, [row, type]); */
+      };
+  
+      fetchCountryData();
+    }, [row, type]); */
 
 
 
@@ -255,12 +257,11 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
         const adaptedActivities = permessiAdapter(activityTypeResponse);
         setActivity(adaptedActivities)
         const skillsAreaResponse = await CrudGenericService.getSkillArea(true);
-        console.log("skill",skillsAreaResponse)
         if (Array.isArray(skillsAreaResponse.data)) {
           const adaptedSkillsArea = skillsAreaResponse.data.map(r => ({ id: r.id, name: r.name }))
           setSkills(adaptedSkillsArea);
-      }
-         
+        }
+
       } catch (error) {
         console.error("Error fetching data:", error);
       };
@@ -358,22 +359,19 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
 
 
     if (!hasError) {
+
       if (isCreate) {
         console.log("combineddatabeforeadapt", combinedData)
         const formattedData = reverseAdapter(combinedData);
         console.log("formattedData", formattedData);
         const idrow = row.id;
-        onSubmit(type, formattedData, refreshTable, idrow);
-        refreshTable();
-        closeModalCallback();
+        onSubmit(type, formattedData, refreshTable, idrow, closeModalCallback);
         setNewFormTrattamentoUpdate(false)
 
       } else {
         const formattedData = reverseAdapterUpdate(combinedData);
         const idrow = row.id;
-        onSubmit(type, formattedData, refreshTable, idrow);
-        refreshTable();
-        closeModalCallback();
+        onSubmit(type, formattedData, refreshTable, idrow, closeModalCallback);
         setNewFormTrattamentoUpdate(false)
 
       }
@@ -385,16 +383,16 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
 
 
   const handleFileUpload = async () => {
-      if(formAnagrafica.current && formAnagrafica.current.values.attachment && formAnagrafica.current.values.attachment.create && formAnagrafica.current.values.attachment.create.length){
+    if (formAnagrafica.current && formAnagrafica.current.values.attachment && formAnagrafica.current.values.attachment.create && formAnagrafica.current.values.attachment.create.length) {
 
       const response = await CrudGenericService.getCVaI(formAnagrafica.current.values.attachment.create[0]);
       const skillsData = await CrudGenericService.getSkillAI(formAnagrafica.current.values.attachment.create[0]);
-      
+
       const data = response.jsonData;
       const dataSKill = skillsData.jsonData.skills
-      const seniority= skillsData.jsonData.seniority
+      const seniority = skillsData.jsonData.seniority
 
-      const updatedFormAnagraficaData = anagraficaAiButtonAdapter(data, formAnagraficaData, modifiedFields, gender, dataSKill,seniority);
+      const updatedFormAnagraficaData = anagraficaAiButtonAdapter(data, formAnagraficaData, modifiedFields, gender, dataSKill, seniority);
 
       setFormAnagraficaData(updatedFormAnagraficaData);
 
@@ -582,6 +580,35 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
 
   if (!isrowDataReady || ((type !== 'create' && type !== "delete") && !isrowDataReady)) {
     return <div className={styles.loader}><LoaderComponent type="pulsing"></LoaderComponent></div>;
+  }
+
+
+  if (type === 'delete') {
+    return (
+
+      <div className={styles.formDelete}>
+        <span>{"Sei sicuro di voler eliminare il record?"}</span>
+
+        <div >
+          <Button onClick={() => closeModalCallback()}>Cancel</Button>
+          <Button themeColor={"error"} onClick={() => row.anagrafica.thereIsFile ? NotificationActions.openConfirm(
+            "All'eliminazione di questo record, vuoi eliminare anche il suo file allegato?",
+            () => {
+              setDeleteFiles(true);
+              onSubmit(type, { deleteFiles: true }, refreshTable, row.id, closeModalCallback);
+            },
+            "Conferma Eliminazione",
+            () => {
+              setDeleteFiles(false);
+              onSubmit(type, { deleteFiles: false }, refreshTable, row.id, closeModalCallback);
+            }
+          ):  onSubmit(type, { deleteFiles: false }, refreshTable, row.id, closeModalCallback) }>
+            Elimina
+          </Button>
+        </div>
+      </div>
+
+    )
   }
 
 

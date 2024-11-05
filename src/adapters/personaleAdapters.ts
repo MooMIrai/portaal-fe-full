@@ -75,11 +75,22 @@ const mapToAnagraficaData = (
           }
         : undefined,
   },
-  attachment_id: Array.isArray(Person.files)
+
+  attachment: Array.isArray(Person.files)
     ? Person.files.map((file) => ({
-        id: file.uniqueRecordIdentifier,
+        provider: file.provider,
+        file_name: file.file_name,
+        google_drive: file.google_drive
+          ? {
+              id: file.google_drive.id,
+              download_link: file.google_drive.download_link,
+              view_link: file.google_drive.view_link,
+            }
+          : undefined,
       }))
     : [],
+
+  thereIsFile: Array.isArray(Person.files) && Person.files.length > 0,
   nascita: {
     city: {
       id: Person?.CityBirth?.id,
@@ -283,11 +294,12 @@ export const dataAdapter = (row: Record<string, any>) => {
     seniority: row.anagrafica.seniority || "",
     sesso: row.anagrafica.sesso,
     città: row.anagrafica.città || "",
-    attachment_id: row.anagrafica.attachment_id || null,
+    /*   attachment_id: row.anagrafica.attachment_id || null, */
     attachment: row.anagrafica.attachment || null,
     residenza: row.anagrafica.residenza || undefined,
     nascita: row.anagrafica.nascita || undefined,
-    existingFile: row.anagrafica.existingFile || undefined,
+    thereIsFile: row.anagrafica.thereIsFile || false,
+    /*  existingFile: row.anagrafica.existingFile || undefined, */
     skills: row.anagrafica.skills,
     //comuneResidenza: row.anagrafica.comuneResidenza || "",
     indirizzoResidenza: row.anagrafica.indirizzoResidenza || "",
@@ -658,9 +670,7 @@ export const reverseAdapter = (combinedData: {
   newFormTrattamentoEconomico: boolean;
   skills: MappedSkill[];
 }) => {
-  debugger;
-  const attachments =
-    combinedData.anagrafica.attachment;
+  const attachments = combinedData.anagrafica.attachment;
   const personSkillAreas =
     combinedData.anagrafica.skills?.map((skill) => {
       const skillId =
@@ -668,15 +678,17 @@ export const reverseAdapter = (combinedData: {
 
       return {
         skillArea_id: skillId,
-        Seniority: combinedData.anagrafica.seniority || null,
       };
     }) || [];
   const permessiIDs =
     mapPermessiNamesToIDs(combinedData.permessi, combinedData.idPermessi) || [];
 
   let attachmentFiles = attachments;
-  if(attachments && attachmentFiles.create){
-    attachmentFiles.create = attachmentFiles.create.map(p=>({...p,property:'files'}))
+  if (attachments && attachmentFiles?.create) {
+    attachmentFiles.create = attachmentFiles.create.map((p) => ({
+      ...p,
+      property: "Person.files",
+    }));
   }
 
   return {
@@ -700,7 +712,7 @@ export const reverseAdapter = (combinedData: {
         combinedData.anagrafica.residenza?.city?.id.toString() === ""
           ? null
           : combinedData.anagrafica.residenza?.city?.id,
-      Attachment: attachments  ,
+      Attachment: attachments,
       location_id: combinedData.anagrafica.sede_autocomplete?.id || 1,
       cityBirth_id:
         !combinedData.anagrafica.nascita?.city?.id ||
@@ -717,6 +729,7 @@ export const reverseAdapter = (combinedData: {
         combinedData.anagrafica.cap.toString().trim() !== ""
           ? combinedData.anagrafica.cap
           : null,
+      Seniority: combinedData.anagrafica.seniority,
       PersonSkillAreas: personSkillAreas,
       taxCode:
         !combinedData.anagrafica.codiceFiscale ||
@@ -818,8 +831,12 @@ export const reverseAdapterUpdate = (combinedData: {
     mapPermessiNamesToIDs(combinedData.permessi, combinedData.idPermessi) || [];
 
   const result: any = {};
-  const attachments =
-    combinedData.modifiedData.attachment? combinedData.modifiedData.attachment.create.map(o=>({...o,property:'files'})):null;
+  const attachments = combinedData.modifiedData.attachment
+    ? combinedData.modifiedData.attachment.create.map((o) => ({
+        ...o,
+        property: "Person.files",
+      }))
+    : null;
   if (combinedData.anagrafica.accountStatus_id) {
     result.accountStatus_id = combinedData.anagrafica.accountStatus_id;
   }
