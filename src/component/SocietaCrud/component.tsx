@@ -72,6 +72,9 @@ export function CompanyCrud(props: PropsWithRef<CompanyCrudProps>) {
     if (props.type === 'delete') {
       props.onSubmit(props.type, {}, props.refreshTable, props.row.id, props.closeModalCallback);
     }
+    if(props.type === 'view'){
+      props.closeModalCallback();
+    }
   }
 
   if (props.type === 'delete') {

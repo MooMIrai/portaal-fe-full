@@ -378,6 +378,9 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
 
 
     }
+    if(type === 'view'){
+      closeModalCallback();
+    }
 
   };
 
