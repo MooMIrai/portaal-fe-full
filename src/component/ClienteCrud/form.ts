@@ -16,7 +16,10 @@ export const getFormCustomerFields = (formData: CustomerModel, type:string) => {
         if(!value || !value.length) return "";
         return otherValidator(value);
     }
-
+    const emailValidator = (value: any) => {
+        if (!value) return "";
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? "" : "L'email non è valida";
+    };
     const fields = {
         customer_code: {
             name: "customer_code",
@@ -57,6 +60,7 @@ export const getFormCustomerFields = (formData: CustomerModel, type:string) => {
             showLabel: false,
             disabled:type === "view",
             value: formData.email || "",
+            validator: (value: any) => optional(value, emailValidator),
         },
         phone: {
             name: "phone",
