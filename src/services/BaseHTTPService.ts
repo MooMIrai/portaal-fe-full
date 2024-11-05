@@ -102,6 +102,17 @@ export default abstract class BaseHTTPService{
         throw error;
       }
     };
+    deleteResourcewidthFiles = async (id: number, deleteFromProvider: boolean) => {
+      try {
+        const response = await client.delete(`/api/v1/${this.getTableName()}/delete/${id}`, {
+          params: { deleteFromProvider },
+        });
+        return response.data;
+      } catch (error) {
+        console.error("Error deleting resource:", error);
+        throw error;
+      }
+    };
   
   
 }
