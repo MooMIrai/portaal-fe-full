@@ -45,7 +45,7 @@ export const getFormOfferFields = (
             name: "accountManager",
             label: "Commerciale di riferimento",
             type: "commerciale-selector",
-            valueOnChange: valueOnChange,
+            //valueOnChange: valueOnChange,
             value: formData.accountManager,
             required: true,
             disabled: type === "view",
@@ -56,7 +56,7 @@ export const getFormOfferFields = (
             label: "Anno di riferimento",
             type: "year",
             value: formData.year,
-            valueOnChange: valueOnChange,
+            //valueOnChange: valueOnChange,
             disabled: type === "view",
         },
         project_type: {
@@ -64,7 +64,7 @@ export const getFormOfferFields = (
             label: "Tipo di offerta",
             type: "projecttype-selector",
             value: formData.project_type,
-            valueOnChange: valueOnChange,
+            //valueOnChange: valueOnChange,
             required: true,
             disabled: type === "view",
             validator: (value: any) => (value ? "" : "Selezionare un tipo offerta")
@@ -75,7 +75,7 @@ export const getFormOfferFields = (
             type: "customer-selector",
             value: formData.customer,
             required: true,
-            valueOnChange: valueOnChange,
+            //valueOnChange: valueOnChange,
             disabled: type === "view",
             validator: (value: any) => (value ? "" : "Selezionare un Cliente valido")
         },
@@ -85,7 +85,7 @@ export const getFormOfferFields = (
             label: "Tipo Fatturazione",
             type: "billingtype-selector",
             value: formData.billing_type,
-            valueOnChange: combinedValueOnChangeBillyngType,
+            //valueOnChange: combinedValueOnChangeBillyngType,
             required: true,
             disabled: type === "view" || isDaily,
             validator: (value: any) => (value ? "" : "Selezionare un Tipo di fatturazione valida")
@@ -98,7 +98,7 @@ export const getFormOfferFields = (
         label: "Tariffa",
         type: "number",
         value: formData.rate,
-        valueOnChange: valueOnChange,
+        //valueOnChange: valueOnChange,
         required: isDaily,
         disabled: type === "view",
         validator: (value: any) => requiredIfDailyValidator(value, "Tariffa"),
@@ -109,7 +109,7 @@ export const getFormOfferFields = (
         label: "Giorni offerti",
         type: "number",
         value: formData.days,
-        valueOnChange: valueOnChange,
+        //valueOnChange: valueOnChange,
         required: isDaily,
         disabled: type === "view",
         validator: (value: any) => requiredIfDailyValidator(value, "Giorni offerti"),
@@ -122,7 +122,7 @@ export const getFormOfferFields = (
         label: "Importo",
         type: "number",
         value: formData.amount,
-        valueOnChange: valueOnChange,
+        //valueOnChange: valueOnChange,
         required: isLupsum,
         disabled: type === "view",
         conditions: (formData: OfferModel) => formData.billing_type?.id !== "Daily",
@@ -138,7 +138,7 @@ export const getFormOfferFields = (
         label: "Titolo",
         type: "text",
         value: formData.title,
-        valueOnChange: valueOnChange,
+        //valueOnChange: valueOnChange,
         required: true,
         disabled: type === "view",
         validator: (value: any) => (value ? "" : "Il campo Titolo è obbligatorio")
@@ -148,7 +148,7 @@ export const getFormOfferFields = (
         label: "Protocollo",
         type: "text",
         value: formData.protocol,
-        valueOnChange: valueOnChange,
+        //valueOnChange: valueOnChange,
         required: true,
         disabled: type === "view",
         validator: (value: any) => value ? "" : "Il campo Protocollo è obbligatorio"
@@ -158,13 +158,13 @@ export const getFormOfferFields = (
             label: "Sede",
             type: "sede-selector",
             value: formData.location,
-            valueOnChange: valueOnChange,
+            //valueOnChange: valueOnChange,
             required: true,
             disabled: type === "view"
         };
     fields.approval_date = {
         name: "approval_date",
-        valueOnChange: valueOnChange,
+        //valueOnChange: valueOnChange,
         label: "Data approvazione",
         type: "date",
         value: formData.approval_date,
@@ -175,7 +175,7 @@ export const getFormOfferFields = (
         name: "end_date",
         label: "Data scadenza",
         type: "date",
-        valueOnChange: valueOnChange,
+        //valueOnChange: valueOnChange,
         value: formData.end_date,
         disabled: type === "view"
     };
@@ -183,7 +183,7 @@ export const getFormOfferFields = (
         name: "outcome_type",
         label: "Tipo Esito",
         type: "outcometype-selector",
-        valueOnChange: valueOnChange,
+        //valueOnChange: valueOnChange,
         value: formData.outcome_type,
         required: true,
         disabled: type === "view",
@@ -193,7 +193,7 @@ export const getFormOfferFields = (
     fields.NoCollective = {
         name: 'NoCollective',
         label: 'Fuori accordo quadro',
-        valueOnChange: valueOnChange,
+        //valueOnChange: valueOnChange,
         type: 'checkbox',
         showLabel: false,
         value: formData.NoCollective || false,
@@ -202,7 +202,7 @@ export const getFormOfferFields = (
     fields.description = {
         name: 'description',
         label: 'Descrizione',
-        valueOnChange: valueOnChange,
+        //valueOnChange: valueOnChange,
         type: 'textarea',
         value: formData.description,
         disabled: type === "view"
@@ -220,7 +220,7 @@ export const getFormOfferFields = (
         name: "attachment",
         label: "Carica Offerta",
         type: "uploadMultipleFiles",
-        valueOnChange: valueOnChange,
+        //valueOnChange: valueOnChange,
         disabled: type === "view",
         existingFile: formData.existingFile,
     };
@@ -237,7 +237,7 @@ export const getFormCommesseFields = (formData: Projects | undefined, valueOnCha
             name: "start_date",
             label: "Data di inizio",
             type: "date",
-            valueOnChange: valueOnChange,
+            //valueOnChange: valueOnChange,
             required: true,
             value: formData?.start_date,
             validator: (value: any) => (value ? "" : "Seleziona una data")
@@ -246,14 +246,14 @@ export const getFormCommesseFields = (formData: Projects | undefined, valueOnCha
             name: "end_date",
             label: "Data di fine",
             type: "date",
-            valueOnChange: valueOnChange,
+            //valueOnChange: valueOnChange,
             value: formData?.end_dateP,
 
         },
         orderNum: {
             name: "orderNum",
             label: "Numero ordine cliente",
-            valueOnChange: valueOnChange,
+            //valueOnChange: valueOnChange,
             type: "text",
             value: formData?.orderNum,
 
@@ -262,7 +262,7 @@ export const getFormCommesseFields = (formData: Projects | undefined, valueOnCha
             name: "waitingForOrder",
             label: "In Attesa di ordine",
             type: "checkbox",
-            valueOnChange: valueOnChange,
+            //valueOnChange: valueOnChange,
             showLabel: false,
             value: formData?.waitingForOrder || false,
         }

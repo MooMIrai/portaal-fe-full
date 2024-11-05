@@ -79,12 +79,7 @@ export interface OfferModel {
   project_type?: { id: number; name: string };
   project_type_id: number;
   existingFile?: Array<any>;
-  attachment?: Array<{
-    id?: string;
-    name?: string;
-    extension?: string;
-    data?: number[]; 
-  }>;
+  attachment?: any;
   attachment_id?: number;
   orderNum?: string;
   start_date?: Date;

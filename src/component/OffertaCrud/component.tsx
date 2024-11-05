@@ -286,7 +286,7 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
 
   const handleSubmit = () => {
     let hasError = false;
-
+    
     if (props.type === "create" || props.type === "edit") {
       if (formCustomer.current) {
         formCustomer.current.onSubmit();
@@ -323,23 +323,11 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
   const saveOfferData = (dataToSave) => {
     const baseData = dataToSave ? dataToSave : formCustomerData;
 
-    if (props.type === "edit") {
-      const modifiedData = Object.keys(modifiedFields).reduce((result, key) => {
-        if (modifiedFields[key] !== undefined) {
-          result[key] = modifiedFields[key];
-        }
-        return result;
-      }, {});
-      
-      const formattedData = reverseOfferAdapterUpdate(modifiedData, baseData);
-      
-      props.onSubmit(props.type, formattedData, props.refreshTable, props.row.id, props.closeModalCallback);
+    
 
-    } else {
-
-      const formattedData = fromOfferModelToOfferBEModel({ ...baseData });
-      props.onSubmit(props.type, formattedData, props.refreshTable, props.row.id, props.closeModalCallback);
-    }
+    const formattedData = fromOfferModelToOfferBEModel({ ...baseData });
+    props.onSubmit(props.type, formattedData, props.refreshTable, props.row.id, props.closeModalCallback);
+    
   };
 
 

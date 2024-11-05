@@ -87,11 +87,20 @@ export function fromOfferBEModelToOfferModel(
 export function fromOfferModelToOfferBEModel(
   offerModel: OfferModel
 ): OfferBEModel {
+
+  let files = offerModel.attachment;
+  if(offerModel.attachment){
+    if(offerModel.attachment.create)
+      files.create = files.create.map(f=>({...f,property:'files'}))
+    if(offerModel.attachment.delete && offerModel.attachment.delete.deletedFiles)
+      offerModel.attachment.delete.deletedFiles = offerModel.attachment.delete.deletedFiles.map(f=>({...f,property:'files'}))
+  }
+
   return {
     id: offerModel.id,
     project_code: offerModel.protocol, // mapping protocol to offer_name
     name: offerModel.title, // mapping title to name
-    Attachment: offerModel.attachment,
+    Attachment: files,
     /* start_date: offerModel.start_date.toISOString(), */
     deadline_date: offerModel.end_date?.toISOString() || undefined, // fallback to undefined if empty
     other_details: offerModel.description || "", // mapping description to other_details
@@ -171,7 +180,7 @@ export const reverseOfferAdapterUpdate = (
   }
 
   if ("attachment" in modifiedData) {
-    result.Attachment = modifiedData.attachment
+    result.Attachment = modifiedData.attachment;
   }
 
   if ("noCollective" in modifiedData) {
