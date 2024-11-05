@@ -83,6 +83,10 @@ class FileService{
         NotificationProviderActions.openFilePreview(URL.createObjectURL(data));
     }
 
+    openFileFromLink(data:string){
+        NotificationProviderActions.openFilePreview(data);
+    }
+
     urlFromUint8(fileData:Uint8Array,contentType:string){
         const uint8Array = new Uint8Array(fileData);
     

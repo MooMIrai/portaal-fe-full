@@ -4,7 +4,7 @@ import UploadSingleFileComponent from "../UpLoadSingleFile/component";
 import styles from './styles.module.scss';
 import {  downloadIcon, plusIcon, trashIcon } from "@progress/kendo-svg-icons";
 import { Button, ButtonGroup } from "@progress/kendo-react-buttons";
-
+import FileService from "../../services/FileService";
 
 interface UploadMultipleProps {
     isReadOnly:boolean;
@@ -18,16 +18,18 @@ export default function UploadMultiple(props:UploadMultipleProps){
     const [openSingle,setOpenSingle] = useState<boolean>(false);
     const [currentSingle,setCurrentSingle] = useState<any>();
     const [values,setValues] = useState<any[]>([]);
+    const [removedExisting,setRemovedExisting] = useState<Array<string>>([]);
 
     useEffect(()=>{
         if(props.onChange){
-            props.onChange(values);
+            const value = FileService.combineDataToBE(values,removedExisting,props.name)
+            props.onChange(value);
         }
-    },[values,props.onChange])
+    },[values,removedExisting])
 
     const handleValue = ()=>{
-        if(currentSingle){
-            setValues([...values,...currentSingle]);
+        if(currentSingle && currentSingle.create){
+            setValues([...values,...currentSingle.create]);
             handleCloseSingle();
             setCurrentSingle(undefined);
         }
@@ -35,6 +37,10 @@ export default function UploadMultiple(props:UploadMultipleProps){
 
     const handleRemove = (index:number)=> {
         setValues(values.filter((el,indexInArray)=>indexInArray!==index));
+    }
+
+    const handleRemoveExisting = (data:any)=>{
+        setRemovedExisting([...removedExisting,data.uniqueIdentifier])
     }
 
     const handleCloseSingle = ()=> setOpenSingle(false)
@@ -54,24 +60,29 @@ export default function UploadMultiple(props:UploadMultipleProps){
                 themeColor={"primary"}
                 svgIcon={downloadIcon}
                 onClick={()=>{
-                    debugger;
+                    FileService.openFileFromLink(FileService.urlFromUint8(file.data,file.content_type))
                 }}
             />
           </ButtonGroup>}
         </li>
       )):<>Nessun file selezionato</>
 
-    const existingRender = props.existingFiles && props.existingFiles.length?<div className={styles.existingFilesContainer} style={{marginTop:10}}>
+    
+    const existinggFileFiltered = props.existingFiles && props.existingFiles.length?
+    props.existingFiles.filter(e=>!removedExisting.some(p=>p === e.uniqueIdentifier))
+    :[]
+
+    const existingRender =existinggFileFiltered && existinggFileFiltered.length?<div className={styles.existingFilesContainer} style={{marginTop:10}}>
     <h4 className={styles.existingFilesTitle}>File esistenti:</h4>
     <ul className={styles.existingFilesListContainer}>
-    {props.existingFiles.map((file,index) => (
+    {existinggFileFiltered.map((file) => (
             <li key={file.uniqueIdentifier} className={styles.existingFilesList}>
                 {file.file_name}
                 {!props.isReadOnly && <ButtonGroup>
                 <Button
                     themeColor={"error"}
                     svgIcon={trashIcon}
-                    onClick={() => handleRemove(index)}
+                    onClick={() => handleRemoveExisting(file)}
                 >
                 </Button>
                 <Button 
