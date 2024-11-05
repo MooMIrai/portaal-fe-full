@@ -483,6 +483,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
         {actionMode === "row" && hasActionInColumn() && (
           <GridColumn
             filterable={false}
+            sortable={false}
             field="action"
             title="Azioni"
             cell={(cellGrid: GridCellProps) => {
