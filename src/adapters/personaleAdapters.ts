@@ -76,21 +76,11 @@ const mapToAnagraficaData = (
         : undefined,
   },
 
-  attachment: Array.isArray(Person.files)
-    ? Person.files.map((file) => ({
-        provider: file.provider,
-        file_name: file.file_name,
-        google_drive: file.google_drive
-          ? {
-              id: file.google_drive.id,
-              download_link: file.google_drive.download_link,
-              view_link: file.google_drive.view_link,
-            }
-          : undefined,
-      }))
-    : [],
-
-  thereIsFile: Array.isArray(Person.files) && Person.files.length > 0,
+  attachment_id: Array.isArray(Person.files)
+  ? Person.files.map((file) => ({
+      id: file.uniqueRecordIdentifier,
+    }))
+  : [],
   nascita: {
     city: {
       id: Person?.CityBirth?.id,
@@ -298,8 +288,7 @@ export const dataAdapter = (row: Record<string, any>) => {
     attachment: row.anagrafica.attachment || null,
     residenza: row.anagrafica.residenza || undefined,
     nascita: row.anagrafica.nascita || undefined,
-    thereIsFile: row.anagrafica.thereIsFile || false,
-    /*  existingFile: row.anagrafica.existingFile || undefined, */
+     existingFile: row.anagrafica.existingFile || undefined,
     skills: row.anagrafica.skills,
     //comuneResidenza: row.anagrafica.comuneResidenza || "",
     indirizzoResidenza: row.anagrafica.indirizzoResidenza || "",

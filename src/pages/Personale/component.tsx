@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import GridTable from "common/Table";
 import PersonaleSection from "./../../component/TabPersonaleHR/component";
-import { accountsService, CrudGenericService } from "../../services/personaleServices";
+import { CrudGenericService } from "../../services/personaleServices";
 import {
   locationOption,
   sedeAdapter,
@@ -134,7 +134,7 @@ const PersonalPage = () => {
       resources.data,
       sede
     );
-    console.log("transfoermedData", transformedData)
+    console.log("transfoermedData",transformedData)
     setData(transformedData);
 
     return {
@@ -145,39 +145,26 @@ const PersonalPage = () => {
     };
   };
 
-  const handleFormSubmit = async (
-    type: string,
-    formData: any,
-    refreshTable: any,
-    id: any,
-    closeModal: () => void
-  ) => {
-    let promise: Promise<any> | undefined;
-  
-    if (type === "create") {
-      promise = accountsService.createResource(formData);
-    } else if (type === "edit") {
-      promise = accountsService.updateResource(id, formData);
-    } else if (type === "delete") {
-      promise = accountsService.deleteResourcewidthFiles(id, formData.deleteFiles);
-    }
-  
-    if (promise) {
-      try {
-        await promise;
-        NotificationProviderActions.openModal(
-          { icon: true, style: "success" },
-          "Operazione avvenuta con successo"
-        );
-        refreshTable();
-        closeModal();
-      } catch (error) {
-        console.error("Error handling form submit:", error);
+  const handleFormSubmit = async (type, formData, refreshTable, id) => {
+    try {
+      if (type === "create") {
+        await CrudGenericService.createResource(formData);
+      } else if (type === "edit") {
+        await CrudGenericService.updateResource(id, formData);
+      } else if (type === "delete") {
+        await CrudGenericService.deleteResource(id);
       }
+
+      NotificationProviderActions.openModal(
+        { icon: true, style: "success" },
+        "Operazione avvenuta con successo"
+      );
+      refreshTable();
+      
+    } catch (error) {
+      console.error("Error during form submission:", error);
     }
   };
-  
-
 
   // Se i dati non sono pronti, non renderizzare nulla
   if (!isLocationDataReady) {
@@ -198,16 +185,38 @@ const PersonalPage = () => {
         classNameWindow={styles.windowStyle}
         classNameWindowDelete={styles.windowDelete}
         formCrud={(row, type, closeModalCallback, refreshTable) => (
-
-          <PersonaleSection
-            row={row}
-            type={type}
-            closeModalCallback={closeModalCallback}
-            refreshTable={refreshTable}
-            onSubmit={handleFormSubmit}
-          />
-
-
+          <>
+            {type === "delete" ? (
+              <div className={styles.formDelete}>
+                <span>{"Sei sicuro di voler eliminare il record?"}</span>
+                <div>
+                  <Button onClick={closeModalCallback}>Cancel</Button>
+                  <Button
+                    themeColor={"error"}
+                    onClick={async () => {
+                      await handleFormSubmit(
+                        type,
+                        null,
+                        refreshTable,
+                        row?.id
+                      );
+                      closeModalCallback();
+                    }}
+                  >
+                    {"Elimina"}
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <PersonaleSection
+                row={row}
+                type={type}
+                closeModalCallback={closeModalCallback}
+                refreshTable={refreshTable}
+                onSubmit={handleFormSubmit}
+              />
+            )}
+          </>
         )}
       />
     </div>

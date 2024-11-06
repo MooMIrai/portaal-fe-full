@@ -112,7 +112,31 @@ class CrudGenericServiceC {
       throw error;
     }
   };
+  updateResource = async (
+    id: number,
+    resourceData: any
+  ) => {
+    try {
+      const response = await client.patch(
+        `api/v1/accounts/update/${id}`,
+        resourceData
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error updating resource:", error);
+      throw error;
+    }
+  };
 
+  deleteResource = async (id: number) => {
+    try {
+      const response = await client.delete(`api/v1/accounts/delete/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error("Error deleting resource:", error);
+      throw error;
+    }
+  };
 
 
   searchCommerciale = (text: string) => {
