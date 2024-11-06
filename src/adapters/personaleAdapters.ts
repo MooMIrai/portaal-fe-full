@@ -77,10 +77,10 @@ const mapToAnagraficaData = (
   },
 
   attachment_id: Array.isArray(Person.files)
-  ? Person.files.map((file) => ({
-      id: file.uniqueRecordIdentifier,
-    }))
-  : [],
+    ? Person.files.map((file) => ({
+        id: file.uniqueRecordIdentifier,
+      }))
+    : [],
   nascita: {
     city: {
       id: Person?.CityBirth?.id,
@@ -284,11 +284,11 @@ export const dataAdapter = (row: Record<string, any>) => {
     seniority: row.anagrafica.seniority || "",
     sesso: row.anagrafica.sesso,
     città: row.anagrafica.città || "",
-    /*   attachment_id: row.anagrafica.attachment_id || null, */
+    attachment_id: row.anagrafica.attachment_id || null,
     attachment: row.anagrafica.attachment || null,
     residenza: row.anagrafica.residenza || undefined,
     nascita: row.anagrafica.nascita || undefined,
-     existingFile: row.anagrafica.existingFile || undefined,
+    existingFile: row.anagrafica.existingFile || undefined,
     skills: row.anagrafica.skills,
     //comuneResidenza: row.anagrafica.comuneResidenza || "",
     indirizzoResidenza: row.anagrafica.indirizzoResidenza || "",
