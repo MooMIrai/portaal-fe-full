@@ -146,7 +146,7 @@ export default function OffertePage() {
     } else if (type === "edit") {
       promise = offertaService.updateResource(id, formData);
     } else if (type === "delete") {
-      promise = offersService.deleteResourcewidthFiles(id, formData.deleteFiles);
+      promise = offertaService.deleteResource(id);
     }
 
     if (promise) {

@@ -366,18 +366,7 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
 
         <div >
           <Button onClick={() => props.closeModalCallback()}>Cancel</Button>
-          <Button themeColor={"error"} onClick={() => props.row.thereIsFile ? NotificationActions.openConfirm(
-            "All'eliminazione di questo record, vuoi eliminare anche il suo file allegato?",
-            () => {
-              setDeleteFiles(true);
-              props.onSubmit(props.type, { deleteFiles: true }, props.refreshTable, props.row.id, props.closeModalCallback);
-            },
-            "Conferma Eliminazione",
-            () => {
-              setDeleteFiles(false);
-              props.onSubmit(props.type, { deleteFiles: false }, props.refreshTable, props.row.id, props.closeModalCallback);
-            }
-          ):  props.onSubmit(props.type, { deleteFiles: false }, props.refreshTable, props.row.id, props.closeModalCallback) }>
+          <Button themeColor={"error"} onClick={handleSubmit}>
             Elimina
           </Button>
         </div>
