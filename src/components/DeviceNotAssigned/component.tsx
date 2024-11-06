@@ -46,7 +46,7 @@ export  function DeviceNotAssigned(){
       } else if (type === "edit") {
         promise = deviceService.updateResource(id, formData);
       } else if (type === "delete") {
-        promise = deviceService.deleteResourcewidthFiles(id,formData.deleteFiles);
+        promise = deviceService.deleteResource(id);
       }
   
       if (promise) {
