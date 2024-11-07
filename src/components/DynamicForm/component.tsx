@@ -115,7 +115,8 @@ export interface FieldConfig {
   loader?: boolean
   existingLink?: string;
   onFileDrop?: ((files: File[]) => void)
-  isDroppable?:boolean
+  isDroppable?:boolean,
+  noContainer?:boolean
   //onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -131,7 +132,7 @@ export interface DynamicFormProps {
   customDisabled?: boolean;
   submitText: string;
   addedFields?: Record<string, React.JSX.Element>
-
+  style?:any
 }
 
 const DynamicField = ({
@@ -216,11 +217,6 @@ const DynamicForm = React.forwardRef<any, DynamicFormProps>((props, ref) => {
   } = props;
 
 
-  React.useEffect(() => {
-    console.log(props.description + ' init')
-    return () => console.log(props.description + ' destroy')
-  }, [])
-
   return <Form
     initialValues={formData}
     onSubmit={(dataItem) => onSubmit(dataItem)}
@@ -228,17 +224,22 @@ const DynamicForm = React.forwardRef<any, DynamicFormProps>((props, ref) => {
     render={(formRenderProps: FormRenderProps) => (
       <FormElement>
         {children === undefined && (
-          <fieldset className={"k-form-fieldset"}>
+          <fieldset className={"k-form-fieldset"}  style={props.style}>
             <legend className={"k-form-legend"}>{description}</legend>
             {fields.filter((field) => {
               const formRef: any = ref;
               return !field.conditions || (formRef && formRef.current && field.conditions(formRef.current.values))
             }).map((field, index) => {
+              if(field.noContainer){
+                return <DynamicField
+                addedFields={addedFields}
+                field={field}
+                formRenderProps={formRenderProps}
+                valueOnChange={field.valueOnChange}
+              />
+              }
               return (
-                <FieldWrapper key={index} style={  field.type === 'country' || 
-                  (field.type === 'uploadMultipleFiles' && field.isDroppable) 
-                    ? { gridColumn: 'span 3' } 
-                    : undefined}>
+                <FieldWrapper key={index}>
                   <DynamicField
                     addedFields={addedFields}
                     field={field}
