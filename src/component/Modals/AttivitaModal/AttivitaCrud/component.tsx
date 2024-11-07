@@ -8,7 +8,7 @@ export interface AttivitaCrudProps {
   refreshTable: Function;
   handleFormSubmit: Function;
   addedFields: any;
-  fields: any[];
+  fields: any;
 }
 
 const AttivitaCrud = (props: AttivitaCrudProps) => {
@@ -34,18 +34,7 @@ const AttivitaCrud = (props: AttivitaCrudProps) => {
         submitText={"Salva"}
         customDisabled={false}
         formData={data}
-        fields={Object.values(props.fields).filter((e: any) => {
-          return e.name !== "id"
-        }).map((e: any) => {
-          return {
-            ...e,
-            disabled: e.name === "project_id" ||
-              e.name === "date_created" ||
-              e.name === "date_modified" ||
-              e.name === "user_created" ||
-              e.name === "user_modified"
-          }
-        })}
+        fields={Object.values(props.fields)}
         addedFields={props.addedFields}
         showSubmit={true}
         extraButton={true}

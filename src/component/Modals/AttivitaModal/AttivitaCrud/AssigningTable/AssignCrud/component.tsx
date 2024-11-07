@@ -7,7 +7,7 @@ export interface AssignCrudProps {
   refreshTable: Function;
   handleFormSubmit: Function;
   addedFields: any;
-  fields: any[];
+  fields: any;
 }
 
 const AssignCrud = (props: AssignCrudProps) => {

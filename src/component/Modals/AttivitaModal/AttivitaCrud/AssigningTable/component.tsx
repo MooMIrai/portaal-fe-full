@@ -14,6 +14,7 @@ import styles from "./styles.module.scss";
 import { attivitaService } from "../../../../../services/attivitaService";
 import { attivitaAssegnazioneColumns } from "../../../../ProgettoCrud/config";
 import AssignCrud from "./AssignCrud/component";
+import { assignForm } from "../../../../ProgettoCrud/forms/assign";
 
 const determineFieldType = (
   value: any
@@ -39,7 +40,7 @@ const determineFieldType = (
 };
 
 const AssigningTable = (props: { activity_id: number }) => {
-  const [innerCRUDFields, setInnerCRUDFields] = useState<any>({});
+  //const [innerCRUDFields, setInnerCRUDFields] = useState<any>({});
 
   const loadData = async (pagination: any, filter: any, sorting: any[]) => {
     const include = true;
@@ -54,7 +55,6 @@ const AssigningTable = (props: { activity_id: number }) => {
       sorting
     );
 
-    console.log("resp: ", tableResponse);
 
     const mappedResponse = tableResponse?.data.map(d => {
       return {
@@ -68,7 +68,7 @@ const AssigningTable = (props: { activity_id: number }) => {
       meta: { total: tableResponse?.meta?.total },
     };
   };
-
+/* 
   const loadModel = async () => {
     try {
       const resources = await attivitaService.getAssignGridModel();
@@ -78,7 +78,6 @@ const AssigningTable = (props: { activity_id: number }) => {
 
       const newModel: any = {};
       resources
-        /* .filter((item: any) => !excludedKeys.includes(item.name)) */
         .forEach((item: any) => {
           const name = item.name === "person_id" ? 'account-selector' : item.name;
           newModel[name] = {
@@ -92,7 +91,7 @@ const AssigningTable = (props: { activity_id: number }) => {
             showLabel: true
           };
         });
-
+        debugger;
       setInnerCRUDFields(newModel);
     } catch (error) {
       console.error("Error loading fields:", error);
@@ -102,7 +101,7 @@ const AssigningTable = (props: { activity_id: number }) => {
 
   useEffect(() => {
     loadModel();
-  }, []);
+  }, []); */
 
   const handleFormSubmit = (
     formData: any,
@@ -161,14 +160,7 @@ const AssigningTable = (props: { activity_id: number }) => {
               submitText={"Salva"}
               customDisabled={false}
               formData={{ activity_id: props.activity_id }}
-              fields={Object.values(innerCRUDFields).filter((e: any) => {
-                return e.name !== "id"
-              }).map((e: any) => {
-                return {
-                  ...e,
-                  disabled: e.disabled
-                }
-              })}
+              fields={Object.values(assignForm)}
               addedFields={formFields}
               showSubmit={true}
               extraButton={true}
@@ -197,7 +189,7 @@ const AssigningTable = (props: { activity_id: number }) => {
               closeModal={closeModal}
               refreshTable={refreshTable}
               addedFields={formFields}
-              fields={innerCRUDFields}
+              fields={assignForm}
               handleFormSubmit={(dataItem, refreshTable, closeModal) => handleFormSubmit(dataItem, refreshTable, closeModal, false)}
             />
           },

@@ -12,6 +12,7 @@ import { formFields } from "./customFields";
 import styles from "./styles.module.scss";
 import AttivitaCrud from "./AttivitaCrud/component";
 import AssigningTable from "./AttivitaCrud/AssigningTable/component";
+import { activityForm } from "../../ProgettoCrud/forms/activity";
 
 const determineFieldType = (
   value: any
@@ -45,9 +46,9 @@ export interface AttivitaModalProps {
 
 const AttivitaModal = (props: AttivitaModalProps) => {
 
-  const [innerCRUDFields, setInnerCRUDFields] = useState<any>({});
+  //const [innerCRUDFields, setInnerCRUDFields] = useState<any>({});
 
-  const loadModel = async () => {
+/*   const loadModel = async () => {
     try {
       const resources = await attivitaService.getGridModel();
       if (!resources) {
@@ -56,7 +57,6 @@ const AttivitaModal = (props: AttivitaModalProps) => {
 
       const newModel: any = {};
       resources
-        /* .filter((item: any) => !excludedKeys.includes(item.name)) */
         .forEach((item: any) => {
           const name = item.name === "activityManager_id"
             ? 'manager-selector'
@@ -84,17 +84,18 @@ const AttivitaModal = (props: AttivitaModalProps) => {
           };
         });
 
+        debugger;
       setInnerCRUDFields(newModel);
     } catch (error) {
       console.error("Error loading fields:", error);
       setInnerCRUDFields({});
     }
   };
-
-  useEffect(() => {
+ */
+  /* useEffect(() => {
     loadModel();
   }, []);
-
+ */
   const loadData = async (pagination: any, filter: any, sorting: any[]) => {
     const tableResponse = await attivitaService.getActivitiesByProject(
       props.dataItem.id,
@@ -165,21 +166,14 @@ const AttivitaModal = (props: AttivitaModalProps) => {
           <DynamicForm
             submitText={"Salva"}
             customDisabled={false}
-            formData={{ project_id: props.dataItem.id }}
-            fields={Object.values(innerCRUDFields).filter((e: any) => {
-              return !(e.readOnly || e.name === "id")
-            }).map((e: any) => {
-              return {
-                ...e,
-                disabled: e.name === "project_id"
-              }
-            })}
+            formData={row}
+            fields={Object.values(activityForm)}
             addedFields={formFields}
             showSubmit={true}
             extraButton={true}
             extraBtnAction={closeModalCallback}
             onSubmit={(dataItem: { [name: string]: any }) => {
-              handleFormSubmit(dataItem, refreshTable, closeModalCallback);
+              handleFormSubmit({...dataItem, project_id: props.dataItem.id}, refreshTable, closeModalCallback);
             }}
           />
         </div>
@@ -196,7 +190,7 @@ const AttivitaModal = (props: AttivitaModalProps) => {
             closeModal={closeModal}
             refreshTable={refreshTable}
             addedFields={formFields}
-            fields={innerCRUDFields}
+            fields={activityForm}
             handleFormSubmit={(dataItem, refreshTable, closeModal) => handleFormSubmit(dataItem, refreshTable, closeModal, true)}
           />
         },
