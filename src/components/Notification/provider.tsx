@@ -2,23 +2,30 @@ import { Button } from "@progress/kendo-react-buttons";
 import { Dialog, DialogActionsBar } from "@progress/kendo-react-dialogs";
 import { NotificationGroup, Notification } from "@progress/kendo-react-notification";
 import React, { createContext, PropsWithChildren, useState } from "react";
+import LoaderComponent from "../Loader/component";
 
 const NotificationContext = createContext({
     openModal:(type:{ icon?: boolean; style?: "none" | "info" | "success" | "warning" | "error"; },message:string)=>{},
     modal:{},
     openConfirm:(message:string,callback:()=>void,title?:string)=>{},
     confirm:{},
-    openFilePreview:(url:string)=>{}
+    openFilePreview:(url:string)=>{},
+    openLoader:()=>{},
+    closeLoader:()=>{}
   });
    
 const NotificationProviderActions:{
   openModal:(type:{ icon?: boolean; style?: "none" | "info" | "success" | "warning" | "error"; },message:string) =>void;
   openConfirm:(message:string,callback:()=>void,title?:string,callbackFail?:()=>void)=>void,
-  openFilePreview:(url:string)=>void
+  openFilePreview:(url:string)=>void,
+  openLoader:()=>void,
+  closeLoader:()=>void
 } = {
   openModal:()=>{},
   openConfirm:(message:string,callback:()=>void,title?:string)=>{},
-  openFilePreview:(url:string)=>{}
+  openFilePreview:(url:string)=>{},
+  openLoader:()=>{},
+  closeLoader:()=>{}
 }
 
 const NotificationProvider = (props:PropsWithChildren) => {
@@ -30,6 +37,8 @@ const NotificationProvider = (props:PropsWithChildren) => {
 
     const [showFile, setShowFile] = useState<boolean>();
     const [urlFile,setUrlFile] = useState<string>();
+
+    const [showLoader, setShowLoader] = useState<boolean>(false);
    
     const handleShow = (type:{ icon?: boolean; style?: "none" | "info" | "success" | "warning" | "error"; },message:string) =>{
       
@@ -52,12 +61,23 @@ const NotificationProvider = (props:PropsWithChildren) => {
       
     }
 
+    const handleShowLoader = ()=>setShowLoader(true);
+    const handleHideLoader = ()=>setShowLoader(false);
+
     NotificationProviderActions.openModal = handleShow;
     NotificationProviderActions.openConfirm = handleConfirmShow;
     NotificationProviderActions.openFilePreview = handleFilePreview;
+    NotificationProviderActions.openLoader = handleShowLoader;
+    NotificationProviderActions.closeLoader = handleHideLoader;
 
     return (
-      <NotificationContext.Provider value={{ openModal:handleShow,modal:modal, openConfirm:handleConfirmShow,confirm,openFilePreview:handleFilePreview }}>
+      <NotificationContext.Provider value={{ 
+        openModal:handleShow,modal:modal,
+         openConfirm:handleConfirmShow,
+         confirm,openFilePreview:handleFilePreview,
+         closeLoader:handleHideLoader,
+         openLoader:handleShowLoader
+          }}>
         {props.children}
         <NotificationGroup
             
@@ -109,6 +129,20 @@ const NotificationProvider = (props:PropsWithChildren) => {
             <iframe src={urlFile}  width={'100%'} height={'100%'}>
             </iframe>
           </Dialog>
+        }
+        {
+          showLoader && <div style={{
+            position:"fixed",
+            top:0,bottom:0,
+            left:0,right:0,
+            background:'rgba(255,255,255,0.7)',
+            zIndex:99999,
+            display:'flex',
+            alignItems:'center',
+            justifyContent:'center'
+            }}>
+            <LoaderComponent size="large" type="infinite-spinner"/>
+          </div>
         }
       </NotificationContext.Provider>
     );

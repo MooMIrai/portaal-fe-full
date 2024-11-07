@@ -10,6 +10,7 @@ const client = axios.create({
 
 client.interceptors.request.use((config) => {
   try {
+    NotificationProviderActions.openLoader();
     config.headers.Authorization = "Bearer " + AuthService.getToken();
     config.headers["x-tenant"] = sessionStorage.getItem("tenant");
   } catch {}
@@ -26,10 +27,11 @@ const askConfirmation=(message:string)=>{
 
 client.interceptors.response.use(
   (response) => {
+    NotificationProviderActions.closeLoader();
     return response;
   },
   async (error) => {
-
+    NotificationProviderActions.closeLoader();
     if(error.response && error.response.status===452){
       
       if(error.response.data && error.response.data.message){
