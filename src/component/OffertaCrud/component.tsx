@@ -38,10 +38,10 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
   const [isLocationDataReady, setIsLocationDataReady] = useState(false);
   const [isrowLocationDataReady, setIsrowLocationDataReady] = useState(false);
   const [isDaily, setIsDaily] = useState<boolean>(false)
-  const [isLumpSum, setIsLumpSum] =useState(false)
+  const [isLumpSum, setIsLumpSum] = useState(false)
   const [showNewTaskModal, setShowNewTaskModal] = useState(false);
   const [rowLocation, setRowLocation] = useState<{ id: number, name: string }>({ id: 0, name: '' });
-
+  const [deleteFiles, setDeleteFiles] = useState<boolean>(false)
 
   useEffect(() => {
     const fetchCountryData = async () => {
@@ -51,53 +51,53 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
         const adaptedLocation = sedeAdapter(sedeResponse);
         setSede(adaptedLocation);
 
-      /*   if (props.row?.existingFile && Array.isArray(props.row.existingFile) && props.row.existingFile.length > 0) {
-
-          const uniqueIdentifiers = props.row.existingFile
-            .map((attachment: { id?: string }) => attachment.id)
-            .join(',');
-
-          if (uniqueIdentifiers) {
-
-            const response = await offertaService.getFilesByIds(uniqueIdentifiers);
-
-            const fetchedAttachments = response.map((file: { uniqueIdentifier: string, file_name: string }) => ({
-              id: file.uniqueIdentifier,
-              name: file.file_name
-            }));
-            const updatedAttachments = props.row.existingFile?.map((attachment) => {
-              const fetchedAttachment = fetchedAttachments.find(
-                (f) => f.id === attachment.id
-              );
-              return {
-                ...attachment,
-                name: fetchedAttachment ? fetchedAttachment.name : "Name not found",
-              };
-            });
-
-            props.row.existingFile = updatedAttachments
-            console.log("Updated Attachments Array:", updatedAttachments);
-          }
-          if (props.type === "edit" || props.type === "view") {
-            if (Array.isArray(props.row.existingFile) && props.row.existingFile.length > 0) {
-              // Extract all attachment names
-              const attachmentNames = props.row.existingFile
-                .map((attachment) => attachment.name || null)
-                .filter(Boolean);
-
-              if (attachmentNames.length > 0) {
-                setAttachmentNameState(attachmentNames[0]);
-                setDownload(true);
+        /*   if (props.row?.existingFile && Array.isArray(props.row.existingFile) && props.row.existingFile.length > 0) {
+  
+            const uniqueIdentifiers = props.row.existingFile
+              .map((attachment: { id?: string }) => attachment.id)
+              .join(',');
+  
+            if (uniqueIdentifiers) {
+  
+              const response = await offertaService.getFilesByIds(uniqueIdentifiers);
+  
+              const fetchedAttachments = response.map((file: { uniqueIdentifier: string, file_name: string }) => ({
+                id: file.uniqueIdentifier,
+                name: file.file_name
+              }));
+              const updatedAttachments = props.row.existingFile?.map((attachment) => {
+                const fetchedAttachment = fetchedAttachments.find(
+                  (f) => f.id === attachment.id
+                );
+                return {
+                  ...attachment,
+                  name: fetchedAttachment ? fetchedAttachment.name : "Name not found",
+                };
+              });
+  
+              props.row.existingFile = updatedAttachments
+              console.log("Updated Attachments Array:", updatedAttachments);
+            }
+            if (props.type === "edit" || props.type === "view") {
+              if (Array.isArray(props.row.existingFile) && props.row.existingFile.length > 0) {
+                // Extract all attachment names
+                const attachmentNames = props.row.existingFile
+                  .map((attachment) => attachment.name || null)
+                  .filter(Boolean);
+  
+                if (attachmentNames.length > 0) {
+                  setAttachmentNameState(attachmentNames[0]);
+                  setDownload(true);
+                } else {
+                  setAttachmentNameState(null);
+                  setDownload(false);
+                }
               } else {
                 setAttachmentNameState(null);
                 setDownload(false);
               }
-            } else {
-              setAttachmentNameState(null);
-              setDownload(false);
             }
-          }
-        } */
+          } */
         setIsLocationDataReady(true);
       } catch (error) {
         console.error("Error fetching country data:", error);
@@ -177,20 +177,21 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
           }));
         }
       }
-    } if(name === "billing_type"){
-      if(value.name === "Fatturazione a corpo"){
+    } if (name === "billing_type") {
+      if (value.name === "Fatturazione a corpo") {
         setIsLumpSum(true)
-      } else{
+      } else {
         setIsLumpSum(false)
       }
     }
-    if (props.type === "edit") {
-      const currentValue = modifiedFields[name];
-      if (currentValue !== value) {
-        setModifiedFields((prevState) => ({
-          ...prevState,
-          [name]: value,
-        }));
+    const currentValue = modifiedFields[name];
+    if (currentValue !== value) {
+      setModifiedFields((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+      if (props.type === "edit") {
+
 
         if (name === "location") {
           setRowLocation(value);
@@ -256,18 +257,12 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
 
       if (!hasError) {
         let combinedData;
+        combinedData = {
+          ...modifiedFields,
+          ...formCustomerData,
+          ...formCommessa.current.values,
+        };
 
-        if (props.type === "edit") {
-          combinedData = {
-            ...modifiedFields,
-            ...formCommessa.current.values,
-          };
-        } else {
-          combinedData = {
-            ...formCustomerData,
-            ...formCommessa.current.values,
-          };
-        }
 
         setformCustomerData(combinedData);
 
@@ -286,7 +281,7 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
 
   const handleSubmit = () => {
     let hasError = false;
-    
+
     if (props.type === "create" || props.type === "edit") {
       if (formCustomer.current) {
         formCustomer.current.onSubmit();
@@ -317,19 +312,40 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
     if (props.type === 'delete') {
       props.onSubmit(props.type, {}, props.refreshTable, props.row.id, props.closeModalCallback);
     }
+    if(props.type === 'view'){
+      props.closeModalCallback();
+    }
   };
 
+
+  /*   const saveOfferData = (dataToSave) => {
+      const baseData = dataToSave ? dataToSave : formCustomerData;
+  
+      if (props.type === "edit") {
+        const modifiedData = Object.keys(modifiedFields).reduce((result, key) => {
+          if (modifiedFields[key] !== undefined) {
+            result[key] = modifiedFields[key];
+          }
+          return result;
+        }, {});
+        
+        const formattedData = reverseOfferAdapterUpdate(modifiedData, baseData);
+        
+        props.onSubmit(props.type, formattedData, props.refreshTable, props.row.id, props.closeModalCallback);
+  
+      } else {
+        const formattedData = fromOfferModelToOfferBEModel({ ...baseData });
+        props.onSubmit(props.type, formattedData, props.refreshTable, props.row.id, props.closeModalCallback);
+      }
+    };
+   */
 
   const saveOfferData = (dataToSave) => {
     const baseData = dataToSave ? dataToSave : formCustomerData;
-
-    
-
     const formattedData = fromOfferModelToOfferBEModel({ ...baseData });
     props.onSubmit(props.type, formattedData, props.refreshTable, props.row.id, props.closeModalCallback);
-    
-  };
 
+  };
 
 
   const handlePositiveOutcome = () => {
@@ -366,7 +382,7 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
           title: "Dati Offerta",
           children: (
             <div className={styles.parentForm}>
-              
+
               <Form
                 ref={formCustomer}
                 fields={Object.values(getFormOfferFields(

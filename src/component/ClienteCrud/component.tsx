@@ -54,6 +54,9 @@ export function ClienteCrud(props:PropsWithRef<ClienteCrudProps>){
           //props.refreshTable();
           //props.closeModalCallback();
       }
+      if(props.type === 'view'){
+        props.closeModalCallback();
+      }
     }
     
     if(props.type==='delete'){

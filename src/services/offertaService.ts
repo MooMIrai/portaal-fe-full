@@ -77,3 +77,12 @@ class OffertaService extends BaseHttpService {
 };
 
 export const offertaService = new OffertaService();
+
+class CS extends BaseHttpService {
+
+  getTableName() {
+    return 'offers';
+  }
+}
+
+export const offersService = new CS();

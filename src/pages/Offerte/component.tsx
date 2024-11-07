@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import NotificationProviderActions from "common/providers/NotificationProvider";
 import GridTable from "common/Table";
-import { offertaService } from "../../services/offertaService";
+import { offersService, offertaService } from "../../services/offertaService";
 import { fromOfferBEModelToOfferModel } from "../../adapters/offertaAdapters";
 import { OffertaCrud } from "../../component/OffertaCrud/component";
 

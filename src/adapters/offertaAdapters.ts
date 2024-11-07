@@ -64,10 +64,10 @@ export function fromOfferBEModelToOfferModel(
       ? { id: offerBE.ProjectType.id, name: offerBE.ProjectType.description }
       : undefined,
     location_id: offerBE.location_id,
-    billing_type: {
+    billing_type: offerBE.billing_type ? {
       id: offerBE.billing_type,
       name: mapBillingTypeName(offerBE.billing_type),
-    }, // hypothetical method for billing type conversion
+    } : undefined, // hypothetical method for billing type conversion
     outcome_type: offerBE.OutcomeType
       ? {
           id: offerBE.OutcomeType,
@@ -76,7 +76,7 @@ export function fromOfferBEModelToOfferModel(
       : undefined,
     existingFile: offerBE.files,
     year: offerBE.year ? new Date(offerBE.year, 1, 1) : undefined,
-
+    thereIsFile: Array.isArray(offerBE.files) && offerBE.files.length > 0,
     days: offerBE.days,
     thereisProject: offerBE.Project ? true : false,
     files:offerBE.files
@@ -104,16 +104,16 @@ export function fromOfferModelToOfferBEModel(
     /* start_date: offerModel.start_date.toISOString(), */
     deadline_date: offerModel.end_date?.toISOString() || undefined, // fallback to undefined if empty
     other_details: offerModel.description || "", // mapping description to other_details
-    rate: offerModel.rate ? parseFloat(offerModel.rate.toString()) : 0,
-    amount: offerModel.amount ? parseFloat(offerModel.amount.toString()) : 0,
+    rate: offerModel.rate && parseFloat(offerModel.rate.toString()),
+    amount: offerModel.amount && parseFloat(offerModel.amount.toString()),
     customer_id: offerModel.customer?.id,
     location_id: offerModel.location?.id || 1,
     accountManager_id: offerModel.accountManager?.id,
     project_type_id: offerModel.project_type?.id,
-    billing_type: offerModel.billing_type ? offerModel.billing_type.id : "",
+    billing_type: offerModel.billing_type ? offerModel.billing_type.id : undefined,
     OutcomeType: offerModel.outcome_type?.id,
     year: offerModel.year ? offerModel.year.getFullYear() : undefined,
-    days: Number(offerModel.days) || 0,
+    days: offerModel.days && Number(offerModel.days),
     noCollective: offerModel.NoCollective,
     approval_date: offerModel.approval_date?.toISOString() || undefined,
     ProjectData: offerModel.start_date

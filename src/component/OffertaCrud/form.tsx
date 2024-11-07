@@ -64,7 +64,7 @@ export const getFormOfferFields = (
             label: "Tipo di offerta",
             type: "projecttype-selector",
             value: formData.project_type,
-            //valueOnChange: valueOnChange,
+            valueOnChange: valueOnChange,
             required: true,
             disabled: type === "view",
             validator: (value: any) => (value ? "" : "Selezionare un tipo offerta")
@@ -85,7 +85,7 @@ export const getFormOfferFields = (
             label: "Tipo Fatturazione",
             type: "billingtype-selector",
             value: formData.billing_type,
-            //valueOnChange: combinedValueOnChangeBillyngType,
+            valueOnChange: combinedValueOnChangeBillyngType,
             required: true,
             disabled: type === "view" || isDaily,
             validator: (value: any) => (value ? "" : "Selezionare un Tipo di fatturazione valida")
@@ -98,7 +98,7 @@ export const getFormOfferFields = (
         label: "Tariffa",
         type: "number",
         value: formData.rate,
-        //valueOnChange: valueOnChange,
+        valueOnChange: valueOnChange,
         required: isDaily,
         disabled: type === "view",
         validator: (value: any) => requiredIfDailyValidator(value, "Tariffa"),
@@ -109,7 +109,7 @@ export const getFormOfferFields = (
         label: "Giorni offerti",
         type: "number",
         value: formData.days,
-        //valueOnChange: valueOnChange,
+        valueOnChange: valueOnChange,
         required: isDaily,
         disabled: type === "view",
         validator: (value: any) => requiredIfDailyValidator(value, "Giorni offerti"),
@@ -231,42 +231,66 @@ export const getFormOfferFields = (
 };
 
 
-export const getFormCommesseFields = (formData: Projects | undefined, valueOnChange: (name: string, value: any) => void,) => {
+export const getFormCommesseFields = (
+    formData: Projects | undefined,
+    valueOnChange: (name: string, value: any) => void
+) => {
     const fields: Record<string, any> = {
         start_date: {
             name: "start_date",
             label: "Data di inizio",
             type: "date",
-            //valueOnChange: valueOnChange,
             required: true,
             value: formData?.start_date,
-            validator: (value: any) => (value ? "" : "Seleziona una data")
+            valueOnChange:(value: any) => valueOnChange("start_date", value),
+            validator: (value: any) => {
+                if (!value) {
+                    return "Seleziona una data";
+                }
+                
+                const selectedDate = new Date(value);
+                const endDate = formData?.end_dateP ? new Date(formData.end_dateP) : null;
+                
+                if (endDate && selectedDate >= endDate) {
+                    return "La data di inizio deve essere anteriore alla data di fine";
+                }
+                return "";
+            },
         },
         end_date: {
             name: "end_date",
             label: "Data di fine",
             type: "date",
-            //valueOnChange: valueOnChange,
+            valueOnChange:(value: any) => valueOnChange("end_date", value),
             value: formData?.end_dateP,
+            validator: (value: any) => {
+                if (!value) {
+                    return "";
+                }
 
+                const selectedDate = new Date(value);
+                const startDate = formData?.start_date ? new Date(formData.start_date) : null;
+                
+                if (startDate && selectedDate <= startDate) {
+                    return "La data di fine deve essere posteriore alla data di inizio";
+                }
+                return "";
+            },
         },
         orderNum: {
             name: "orderNum",
             label: "Numero ordine cliente",
-            //valueOnChange: valueOnChange,
             type: "text",
             value: formData?.orderNum,
-
         },
         waitingForOrder: {
             name: "waitingForOrder",
             label: "In Attesa di ordine",
             type: "checkbox",
-            //valueOnChange: valueOnChange,
             showLabel: false,
             value: formData?.waitingForOrder || false,
-        }
-
+        },
     };
+
     return fields;
-}
+};
