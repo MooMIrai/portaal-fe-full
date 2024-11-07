@@ -16,11 +16,41 @@ client.interceptors.request.use((config) => {
 
   return config;
 });
+
+
+const askConfirmation=(message:string)=>{
+  return new Promise((ok,ko)=>{
+    NotificationProviderActions.openConfirm(message,()=>ok(true),'Conferma la tua azione',()=>ok(false));
+  })
+}
+
 client.interceptors.response.use(
   (response) => {
     return response;
   },
-  (error) => {
+  async (error) => {
+
+    if(error.response && error.response.status===452){
+      
+      if(error.response.data && error.response.data.message){
+        const readBody = JSON.parse(error.response.data.message);
+        const val = await askConfirmation(readBody.message);
+        const originalRequest = error.config;
+        if(readBody.location ==='query'){
+          originalRequest.params = {
+            ...originalRequest.params, // Mantiene i parametri esistenti
+            [readBody.field]: val, // Aggiungi un parametro "retry" alla query string
+          };
+        }else if(readBody.location ==='body'){
+          originalRequest.data = {
+            ...originalRequest.data, // Mantiene i parametri esistenti
+            [readBody.field]: val, // Aggiungi un parametro "retry" alla query string
+          };
+        }
+        return await client(originalRequest);
+      }
+    }
+
     if (error.response && error.response.status === 401) {
       window.dispatchEvent(new CustomEvent("LOGOUT"));
       window.location.href = "/";
@@ -29,14 +59,14 @@ client.interceptors.response.use(
         { icon: true, style: "error" },
         error.response.data.message
       );
-      throw new Error(error.response.data.message)
+      return Promise.reject(error.response.data.message)
     } else {
       
       NotificationProviderActions.openModal(
         { icon: true, style: "error" },
         "SERVER ERROR"
       );
-      throw new Error("SERVER ERROR")
+      return Promise.reject("SERVER ERROR")
     }
   }
 );
