@@ -37,7 +37,7 @@ class ProgettoService extends BaseHttpService {
     pageSize?: number,
     include?: boolean
   ) => {
-    try {
+   
       const params = {
         pageNum,
         pageSize,
@@ -51,17 +51,14 @@ class ProgettoService extends BaseHttpService {
         }
       );
       return response.data;
-    } catch (error) {
-      console.error("Error fetching resources:", error);
-      throw error;
-    }
+    
   };
 
   getProjectById = async (
     projectId: number,
     include?: boolean
   ) => {
-    try {
+    
       const params = {
         include,
       };
@@ -73,14 +70,11 @@ class ProgettoService extends BaseHttpService {
         }
       );
       return response.data;
-    } catch (error) {
-      console.error("Error fetching resources:", error);
-      throw error;
-    }
+   
   };
 
   getGridModel = async () => {
-    try {
+    
       const params = {};
 
       const response = await client.get(
@@ -90,63 +84,48 @@ class ProgettoService extends BaseHttpService {
         }
       );
       return response.data;
-    } catch (error) {
-      console.error("Error fetching resources:", error);
-      throw error;
-    }
+   
   };
 
   getProjectExpensesCreateDtoModel = async () => {
-    try {
+    
       const response = await client.get(
         `api/v1/projectExpenses/dtoModels/create`,
         {}
       );
       return response.data;
-    } catch (error) {
-      console.error("Error fetching resources:", error);
-      throw error;
-    }
+    
   }
 
   getCreateDTOModel = async () => {
-    try {
+    
       const response = await client.get(
         `api/v1/projects/dtoModels/create`,
         {}
       );
       return response.data;
-    } catch (error) {
-      console.error("Error fetching resources:", error);
-      throw error;
-    }
+    
   }
 
   getUpdateDTOModel = async () => {
-    try {
+   
       const response = await client.get(
         `api/v1/projects/dtoModels/update`,
         {}
       );
       return response.data;
-    } catch (error) {
-      console.error("Error fetching resources:", error);
-      throw error;
-    }
+    
   }
 
   deleteProject = async (
     id: number
   ) => {
-    try {
+    
       const response = await client.delete(
         `api/v1/projects/delete/${id}`
       );
       return response.data;
-    } catch (error) {
-      console.error("Error fetching resources:", error);
-      throw error;
-    }
+   
   };
 
   getExpensesByProjectId = async (
@@ -157,7 +136,7 @@ class ProgettoService extends BaseHttpService {
     filtering?: any,
     sorting?: any,
   ) => {
-    try {
+    
       const params = {
         pageNum,
         pageSize,
@@ -170,10 +149,7 @@ class ProgettoService extends BaseHttpService {
         { params }
       );
       return response.data;
-    } catch (error) {
-      console.error("Error fetching resources:", error);
-      throw error;
-    }
+    
   };
 
   getProjectExpensesTypes = (text: string) => {
@@ -188,7 +164,7 @@ class ProgettoService extends BaseHttpService {
     projectExpensesType_id: number,
     files: any[],
   ) => {
-    try {
+   
       const params = [{
         project_id,
         description,
@@ -204,10 +180,7 @@ class ProgettoService extends BaseHttpService {
         {}
       );
       return response.data;
-    } catch (error) {
-      console.error("Error fetching resources:", error);
-      throw error;
-    }
+   
   };
 
   updateProjectExpense = async (
@@ -218,7 +191,7 @@ class ProgettoService extends BaseHttpService {
     projectExpensesType_id: number,
     files: any[],
   ) => {
-    try {
+   
       const params = [{
         id,
         description,
@@ -234,24 +207,18 @@ class ProgettoService extends BaseHttpService {
         {}
       );
       return response.data;
-    } catch (error) {
-      console.error("Error fetching resources:", error);
-      throw error;
-    }
+    
   };
 
   deleteProjectExpense = async (
     id: number
   ) => {
-    try {
+   
       const response = await client.delete(
         `/api/v1/projectExpenses/delete/${id}`
       );
       return response.data;
-    } catch (error) {
-      console.error("Error fetching resources:", error);
-      throw error;
-    }
+   
   };
 }
 

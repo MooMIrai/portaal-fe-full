@@ -20,6 +20,7 @@ import DatiOrdineModal from "../Modals/DatiOrdineModal/component";
 import SalModal from "../Modals/SalModal/component";
 import AttivitaModal from "../Modals/AttivitaModal/component";
 import CostiCommessaModal from "../Modals/CostiCommessaModal/component";
+import { progettoForm } from "./forms/progetto";
 
 const determineFieldType = (
   value: any
@@ -69,7 +70,6 @@ const ProjectTable = (props: { customer: number }) => {
       include
     );
 
-    console.log("resp: ", tableResponse);
 
     return {
       data: tableResponse?.data,
@@ -77,7 +77,7 @@ const ProjectTable = (props: { customer: number }) => {
     };
   };
 
-  const loadModel = async (update?: boolean) => {
+ /*  const loadModel = async (update?: boolean) => {
     try {
       const resources = !update ? await progettoService.getCreateDTOModel() : await progettoService.getUpdateDTOModel();
       if (!resources) {
@@ -86,7 +86,6 @@ const ProjectTable = (props: { customer: number }) => {
 
       const newModel: any = {};
       resources
-        /* .filter((item: any) => !excludedKeys.includes(item.name)) */
         .forEach((item: any) => {
           const name = item.name === "offer_id" ? 'offerte-selector' : item.name;
           if (item.nested) {
@@ -131,7 +130,7 @@ const ProjectTable = (props: { customer: number }) => {
   useEffect(() => {
     loadModel();
     loadModel(true);
-  }, []);
+  }, []); */
 
   const handleFormSubmit = (
     formData: any,
@@ -140,22 +139,10 @@ const ProjectTable = (props: { customer: number }) => {
     closeModal: () => void,
     isCreate?: boolean,
   ) => {
-    //add parent object structure if needed
-    let newFormData = {};
-
-    Object.keys(formData).forEach(k => {
-      let parent = innerCRUDFields[k]?.parentObject;
-      if (parent && !newFormData[parent]) {
-        newFormData[parent] = { [k]: formData[k] }
-      } else if (parent && newFormData[parent]) {
-        newFormData[parent] = {
-          ...newFormData[parent],
-          [k]: formData[k]
-        }
-      } else {
-        newFormData[k] = formData[k];
-      }
-    });
+    
+    let newFormData = {
+      ...formData,
+    };
 
     newFormData["offer_id"] = newFormData["offer_id"]?.id;
     if (newFormData["rate"]) {
@@ -165,7 +152,7 @@ const ProjectTable = (props: { customer: number }) => {
       newFormData["amount"] = parseInt(newFormData["amount"]);
     }
     if (newFormData["workedDays"]) {
-      newFormData["workedDays"] = parseInt(newFormData["workedDays"]);
+      newFormData["workedDays"] = parseInt(formData.Offer.days);
     }
 
     let promise: Promise<any> | undefined = undefined;
@@ -199,7 +186,7 @@ const ProjectTable = (props: { customer: number }) => {
       draggableWindow={true}
       initialWidthWindow={1200}
       resizable={true}
-      actions={() => ["create"]}
+      actions={() => []}
       formCrud={(row, type, closeModalCallback, refreshTable) => {
         return (
           <div>
@@ -207,17 +194,17 @@ const ProjectTable = (props: { customer: number }) => {
               submitText={"Salva"}
               customDisabled={false}
               formData={row}
-              fields={Object.values(innerCRUDFields).filter((e: any) => {
+              fields={Object.values(progettoForm)/* .filter((e: any) => {
                 return e.name !== "id" && e.name !== "date_created" &&
                   e.name !== "date_modified" &&
                   e.name !== "user_created" &&
                   e.name !== "user_modified"
-              }).map((e: any) => {
+              }) .map((e: any) => {
                 return {
                   ...e,
                   disabled: false
                 }
-              })}
+              })*/}
               addedFields={formFields}
               showSubmit={true}
               extraButton={true}
@@ -239,7 +226,7 @@ const ProjectTable = (props: { customer: number }) => {
               closeModal={closeModal}
               refreshTable={refreshTable}
               addedFields={formFields}
-              fields={innerCRUDFieldsUpdate}
+              fields={progettoForm}
               handleFormSubmit={handleFormSubmit}
             />
           },

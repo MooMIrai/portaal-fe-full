@@ -2,29 +2,37 @@ import React, { useEffect, useState } from "react";
 import { progettoService } from "../../../services/progettoServices";
 import DynamicForm from "common/Form";
 
+import styles from './style.module.scss';
 export interface DatiOrdineModalProps {
   dataItem: any;
   closeModal: Function;
   refreshTable: Function;
   handleFormSubmit: Function;
   addedFields: any;
-  fields: any[];
+  fields: any;
 }
 
 const DatiOrdineModal = (props: DatiOrdineModalProps) => {
   const [data, setData] = useState<any | undefined>(undefined);
 
   useEffect(() => {
-    progettoService.getProjectById(
-      props.dataItem.id,
-      true
-    ).then(res => setData(res));
+
+    progettoService.getProjectWorkedDays(props.dataItem.id)
+    .then(giorniLavorati=>{
+      progettoService.getProjectById(
+        props.dataItem.id,
+        true
+      ).then(res => setData({...res,workedDays:giorniLavorati}));
+    })
+
+    
   }, []);
 
   return (
-    <div>
+    <div className={styles.form}>
       <h3>Dettagli per {props.dataItem.offer_name}</h3>
       {data ? <DynamicForm
+        style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr 1fr', gap : 20}}
         submitText={"Salva"}
         customDisabled={false}
         formData={{
@@ -32,17 +40,23 @@ const DatiOrdineModal = (props: DatiOrdineModalProps) => {
           offer_id: { id: data.offer_id, name: data.Offer.name }
         }}
         fields={Object.values(props.fields).filter((e: any) => {
-          return e.name !== "id"
-        }).map((e: any) => {
-          return {
-            ...e,
-            disabled: e.name === "user_created" ||
-              e.name === "user_modified" ||
-              e.name === "date_modified" ||
-              e.name === "date_created" ||
-              e.name === "offer_id"
+          if(e.name === 'amount'  && data.Offer.ProjectType.billing_type!=="LumpSum")
+            return false;
+          if(e.name === 'rate'  && data.Offer.ProjectType.billing_type!=="Daily" )
+            return false 
+
+          return true;
+          
+          
+        })/*.map((e: any) => {
+          if(e.name === 'amount'){
+            debugger;
+            e.conditions = data.Offer.ProjectType.billing_type==="LumpSum" || data.Offer.ProjectType.billing_type=== "None";
+          }else if(e.name === 'rate'){
+            e.conditions = data.Offer.ProjectType.billing_type==="Daily"  || data.Offer.ProjectType.billing_type==="None";
           }
-        })}
+          return e;
+        })*/}
         addedFields={props.addedFields}
         showSubmit={true}
         extraButton={true}
