@@ -18,3 +18,5 @@ declare module 'hr/Index';
 declare module 'stock/Routes';
 declare module 'stock/Index';
 
+declare module 'recruiting/Index';
+

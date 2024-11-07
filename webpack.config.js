@@ -5,6 +5,9 @@ const deps = require("./package.json").dependencies;
 const { FederatedTypesPlugin } = require("@module-federation/typescript");
 const webpack = require("webpack");
 const CopyPlugin = require("copy-webpack-plugin");
+const PrebuildPlugin = require("prebuild-webpack-plugin");
+const path = require('path')
+const fs = require('fs');
 
 const mfeConfig = (path, mode) => {
   let remotes = {
@@ -44,7 +47,9 @@ const mfeConfig = (path, mode) => {
   };
 };
 module.exports = (_, argv) => {
-  require("dotenv").config({ path: "./.env." + argv.mode });
+  require("dotenv").config({ path: "./.env." + argv.mode ,processEnv:{
+    mfe:mfeConfig.remotes
+  }});
 
   return {
     entry: "./src/index",
@@ -84,12 +89,47 @@ module.exports = (_, argv) => {
       ],
     },
     plugins: [
+      new PrebuildPlugin({
+        build: (compiler, compilation, matchedFiles) => {
+          const filePath = path.resolve(__dirname, 'src/mfeConfig.ts');
+          const menuToImportString = Object.keys(mfeConfig(process.env.REMOTE_PATH, argv.mode).remotes)
+          .filter(k=>k!='common' && k!='auth')
+          .map(k=>'import("' +k+'/Index")');
+          const routesToImport = Object.keys(mfeConfig(process.env.REMOTE_PATH, argv.mode).remotes)
+          .filter(k=>k!='common' && k!='auth')
+          .map(k=>'React.lazy(() => import("' +k+'/Routes"))');
+
+          let textFile = `
+          import React from 'react';
+
+          export const menuToImport = [
+            ${menuToImportString.join(',\n\t\t\t')}
+          ];
+          
+          export const routesToImport = [
+             React.lazy(()=> import("auth/VisibleRoutes")),
+             ${routesToImport.join(',\n\t\t\t')}
+          ];
+
+          export const routesLoginToImport = [
+            React.lazy(() => import("auth/Routes"))
+          ];
+          `;
+          fs.writeFileSync(filePath, textFile, 'utf8'); // Scrive il file
+
+          console.log('File TSX generato dinamicamente!');
+          // function that runs on compile, as well as when dev mode starts for the first time only
+        },
+      }),
       new ModuleFederationPlugin(mfeConfig(process.env.REMOTE_PATH, argv.mode)),
       //new FederatedTypesPlugin({ federationConfig: mfeConfig }),
       new HtmlWebPackPlugin({
         template: "./src/index.html",
       }),
       new Dotenv({ path: "./.env." + argv.mode }),
+      new webpack.DefinePlugin({
+        'process.env.REMOTES_MFE': JSON.stringify(Object.keys(mfeConfig(process.env.REMOTE_PATH, argv.mode).remotes)),
+      }),
       new CopyPlugin({
         patterns: [{ from: "public", to: "." }],
       }),
