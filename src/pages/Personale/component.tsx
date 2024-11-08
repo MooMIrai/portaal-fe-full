@@ -160,6 +160,7 @@ const PersonalPage = () => {
         "Operazione avvenuta con successo"
       );
       refreshTable();
+      
     } catch (error) {
       console.error("Error during form submission:", error);
     }

@@ -75,6 +75,7 @@ const mapToAnagraficaData = (
           }
         : undefined,
   },
+
   attachment_id: Array.isArray(Person.files)
     ? Person.files.map((file) => ({
         id: file.uniqueRecordIdentifier,
@@ -668,15 +669,17 @@ export const reverseAdapter = (combinedData: {
 
       return {
         skillArea_id: skillId,
-        Seniority: combinedData.anagrafica.seniority || null,
       };
     }) || [];
   const permessiIDs =
     mapPermessiNamesToIDs(combinedData.permessi, combinedData.idPermessi) || [];
 
   let attachmentFiles = attachments;
-  if(attachments && attachmentFiles.create){
-    attachmentFiles.create = attachmentFiles.create.map(p=>({...p,property:'files'}))
+  if (attachments && attachmentFiles?.create) {
+    attachmentFiles.create = attachmentFiles.create.map((p) => ({
+      ...p,
+      property: "Person.files",
+    }));
   }
 
   return {
@@ -700,7 +703,7 @@ export const reverseAdapter = (combinedData: {
         combinedData.anagrafica.residenza?.city?.id.toString() === ""
           ? null
           : combinedData.anagrafica.residenza?.city?.id,
-      Attachment: attachments  ,
+      Attachment: attachments,
       location_id: combinedData.anagrafica.sede_autocomplete?.id || 1,
       cityBirth_id:
         !combinedData.anagrafica.nascita?.city?.id ||
@@ -717,6 +720,7 @@ export const reverseAdapter = (combinedData: {
         combinedData.anagrafica.cap.toString().trim() !== ""
           ? combinedData.anagrafica.cap
           : null,
+      Seniority: combinedData.anagrafica.seniority,
       PersonSkillAreas: personSkillAreas,
       taxCode:
         !combinedData.anagrafica.codiceFiscale ||
@@ -818,8 +822,12 @@ export const reverseAdapterUpdate = (combinedData: {
     mapPermessiNamesToIDs(combinedData.permessi, combinedData.idPermessi) || [];
 
   const result: any = {};
-  const attachments =
-    combinedData.modifiedData.attachment? combinedData.modifiedData.attachment.create.map(o=>({...o,property:'files'})):null;
+  const attachments = combinedData.modifiedData.attachment
+    ? combinedData.modifiedData.attachment.create.map((o) => ({
+        ...o,
+        property: "Person.files",
+      }))
+    : null;
   if (combinedData.anagrafica.accountStatus_id) {
     result.accountStatus_id = combinedData.anagrafica.accountStatus_id;
   }

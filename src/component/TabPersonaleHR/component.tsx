@@ -364,16 +364,12 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
         console.log("formattedData", formattedData);
         const idrow = row.id;
         onSubmit(type, formattedData, refreshTable, idrow);
-        refreshTable();
-        closeModalCallback();
         setNewFormTrattamentoUpdate(false)
 
       } else {
         const formattedData = reverseAdapterUpdate(combinedData);
         const idrow = row.id;
         onSubmit(type, formattedData, refreshTable, idrow);
-        refreshTable();
-        closeModalCallback();
         setNewFormTrattamentoUpdate(false)
 
       }
