@@ -20,7 +20,8 @@ class AuthService {
   }
 
   logout() {
-    window.dispatchEvent(new CustomEvent("LOGOUT"));
+    //window.dispatchEvent(new CustomEvent("LOGOUT"));
+    this.removeToken()
   }
 
   getToken() {

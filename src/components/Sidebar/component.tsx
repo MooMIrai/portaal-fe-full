@@ -166,7 +166,8 @@ const Sidebar = ({ children, items }: SidebarPros) => {
   };
 
   const logout = () => {
-    AuthService.logout()
+    AuthService.logout();
+    window.location.href='/';
   };
 
 
