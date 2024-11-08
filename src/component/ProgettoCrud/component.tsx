@@ -153,7 +153,6 @@ const ProjectTable = (props: { customer: number }) => {
     if (newFormData["workedDays"]) {
       newFormData["workedDays"] = parseInt(formData.Offer.days);
     }
-    debugger;
 
     let promise: Promise<any> | undefined = undefined;
     if (!isCreate) {
