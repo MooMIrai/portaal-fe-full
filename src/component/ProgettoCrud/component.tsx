@@ -46,8 +46,7 @@ const determineFieldType = (
 };
 
 const ProjectTable = (props: { customer: number }) => {
-  const [innerCRUDFields, setInnerCRUDFields] = useState<any>({});
-  const [innerCRUDFieldsUpdate, setInnerCRUDFieldsUpdate] = useState<any>({});
+
 
   const loadData = async (pagination: any, filter: any, sorting: any[]) => {
     const include = true;
@@ -154,6 +153,7 @@ const ProjectTable = (props: { customer: number }) => {
     if (newFormData["workedDays"]) {
       newFormData["workedDays"] = parseInt(formData.Offer.days);
     }
+    debugger;
 
     let promise: Promise<any> | undefined = undefined;
     if (!isCreate) {

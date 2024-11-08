@@ -62,7 +62,7 @@ const DatiOrdineModal = (props: DatiOrdineModalProps) => {
         extraButton={true}
         extraBtnAction={props.closeModal}
         onSubmit={(dataItem: { [name: string]: any }) => {
-          props.handleFormSubmit(dataItem, props.refreshTable, dataItem.id, props.closeModal, true);
+          props.handleFormSubmit(dataItem, props.refreshTable, dataItem.id, props.closeModal, false);
         }}
       /> : null}
     </div>
