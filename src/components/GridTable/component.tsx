@@ -419,17 +419,23 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
         </GridToolbar>:null}
 
         {props.columns.map((column: TableColumn, idx: number) => {
+
           let cell: React.ComponentType<GridCellProps> | undefined;
           if (column.type === TABLE_COLUMN_TYPE.date) {
             cell = (cellGrid: GridCellProps) => {
-              const date = new Date(cellGrid.dataItem[column.key]);
-              const day = String(date.getDate()).padStart(2, "0");
-              const month = String(date.getMonth() + 1).padStart(2, "0");
-              const year = date.getFullYear();
+              let dateString = 'Nessuna data';
+              if(cellGrid.dataItem[column.key]){
+                const date = new Date(cellGrid.dataItem[column.key]);
+                const day = String(date.getDate()).padStart(2, "0");
+                const month = String(date.getMonth() + 1).padStart(2, "0");
+                const year = date.getFullYear();
+                dateString=`${day}/${month}/${year}`;
+              }
+              
               return (
                 <td>
                   <strong>
-                    <i>{`${day}/${month}/${year}`}</i>
+                    <i>{dateString}</i>
                   </strong>
                 </td>
               );
