@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { menuToImport, routesToImport } from "./mfeConfig";
+import { menuToImport, routesToImport, routesLoginToImport } from "./mfeConfig";
 import React from "react";
 
 export const mfeInitMenu=()=>{
@@ -19,7 +19,7 @@ export const mfeInitMenu=()=>{
 }
 
 export const LoginRouting = ()=><Suspense>
-{routesToImport.map((RoutingMfe,index)=><RoutingMfe key={'Routing_'+index} />)}
+{routesLoginToImport.map((RoutingMfe,index)=><RoutingMfe key={'Routing_'+index} />)}
 </Suspense>
 
 export const GlobalRouting = ()=><Suspense>

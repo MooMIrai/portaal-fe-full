@@ -47,7 +47,7 @@ export const App = () => {
           { once: true }
         );
       }
-      } else if(location.pathname != '/login'){
+      } else if(location.pathname != '/login' && location.pathname!='/auth-success'){
         
         //navigate("/login", { replace: true });
         location.href = "/login";
