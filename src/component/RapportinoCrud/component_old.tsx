@@ -23,7 +23,7 @@ const RapportinoCrud = (props: RapportinoCrudProps) => {
   }
 
   const loadData = async () => {
-    debugger;
+
     try {
       if (props.item && props.item.timeSheetsId) {
         console.log("rpcrud:", props)

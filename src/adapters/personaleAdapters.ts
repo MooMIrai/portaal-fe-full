@@ -658,7 +658,7 @@ export const reverseAdapter = (combinedData: {
   newFormTrattamentoEconomico: boolean;
   skills: MappedSkill[];
 }) => {
-  debugger;
+
   const attachments =
     combinedData.anagrafica.attachment;
   const personSkillAreas =
