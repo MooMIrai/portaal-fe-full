@@ -178,6 +178,7 @@ const DynamicField = ({
       loader={loader}
       existingFile={existingFile}
       value={formRenderProps.valueGetter(name)}
+      
       onChange={(event) => {
         let value = undefined;
         if (event.value) {

@@ -19,7 +19,6 @@ const withField = (WrappedComponent:any) => {
         // The custom props that you passed to the Field.
         ...others
       } = props;
-      
 
       return <div onFocus={onFocus} onBlur={onBlur}>
         {showLabel && others.label && (
