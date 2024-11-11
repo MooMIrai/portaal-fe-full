@@ -41,7 +41,9 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
   const [isLumpSum, setIsLumpSum] = useState(false)
   const [showNewTaskModal, setShowNewTaskModal] = useState(false);
   const [rowLocation, setRowLocation] = useState<{ id: number, name: string }>({ id: 0, name: '' });
-  const [deleteFiles, setDeleteFiles] = useState<boolean>(false)
+  const [deleteFiles, setDeleteFiles] = useState<boolean>(false);
+
+  const [customerForProtocol,setCustomerForProtocol] = useState<string>();
 
   useEffect(() => {
     const fetchCountryData = async () => {
@@ -108,9 +110,6 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
   }, [props.row, props.type]);
 
 
-
-
-
   useEffect(() => {
     if (isLocationDataReady && (props.type === "edit" || props.type === "view")) {
       const locationLabel = getLocationLabel(sede, props.row.location_id);
@@ -121,7 +120,27 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
     }
   }, [sede, props.row.location_id, isLocationDataReady, props.type]);
 
+ useEffect(() => {
+    if (props.type === "edit" && isrowLocationDataReady) {
+      if (
+        formCustomerData.project_type?.name === "Consulenza" &&
+        formCustomerData.billing_type?.name === "Fatturazione a giornata"
+      ) {
+        setIsDaily(true);
+      } else {
+        setIsDaily(false);
+      }
+    }
+  }, [props.type, isrowLocationDataReady]);
 
+  useEffect(()=>{
+    if(formCustomerData && formCustomerData.customer){
+      handleChangeCustomerProtocol(formCustomerData.customer)
+    }
+  },[formCustomerData]);
+
+  const handleChangeCustomerProtocol = (customer:any)=>setCustomerForProtocol(customer);
+  
 
   const openNewTaskModal = () => {
     setShowNewTaskModal(true);
@@ -139,22 +158,7 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
 
   };
 
-  useEffect(() => {
-    if (props.type === "edit" && isrowLocationDataReady) {
-      if (
-        formCustomerData.project_type?.name === "Consulenza" &&
-        formCustomerData.billing_type?.name === "Fatturazione a giornata"
-      ) {
-        setIsDaily(true);
-      } else {
-        setIsDaily(false);
-      }
-    }
-  }, [props.type, isrowLocationDataReady]);
-
-
-
-
+ 
   const valueOnChange = (name: string, value: any) => {
     if (name === "project_type") {
       if (value.name === "Consulenza") {
@@ -198,14 +202,15 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
         }
       }
     }
+    if(name==='customer'){
+      handleChangeCustomerProtocol(value);
+    }
   };
-
 
 
   const getLocationLabel = (sedi: locationOption[], location_id: number) => {
     return Array.isArray(sedi) ? (sedi.find((sede) => sede.value === location_id)?.label || " ") : " ";
   };
-
 
   const valueOnChangeByllingType = (name: string, value: any) => {
     if (value.name === "Fatturazione a giornata") {
@@ -274,9 +279,6 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
       }
     }
   };
-
-
-
 
 
   const handleSubmit = () => {
@@ -396,7 +398,8 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
                   valueOnChange,
                   isDaily,
                   isLumpSum,
-                  combinedValueOnChangeBillyngType
+                  combinedValueOnChangeBillyngType,
+                  customerForProtocol
                 ))}
                 formData={formCustomerData}
                 onSubmit={(data: OfferModel) => setformCustomerData(data)}

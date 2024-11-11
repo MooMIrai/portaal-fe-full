@@ -14,6 +14,7 @@ export const getFormOfferFields = (
     isDaily: boolean,
     isLupsum: boolean,
     combinedValueOnChangeBillyngType: (name: string, value: any) => void,
+    customerForProtocol
 ) => {
 
     // Validators
@@ -75,7 +76,7 @@ export const getFormOfferFields = (
             type: "customer-selector",
             value: formData.customer,
             required: true,
-            //valueOnChange: valueOnChange,
+            valueOnChange: valueOnChange,
             disabled: type === "view",
             validator: (value: any) => (value ? "" : "Selezionare un Cliente valido")
         },
@@ -146,9 +147,9 @@ export const getFormOfferFields = (
     fields.protocol = {
         name: "protocol",
         label: "Protocollo",
-        type: "text",
+        type: "protocol-input",
         value: formData.protocol,
-        //valueOnChange: valueOnChange,
+        options : ()=> customerForProtocol,
         required: true,
         disabled: type === "view",
         validator: (value: any) => value ? "" : "Il campo Protocollo è obbligatorio"

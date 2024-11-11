@@ -1,4 +1,3 @@
-import buildingBlocksIcon from "common/SvgIcon"
 
 export default function () {
   return {
@@ -33,6 +32,14 @@ export default function () {
         text: "Progetti",
         route: "/progetti",
         iconKey: "inboxIcon",
+      },
+      {
+        parentId: 6,
+        id: 65,
+        level: 2,
+        text: "Sal",
+        route: "/sal",
+        iconKey: "dollarIcon",
       },
     ],
   };

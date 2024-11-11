@@ -22,28 +22,7 @@ import AttivitaModal from "../Modals/AttivitaModal/component";
 import CostiCommessaModal from "../Modals/CostiCommessaModal/component";
 import { progettoForm } from "./forms/progetto";
 
-const determineFieldType = (
-  value: any
-):
-  | "number"
-  | "text"
-  | "email"
-  | "date"
-  | "time"
-  | "textarea"
-  | "password"
-  | "checkbox"
-  | "select" => {
-  if (value.toLocaleLowerCase() === "boolean") return "checkbox";
-  if (value.toLocaleLowerCase() === "number" || value.toLocaleLowerCase() === "float" || value.toLocaleLowerCase() === "int") return "number";
-  if (value.toLocaleLowerCase() === "string") {
-    if (value.toLocaleLowerCase().includes("@")) return "email";
-    return "text";
-  }
-  if (value.toLocaleLowerCase() === "date" || value.toLocaleLowerCase() === "datetime") return "date";
-  if (value.toLocaleLowerCase() === "projectstate") return "select";
-  return "text";
-};
+
 
 const ProjectTable = (props: { customer: number }) => {
 
@@ -76,61 +55,7 @@ const ProjectTable = (props: { customer: number }) => {
     };
   };
 
- /*  const loadModel = async (update?: boolean) => {
-    try {
-      const resources = !update ? await progettoService.getCreateDTOModel() : await progettoService.getUpdateDTOModel();
-      if (!resources) {
-        throw new Error("No resources found");
-      }
-
-      const newModel: any = {};
-      resources
-        .forEach((item: any) => {
-          const name = item.name === "offer_id" ? 'offerte-selector' : item.name;
-          if (item.nested) {
-            item.nested.forEach((i: any) => {
-              newModel[i.name] = {
-                name: i.name,
-                type: i.name === "offer_id" ? 'offerte-selector' : determineFieldType(i.type),
-                label: i.name === "offer_id" ? "Offerta" : i.name.charAt(0).toUpperCase() + i.name.slice(1),
-                value: "",
-                disabled: i.readOnly,
-                required: i.required,
-                options: i.enum || [],
-                showLabel: !i.enum && i.type.toLocaleLowerCase() !== 'boolean',
-                parentObject: item.name,
-              };
-            });
-          } else {
-            newModel[name] = {
-              name: item.name,
-              type: item.name === "offer_id"
-                ? 'offerte-selector'
-                : item.enum
-                  ? 'select'
-                  : determineFieldType(item.type),
-              label: item.name === "offer_id" ? "Offerta" : item.name.charAt(0).toUpperCase() + item.name.slice(1),
-              value: "",
-              disabled: item.readOnly,
-              required: item.required,
-              options: item.enum || [],
-              showLabel: !item.enum && item.type.toLocaleLowerCase() !== 'boolean'
-            };
-          }
-        });
-
-      !update ? setInnerCRUDFields(newModel) : setInnerCRUDFieldsUpdate(newModel);
-    } catch (error) {
-      console.error("Error loading fields:", error);
-      !update ? setInnerCRUDFields({}) : setInnerCRUDFieldsUpdate({});
-    }
-  };
-
-  useEffect(() => {
-    loadModel();
-    loadModel(true);
-  }, []); */
-
+ 
   const handleFormSubmit = (
     formData: any,
     refreshTable: any,

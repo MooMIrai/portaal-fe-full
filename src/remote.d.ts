@@ -26,3 +26,5 @@ declare module "common/hoc/AutoComplete"
 declare module "common/icons"
 
 declare module "common/UploadMultiple"
+
+declare module "common/InputText"

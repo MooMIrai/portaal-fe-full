@@ -4,6 +4,9 @@ import withAutoComplete from "common/hoc/AutoComplete"
 import { offertaService } from "../../services/offertaService";
 import { customerService } from "../../services/clienteService";
 import { CrudGenericService } from "../../services/personaleServices";
+import React from "react";
+import InputText from "common/InputText";
+import Button from "common/Button";
 
 const getDataOutcome= (filterP:string)=>{
     return offertaService.getOutcomeType(filterP);
@@ -54,12 +57,60 @@ const getDataProjectType= (filterP:string)=>{
     });
 }
 
+const ProtocolInput =  (
+    props:any
+  ) => {
+
+    const generateCompanyCode = (companyName) => {
+        // Rimuove spazi multipli e trasforma tutto in maiuscolo
+        const cleanName = companyName.trim().toUpperCase();
+      
+        // Se il nome ha almeno 5 caratteri, prendi le prime 3 e le ultime 2 lettere
+        if (cleanName.length >= 5) {
+          return cleanName.slice(0, 3) + cleanName.slice(-2);
+        }
+      
+        // Se il nome ha meno di 5 caratteri, aggiunge lettere per arrivare a 5
+        let code = cleanName.slice(0, 3); // Prende fino alle prime 3 lettere disponibili
+        const remainingChars = 5 - code.length;
+      
+        // Aggiunge le lettere rimanenti alla fine del nome se disponibili
+        code += cleanName.slice(-remainingChars);
+      
+        // Se ancora troppo corto, aggiunge "X" fino a raggiungere 5 caratteri
+        return code.padEnd(5, 'X');
+    }
+
+    return <div style={{
+        display: 'grid',
+        gridTemplateColumns: "80% 20%"
+    }}>
+        <InputText {...props} style={{ borderEndEndRadius:0 ,borderStartEndRadius:0, width:'100%'}} label={undefined} />
+        <Button style={{
+            borderStartStartRadius:0,
+            borderEndStartRadius:0
+        }} themeColor="primary" type="button" onClick={()=>{
+            let companyName = "";
+            if(props.options()){
+                companyName = props.options().name.toUpperCase().split(' ').join('');
+            }
+            let protocol = generateCompanyCode(companyName);
+            const now = new Date();
+            protocol+= now.getDate()+""+(now.getMonth()+1)+""+ now.getFullYear()
+            props.onChange({value:protocol});
+        }}>
+            Genera
+        </Button>
+        </div>
+  };
+
 export const offertaCustomFields = {
     "projecttype-selector":withField(withAutoComplete(getDataProjectType)),
     "commerciale-selector": withField(withAutoComplete(getDataCommerciale)),
     "customer-selector":withField(withAutoComplete(getDataCustomer)),
     "sede-selector": withField(withAutoComplete(getDataLocation)),
     "outcometype-selector":withField(withAutoComplete(getDataOutcome)),
-    "billingtype-selector":withField(withAutoComplete(getDataBilling))
+    "billingtype-selector":withField(withAutoComplete(getDataBilling)),
+    "protocol-input":withField(ProtocolInput)
 }
 
