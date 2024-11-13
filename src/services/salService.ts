@@ -80,7 +80,7 @@ class SalService extends BaseHttpService {
     sorting: Array<any>,
     include?: boolean
   ) => {
-    try {
+    
       const params = {
         pageNum,
         pageSize,
@@ -93,11 +93,27 @@ class SalService extends BaseHttpService {
         { params }
       );
       return response.data;
-    } catch (error) {
-      console.error("Error fetching resources:", error);
-      throw error;
-    }
+    
   };
+
+  getCustomersWithSal = (
+    pageNum: number,
+    pageSize: number,
+    filtering?: any,
+    sorting?: Array<any>,
+    include?: boolean) =>{
+      const params = {
+        pageNum,
+        pageSize,
+        include,
+      };
+
+      return  client.post(
+        `/api/v1/sal/draftsByCustomer`,
+        { filtering, sorting },
+        { params }
+      ).then(response=>response.data);
+    }
 }
 
 export const salService = new SalService();

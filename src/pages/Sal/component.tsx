@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Tab from "common/Tab";
 import styles from "./style.module.scss";
+import { SalDraft } from "../../component/SalCrud/Draft/component";
 
 export default function SalPage(){
 
@@ -17,9 +18,7 @@ export default function SalPage(){
         {
           title: "Draft",
           children: (
-            <div className={styles.parentForm} >
-             Draft
-            </div>
+            <SalDraft />
           ),
         },
         {
