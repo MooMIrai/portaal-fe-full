@@ -18,6 +18,7 @@ import {
   GridDetailRowProps,
   GridProps,
   GridNoRecords,
+  GridRowProps,
 } from "@progress/kendo-react-grid";
 import { Button } from "@progress/kendo-react-buttons";
 import { FORM_TYPE } from "../../models/formModel";
@@ -132,6 +133,8 @@ interface TablePaginatedProps extends GridProps {
   customRowActions?: CustomRowAction[];
 
   forceRefresh?: number;
+
+  rowStyle?:(row:any)=>Record<string,any>
 }
 
 const MyPager = (props: PagerProps) => (
@@ -362,10 +365,30 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
       ? props.classNameWindowDelete
       : props.classNameWindow;
 
+
+    const rowRender = (trElement:any, propsR:GridRowProps) => {
+      
+      const trProps:any = {};
+      
+      if(props.rowStyle && propsR.dataItem){
+        trProps.style = props.rowStyle(propsR.dataItem);
+      }
+        
+      
+      return React.cloneElement(
+        trElement,
+        {
+          ...trProps,
+        },
+        trElement.props.children
+      );
+    };
+
   return (
     <div className={styles.gridContainer}>
       <Grid
         ref={gridRef}
+        rowRender={rowRender}
         {...expandedProps}
         filterable={props.filterable}
         resizable={props.resizable}
