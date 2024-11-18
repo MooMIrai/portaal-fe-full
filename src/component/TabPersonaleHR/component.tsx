@@ -409,10 +409,6 @@ const PersonaleSection: React.FC<PersonaleSectionProps> = ({ row, type, closeMod
     }
   };
 
-
-
-
-
   useEffect(() => {
     if (triggerUpdate && formAnagrafica.current) {
       formAnagrafica.current.values = formAnagraficaData;
