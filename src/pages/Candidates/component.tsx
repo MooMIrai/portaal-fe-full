@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import GridTable from "common/Table";
 import { candidatoService } from "../../services/candidatoService";
+import { CandidatiCrud } from "../../components/CandidatiCrud/component";
 
 export default function CandidatePage(){
 
@@ -41,9 +42,7 @@ export default function CandidatePage(){
      ]}
  
      formCrud={(row: any, type: string, closeModalCallback: any, refreshTable: any) => (
-       <>
-          
-       </>
+       <CandidatiCrud refreshTable={refreshTable} type={type} row={row} closeModalCallback={closeModalCallback} />
      )}
    />
 }

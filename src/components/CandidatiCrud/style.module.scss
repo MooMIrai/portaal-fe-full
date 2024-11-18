@@ -1,0 +1,11 @@
+.formContainer{
+    & > form > fieldset {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap:10px;
+        & > div[class*="residenza-input"], & > div[class*="sede-input"], & > div[class*="note-input"]{
+            grid-column-start: 1;
+            grid-column-end: 4;
+        }
+    }
+}
