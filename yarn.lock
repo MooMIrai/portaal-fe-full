@@ -1541,6 +1541,11 @@
   resolved "https://registry.yarnpkg.com/@progress/kendo-svg-icons/-/kendo-svg-icons-3.0.0.tgz#d2c5cf813333f952b72c4b6e629cdfb21a10def1"
   integrity sha512-+Hk0YWhxd9rIvFNX6T+L0P2x9/DJ8Z4baHWY4xT2ntjVK9IasSPgMmfQiAfs58q3vTiyZNkmx7Yfrdg5Mqh8Aw==
 
+"@progress/kendo-svg-icons@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@progress/kendo-svg-icons/-/kendo-svg-icons-4.0.0.tgz#c8daff468730e02cf1d00974e7e52a17ea41f242"
+  integrity sha512-u3JcSBm+0W4o2TTiLWe372F0we2K5GkXDDTNcqpVayi/0XxKguRuPN7Bnfv/NYPt32JM+pc6EwmWvOnUC0F8MA==
+
 "@progress/kendo-theme-bootstrap@^8.0.1":
   version "8.2.1"
   resolved "https://registry.yarnpkg.com/@progress/kendo-theme-bootstrap/-/kendo-theme-bootstrap-8.2.1.tgz#5a369af3b8cf84f6727914603c5d26f1e21ce89c"
@@ -1551,6 +1556,11 @@
     "@progress/kendo-theme-default" "8.2.1"
     "@progress/kendo-theme-utils" "8.2.0"
     bootstrap "5.2.1"
+
+"@progress/kendo-theme-core@10.0.1":
+  version "10.0.1"
+  resolved "https://registry.yarnpkg.com/@progress/kendo-theme-core/-/kendo-theme-core-10.0.1.tgz#18530a15bf23229139db3f5dcad0eed9aac3e3fd"
+  integrity sha512-DbMt1c/zXTS54Q65RFXlEnw7iUcCGkh/s7ZLvxG+gS9ZbODeFGku7wHsfJfrURz02HFwrbvH7cFHiEqvwnGE5g==
 
 "@progress/kendo-theme-core@8.2.0":
   version "8.2.0"
@@ -1566,6 +1576,15 @@
     "@progress/kendo-theme-core" "8.2.0"
     "@progress/kendo-theme-utils" "8.2.0"
 
+"@progress/kendo-theme-fluent@^10.0.1":
+  version "10.0.1"
+  resolved "https://registry.yarnpkg.com/@progress/kendo-theme-fluent/-/kendo-theme-fluent-10.0.1.tgz#060d1e69a4659624f0a34d7361f6126079d31ec7"
+  integrity sha512-QACHLrTF1F+8pE2yQ1S/5PXMD0KP3lDy1LOx7yrjQ8eQALwz4SxAFFnlLEVpG+msNcoKEfjbo6xiiUGbVzCDcA==
+  dependencies:
+    "@progress/kendo-svg-icons" "^4.0.0"
+    "@progress/kendo-theme-core" "10.0.1"
+    "@progress/kendo-theme-utils" "10.0.1"
+
 "@progress/kendo-theme-material@^8.0.1":
   version "8.2.1"
   resolved "https://registry.yarnpkg.com/@progress/kendo-theme-material/-/kendo-theme-material-8.2.1.tgz#1212d00b14698e23819e6f6ad54a59daf3df32f4"
@@ -1575,6 +1594,13 @@
     "@progress/kendo-theme-core" "8.2.0"
     "@progress/kendo-theme-default" "8.2.1"
     "@progress/kendo-theme-utils" "8.2.0"
+
+"@progress/kendo-theme-utils@10.0.1":
+  version "10.0.1"
+  resolved "https://registry.yarnpkg.com/@progress/kendo-theme-utils/-/kendo-theme-utils-10.0.1.tgz#904d8ca775e75989b62441ed593f1f4e03d4e812"
+  integrity sha512-QkNEuKcR5I3elLNHDbxG+OHwYMshKdZq9zw48ZAG17w0GU9F3wHl7rlv05eegk2ncpvyKc8SvogZTWX4uR49rQ==
+  dependencies:
+    "@progress/kendo-theme-core" "10.0.1"
 
 "@progress/kendo-theme-utils@8.2.0":
   version "8.2.0"

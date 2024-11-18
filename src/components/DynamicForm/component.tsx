@@ -149,6 +149,7 @@ const DynamicField = ({
 }) => {
 
 
+
   const { name, type, label, validator, options, disabled, required, showLabel = true, onDownload, multiple, existingFile, onFileUpload, onClick, loader, existingLink, onFileDrop,isDroppable } = field;
   let Component: any = getFieldComponent(type);
 
@@ -240,7 +241,7 @@ const DynamicForm = React.forwardRef<any, DynamicFormProps>((props, ref) => {
               />
               }
               return (
-                <FieldWrapper key={index}>
+                <FieldWrapper key={index} className={field.name+'-input'}>
                   <DynamicField
                     addedFields={addedFields}
                     field={field}
