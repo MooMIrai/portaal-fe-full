@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import Tab from "common/Tab";
 import styles from "./style.module.scss";
 import { SalDraft } from "../../component/SalCrud/Draft/component";
+import { SalReadyToBill } from "../../component/SalCrud/ReadyToBill/component";
+import { SalHistoryCustomer } from "../../component/SalCrud/History/component";
 
 export default function SalPage(){
 
@@ -24,17 +26,13 @@ export default function SalPage(){
         {
             title: "Da fatturare",
             children: (
-              <div className={styles.parentForm} >
-               Da fatturare
-              </div>
+              <SalReadyToBill />
             ),
           },
           {
             title: "Storico",
             children: (
-              <div className={styles.parentForm} >
-               Storico
-              </div>
+              <SalHistoryCustomer />
             ),
           },
       ]

@@ -96,6 +96,55 @@ class SalService extends BaseHttpService {
     
   };
 
+  getSalFromProject = async (
+    projectId: number,
+    pageNum: number,
+    pageSize: number,
+    filtering: any,
+    sorting: Array<any>,
+    include?: boolean
+  ) => {
+    
+      const params = {
+        pageNum,
+        pageSize,
+        include,
+      };
+
+      const response = await client.post(
+        `api/v1/sal/getSalFromProject/${projectId}`,
+        { filtering, sorting },
+        { params }
+      );
+      return response.data;
+    
+  };
+
+  getSalRTBFromProject = async (
+    projectId: number,
+    pageNum: number,
+    pageSize: number,
+    filtering: any,
+    sorting: Array<any>,
+    include?: boolean
+  ) => {
+    
+      const params = {
+        pageNum,
+        pageSize,
+        include,
+      };
+
+      const response = await client.post(
+        `api/v1/bills/getReadyToBillFromProject/${projectId}`,
+        { filtering, sorting },
+        { params }
+      );
+      return response.data;
+    
+  };
+
+
   getCustomersWithSal = (
     pageNum: number,
     pageSize: number,
@@ -114,6 +163,194 @@ class SalService extends BaseHttpService {
         { params }
       ).then(response=>response.data);
     }
+  
+    getProjectsWithSal = (
+      customerID:number,
+      pageNum: number,
+      pageSize: number,
+      filtering?: any,
+      sorting?: Array<any>,
+      include?: boolean) =>{
+        const params = {
+          pageNum,
+          pageSize,
+          include,
+        };
+  
+        return  client.post(
+          `/api/v1/sal/draftsByProject/${customerID}`,
+          { filtering, sorting },
+          { params }
+        ).then(response=>response.data);
+    }
+
+    getActivitiesWithSal = (
+      project:number,
+      pageNum: number,
+      pageSize: number,
+      filtering?: any,
+      sorting?: Array<any>,
+      include?: boolean) =>{
+        const params = {
+          pageNum,
+          pageSize,
+          include,
+        };
+  
+        return  client.post(
+          `/api/v1/sal/draftsByActivity/${project}`,
+          { filtering, sorting },
+          { params }
+        ).then(response=>response.data);
+    }
+
+    getAllocationsWithSal = (
+      activity:number,
+      pageNum: number,
+      pageSize: number,
+      filtering?: any,
+      sorting?: Array<any>,
+      include?: boolean) =>{
+        const params = {
+          pageNum,
+          pageSize,
+          include,
+        };
+  
+        return  client.post(
+          `/api/v1/sal/draftsByPersonActivity/${activity}`,
+          { filtering, sorting },
+          { params }
+        ).then(response=>response.data);
+    }
+
+    getPersonWithSal = (
+      person:number,
+      pageNum: number,
+      pageSize: number,
+      filtering?: any,
+      sorting?: Array<any>,
+      include?: boolean) =>{
+        const params = {
+          pageNum,
+          pageSize,
+          include,
+        };
+  
+        return  client.post(
+          `/api/v1/sal/salByPersonActivity/${person}`,
+          { filtering, sorting },
+          { params }
+        ).then(response=>response.data);
+    }
+
+  getReadyToBillByCustomer = ( pageNum: number,
+    pageSize: number,
+    filtering?: any,
+    sorting?: Array<any>,
+    include?: boolean) =>{
+      const params = {
+        pageNum,
+        pageSize,
+        include,
+      };
+
+      return  client.post(
+        `/api/v1/bills/getReadyToBillByCustomer`,
+        { filtering, sorting },
+        { params }
+      ).then(response=>response.data);
+    }
+
+    getReadyToBillByProject = ( customerId:number,pageNum: number,
+      pageSize: number,
+      filtering?: any,
+      sorting?: Array<any>,
+      include?: boolean) =>{
+        const params = {
+          pageNum,
+          pageSize,
+          include,
+        };
+  
+        return  client.post(
+          `/api/v1/bills/getReadyToBillByProject/${customerId}`,
+          { filtering, sorting },
+          { params }
+        ).then(response=>response.data);
+    }
+
+    getHistoryBillCustomer = async (
+      pageNum: number,
+      pageSize: number,
+      filtering: any,
+      sorting: Array<any>,
+      include?: boolean
+    ) => {
+      
+        const params = {
+          pageNum,
+          pageSize,
+          include,
+        };
+  
+        const response = await client.post(
+          `/api/v1/bills/getBillByCustomer`,
+          { filtering, sorting },
+          { params }
+        );
+        return response.data;
+      
+    };
+
+    getHistoryBillFromCustomer = async (
+      customer_id: number,
+      pageNum: number,
+      pageSize: number,
+      filtering: any,
+      sorting: Array<any>,
+      include?: boolean
+    ) => {
+      
+        const params = {
+          pageNum,
+          pageSize,
+          include,
+        };
+  
+        const response = await client.post(
+          `/api/v1/bills/getBillByProject/${customer_id}`,
+          { filtering, sorting },
+          { params }
+        );
+        return response.data;
+      
+    };
+    
+    getHistoryBillFromProject = async (
+      project_id: number,
+      pageNum: number,
+      pageSize: number,
+      filtering: any,
+      sorting: Array<any>,
+      include?: boolean
+    ) => {
+      
+        const params = {
+          pageNum,
+          pageSize,
+          include,
+        };
+  
+        const response = await client.post(
+          `/api/v1/bills/getBillFromProject/${project_id}`,
+          { filtering, sorting },
+          { params }
+        );
+        return response.data;
+      
+    };
+
 }
 
 export const salService = new SalService();

@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { salService } from "../../../services/salService";
 import GridTable from "common/Table";
-import { SalProjectDraft } from "./ProjectDraft";
+import { SalHistoryProject } from "./HistoryProject";
 
 const columns = [
   { key: "customer_code", label: "Codice", type: "string", sortable: true, filter: "text" },
@@ -11,10 +11,10 @@ const columns = [
   { key: "totalSal", label: "Totale SAL", type: "number", sortable: true, filter: "number" },
 ];
 
-export const SalDraft = React.memo(() => {
+export const SalHistoryCustomer = React.memo(() => {
   const loadData = useCallback(async (pagination, filter, sorting) => {
     const include = true;
-    const tableResponse = await salService.getCustomersWithSal(
+    const tableResponse = await salService.getHistoryBillCustomer(
       pagination.currentPage,
       pagination.pageSize,
       filter,
@@ -29,7 +29,7 @@ export const SalDraft = React.memo(() => {
   }, []);
 
   const renderExpand = useCallback((rowProps) => (
-    <SalProjectDraft customer={rowProps.dataItem} />
+    <SalHistoryProject customer={rowProps.dataItem} />
   ), []);
 
   return (
@@ -38,9 +38,6 @@ export const SalDraft = React.memo(() => {
         enabled: true,
         render: renderExpand,
       }}
-      rowStyle={(rowData) => ({
-        background: rowData.oldSal ? 'rgba(255,0,0,0.2)' : rowData.missingSal ? 'rgba(255,209,0,0.2)' : 'rgba(0,255,0,0.2)',
-      })}
       filterable={true}
       pageable={true}
       sortable={true}

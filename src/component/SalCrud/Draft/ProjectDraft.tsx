@@ -1,20 +1,21 @@
-import React, { useCallback } from "react";
+import React, { PropsWithChildren, useCallback } from "react";
 import { salService } from "../../../services/salService";
 import GridTable from "common/Table";
-import { SalProjectDraft } from "./ProjectDraft";
+import { SalActivitiesDraft } from "./ActivityDraft";
+import { SalDraftItem } from "./SalDraftItem";
 
 const columns = [
-  { key: "customer_code", label: "Codice", type: "string", sortable: true, filter: "text" },
-  { key: "name", label: "Ragione sociale", type: "string", sortable: true, filter: "text" },
-  { key: "vatNumber", label: "P.IVA", type: "string", sortable: true, filter: "numeric" },
-  { key: "lastSal", label: "Ultimo SAL", type: "date", sortable: true, filter: "date" },
-  { key: "totalSal", label: "Totale SAL", type: "number", sortable: true, filter: "number" },
+  { key: "Offer.name", label: "Offerta", type: "string",sortable: true, filter: "text"  },
+  { key: "Offer.ProjectType.description", label: "Tipo progetto", type: "string", sortable: true, filter: "text"  },
+  { key: "start_date", label: "Data Inizio Progetto", type: "date", sortable: true, filter: "date" },
+  { key: "end_date", label: "Data Fine Progetto", type: "date", sortable: true, filter: "date" },
 ];
 
-export const SalDraft = React.memo(() => {
+export const SalProjectDraft = React.memo((props: PropsWithChildren<{ customer: any }>) => {
   const loadData = useCallback(async (pagination, filter, sorting) => {
     const include = true;
-    const tableResponse = await salService.getCustomersWithSal(
+    const tableResponse = await salService.getProjectsWithSal(
+      props.customer.id,
       pagination.currentPage,
       pagination.pageSize,
       filter,
@@ -26,13 +27,15 @@ export const SalDraft = React.memo(() => {
       data: tableResponse.data,
       meta: { total: tableResponse.meta.model },
     };
-  }, []);
+  }, [props.customer.id]);
 
   const renderExpand = useCallback((rowProps) => (
-    <SalProjectDraft customer={rowProps.dataItem} />
+    <SalDraftItem project={rowProps.dataItem} />
   ), []);
 
   return (
+    <>
+    <p>Progetti di {props.customer.name}</p>
     <GridTable
       expand={{
         enabled: true,
@@ -52,6 +55,7 @@ export const SalDraft = React.memo(() => {
       initialWidthWindow={900}
       resizable={true}
     />
+    </>
   );
 });
 
