@@ -351,6 +351,10 @@ class SalService extends BaseHttpService {
       
     };
 
+    getSalWorkedDays = (projectId:number, month:number,year:number)=>{
+      return client.get('api/v1/sal/getPersonalWorkedDays',{ params: { project_id:projectId,month,year } });
+    }
+
 }
 
 export const salService = new SalService();

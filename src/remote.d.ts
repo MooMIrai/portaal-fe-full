@@ -28,3 +28,5 @@ declare module "common/icons"
 declare module "common/UploadMultiple"
 
 declare module "common/InputText"
+declare module "common/YearMonthPicker"
+declare module "common/Accordion"

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Tab from "common/Tab";
-import styles from "./style.module.scss";
 import { SalDraft } from "../../component/SalCrud/Draft/component";
 import { SalReadyToBill } from "../../component/SalCrud/ReadyToBill/component";
 import { SalHistoryCustomer } from "../../component/SalCrud/History/component";

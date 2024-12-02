@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useRef } from "react";
 import { salService } from "../../../services/salService";
 import GridTable from "common/Table";
 import { SalProjectDraft } from "./ProjectDraft";
@@ -12,6 +12,9 @@ const columns = [
 ];
 
 export const SalDraft = React.memo(() => {
+
+  const tableRef = useRef<any>();
+  
   const loadData = useCallback(async (pagination, filter, sorting) => {
     const include = true;
     const tableResponse = await salService.getCustomersWithSal(
@@ -29,7 +32,7 @@ export const SalDraft = React.memo(() => {
   }, []);
 
   const renderExpand = useCallback((rowProps) => (
-    <SalProjectDraft customer={rowProps.dataItem} />
+    <SalProjectDraft customer={rowProps.dataItem} refreshTableParent={tableRef.current?.refreshTable} />
   ), []);
 
   return (
@@ -51,6 +54,7 @@ export const SalDraft = React.memo(() => {
       draggableWindow={true}
       initialWidthWindow={900}
       resizable={true}
+      ref={tableRef}
     />
   );
 });

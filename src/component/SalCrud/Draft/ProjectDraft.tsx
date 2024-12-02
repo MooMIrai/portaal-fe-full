@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useCallback } from "react";
+import React, { PropsWithChildren, useCallback, useRef } from "react";
 import { salService } from "../../../services/salService";
 import GridTable from "common/Table";
 import { SalActivitiesDraft } from "./ActivityDraft";
@@ -11,7 +11,10 @@ const columns = [
   { key: "end_date", label: "Data Fine Progetto", type: "date", sortable: true, filter: "date" },
 ];
 
-export const SalProjectDraft = React.memo((props: PropsWithChildren<{ customer: any }>) => {
+export const SalProjectDraft = React.memo((props: PropsWithChildren<{ customer: any, refreshTableParent:()=>void }>) => {
+
+  const tableRef = useRef<any>();
+
   const loadData = useCallback(async (pagination, filter, sorting) => {
     const include = true;
     const tableResponse = await salService.getProjectsWithSal(
@@ -30,7 +33,10 @@ export const SalProjectDraft = React.memo((props: PropsWithChildren<{ customer: 
   }, [props.customer.id]);
 
   const renderExpand = useCallback((rowProps) => (
-    <SalDraftItem project={rowProps.dataItem} />
+    <SalDraftItem project={rowProps.dataItem} refreshTableParent={()=>{
+      props.refreshTableParent();
+      tableRef.current?.refreshTable();
+    }} />
   ), []);
 
   return (
@@ -54,6 +60,7 @@ export const SalProjectDraft = React.memo((props: PropsWithChildren<{ customer: 
       draggableWindow={true}
       initialWidthWindow={900}
       resizable={true}
+      ref={tableRef}
     />
     </>
   );
