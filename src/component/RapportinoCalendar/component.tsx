@@ -74,12 +74,13 @@ const RapportinoItem = withScheduler(RapportinoItemView)
 
 export interface RapportinoCalendarProps {
   forcePerson?: { id: number, name: string };
+  forceDate?:Date
 }
 
 export default function RapportinoCalendar(props: RapportinoCalendarProps) {
   const defaultPerson = props.forcePerson || { id: 0, name: '(Me)' };
 
-  const [date, setDate] = useState<Date>(new Date());
+  const [date, setDate] = useState<Date>(props.forceDate || new Date());
   const [data, setData] = useState<any>([]);
   const [holidays, setHolidays] = useState<Array<number>>();
   const [timeSheetsId, setTimeSheetsId] = useState<number>();
