@@ -10,7 +10,6 @@ import {
 import { Calendar, CalendarProps, DatePicker } from "@progress/kendo-react-dateinputs";
 
 import withField from "../../hoc/Field";
-import UploadComponent from "../UpLoadSingleFile/component";
 import { Button } from "@progress/kendo-react-buttons";
 import UploadMultipleFileComponent from "../UploadMultipleFiles/component";
 import UploadSingleFileComponent from "../UpLoadSingleFile/component";

@@ -26,7 +26,9 @@ const withField = (WrappedComponent:any) => {
             {others.label} {others.required ? <span style={{color:'red', fontSize:20}}>*</span> : ''}
           </Label>
         )}
-        <WrappedComponent onChange={onChange}  value={value} {...others}/>
+        {
+          <WrappedComponent onChange={onChange}  value={value} {...others}/>
+          }
         {
             // Display an error message after the "visited" or "touched" field is set to true.
             visited && validationMessage && <Error>{validationMessage}</Error>

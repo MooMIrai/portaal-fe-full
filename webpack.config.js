@@ -30,6 +30,7 @@ const mfeConfig = {
     "./HoursDaysFilterCell":"./src/components/HoursDaysFilterCell/component.tsx",
     "./Loader":"./src/components/Loader/component",
     "./Modal":"./src/components/Modal/component",
+    "./YearMonthPicker":"./src/components/YearMonthPicker/component",
 
     "./Accordion":"./src/components/Accordion/component",
     "./TimePicker":"./src/components/TimePicker/component",
