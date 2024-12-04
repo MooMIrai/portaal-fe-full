@@ -129,22 +129,22 @@ export function MoneyInputSal(props:MoneyInputSalProps)
         {
             props.options.project.Offer.ProjectType.code === "CONS"?
             <div>
-                <InputText label="Giorni Lavorati"  type="number" value={workingDays} disabled /> 
-                <InputText label="Giorni Effettivi" onChange={(e)=>{
+                <InputText label="Giorni Lavorati Sal"  type="number" value={workingDays} disabled /> 
+                <InputText label="Giorni Effettivi Sal" onChange={(e)=>{
                     setEffectiveDaysPristine(true);
                     let v = e.target.value && e.target.value.length?parseInt(e.target.value):0;
                     setEffectiveDays(v);
                    
-                }} required type="number" value={effectiveDays}  />
-                <InputText label="Tariffa" type="number" value={props.options.project.rate} disabled />
+                }} required type="number" value={effectiveDays} disabled={props.disabled} />
+                <InputText label="Tariffa Sal" type="number" value={props.options.project.rate} disabled />
             </div>
             :null
         }
         
-        <InputText required label="Importo" type="number" value={finalAmount} onChange={(e)=>{
+        <InputText required label="Importo Sal" type="number" value={finalAmount} onChange={(e)=>{
             let v = e.target.value && e.target.value.length?parseInt(e.target.value):0;
             setFinalAmount(v);
-        }} />
+        }} disabled={props.disabled} />
         
         {rapportinoViewParam && <Modal title={"Rapportino di " + rapportinoViewParam.person.name }
             isOpen={rapportinoViewParam}

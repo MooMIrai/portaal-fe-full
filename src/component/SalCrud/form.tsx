@@ -24,9 +24,9 @@ export const getFormFields=(values,onChange,type,project,otherSal?)=>{
         //value: getDateFromData(values.year,values.month),
         valueOnChange:onChange,
         required: true,
-        disabled:type === "view",
+        disabled:type === "view" || values.SalState==='BILLING_OK',
         options:{
-            disabled:otherSal.map(os=>({...os,month:os.month-1}))
+            disabled:otherSal?otherSal.map(os=>({...os,month:os.month-1})):[]
         }
     },
     {
@@ -36,11 +36,47 @@ export const getFormFields=(values,onChange,type,project,otherSal?)=>{
         value: values,
         required: true,
         showLabel:false,
-        disabled:type === "view",
+        disabled:type === "view" || values.SalState==='BILLING_OK',
         options:{
             project,
             sal:values
         }
+    },
+    {
+        name: "billing_date",
+        label: "Data Fattura",
+        type: "date",
+        value: values.Bill?.billing_date,
+        required: true,
+        disabled:type === "view",
+        conditions:(formData)=>formData.SalState==='BILLING_OK',
+    },
+    {
+        name: "billing_number",
+        label: "Numero Fattura",
+        type: "text",
+        value: values.Bill?.billing_number,
+        required: true,
+        disabled:type === "view",
+        conditions:(formData)=>formData.SalState==='BILLING_OK',
+    },
+    {
+        name: "advancePayment",
+        label: "Anticipata",
+        type: "number",
+        value: values.Bill?.advancePayment,
+        required: true,
+        disabled:type === "view",
+        conditions:(formData)=>formData.SalState==='BILLING_OK',
+    },
+    {
+        name: "amountBill",
+        label: "Importo Fattura",
+        type: "number",
+        value: values.Bill?.amount || values.amount,
+        required: true,
+        disabled:type === "view",
+        conditions:(formData)=>formData.SalState==='BILLING_OK',
     },
     {
         name: "notes",

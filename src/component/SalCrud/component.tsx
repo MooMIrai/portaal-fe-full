@@ -3,6 +3,8 @@ import { customFieldsSal, getFormFields } from "./form";
 import Form from 'common/Form';
 import { salService } from "../../services/salService";
 import NotificationActions from 'common/providers/NotificationProvider';
+import Button from 'common/Button';
+import {fileAddIcon, stampIcon} from 'common/icons';
 
 type SalCrudProps = {
     project:any,
@@ -11,7 +13,7 @@ type SalCrudProps = {
     type: string;
     closeModalCallback: () => void;
     refreshTable: () => void;
-    onSubmit: (type: string, formData: any, refreshTable: () => void, id: any,closeModal:()=>void) => void;
+    onNext:()=>void
   };
 
   const getDateFromData= (year?:number,month?:number)=>{
@@ -32,7 +34,7 @@ export function SalCrud(props:PropsWithRef<SalCrudProps>){
       });
     }
 
-    const handleSubmit = (data:any) => {
+    const handleSubmit = () => {
         let action= Promise.resolve()
         const mappedObj = {
           year:formSal.current.values.monthyear.getFullYear(),
@@ -46,17 +48,32 @@ export function SalCrud(props:PropsWithRef<SalCrudProps>){
         if(props.type==='create'){
           action =salService.createResource(mappedObj);
         } else if(props.type==='edit'){
-          action=salService.updateResource(props.row.id,mappedObj)
+          if(formSalData.SalState==='BILLING_OK'){
+            const billData={
+              amount: formSal.current.values.amountBill?parseFloat(formSal.current.values.amountBill):undefined,
+              billing_date: formSal.current.values.billing_date,
+              billing_number: formSal.current.values.billing_number,
+              advancePayment: formSal.current.values.advancePayment,
+              sal_id:formSalData.id
+            }
+            if(!formSalData.Bill){
+              action = salService.createBill(billData);
+            }else{
+              action = salService.updateBill(formSalData.Bill.id,billData);
+            }
+          }else{
+            action=salService.updateResource(props.row.id,mappedObj);
+          }
+          
         }
 
-        action.then(res=>{
+        return action.then(res=>{
           NotificationActions.openModal(
             { icon: true, style: "success" },
             "Operazione avvenuta con successo "
           );
           props.refreshTable();
           props.closeModalCallback();
-
         })
     }
 
@@ -82,22 +99,37 @@ export function SalCrud(props:PropsWithRef<SalCrudProps>){
     const mappedData = {
       ...formSalData,
       money:formSalData,
-     
+      amountBill:formSalData.Bill?formSalData.Bill.amount:formSalData.amount,
+      advancePayment: formSalData.Bill?.advancePayment,
+      billing_number: formSalData.Bill?.billing_number,
+      billing_date: formSalData.Bill?.billing_date
     }
 
     if(!mappedData.monthyear && mappedData.year && mappedData.month){
       mappedData.monthyear=getDateFromData(mappedData.year,mappedData.month);
     } 
 
-    return <>{props.type!='delete'?<Form
+    return <>{
+      props.type!='delete'?<><Form
               ref={formSal}
               addedFields={customFieldsSal}
               fields={getFormFields(mappedData,onChange,props.type,props.project,props.otherSal)}
               formData={mappedData}
               onSubmit={handleSubmit}
               submitText="Salva"
-              showSubmit
-          />:<div>delete</div>}
+              showSubmit={props.type!='show'}
+          />
+          {
+            <div style={{display:'flex',justifyContent:'flex-end',marginTop:10}}>
+              <Button disabled={props.row.SalState==='BILLED'} svgIcon={
+                props.row.SalState==='PENDING'?fileAddIcon:stampIcon
+              } onClick={()=>{
+                handleSubmit().then(props.onNext);
+              }}>{props.row.SalState==='PENDING'?'Invia a fatturare':props.row.SalState==='BILLING_OK'?'Conferma Fattura':'Fatturato'}</Button>
+              </div>
+          }
+          </>
+          :<div>delete</div>}
          
           </>
 }

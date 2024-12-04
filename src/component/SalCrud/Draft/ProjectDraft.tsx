@@ -33,10 +33,7 @@ export const SalProjectDraft = React.memo((props: PropsWithChildren<{ customer: 
   }, [props.customer.id]);
 
   const renderExpand = useCallback((rowProps) => (
-    <SalDraftItem project={rowProps.dataItem} refreshTableParent={()=>{
-      props.refreshTableParent();
-      tableRef.current?.refreshTable();
-    }} />
+    <SalDraftItem project={rowProps.dataItem} />
   ), []);
 
   return (

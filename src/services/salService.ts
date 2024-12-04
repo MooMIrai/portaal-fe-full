@@ -355,6 +355,24 @@ class SalService extends BaseHttpService {
       return client.get('api/v1/sal/getPersonalWorkedDays',{ params: { project_id:projectId,month,year } });
     }
 
+    createBill =  (resourceData: any) => {
+      return client.post(
+        `/api/v1/bills/create`,
+        resourceData
+      ).then(res=>res.data)
+      
+    };
+
+    updateBill = async (
+      id: number,
+      resourceData: any
+    ) => {
+      return client.patch(
+          `/api/v1/bills/update/${id}`,
+          resourceData
+        ).then(res=>res.data)
+    }
+
 }
 
 export const salService = new SalService();
