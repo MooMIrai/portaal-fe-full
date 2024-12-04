@@ -4,6 +4,7 @@ import { Calendar, CalendarCell, CalendarCellProps, CalendarProps, DateInput, Da
 type DateInputProps ={
     value:Date;
     onChange:(v:any) => void,
+    disabled?:boolean,
     options:{
         disabled:Array<{year:number,month:number}>
     }
@@ -31,7 +32,7 @@ export default function(props:PropsWithRef<DateInputProps>){
             dateInput={(propsD)=><DateInput {...propsD} disabled />}
             value={props.value} 
             calendar={CalendarOnlyYear}
-           
+            disabled={props.disabled}
             onChange={(e)=>{
                 props.onChange({value:e.value});
             }}  

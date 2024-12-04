@@ -24,7 +24,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   ...props
 }) => {
   return (
-    <Button themeColor={themeColor} {...props}>
+    <Button themeColor={themeColor} {...props} >
       {children}
     </Button>
   );
