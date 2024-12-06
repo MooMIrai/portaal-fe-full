@@ -1,7 +1,8 @@
-import React, { PropsWithChildren } from "react";
+import React, { PropsWithChildren, useContext, useRef } from "react";
 import { salService } from "../../../services/salService";
 import GridTable from "common/Table";
 import { SalRTBItem } from "./SalRTBItem";
+import { SalContext } from "../../../pages/Sal/provider";
 
 const columns = [
     { key: "Offer.name", label: "Offerta", type: "string"},
@@ -10,7 +11,10 @@ const columns = [
     { key: "start_date", label: "Data Inizio", type: "date", sortable: true, filter: "date" },
     { key: "end_date", label: "Data Fine", type: "date", sortable: true, filter: "date" },
   ]; 
-export const SalRTBProject=React.memo((props: PropsWithChildren<{customer:any}>)=>{
+export const SalRTBProject=React.memo((props: PropsWithChildren<{customer:any, refreshParent:()=>void}>)=>{
+
+  
+  const { addOpen, removeOpen, billing } = useContext(SalContext);
 
     const loadData = async (
         pagination: any,
@@ -30,7 +34,10 @@ export const SalRTBProject=React.memo((props: PropsWithChildren<{customer:any}>)
     
     
         return {
-          data: tableResponse.data,
+          data: tableResponse.data.map(td=>({
+            ...td,
+            gridtable_expanded:billing.projects.some(d=>d===td.id)
+          })),
           meta: {
             total: tableResponse.meta.model
           }
@@ -42,7 +49,14 @@ export const SalRTBProject=React.memo((props: PropsWithChildren<{customer:any}>)
     return <GridTable
                 expand={{
                     enabled: true,
-                    render: (rowProps) => <SalRTBItem project={rowProps.dataItem}  />,
+                    render: (rowProps) => <SalRTBItem project={rowProps.dataItem} refreshParent={props.refreshParent}  />,
+                    onExpandChange:(row:any,expanded:boolean)=>{
+                      if(expanded){
+                        addOpen("billing","projects",row.id);
+                      }else{
+                        removeOpen("billing","projects",row.id);
+                      }
+                    }
                 }}
                 filterable={true}
                 pageable={true}

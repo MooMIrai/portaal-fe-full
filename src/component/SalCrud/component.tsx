@@ -13,7 +13,7 @@ type SalCrudProps = {
     type: string;
     closeModalCallback: () => void;
     refreshTable: () => void;
-    onNext:()=>void
+    onNext:()=>Promise<any>
   };
 
   const getDateFromData= (year?:number,month?:number)=>{
@@ -72,8 +72,6 @@ export function SalCrud(props:PropsWithRef<SalCrudProps>){
             { icon: true, style: "success" },
             "Operazione avvenuta con successo "
           );
-          props.refreshTable();
-          props.closeModalCallback();
         })
     }
 
@@ -115,7 +113,10 @@ export function SalCrud(props:PropsWithRef<SalCrudProps>){
               addedFields={customFieldsSal}
               fields={getFormFields(mappedData,onChange,props.type,props.project,props.otherSal)}
               formData={mappedData}
-              onSubmit={handleSubmit}
+              onSubmit={()=>handleSubmit().then(()=>{
+                props.refreshTable();
+                props.closeModalCallback();
+              })}
               submitText="Salva"
               showSubmit={props.type!='show'}
           />
@@ -124,7 +125,10 @@ export function SalCrud(props:PropsWithRef<SalCrudProps>){
               <Button disabled={props.row.SalState==='BILLED'} svgIcon={
                 props.row.SalState==='PENDING'?fileAddIcon:stampIcon
               } onClick={()=>{
-                handleSubmit().then(props.onNext);
+                handleSubmit().then(props.onNext).then(()=>{
+                  props.refreshTable();
+                  props.closeModalCallback();
+                });
               }}>{props.row.SalState==='PENDING'?'Invia a fatturare':props.row.SalState==='BILLING_OK'?'Conferma Fattura':'Fatturato'}</Button>
               </div>
           }

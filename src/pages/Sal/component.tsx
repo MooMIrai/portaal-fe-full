@@ -3,6 +3,7 @@ import Tab from "common/Tab";
 import { SalDraft } from "../../component/SalCrud/Draft/component";
 import { SalReadyToBill } from "../../component/SalCrud/ReadyToBill/component";
 import { SalHistoryCustomer } from "../../component/SalCrud/History/component";
+import { SalProvider } from "./provider";
 
 export default function SalPage(){
 
@@ -13,7 +14,9 @@ export default function SalPage(){
     };
     
 
-    return <Tab
+    return <SalProvider>
+    <Tab
+    renderAllContent={false}
     tabs={
       [
         {
@@ -40,4 +43,5 @@ export default function SalPage(){
     selected={selected}
     
   />
+  </SalProvider>
 }

@@ -6,14 +6,14 @@ import Button from 'common/Button';
 import NotificationActions from 'common/providers/NotificationProvider';
 import {fileAddIcon} from 'common/icons';
 
-export const SalDraftItem = React.memo((props: PropsWithChildren<{ project: any }>) => {
+export const SalDraftItem = React.memo((props: PropsWithChildren<{ project: any, refreshParent:()=>void }>) => {
 
   const columns = [
     {
       key: "SalState", label: "Stato", type: "custom", render: (rowData) => <td>
         Sal creato in attesa di ok a fatturare
         <Button size="small" svgIcon={fileAddIcon} onClick={() => {
-          updateToBilling(rowData.id)
+          updateToBilling(rowData.id).then(props.refreshParent)
         }}>Ok a fatturare</Button>
       </td>
     },
@@ -31,16 +31,20 @@ export const SalDraftItem = React.memo((props: PropsWithChildren<{ project: any 
     { key: "year", label: "Anno", type: "number", sortable: true, filter: "number" }
   ];
 
-  const tableRef = useRef<any>();
+  
   const [rows, setRows] = useState<Array<any>>();
 
   const updateToBilling = (id)=>{
-    NotificationActions.openConfirm('Sei sicuro di spostare il Sal in stato "A FATTURARE" ?',
-      () => {
-        salService.updateResource(id,{SalState:'BILLING_OK'})
-      },
-      'Conferma operazione'
-    )
+    return new Promise((ok,ko)=>{
+      NotificationActions.openConfirm('Sei sicuro di spostare il Sal in stato "A FATTURARE" ?',
+        () => {
+          ok(salService.updateResource(id,{SalState:'BILLING_OK'}));
+        },
+        'Conferma operazione',
+        ko
+      )
+    })
+    
   }
 
   const loadData = useCallback(async (pagination: any, filter: any, sorting: any[]) => {
@@ -90,7 +94,7 @@ export const SalDraftItem = React.memo((props: PropsWithChildren<{ project: any 
                 row={row}
                 type={type}
                 closeModalCallback={closeModalCallback}
-                refreshTable={refreshTable}
+                refreshTable={props.refreshParent}
                 onNext={() => updateToBilling(row.id)}
               />
             </>

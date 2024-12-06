@@ -1,8 +1,9 @@
-import React, { PropsWithChildren, useCallback, useRef } from "react";
+import React, { PropsWithChildren, useCallback, useContext, useRef } from "react";
 import { salService } from "../../../services/salService";
 import GridTable from "common/Table";
 import { SalActivitiesDraft } from "./ActivityDraft";
 import { SalDraftItem } from "./SalDraftItem";
+import { SalContext } from "../../../pages/Sal/provider";
 
 const columns = [
   { key: "Offer.name", label: "Offerta", type: "string",sortable: true, filter: "text"  },
@@ -11,9 +12,10 @@ const columns = [
   { key: "end_date", label: "Data Fine Progetto", type: "date", sortable: true, filter: "date" },
 ];
 
-export const SalProjectDraft = React.memo((props: PropsWithChildren<{ customer: any, refreshTableParent:()=>void }>) => {
+export const SalProjectDraft = React.memo((props: PropsWithChildren<{ customer: any, refreshParent:()=>void }>) => {
 
-  const tableRef = useRef<any>();
+  const tableRef= useRef<any>();
+  const { addOpen, removeOpen, draft } = useContext(SalContext);
 
   const loadData = useCallback(async (pagination, filter, sorting) => {
     const include = true;
@@ -27,13 +29,16 @@ export const SalProjectDraft = React.memo((props: PropsWithChildren<{ customer: 
     );
 
     return {
-      data: tableResponse.data,
+      data: tableResponse.data.map(td=>({
+        ...td,
+        gridtable_expanded:draft.projects.some(d=>d===td.id)
+      })),
       meta: { total: tableResponse.meta.model },
     };
-  }, [props.customer.id]);
+  }, [props.customer.id,draft.projects]);
 
   const renderExpand = useCallback((rowProps) => (
-    <SalDraftItem project={rowProps.dataItem} />
+    <SalDraftItem project={rowProps.dataItem} refreshParent={props.refreshParent} />
   ), []);
 
   return (
@@ -43,6 +48,13 @@ export const SalProjectDraft = React.memo((props: PropsWithChildren<{ customer: 
       expand={{
         enabled: true,
         render: renderExpand,
+        onExpandChange:(row:any,expanded:boolean)=>{
+          if(expanded){
+            addOpen("draft","projects",row.id);
+          }else{
+            removeOpen("draft","projects",row.id);
+          }
+        }
       }}
       rowStyle={(rowData) => ({
         background: rowData.oldSal ? 'rgba(255,0,0,0.2)' : rowData.missingSal ? 'rgba(255,209,0,0.2)' : 'rgba(0,255,0,0.2)',

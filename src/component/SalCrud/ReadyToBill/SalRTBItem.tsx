@@ -6,7 +6,7 @@ import NotificationActions from 'common/providers/NotificationProvider';
 import {stampIcon} from 'common/icons';
 import Button from 'common/Button';
 
-export const SalRTBItem = React.memo((props: PropsWithChildren<{ project: any }>) => {
+export const SalRTBItem = React.memo((props: PropsWithChildren<{ project: any, refreshParent:()=>void }>) => {
   
   const [rows, setRows] = useState<Array<any>>();
 
@@ -50,12 +50,16 @@ export const SalRTBItem = React.memo((props: PropsWithChildren<{ project: any }>
   }, [props.project.id]);
 
   const updateToBilled = (id)=>{
-    NotificationActions.openConfirm('Sei sicuro di spostare il Sal in stato "FATTURATO" ?',
-      () => {
-        salService.updateResource(id,{SalState:'BILLED'})
-      },
-      'Conferma operazione'
-    )
+    return new Promise((ok,ko)=>{
+      NotificationActions.openConfirm('Sei sicuro di spostare il Sal in stato "FATTURATO" ?',
+        () => {
+          ok(salService.updateResource(id,{SalState:'BILLED'}))
+        },
+        'Conferma operazione',
+        ko
+      )
+    })
+    
   }
 
 
@@ -80,17 +84,17 @@ export const SalRTBItem = React.memo((props: PropsWithChildren<{ project: any }>
             otherSal = rows.filter(s => s.id != row.id);
           }
           return (
-            <>
+            
               <SalCrud
                 otherSal={otherSal}
                 project={props.project}
                 row={row}
                 type={type}
                 closeModalCallback={closeModalCallback}
-                refreshTable={refreshTable}
+                refreshTable={props.refreshParent}
                 onNext={() => updateToBilled(row.id)}
               />
-            </>
+            
           )
         }}
     />
