@@ -103,6 +103,7 @@ interface TablePaginatedProps extends GridProps {
   expand?: {
     enabled: boolean;
     render: (props: GridDetailRowProps) => JSX.Element;
+    onExpandChange?:(rowData:any,expanded:boolean) => void
   };
 
   customToolBarComponent?: (refreshTable: () => void) => JSX.Element;
@@ -222,6 +223,9 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
       let newData = data.map((item: any, indexP) => {
         if (indexP === event.dataIndex) {
           item.gridtable_expanded = !event.dataItem.gridtable_expanded;
+          if(props.expand && props.expand.onExpandChange){
+            props.expand.onExpandChange(item,item.gridtable_expanded);
+          }
         }
         return item;
       });
