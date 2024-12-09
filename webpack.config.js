@@ -6,7 +6,7 @@ const { FederatedTypesPlugin } = require("@module-federation/typescript");
 const webpack = require("webpack");
 
 const mfeConfig = (path, mode) => ({
-  name: "lookups",
+  name: "notification",
   filename: "remoteEntry.js",
   remotes: {
     common:
@@ -47,7 +47,7 @@ module.exports = (_, argv) => {
       extensions: [".tsx", ".ts", ".jsx", ".js", ".json"],
     },
     devServer: {
-      port: 3012,
+      port: 3013,
       historyApiFallback: true,
     },
     module: {
