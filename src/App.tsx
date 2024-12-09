@@ -7,9 +7,9 @@ import { notificationService } from "./services/notification";
 const App = () => {
 
   useEffect(()=>{//on init
-    debugger;
+    
     notificationService.tryConnect().then(id=>{
-      debugger;
+
     })
     return ()=>{
       //ondestroy
