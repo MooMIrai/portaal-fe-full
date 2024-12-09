@@ -16,7 +16,8 @@ const mfeConfig = (path, mode) => {
     lookups: "lookups@http://localhost:3005/remoteEntry.js",
     sales: "sales@http://localhost:3008/remoteEntry.js",
     hr: "hr@http://localhost:3009/remoteEntry.js",
-    stock:"stock@http://localhost:3012/remoteEntry.js"
+    stock:"stock@http://localhost:3012/remoteEntry.js",
+    notification:"notification@http://localhost:3013/remoteEntry.js"
   };
   if (mode === "production") {
     remotes = {
@@ -26,7 +27,8 @@ const mfeConfig = (path, mode) => {
       sales: "sales@sales/remoteEntry.js",
       hr: "hr@hr/remoteEntry.js",
       //recruiting: "recruiting@recruiting/remoteEntry.js",
-       stock:"stock@stock/remoteEntry.js"
+      stock:"stock@stock/remoteEntry.js",
+      notification:"notification@notification/remoteEntry.js"
     };
   }
   return {
