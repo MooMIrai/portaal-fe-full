@@ -8,7 +8,7 @@ class NotificationServiceC {
     // BE_URL_SOCKET = LOCAL HOST: http://localhost:8023
 
     //remotePath = `${process.env.BE_URL_SOCKET}:${process.env.BE_SOCKET_PORT}}`;
-    remotePath = "http://portaljs.dev.taal.it:8023";
+    remotePath = "https://portaljs.dev.taal.it/socket";
     serverPath = `${this.remotePath}`;
     client: Socket | undefined;
 
@@ -27,7 +27,8 @@ class NotificationServiceC {
                 },
                 query: {
                     token: AuthService.getToken()
-                }
+                },
+                transports: ['websocket', 'polling']
 
             });
 

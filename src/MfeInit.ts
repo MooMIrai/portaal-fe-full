@@ -6,14 +6,14 @@ export default function(){
           id:12,
           text:'Notifications',
           level:0,
-          route:'/notifications',
+          route:'/notification',
           
       },
       {
         id:121,
         text:'inner',
         level:1,
-        route:'/notifications/inner',
+        route:'/notification/inner',
         parentId: 12,
       }
     ]
