@@ -7,30 +7,6 @@ class CandidatoServiceC extends BaseHttpService{
         return "recruitingCandidate";
       }
 
-   /*  search =  (
-        pageNum: number,
-        pageSize: number,
-        filtering:any,
-        sorting: any,
-        include?: boolean
-      ) => {
-        
-          const params = {
-            pageNum,
-            pageSize,
-            include,
-          };
-    
-
-
-          return client.post(
-            `api/v1/recruitingCandidate`,
-            { filtering, sorting },
-            { params }
-          ).then(res=>res.data)
-          
-        
-      }; */
 }
 
 export const candidatoService = new CandidatoServiceC();

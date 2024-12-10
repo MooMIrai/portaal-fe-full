@@ -4,7 +4,9 @@ import RequestPage from './pages/Request/component';
 import CandidatePage from './pages/Candidates/component';
 
 export default function(){
-    return <Routes>
+    return <>
+    
+    <Routes>
     <Route
       path={"/richieste"}
       element={<RequestPage />}
@@ -12,4 +14,5 @@ export default function(){
     <Route path={"/candidati"} element={<CandidatePage />}></Route>
     
   </Routes>
+  </>
 }
