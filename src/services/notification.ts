@@ -4,11 +4,10 @@ import { notificationDebouncing } from "./notification-debouncing";
 
 class NotificationServiceC {
 
-    // BE_URL_SOCKET = DISTRIBUTED: http://portaljs.dev.taal.it:8023
+    // BE_URL_SOCKET = DISTRIBUTED: => automatic
     // BE_URL_SOCKET = LOCAL HOST: http://localhost:8023
 
-    //remotePath = `${process.env.BE_URL_SOCKET}:${process.env.BE_SOCKET_PORT}}`;
-    remotePath = "";
+    remotePath = `${process.env.BE_URL_SOCKET}`;
     serverPath = `${this.remotePath}`;
     client: Socket | undefined;
 
