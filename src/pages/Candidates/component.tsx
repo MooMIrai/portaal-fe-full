@@ -10,8 +10,19 @@ export default function CandidatePage(){
 
         { key: "Person.firstName", label: "Nome", type: "string", sortable: true, filter: "text" },
         { key: "Person.lastName", label: "Cognome", type: "string", sortable: true, filter: "text" },
-        { key: "job_profile", label: "Mansione", type: "string", sortable: true, filter: "text" },
-        { key: "skills", label: "Skills", type: "string", sortable: true, filter: "text" },
+        { key: "CandidateProfile.description", label: "Mansione", type: "string", sortable: true, filter: "text" },
+        { key: "skills", label: "Skills", type: "custom", sortable: true, filter: "text", render:(row)=>{
+
+          debugger;
+          if (row?.Person?.PersonSkillAreas == null || row.Person.PersonSkillAreas.lenght == 0)
+            return <td></td>;
+
+          let skills = row.Person.PersonSkillAreas;
+
+          const skillsDescription = skills.map(skill => skill.SkillArea.name).filter(SkillArea => SkillArea?.name).join(", ");
+
+          return <td>{skillsDescription}</td>;
+        } },
         { key: "date_updated", label: "Data Ultima Revisione", type: "date", sortable: true, filter: "text" }
       ];
       
