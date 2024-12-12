@@ -2,10 +2,13 @@ import React, { useEffect, useState } from "react";
 import GridTable from "common/Table";
 import { candidatoService } from "../../services/candidatoService";
 import { CandidatiCrud } from "../../components/CandidatiCrud/component";
-import "bootstrap/dist/css/bootstrap.min.css"; // Importa il CSS di Bootstrap
-import "bootstrap/dist/js/bootstrap.bundle.min.js"; // Importa i file JavaScript di Bootstrap (necessari per tooltip, modali, ecc.)
+import Button from 'common/Button'
+import Modal from 'common/Modal';
+import { TestComponent } from "../../components/TestComponent/component";
 
 export default function CandidatePage() {
+
+  const [showModal,setShowModal] = useState<boolean>(false);
 
   const columns = [
 
@@ -30,9 +33,7 @@ export default function CandidatePage() {
 
         return <td>
                 <span
-                  data-bs-toggle="tooltip"
                   title={skillsDescription}
-                  className="d-inline-block text-truncate tooltip-bs"
                   style={{ cursor: "pointer" }}
                 >
                   {substring}
@@ -92,25 +93,43 @@ export default function CandidatePage() {
     return maxDate;
   }
 
-  return <GridTable
-    filterable={true}
-    sortable={true}
-    getData={loadData}
-    columns={columns}
-    resizableWindow={true}
-    initialHeightWindow={800}
-    draggableWindow={true}
-    initialWidthWindow={900}
-    resizable={true}
-    actions={() => [
-      "create",
-      "edit",
-      "delete",
+  return (
+    <>
+    <GridTable
 
-    ]}
+      customToolBarComponent={()=>{
+        return <Button themeColor={"info"} disabled={false} onClick={()=>{setShowModal(true)}}>Prova Modale</Button>
+      }}
 
-    formCrud={(row: any, type: string, closeModalCallback: any, refreshTable: any) => (
-      <CandidatiCrud refreshTable={refreshTable} type={type} row={row} closeModalCallback={closeModalCallback} />
-    )}
-  />
+      filterable={true}
+      sortable={true}
+      getData={loadData}
+      columns={columns}
+      resizableWindow={true}
+      initialHeightWindow={800}
+      draggableWindow={true}
+      initialWidthWindow={900}
+      resizable={true}
+      actions={() => [
+        "create",
+        "edit",
+        "delete",
+
+      ]}
+
+      formCrud={(row: any, type: string, closeModalCallback: any, refreshTable: any) => (
+        <CandidatiCrud refreshTable={refreshTable} type={type} row={row} closeModalCallback={closeModalCallback} />
+      )}
+    />
+    <Modal
+      title="Titolo"
+      isOpen={showModal}
+      onClose={()=>setShowModal(false)}
+      width="100%"
+      height="100%"
+    >
+      <TestComponent id={1} />
+   </Modal>
+   </>
+  )
 }
