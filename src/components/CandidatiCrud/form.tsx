@@ -1,6 +1,6 @@
 
 export const getFormCandidate = (
-    formData: any, 
+    formData: any,
     type: string
 ) => {
 
@@ -38,7 +38,7 @@ export const getFormCandidate = (
             name: "firstName",
             label: "Nome",
             type: "text",
-            value: formData?.firstName ,
+            value: formData?.firstName,
             required: true,
             disabled: (type === "view"),
             validator: (value: any) => value ? "" : "Il campo Nome è obbligatorio",
@@ -52,13 +52,13 @@ export const getFormCandidate = (
             disabled: (type === "view"),
             validator: (value: any) => value ? "" : "Il campo Cognome è obbligatorio"
         },
-         birthDate: {
+        birthDate: {
             name: "birthDate",
             label: "Data di nascita",
             required: true,
             type: "date",
             value: formData?.birthDate,
-            disabled: (type === "view" ),
+            disabled: (type === "view"),
             validator: createValidator(type === "view", dateValidator)
         },
         phoneNumber: {
@@ -66,7 +66,7 @@ export const getFormCandidate = (
             label: "Numero di Telefono",
             type: "text",
             value: formData?.phoneNumber,
-            disabled: (type === "view" ),
+            disabled: (type === "view"),
             validator: (value: any) =>
                 optionalCellulareValidator(value) ? "" : "Il campo Telefono deve essere nel formato +39XXXXXXXXXX o XXXXXXXXXX"
         },
@@ -76,30 +76,30 @@ export const getFormCandidate = (
             type: "text",
             value: formData?.email || "",
             required: true,
-            disabled: (type === "view" ),
-            validator:(value:any)=>!value || !value.length ?"Il campo Email è obbligatorio":''
+            disabled: (type === "view"),
+            validator: (value: any) => !value || !value.length ? "Il campo Email è obbligatorio" : ''
         },
-        residenza : {
+        residenza: {
             name: "residenza",
             label: "Comune di Residenza",
             type: "country",
             disabled: type === "view",
             value: formData?.residenza,
         },
-        sede:{
+        sede: {
             name: "sede",
             label: "Sede",
             type: "country",
             disabled: (type === "view"),
             value: formData?.sede,
-        }, 
+        },
         ral: {
             name: "ral",
             label: "Ral attuale",
             type: "number",
             value: formData?.ral,
             disabled: (type === "view")
-           
+
         },
         ralMin: {
             name: "ralMin",
@@ -114,7 +114,7 @@ export const getFormCandidate = (
             type: "number",
             value: formData?.ralMax,
             disabled: (type === "view")
-           
+
         },
         notice: {
             name: "notice",
@@ -122,7 +122,7 @@ export const getFormCandidate = (
             type: "number",
             value: formData?.notice,
             disabled: (type === "view")
-           
+
         },
         note: {
             name: "note",
@@ -130,10 +130,10 @@ export const getFormCandidate = (
             type: "textarea",
             value: formData?.note,
             disabled: (type === "view")
-           
+
         },
         profile_autocomplete: {
-            name: "profile",
+            name: "profile_autocomplete",
             label: "Profilo",
             type: "profile-selector",
             value: formData.profile_autocomplete || "",
@@ -144,9 +144,53 @@ export const getFormCandidate = (
                 value ? "" : "Il campo profilo è obbligatorio"
             ),
         },
-     
+        profile_type: {
+            name: "profile_type",
+            label: "Tipologia profilo",
+            type: "textarea",
+            value: formData?.profile_type,
+            disabled: (type === "view")
+
+        },
+        willingToTransfer: {
+            name: "willingToTransfer",
+            label: "Disposto a trasferirsi",
+            type: "checkbox",
+            showLabel: false,
+            value: formData?.willingToTransfer || false,
+            disabled: (type === "view")
+
+        },
+        assistance_104: {
+            name: "assistance_104",
+            label: "Disposto a trasferirsi",
+            type: "checkbox",
+            showLabel: false,
+            value: formData?.assistance_104 || false,
+            disabled: (type === "view")
+
+        },
+        contract_type: {
+            name: "contract_type",
+            label: "Tipo Contratto Attuale",
+            type: "contract_type-selector",
+            value: formData.contract_type || "",
+            disabled: (type === "view"),
+            //valueOnChange: valueOnChange,
+        },
+        seniority: {
+            name: "seniority",
+            label: "Seniority",
+            type: "select",
+            showLabel: false,
+            value: formData.seniority,
+            options: ["J", "J_A", "M", "M_A", "S", "S_A"],
+            //valueOnChange: valueOnChange,
+            disabled: (type === "view"),
+        }
+       
     };
 
-    
+
     return fields;
 };
