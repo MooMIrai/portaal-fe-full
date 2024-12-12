@@ -18,5 +18,9 @@ declare module 'hr/Index';
 declare module 'stock/Routes';
 declare module 'stock/Index';
 
+declare module 'recruiting/Routes';
 declare module 'recruiting/Index';
+
+declare module 'notification/Routes';
+declare module 'notification/Index';
 
