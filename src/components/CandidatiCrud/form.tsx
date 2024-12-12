@@ -163,7 +163,7 @@ export const getFormCandidate = (
         },
         assistance_104: {
             name: "assistance_104",
-            label: "Disposto a trasferirsi",
+            label: "104",
             type: "checkbox",
             showLabel: false,
             value: formData?.assistance_104 || false,
