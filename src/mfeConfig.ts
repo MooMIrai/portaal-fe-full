@@ -5,6 +5,7 @@
             import("lookups/Index"),
 			import("sales/Index"),
 			import("hr/Index"),
+			import("recruiting/Index"),
 			import("stock/Index"),
 			import("notification/Index")
           ];
@@ -14,6 +15,7 @@
              React.lazy(() => import("lookups/Routes")),
 			React.lazy(() => import("sales/Routes")),
 			React.lazy(() => import("hr/Routes")),
+			React.lazy(() => import("recruiting/Routes")),
 			React.lazy(() => import("stock/Routes")),
 			React.lazy(() => import("notification/Routes"))
           ];
