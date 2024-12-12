@@ -4,6 +4,7 @@ import { getFormCandidate } from "./form";
 import styles from './style.module.scss';
 import NotificationActions from 'common/providers/NotificationProvider';
 import { candidatoService } from '../../services/candidatoService';
+import formFields from './customFields'
 
 type CandidatiCrudProps = {
     row: Record<string, any>;
@@ -34,7 +35,7 @@ export function CandidatiCrud(props:PropsWithChildren<CandidatiCrudProps>){
             disabled: false
           }
         })*/}
-        //addedFields={formFields}
+        addedFields={formFields}
         showSubmit={true}
         extraButton={true}
         extraBtnAction={props.closeModalCallback}
