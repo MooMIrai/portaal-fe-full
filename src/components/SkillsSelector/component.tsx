@@ -10,6 +10,7 @@ import CustomWindow from "../Window/component";
 import DynamicForm from "../DynamicForm/component";
 import { Button } from "@progress/kendo-react-buttons";
 import styles from "./styles.module.scss"
+import { Label } from "@progress/kendo-react-labels";
 
 interface Skill {
     id: number;
@@ -30,7 +31,7 @@ const SkillMultiSelect: React.FC<SkillMultiSelectProps> = (props: any) => {
     const {
         onChange,
         value,
-        disabled,
+        disabled
     } = props;
     const [skills, setSkills] = useState<Skill[]>([]);
     const [selectedSkills, setSelectedSkills] = useState<Skill[]>([]);
@@ -196,6 +197,8 @@ const SkillMultiSelect: React.FC<SkillMultiSelectProps> = (props: any) => {
 
     return (
         <div>
+            <Label>{props.label || "Skills"}</Label>
+
             <MultiSelect
                 data={skills}
                 ref={multiselectRef}
@@ -203,14 +206,17 @@ const SkillMultiSelect: React.FC<SkillMultiSelectProps> = (props: any) => {
                 filterable={true}
                 filter={filter} 
                 onFilterChange={handleSearch} 
-                label="Skill"
+                //label="Skill"
                 onChange={handleChange}
                 listNoDataRender={listNoDataRender}
                 placeholder="Seleziona o cerca skill..."
                 textField="name"
                 dataItemKey="id"
                 loading={loading}
+                style={{height:33.33}}
+                size={"medium"}
             />
+            
             {showModal && (
                 <CustomWindow
                     show={showModal}
