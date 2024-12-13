@@ -93,7 +93,7 @@ const getSeniority= (filterP:string)=>{
 }
 
 export const customFields={
-    "account-selector":withField(withAutoComplete(getEmployee)),
+    "hr-selector":withField(withAutoComplete(getEmployee)),
     "status-selector":withField(withAutoComplete(getStatus)),
     "priority-selector":withField(withAutoComplete(getPriority)),
     "customer-selector":withField(withAutoComplete(getDataCustomer)),

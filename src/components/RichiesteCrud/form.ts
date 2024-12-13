@@ -12,10 +12,10 @@ export const getFormRichiesta = (
     };
 
     const fields = {
-        pippo: {
-            name: "pippo",
+        ReferrerHr: {
+            name: "ReferrerHr",
             label: "HR di riferimento",
-            type: "account-selector",
+            type: "hr-selector",
             value: {id:0,name:"Seleziona un dipendente"},
             required: true,
             disabled: type === "view"
@@ -44,6 +44,14 @@ export const getFormRichiesta = (
             required: true,
             disabled: type === "view"
         },
+        CustomerReferer: {
+            name: "CustomerReferer",
+            label: "Referente Cliente",
+            type: "text",
+            value: formData.CustomerReferer || "",
+            required: false,
+            disabled: type === "view"
+        },
         ref_code: {
             name: "ref_code",
             label: "Codice di Riferimento",
@@ -59,7 +67,7 @@ export const getFormRichiesta = (
             value: formData.id_code || "",
             required: false,
             disabled: type === "view" 
-        },
+        }/* ,
         WorkModel: {
             name: "WorkModel",
             label: "Ambito lavorativo",
@@ -69,7 +77,7 @@ export const getFormRichiesta = (
             required: true,
             showLabel:false,
             disabled: type === "view"
-        },
+        } */,
         Seniority: {
             name: "Seniority",
             label: "Seniority",
