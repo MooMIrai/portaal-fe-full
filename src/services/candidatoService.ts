@@ -1,11 +1,10 @@
-import client from "common/services/BEService";
 import BaseHttpService from "common/services/BaseHTTPService";
-class CandidatoServiceC extends BaseHttpService{
+class CandidatoServiceC extends BaseHttpService {
 
 
-    getTableName() {
-        return "recruitingCandidate";
-      }
+  getTableName() {
+    return "recruitingCandidate";
+  }
 
 }
 
