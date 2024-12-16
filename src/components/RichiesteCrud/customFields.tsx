@@ -1,6 +1,7 @@
 import { richiestaService } from "../../services/richiestaService";
 import withField from "common/hoc/Field";
 import withAutoComplete from "common/hoc/AutoComplete";
+import { RequestPriority, RequestSeniority, RequestStatus } from "./models";
 
 const getEmployee = (filterP: string) => {
     return richiestaService.searchAccount(filterP).then((res) => {
@@ -12,45 +13,11 @@ const getEmployee = (filterP: string) => {
 }
 
 const getStatus = (filterP: string) => {
-    return Promise.resolve([
-        {
-            id:'A',
-            name:'Aperta'
-        },
-        {
-            id:'S',
-            name:'Sospesa'
-        },
-        {
-            id:'C',
-            name:'Chiusa'
-        },
-        {
-            id:'E',
-            name:'Eliminata'
-        }
-    ].filter(p=>!filterP || !filterP.length || p.name.toLowerCase().indexOf(filterP.toLowerCase())>=0))
+    return Promise.resolve(RequestStatus.filter(p=>!filterP || !filterP.length || p.name.toLowerCase().indexOf(filterP.toLowerCase())>=0))
 }
 
 const getPriority = (filterP: string) => {
-    return Promise.resolve([
-        {
-            id:'L',
-            name:'Bassa'
-        },
-        {
-            id:'M',
-            name:'Media'
-        },
-        {
-            id:'H',
-            name:'Alta'
-        },
-        {
-            id:'U',
-            name:'Urgente'
-        }
-    ].filter(p=>!filterP || !filterP.length || p.name.toLowerCase().indexOf(filterP.toLowerCase())>=0))
+    return Promise.resolve(RequestPriority.filter(p=>!filterP || !filterP.length || p.name.toLowerCase().indexOf(filterP.toLowerCase())>=0))
 }
 
 const getDataCustomer= (filterP:string)=>{
@@ -64,33 +31,27 @@ const getDataCustomer= (filterP:string)=>{
 }
 
 const getSeniority= (filterP:string)=>{
-    return Promise.resolve([
-        {
-            id:'J',
-            name:'Junior'
-        },
-        {
-            id:'J_A',
-            name:'Junior Avanzato'
-        },
-        {
-            id:'M',
-            name:'Middle'
-        },
-        {
-            id:'M_A',
-            name:'Middle Avanzato'
-        },
-        {
-            id:'S',
-            name:'Senior'
-        },
-        {
-            id:'S_A',
-            name:'Senior Avanzato'
-        }
-    ].filter(p=>!filterP || !filterP.length || p.name.toLowerCase().indexOf(filterP.toLowerCase())>=0))
+    return Promise.resolve(RequestSeniority.filter(p=>!filterP || !filterP.length || p.name.toLowerCase().indexOf(filterP.toLowerCase())>=0))
 }
+
+const getLocation = (filterP:string) =>{
+    return richiestaService.searchLocation(filterP).then((res)=>{
+        if(res ){
+            return res.map(r => ({ id: r.id, name:r.description }));
+        }
+    });  
+}
+
+const getProfile = (filterP:string) =>{
+    return richiestaService.searchProfile(filterP).then((res)=>{
+        if(res ){
+            return res.map(r => ({ id: r.id, name:r.description }));
+        }
+    });  
+}
+
+
+
 
 export const customFields={
     "hr-selector":withField(withAutoComplete(getEmployee)),
@@ -98,4 +59,6 @@ export const customFields={
     "priority-selector":withField(withAutoComplete(getPriority)),
     "customer-selector":withField(withAutoComplete(getDataCustomer)),
     "seniority-selector":withField(withAutoComplete(getSeniority)),
+    "location-selector":withField(withAutoComplete(getLocation)),
+    "profile-selector":withField(withAutoComplete(getProfile))
 }

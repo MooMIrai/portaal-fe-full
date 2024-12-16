@@ -4,29 +4,26 @@ import styles from './style.module.scss';
 
 import { customFields } from "./customFields";
 import { getFormRichiesta } from "./form";
-
+import { requestAdapter } from "./adapters";
+import { RequestServer } from "./models";
+import withAiBox from "common/hoc/AiBox";
+import {
+    fileBacIcon
+  } from "common/icons";
+import fileService from 'common/services/FileService'
 
 type RichiesteCrudProps = {
-    row: Record<string, any>;
+    row: RequestServer;
     type: any;
     closeModalCallback: () => void;
     refreshTable: () => void;
     //onSubmit: (type: any, formData: any, refreshTable: () => void, id: any) => void;
   };
 
-export function RichiesteCrud(props:PropsWithChildren<RichiesteCrudProps>){
+function RichiesteCrudC(props:PropsWithChildren<RichiesteCrudProps>){
 
     const formRichiesta = useRef();
-    const [formRichiestaData,setFormRichiestaData] = useState({
-        ...props.row,
-        pippo:{id:0,name:"Seleziona un dipendente"}
-        /*requestingEmployee_id:{
-            id:props.row.requestingEmployee_id,
-            name:
-                props.row.RequestingEmployee?
-                props.row.RequestingEmployee.Person.firstName + ' ' +props.row.RequestingEmployee.Person.lastName
-            :''}*/
-    })
+    const [formRichiestaData,setFormRichiestaData] = useState(requestAdapter.reverseAdapt(props.row))
 
     return <div className={styles.formContainer}>
         <Form submitText={"Salva"} 
@@ -43,3 +40,22 @@ export function RichiesteCrud(props:PropsWithChildren<RichiesteCrudProps>){
             }}
     /></div>
 }
+
+export const RichiesteCrud = withAiBox(RichiesteCrudC,[
+    {
+        id: '1',
+        text: 'Riempi Dati dal Cv',
+        svgIcon: fileBacIcon
+    }
+], (command,closeAiPopup)=>{
+
+    if(command.id==='1'){
+        fileService.selectFile().then(f=>{
+            debugger;
+            closeAiPopup();
+        }).catch(()=>{
+            debugger;
+        })
+    }
+    //closeAiPopup()
+});

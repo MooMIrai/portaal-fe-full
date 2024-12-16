@@ -67,7 +67,16 @@ export const getFormRichiesta = (
             value: formData.id_code || "",
             required: false,
             disabled: type === "view" 
-        }/* ,
+        },
+        Location: {
+            name: "Location",
+            label: "Sede di riferimento",
+            type: "location-selector",
+            value: formData.Location || "",
+            required: false,
+            disabled: type === "view"
+        }
+        /* ,
         WorkModel: {
             name: "WorkModel",
             label: "Ambito lavorativo",
@@ -78,12 +87,20 @@ export const getFormRichiesta = (
             showLabel:false,
             disabled: type === "view"
         } */,
+        Profile: {
+            name: "Profile",
+            label: "Profilo",
+            type: "profile-selector",
+            value: formData.Profile || "",
+            required: true,
+            disabled: type === "view"
+        },
         Seniority: {
             name: "Seniority",
             label: "Seniority",
             type: "seniority-selector",
             value: formData.Seniority || "",
-            required: false,
+            required: true,
             disabled: type === "view"
         },
         PrimarySkill: {
@@ -91,7 +108,7 @@ export const getFormRichiesta = (
             label: "Skill primarie",
             type: "skill",
             value: formData.Seniority || "",
-            required: false,
+            required: true,
             disabled: type === "view"
         },
         SecondarySkill: {
@@ -107,7 +124,7 @@ export const getFormRichiesta = (
             label: "Tariffa di Vendita",
             type: "number",
             value: formData.saleRate || "",
-            required: true,
+            required: false,
             disabled: type === "view"
         },
         continuative: {
@@ -115,7 +132,7 @@ export const getFormRichiesta = (
             label: "Continuativo",
             type: "checkbox",
             value: formData.continuative || false,
-            required: true,
+            required: false,
             showLabel:false,
             disabled: type === "view"
         },
@@ -129,6 +146,6 @@ export const getFormRichiesta = (
         }
     };
 
-    debugger;
+    
     return fields;
 };

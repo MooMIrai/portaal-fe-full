@@ -14,6 +14,8 @@ declare module "common/ListBox"
 declare module "common/AutoComplete"
 declare module "common/CountrySelector"
 
+declare module 'common/icons'
+
 declare module "common/providers/NotificationProvider";
 
 declare module "common/services/BEService";
@@ -21,3 +23,8 @@ declare module "common/services/BaseHTTPService";
 
 declare module "common/hoc/Field"
 declare module "common/hoc/AutoComplete"
+declare module "common/hoc/AiBox"
+
+declare module "common/services/FileService"
+
+declare module 'common/gof/Adapter'
