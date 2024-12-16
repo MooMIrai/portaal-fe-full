@@ -5,9 +5,11 @@ import styles from './style.module.scss';
 import NotificationActions from 'common/providers/NotificationProvider';
 import { candidatoService } from '../../services/candidatoService';
 import {formFields} from './customFields'
+import { candidateAdapter } from "./adapter";
+import { CandidateServer } from "./models";
 
 type CandidatiCrudProps = {
-    row: Record<string, any>;
+    row: CandidateServer;
     type: any;
     closeModalCallback: () => void;
     refreshTable: () => void;
@@ -17,7 +19,8 @@ type CandidatiCrudProps = {
 export function CandidatiCrud(props:PropsWithChildren<CandidatiCrudProps>){
 
     const formCandidato = useRef();
-    const [formCandidateData,setFormCandidateData] = useState({})
+    //const [formCandidateData,setFormCandidateData] = useState({})
+    const [formCandidateData,setFormCandidateData] = useState(candidateAdapter.reverseAdapt(props.row))
 
     return <div className={styles.formContainer}>
       <Form

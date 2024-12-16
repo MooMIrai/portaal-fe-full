@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useRef, useState } from "react";
+import React, { Children, PropsWithChildren, useRef, useState } from "react";
 import Form from "common/Form";
 import styles from './style.module.scss';
 
@@ -49,7 +49,9 @@ export const RichiesteCrud = withAiBox(RichiesteCrudC,[
     }
 ], (command,closeAiPopup)=>{
 
+    debugger;
     if(command.id==='1'){
+
         fileService.selectFile().then(f=>{
             debugger;
             closeAiPopup();

@@ -89,7 +89,7 @@ export const getFormCandidate = (
         sede: {
             name: "sede",
             label: "Sede",
-            type: "country",
+            type: "location-selector",
             disabled: (type === "view"),
             value: formData?.sede,
         },
@@ -181,10 +181,10 @@ export const getFormCandidate = (
         seniority: {
             name: "seniority",
             label: "Seniority",
-            type: "select",
+            type: "seniority-selector",
             showLabel: false,
             value: formData.seniority,
-            options: ["J", "J_A", "M", "M_A", "S", "S_A"],
+            //options: ["J", "J_A", "M", "M_A", "S", "S_A"],
             //valueOnChange: valueOnChange,
             disabled: (type === "view"),
         }

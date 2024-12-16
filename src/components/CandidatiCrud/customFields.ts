@@ -2,9 +2,9 @@ import withField from "common/hoc/Field";
 import withAutoComplete from "common/hoc/AutoComplete";
 import { profileService } from "../../services//profileService"
 import { contractService } from "../../services/contractService";
+import { LocationSelector, SenioritySelector } from "../RichiesteCrud/customFields";
 
 const getDataProfile = () => {
-    debugger;
 
     return profileService.getAll().then((res) => {
         if (res) {
@@ -14,7 +14,6 @@ const getDataProfile = () => {
     });
 }
 const getDataContract = () => {
-    debugger;
 
     return contractService.getAll().then((res) => {
         if (res) {
@@ -31,4 +30,6 @@ export const AutoCompleteContract = withField(withAutoComplete(getDataContract))
 export const formFields = {
     "profile-selector": AutoCompleteProfile,
     "contract_type-selector": AutoCompleteContract,
+    "location-selector": LocationSelector,
+    "seniority-selector": SenioritySelector
 };

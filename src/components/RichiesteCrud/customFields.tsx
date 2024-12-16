@@ -50,7 +50,8 @@ const getProfile = (filterP:string) =>{
     });  
 }
 
-
+export const LocationSelector = withField(withAutoComplete(getLocation));
+export const SenioritySelector = withField(withAutoComplete(getSeniority));
 
 
 export const customFields={
@@ -58,7 +59,7 @@ export const customFields={
     "status-selector":withField(withAutoComplete(getStatus)),
     "priority-selector":withField(withAutoComplete(getPriority)),
     "customer-selector":withField(withAutoComplete(getDataCustomer)),
-    "seniority-selector":withField(withAutoComplete(getSeniority)),
-    "location-selector":withField(withAutoComplete(getLocation)),
+    "seniority-selector":SenioritySelector,
+    "location-selector":LocationSelector,
     "profile-selector":withField(withAutoComplete(getProfile))
 }
