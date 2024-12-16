@@ -52,7 +52,7 @@
     "@progress/kendo-react-buttons": "^8.0.0",
     "@progress/kendo-react-charts": "^8.0.0",
     "@progress/kendo-react-common": "^8.0.0",
-    "@progress/kendo-react-conversational-ui": "^8.0.0",
+    "@progress/kendo-react-conversational-ui": "^9.1.0",
     "@progress/kendo-react-data-tools": "^8.0.0",
     "@progress/kendo-react-dateinputs": "^8.0.0",
     "@progress/kendo-react-dialogs": "^8.0.0",

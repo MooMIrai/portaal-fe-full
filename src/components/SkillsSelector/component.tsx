@@ -27,7 +27,7 @@ export interface SkillCategory {
 interface SkillMultiSelectProps {
     initialSelectedSkills?: Skill[];
 }
-const SkillMultiSelect: React.FC<SkillMultiSelectProps> = (props: any) => {
+const SkillMultiSelect: React.FC<SkillMultiSelectProps | any> = (props) => {
     const {
         onChange,
         value,
@@ -45,7 +45,6 @@ const SkillMultiSelect: React.FC<SkillMultiSelectProps> = (props: any) => {
     const multiselectRef = useRef<any>(null);
 
     useEffect(() => {
-        fetchSkills();
         fetchCategories();
     }, []);
 
@@ -53,19 +52,24 @@ const SkillMultiSelect: React.FC<SkillMultiSelectProps> = (props: any) => {
         setSelectedSkills(value);
     }, [value]);
 
-    const fetchSkills = async () => {
+/*     const fetchSkills = async () => {
         setLoading(true);
         try {
-            const response = await client.post("api/v1/skillArea");
+            let filter=undefined;
+            if(props.options){
+                filter={}
+            }
+            const response = await client.post("api/v1/skillArea",);
             setSkills(response.data.data);
         } catch (error) {
             console.error("Errore nel recupero delle skill:", error);
         } finally {
             setLoading(false);
         }
-    };
+    }; */
 
     const fetchCategories = async () => {
+        setLoading(true)
         try {
             const response = await client.get("api/v1/crud/skillCategory");
             const categoryMap = new Map<string, number>();
@@ -77,6 +81,8 @@ const SkillMultiSelect: React.FC<SkillMultiSelectProps> = (props: any) => {
             setCategoryMap(categoryMap);
         } catch (error) {
             console.error("Errore nel recupero delle categorie:", error);
+        }finally{
+            setLoading(false);
         }
     };
 
@@ -87,19 +93,52 @@ const SkillMultiSelect: React.FC<SkillMultiSelectProps> = (props: any) => {
             onChange({ value: currentValue });
         }
     };
-    const timeout = useRef<any>();
+    //const timeout = useRef<any>();
     const handleSearch = (event: MultiSelectFilterChangeEvent) => {
         const filterValue = event?.filter?.value || "";
         setFilter(filterValue);
-        clearTimeout(timeout.current);
-        timeout.current = setTimeout(() => {
-            fetchFilteredSkills(filterValue);
-        }, 800);
+        //clearTimeout(timeout.current);
     };
 
-    const fetchFilteredSkills = async (filterValue: string) => {
+    const fetchFilteredSkills = async (filterValue?: string) => {
         setLoading(true);
-        const body = {
+
+        let body:any = undefined;
+
+        if(filterValue && filterValue.length){
+            body={
+                filtering: {
+                    logic: "and",
+                    filters: [
+                        {
+                            field: "name",
+                            operator: "contains",
+                            value: filterValue
+                        }
+                    ]
+                }
+        }
+        if(props.options){
+            const filterType = {
+                field: "type",
+                operator: "equals",
+                value: props.options
+            };
+            if(!body){
+                body={
+                    filtering: {
+                        logic: "and",
+                        filters: [
+                            filterType
+                        ]
+                    }  
+                }
+            }else{
+                body.filtering.filters.push(filterType);
+            }
+        }
+
+        /* const body = {
             filtering: {
                 logic: "or",
                 filters: [
@@ -110,7 +149,7 @@ const SkillMultiSelect: React.FC<SkillMultiSelectProps> = (props: any) => {
                     }
                 ]
             }
-        };
+        }; */
         try {
             const response = await client.post("/api/v1/skillArea", body);
             setSkills(response.data.data);
@@ -120,6 +159,11 @@ const SkillMultiSelect: React.FC<SkillMultiSelectProps> = (props: any) => {
             setLoading(false);
         }
     };
+    }
+
+    useEffect(()=>{
+        fetchFilteredSkills(filter);
+    },[props.options,filter])
 
     const createNewSkill = async () => {
         if (selectedCategory && categoryMap.has(selectedCategory)) {
@@ -143,7 +187,7 @@ const SkillMultiSelect: React.FC<SkillMultiSelectProps> = (props: any) => {
                 setFilter(""); 
                 setNewSkillName("");
                 
-                fetchSkills();
+                //fetchFilteredSkills(filter);
             } catch (error) {
                 console.error("Errore nella creazione della skill:", error);
             }
@@ -207,6 +251,7 @@ const SkillMultiSelect: React.FC<SkillMultiSelectProps> = (props: any) => {
                 filter={filter} 
                 onFilterChange={handleSearch} 
                 //label="Skill"
+                
                 onChange={handleChange}
                 listNoDataRender={listNoDataRender}
                 placeholder="Seleziona o cerca skill..."

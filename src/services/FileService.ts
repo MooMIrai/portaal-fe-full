@@ -132,6 +132,34 @@ class FileService{
        
     }
     
+    selectFile() {
+        return new Promise((resolve, reject) => {
+          const input = document.createElement('input');
+          input.type = 'file';
+      
+          input.addEventListener('change', (event:any) => {
+            if(!event || !event.target || !event.target.files)
+                return reject();
+            const file =event.target.files[0];
+            if (file) {
+              resolve(file);
+            } else {
+              reject('No file selected');
+            }
+            // Rimuovi l'input dopo l'uso
+            input.remove();
+          });
+      
+          input.addEventListener('cancel', () => {
+            debugger;
+            reject('File selection was canceled');
+            // Rimuovi l'input dopo l'uso
+            input.remove();
+          });
+      
+          input.click();
+        });
+    }
 }
 
 export default new FileService();

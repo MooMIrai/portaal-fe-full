@@ -51,6 +51,9 @@ const mfeConfig = {
     "./hoc/Field": "./src/hoc/Field",
     "./hoc/AutoComplete": "./src/hoc/AutoComplete",
     "./hoc/SchedulerItem": "./src/hoc/SchedulerItemHoc",
+    "./hoc/AiBox": "./src/hoc/AiBox",
+
+    "./gof/Adapter": "./src/adapters/baseAdapter",
 
     "./icons": "@progress/kendo-svg-icons",
   },
