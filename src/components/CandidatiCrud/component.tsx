@@ -48,15 +48,15 @@ export function CandidatiCrud(props:PropsWithChildren<CandidatiCrudProps>){
 
             let action = Promise.resolve()
             
-
+            let dataServer = candidateAdapter.adapt(data);
 
             console.log(formCandidato);
             //let formCandidato.current.values
 
             if (props.type === "create")
-              action = candidatoService.createResource(data);
+              action = candidatoService.createResource(dataServer);
             else
-              action = candidatoService.updateResource(props.row.id, data);
+              action = candidatoService.updateResource(props.row.id, dataServer);
 
             return action.then(res=>{
               NotificationActions.openModal(

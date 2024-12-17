@@ -7,10 +7,7 @@ export default function(){
     return <>
     
     <Routes>
-    <Route
-      path={"/richieste"}
-      element={<RequestPage />}
-    ></Route>
+    <Route path={"/richieste"} element={<RequestPage />}></Route>
     <Route path={"/candidati"} element={<CandidatePage />}></Route>
     
   </Routes>

@@ -13,6 +13,13 @@ export default function(){
       },
       {
         id:131,
+        text:'Richieste',
+        level:1,
+        route:'/richieste',
+        parentId: 13,
+      },
+      {
+        id:132,
         text:'Candidati',
         level:1,
         route:'/candidati',

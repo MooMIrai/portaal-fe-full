@@ -11,7 +11,6 @@ class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, Candidat
 
         return {
             id: 0, // ID predefinito, potrebbe essere generato dal sistema
-            person_id: 0, // ID persona predefinito, da determinare in base al sistema
             willingToTransfer: source.willingToTransfer,
             candidateProfile_id: source.profile_autocomplete?.id ? parseInt(source.profile_autocomplete.id.toString()) : 0,
             profileType: source.profile_type || '',
@@ -33,45 +32,35 @@ class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, Candidat
                 dailyHours: 0, // Valore predefinito
                 fillTimesheet: false, // Valore predefinito
             },
-            RecruitingAssignments: [], // Mappatura non specificata, dipende dal sistema
+            //RecruitingAssignments: [], // Mappatura non specificata, dipende dal sistema
             Person: {
                 id: 0, // ID persona predefinito
                 firstName: source.firstName,
                 lastName: source.lastName,
                 phoneNumber: source.phoneNumber || null,
-                phoneNumber2: null,
-                address: null,
                 privateEmail: source.email,
                 dateBirth: source.birthDate,
-                bankAddress: null,
-                zipCode: '',
-                taxCode: '',
-                vatNumber: '',
-                employee_id: '',
-                note: '',
-                cityBirth_id: null,
                 cityRes_id: source.residenza?.id ? parseInt(source.residenza.id.toString()) : null,
-                gender_id: 0, // Valore predefinito
-                isExternal: false, // Valore predefinito
-                data: null,
                 date_created: '', // Da aggiungere se disponibile
                 date_modified: '', // Da aggiungere se disponibile
                 user_created: '', // Da aggiungere se disponibile
                 user_modified: '', // Da aggiungere se disponibile
                 location_id: source.sede?.id ? parseInt(source.sede.id.toString()) : null,
                 Seniority: source.seniority ? source.seniority.id.toString() : "",
-                files: [],
-                PersonSkillAreas: [] // Mappatura non specificata
+                Attachment: null,
+                PersonSkillAreas: [], // Mappatura non specificata
+                activityType_ids: source.assistance_104 ? [ 4 ] : []
             }
         };
     }
 
     // Adatta CandidateServer in CandidateFields
     reverseAdapt(source?: CandidateServer): CandidateFields | null {
-        if (!source) {
-            return null;
-        }
 
+        if (!source || !Object.keys(source).length)
+            return null;
+
+        debugger;
         return {
             firstName: source.Person.firstName,
             lastName: source.Person.lastName,
@@ -88,7 +77,7 @@ class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, Candidat
             profile_autocomplete: source.CandidateProfile ? { id: source.CandidateProfile.id, name: source.CandidateProfile.description } : undefined,
             profile_type: source.profileType || undefined,
             willingToTransfer: source.willingToTransfer,
-            assistance_104: false, // Valore predefinito
+            assistance_104: source.Person.activityType_ids && source.Person.activityType_ids.length > 0 && source.Person.activityType_ids.includes(104), // Valore predefinito
             contract_type: source.currentContractType ? { id: source.currentContractType.id, name: source.currentContractType.description } : undefined,
             seniority: RequestSeniority.find(p=>p.id===source.Person.Seniority) || {id:0,name:'Seleziona Seniority'},
         };

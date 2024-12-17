@@ -118,7 +118,7 @@ export const getFormCandidate = (
         },
         notice: {
             name: "notice",
-            label: "Preavviso",
+            label: "Preavviso (giorni)",
             type: "number",
             value: formData?.notice,
             disabled: (type === "view")
@@ -182,7 +182,7 @@ export const getFormCandidate = (
             name: "seniority",
             label: "Seniority",
             type: "seniority-selector",
-            showLabel: false,
+            showLabel: true,
             value: formData.seniority,
             //options: ["J", "J_A", "M", "M_A", "S", "S_A"],
             //valueOnChange: valueOnChange,

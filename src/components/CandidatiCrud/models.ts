@@ -30,20 +30,19 @@ export interface CandidateFields {
 
   export interface CandidateServer {
     id: number;
-    person_id: number;
-    willingToTransfer: boolean;
-    candidateProfile_id: number;
-    profileType: string;
+    Person: Person;
     currentRAL: number;
     minRequiredRAL: number;
     maxRequiredRAL: number;
     notice: string;
-    currentContractType_id: number;
     notes: string;
+    candidateProfile_id: number;
     CandidateProfile: CandidateProfile;
+    currentContractType_id: number;
     currentContractType: CurrentContractType;
-    RecruitingAssignments: RecruitingAssignment[];
-    Person: Person;
+    profileType: string;
+    willingToTransfer: boolean;
+    // RecruitingAssignments: RecruitingAssignment[];
   }
   
   interface CandidateProfile {
@@ -72,7 +71,7 @@ export interface CandidateFields {
     date_modified: string; // ISO date string
   }
   
-  interface RecruitingSendCv {
+  /* interface RecruitingSendCv {
     id: number;
     assignment_id: number;
     date_log: string; // ISO date string
@@ -82,9 +81,9 @@ export interface CandidateFields {
     user_modified: string;
     date_created: string; // ISO date string
     date_modified: string; // ISO date string
-  }
+  } */
   
-  interface RecruitingAssignment {
+  /* interface RecruitingAssignment {
     id: number;
     candidate_id: number;
     request_id: number;
@@ -101,7 +100,7 @@ export interface CandidateFields {
     RecruitingOffer: any | null; // Define as needed
     RecruitingSendCv: RecruitingSendCv | null;
     RecruitingSendContract: any | null; // Define as needed
-  }
+  } */
 
   interface SkillArea {
     id: number;
@@ -120,14 +119,27 @@ export interface CandidateFields {
   }
   
   interface Person {
+
     id: number;
     firstName: string;
     lastName: string;
+    cityRes_id: number | null;
+    location_id: number | null;
     phoneNumber: string | null;
-    phoneNumber2: string | null;
-    address: string | null;
     privateEmail: string | null;
     dateBirth: string; // ISO date string
+    Attachment: any; //
+    PersonSkillAreas: PersonSkillArea[];
+    activityType_ids: number[]; // attualmente prevede soltanto la
+    Seniority: string;
+    date_created: string; // ISO date string
+    date_modified: string; // ISO date string
+    user_created: string;
+    user_modified: string;
+
+    /* phoneNumber2: string | null;
+    address: string | null;
+    files: any[]; // Define as needed
     bankAddress: string | null;
     zipCode: string;
     taxCode: string;
@@ -135,17 +147,10 @@ export interface CandidateFields {
     employee_id: string;
     note: string;
     cityBirth_id: number | null;
-    cityRes_id: number | null;
     gender_id: number;
     isExternal: boolean;
     data: any | null; // Define as needed
-    date_created: string; // ISO date string
-    date_modified: string; // ISO date string
-    user_created: string;
-    user_modified: string;
-    location_id: number | null;
-    Seniority: string;
-    files: any[]; // Define as needed
-    PersonSkillAreas: PersonSkillArea[];
+    */
+    
   }
   
