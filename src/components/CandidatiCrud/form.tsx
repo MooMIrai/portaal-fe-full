@@ -1,7 +1,8 @@
 
 export const getFormCandidate = (
     formData: any,
-    type: string
+    type: string,
+    skillLoading:boolean
 ) => {
 
     const createValidator = (isDisabled: boolean, validationFn: (value: any) => string) => {
@@ -186,7 +187,7 @@ export const getFormCandidate = (
             value: formData.seniority,
             //options: ["J", "J_A", "M", "M_A", "S", "S_A"],
             //valueOnChange: valueOnChange,
-            disabled: (type === "view"),
+            disabled: (type === "view" || skillLoading),
         }
        
     };

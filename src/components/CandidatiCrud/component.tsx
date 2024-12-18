@@ -7,6 +7,11 @@ import { candidatoService } from '../../services/candidatoService';
 import {formFields} from './customFields'
 import { candidateAdapter } from "./adapter";
 import { CandidateServer } from "./models";
+import withAiBox from "common/hoc/AiBox";
+import {
+  fileBacIcon
+} from "common/icons";
+import fileService from 'common/services/FileService'
 
 type CandidatiCrudProps = {
     row: CandidateServer;
@@ -19,15 +24,15 @@ type CandidatiCrudProps = {
 export function CandidatiCrud(props:PropsWithChildren<CandidatiCrudProps>){
 
     const formCandidato = useRef();
-    //const [formCandidateData,setFormCandidateData] = useState({})
     const [formCandidateData,setFormCandidateData] = useState(candidateAdapter.reverseAdapt(props.row))
+    const [skillLoading,setSkillLoading] = useState<boolean>(false);
 
-    return <div className={styles.formContainer}>
+    const CandidatiCrudInner = withAiBox(()=><div className={styles.formContainer}>
       <Form
         submitText={"Salva"}
         customDisabled={false}
         formData={formCandidateData}
-        fields={Object.values(getFormCandidate({},props.type))/* .filter((e: any) => {
+        fields={Object.values(getFormCandidate({},props.type,skillLoading))/* .filter((e: any) => {
           return e.name !== "id" && e.name !== "date_created" &&
             e.name !== "date_modified" &&
             e.name !== "user_created" &&
@@ -66,5 +71,49 @@ export function CandidatiCrud(props:PropsWithChildren<CandidatiCrudProps>){
             })
             
       }}
-      /></div>
+      /></div>,[
+      {
+          id: '1',
+          text: 'Riempi Dati dal Cv',
+          svgIcon: fileBacIcon
+      }
+  ], (command,closeAiPopup)=>{
+  
+      debugger;
+      if(command.id==='1'){
+  
+          fileService.selectFile().then(f=>{
+              debugger;
+              fileService.convertToBE(f).then(fileData=>{
+                candidatoService.getCVDataAI(fileData).then((dataResult)=>{
+                  //quando finisce 
+                  setFormCandidateData((prevState:any)=>{
+                    return {
+                      ...prevState,
+                     // ...adapter.adapt(dataResult)
+                    }
+                  })
+                });
+                setSkillLoading(true);
+                candidatoService.getSkillAI(fileData).then((skillResult)=>{
+                  setFormCandidateData((prevState:any)=>{
+                    return {
+                      ...prevState,
+                     // ...adapter.adapt(dataResult)
+                    }
+                  })
+                }).finally(()=>{
+                  setSkillLoading(false);
+                })
+              })
+              closeAiPopup();
+          }).catch(()=>{
+              debugger;
+          })
+      }
+      //closeAiPopup()
+  });
+
+    return <CandidatiCrudInner />
 }
+

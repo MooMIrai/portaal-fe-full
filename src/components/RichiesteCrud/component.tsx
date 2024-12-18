@@ -23,7 +23,8 @@ type RichiesteCrudProps = {
 function RichiesteCrudC(props:PropsWithChildren<RichiesteCrudProps>){
 
     const formRichiesta = useRef();
-    const [formRichiestaData,setFormRichiestaData] = useState(requestAdapter.reverseAdapt(props.row))
+    const [formRichiestaData,setFormRichiestaData] = useState(requestAdapter.reverseAdapt(props.row));
+    
 
     return <div className={styles.formContainer}>
         <Form submitText={"Salva"} 
