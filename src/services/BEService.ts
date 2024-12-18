@@ -10,7 +10,8 @@ const client = axios.create({
 
 client.interceptors.request.use((config) => {
   try {
-    NotificationProviderActions.openLoader();
+    if(config.url && config.url.indexOf('/ai/upload_cv_ts')<=0)
+      NotificationProviderActions.openLoader();
     config.headers.Authorization = "Bearer " + AuthService.getToken();
     config.headers["x-tenant"] = sessionStorage.getItem("tenant");
   } catch {}
