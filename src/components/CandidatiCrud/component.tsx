@@ -5,8 +5,8 @@ import styles from './style.module.scss';
 import NotificationActions from 'common/providers/NotificationProvider';
 import { candidatoService } from '../../services/candidatoService';
 import {formFields} from './customFields'
-import { candidateAdapter } from "./adapter";
-import { CandidateServer } from "./models";
+import { candidateAdapter } from "./adapters/adapter";
+import { CandidateServer } from "./models/models";
 import withAiBox from "common/hoc/AiBox";
 import {
   fileBacIcon
@@ -86,6 +86,9 @@ export function CandidatiCrud(props:PropsWithChildren<CandidatiCrudProps>){
               debugger;
               fileService.convertToBE(f).then(fileData=>{
                 candidatoService.getCVDataAI(fileData).then((dataResult)=>{
+
+                  debugger;
+                  
                   //quando finisce 
                   setFormCandidateData((prevState:any)=>{
                     return {
@@ -96,6 +99,9 @@ export function CandidatiCrud(props:PropsWithChildren<CandidatiCrudProps>){
                 });
                 setSkillLoading(true);
                 candidatoService.getSkillAI(fileData).then((skillResult)=>{
+
+                  debugger;
+
                   setFormCandidateData((prevState:any)=>{
                     return {
                       ...prevState,

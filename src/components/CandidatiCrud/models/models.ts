@@ -1,4 +1,4 @@
-import { RequestServer } from "../RichiesteCrud/models";
+import { RequestServer } from "../../RichiesteCrud/models";
 
 export interface OptionCandidateField {
     id: number|string;
@@ -22,7 +22,7 @@ export interface CandidateFields {
     profile_autocomplete?: OptionCandidateField,
     profile_type?: string,
     willingToTransfer: boolean,
-    assistance_104: boolean,
+    isActivity_104: boolean,
     contract_type?: OptionCandidateField,
     seniority?: OptionCandidateField
 
@@ -34,7 +34,7 @@ export interface CandidateFields {
     currentRAL: number;
     minRequiredRAL: number;
     maxRequiredRAL: number;
-    notice: string;
+    notice?: number;
     notes: string;
     candidateProfile_id: number;
     CandidateProfile: CandidateProfile;
@@ -130,7 +130,7 @@ export interface CandidateFields {
     dateBirth: string; // ISO date string
     Attachment: any; //
     PersonSkillAreas: PersonSkillArea[];
-    activityType_ids: number[]; // attualmente prevede soltanto la
+    isActivity_104: boolean;
     Seniority: string;
     date_created: string; // ISO date string
     date_modified: string; // ISO date string

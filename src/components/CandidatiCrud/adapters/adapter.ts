@@ -1,6 +1,6 @@
 import { BaseAdapter } from 'common/gof/Adapter';
-import { CandidateFields, CandidateServer, OptionCandidateField } from './models';
-import { RequestSeniority } from '../RichiesteCrud/models';
+import { CandidateFields, CandidateServer, OptionCandidateField } from '../models/models';
+import { RequestSeniority } from '../../RichiesteCrud/models';
 
 class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, CandidateServer> {
     // Adatta CandidateFields in CandidateServer
@@ -17,7 +17,7 @@ class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, Candidat
             currentRAL: source.ral || 0,
             minRequiredRAL: source.ralMin || 0,
             maxRequiredRAL: source.ralMax || 0,
-            notice: source.notice?.toString() || '',
+            notice: source.notice,
             currentContractType_id: source.contract_type?.id ? parseInt(source.contract_type.id.toString()) : 0,
             notes: source.note || '',
             CandidateProfile: {
@@ -49,7 +49,7 @@ class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, Candidat
                 Seniority: source.seniority ? source.seniority.id.toString() : "",
                 Attachment: null,
                 PersonSkillAreas: [], // Mappatura non specificata
-                activityType_ids: source.assistance_104 ? [ 4 ] : []
+                isActivity_104: source.isActivity_104
             }
         };
     }
@@ -72,12 +72,12 @@ class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, Candidat
             ral: source.currentRAL,
             ralMin: source.minRequiredRAL,
             ralMax: source.maxRequiredRAL,
-            notice: parseInt(source.notice) || undefined,
+            notice: source.notice,
             note: source.notes || undefined,
             profile_autocomplete: source.CandidateProfile ? { id: source.CandidateProfile.id, name: source.CandidateProfile.description } : undefined,
             profile_type: source.profileType || undefined,
             willingToTransfer: source.willingToTransfer,
-            assistance_104: source.Person.activityType_ids && source.Person.activityType_ids.length > 0 && source.Person.activityType_ids.includes(104), // Valore predefinito
+            isActivity_104: source.Person.isActivity_104,
             contract_type: source.currentContractType ? { id: source.currentContractType.id, name: source.currentContractType.description } : undefined,
             seniority: RequestSeniority.find(p=>p.id===source.Person.Seniority) || {id:0,name:'Seleziona Seniority'},
         };
