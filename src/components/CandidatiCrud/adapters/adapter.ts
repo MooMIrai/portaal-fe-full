@@ -1,5 +1,5 @@
 import { BaseAdapter } from 'common/gof/Adapter';
-import { CandidateFields, CandidateServer, OptionCandidateField } from '../models/models';
+import { CandidateFields, CandidateServer, OptionCandidateField, ResidenceFields, SubResidenceFields } from '../models/models';
 import { RequestSeniority } from '../../RichiesteCrud/models';
 
 class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, CandidateServer> {
@@ -40,7 +40,8 @@ class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, Candidat
                 phoneNumber: source.phoneNumber || null,
                 privateEmail: source.email,
                 dateBirth: source.birthDate,
-                cityRes_id: source.residenza?.id ? parseInt(source.residenza.id.toString()) : null,
+                cityRes_id: source.residenza?.city?.id != null ? source.residenza.city.id : null,
+                //cityRes_id: source.residenza?.id ? parseInt(source.residenza.id.toString()) : null,
                 date_created: '', // Da aggiungere se disponibile
                 date_modified: '', // Da aggiungere se disponibile
                 user_created: '', // Da aggiungere se disponibile
@@ -60,6 +61,10 @@ class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, Candidat
         if (!source || !Object.keys(source).length)
             return null;
 
+
+        let city: SubResidenceFields = { id: source.Person.cityRes_id ? source.Person.cityRes_id : 0 };
+        let residence: ResidenceFields = { city: city };
+        
         debugger;
         return {
             firstName: source.Person.firstName,
@@ -67,7 +72,8 @@ class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, Candidat
             birthDate: source.Person.dateBirth,
             phoneNumber: source.Person.phoneNumber || undefined,
             email: source.Person.privateEmail || '',
-            residenza: source.Person.cityRes_id ? { id: source.Person.cityRes_id, name: '' } : undefined, // Mappatura aggiuntiva se necessaria
+            residenza: residence,
+            //residenza: source.Person.cityRes_id ? { id: source.Person.cityRes_id, name: '' } : undefined, // Mappatura aggiuntiva se necessaria
             sede: source.Person.location_id ? { id: source.Person.location_id, name: '' } : undefined, // Mappatura aggiuntiva se necessaria
             ral: source.currentRAL,
             ralMin: source.minRequiredRAL,

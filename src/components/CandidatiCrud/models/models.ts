@@ -12,7 +12,7 @@ export interface CandidateFields {
     birthDate: string,
     phoneNumber?: string,
     email: string,
-    residenza?: any,
+    residenza?: ResidenceFields,
     sede?: OptionCandidateField,
     ral?: number,
     ralMin?: number,
@@ -27,6 +27,20 @@ export interface CandidateFields {
     seniority?: OptionCandidateField
 
 }
+
+  export interface ResidenceFields {
+    
+    country?: SubResidenceFields;
+    province?: SubResidenceFields;
+    city?: SubResidenceFields;
+
+  }
+
+  export interface SubResidenceFields {
+    id?: number;
+    name?: string;
+    code?: string;
+  }
 
   export interface CandidateServer {
     id: number;

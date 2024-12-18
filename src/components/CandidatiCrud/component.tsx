@@ -12,6 +12,7 @@ import {
   fileBacIcon
 } from "common/icons";
 import fileService from 'common/services/FileService'
+import { candidateAiAdapter } from "./adapters/adapter-ai";
 
 type CandidatiCrudProps = {
     row: CandidateServer;
@@ -24,15 +25,16 @@ type CandidatiCrudProps = {
 export function CandidatiCrud(props:PropsWithChildren<CandidatiCrudProps>){
 
     const formCandidato = useRef();
-    const [formCandidateData,setFormCandidateData] = useState(candidateAdapter.reverseAdapt(props.row))
-    const [skillLoading,setSkillLoading] = useState<boolean>(false);
+    const [formCandidateData, setFormCandidateData] = useState(candidateAdapter.reverseAdapt(props.row))
+    const [formLoading, setFormLoading] = useState<boolean>(false);
+    const [skillLoading, setSkillLoading] = useState<boolean>(false);
 
     const CandidatiCrudInner = withAiBox(()=><div className={styles.formContainer}>
       <Form
         submitText={"Salva"}
         customDisabled={false}
         formData={formCandidateData}
-        fields={Object.values(getFormCandidate({},props.type,skillLoading))/* .filter((e: any) => {
+        fields={Object.values(getFormCandidate({}, props.type, skillLoading))/* .filter((e: any) => {
           return e.name !== "id" && e.name !== "date_created" &&
             e.name !== "date_modified" &&
             e.name !== "user_created" &&
@@ -85,6 +87,7 @@ export function CandidatiCrud(props:PropsWithChildren<CandidatiCrudProps>){
           fileService.selectFile().then(f=>{
               debugger;
               fileService.convertToBE(f).then(fileData=>{
+
                 candidatoService.getCVDataAI(fileData).then((dataResult)=>{
 
                   debugger;
@@ -93,10 +96,13 @@ export function CandidatiCrud(props:PropsWithChildren<CandidatiCrudProps>){
                   setFormCandidateData((prevState:any)=>{
                     return {
                       ...prevState,
+                      ...candidateAiAdapter.reverseAdapt(dataResult.jsonData)
                      // ...adapter.adapt(dataResult)
                     }
                   })
+                }).finally(()=>{
                 });
+
                 setSkillLoading(true);
                 candidatoService.getSkillAI(fileData).then((skillResult)=>{
 

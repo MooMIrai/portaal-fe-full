@@ -2,7 +2,7 @@
 export const getFormCandidate = (
     formData: any,
     type: string,
-    skillLoading:boolean
+    skillLoading: boolean
 ) => {
 
     const createValidator = (isDisabled: boolean, validationFn: (value: any) => string) => {
