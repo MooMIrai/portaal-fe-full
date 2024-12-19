@@ -187,9 +187,36 @@ export const getFormCandidate = (
             value: formData.seniority,
             //options: ["J", "J_A", "M", "M_A", "S", "S_A"],
             //valueOnChange: valueOnChange,
+            disabled: type === "view"
+        },
+        skill: {
+            name: "skill",
+            label: "Skill",
+            type: "skill",
+            value: formData.skill || "",
+            required: true,
             disabled: (type === "view" || skillLoading),
-        }
-       
+            options:  {
+                field: "skillCategory_id",
+                operator: "neq", // diverso da
+                value: 116
+            }
+        },
+        languageSkill: {
+            name: "languageSkill",
+            label: "Lingue",
+            type: "skill",
+            value: formData.languageSkill || "",
+            required: true,
+            disabled: (type === "view" || skillLoading),
+            options:  {
+                field: "skillCategory_id",
+                operator: "equals",
+                value: 116
+            }
+
+        },
+
     };
 
 

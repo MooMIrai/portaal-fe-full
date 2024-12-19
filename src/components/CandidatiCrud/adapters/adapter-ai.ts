@@ -1,6 +1,7 @@
 import { BaseAdapter } from 'common/gof/Adapter';
-import { CandidateFields } from "../models/models";
-import { CandidateAi } from "../models/models-ai";
+import { CandidateFields, CandidateSkills } from "../models/models";
+import { CandidateAi, CandidateSkillsAi } from "../models/models-ai";
+import { RequestSeniority } from '../../RichiesteCrud/models';
 
 class CandidateAiFieldsAdapter extends BaseAdapter<CandidateFields, CandidateAi> {
     // Adatta CandidateFields in CandidateAi
@@ -15,7 +16,9 @@ class CandidateAiFieldsAdapter extends BaseAdapter<CandidateFields, CandidateAi>
             dateBirth: source.birthDate,
             country_id: 0,
             province_id: 0,
-            cityRes_id: source.residenza?.city?.id ? source.residenza.city.id : null
+            cityRes_id: source.residenza?.city?.id ? source.residenza.city.id : null,
+            phoneNumber:source.phoneNumber,
+            email: source.email
         };
     }
 
@@ -29,8 +32,8 @@ class CandidateAiFieldsAdapter extends BaseAdapter<CandidateFields, CandidateAi>
             firstName: source.firstName,
             lastName: source.lastName,
             birthDate: source.dateBirth,
-            phoneNumber: undefined,
-            email: '',
+            phoneNumber:  source.phoneNumber,
+            email: source.email,
             residenza: undefined, // Mappatura aggiuntiva se necessaria
             sede: undefined, // Mappatura aggiuntiva se necessaria
             ral: 0,
@@ -44,6 +47,19 @@ class CandidateAiFieldsAdapter extends BaseAdapter<CandidateFields, CandidateAi>
             isActivity_104: false,
             contract_type: undefined,
             seniority: undefined
+        };
+    }
+    // Adatta CandidateSkillsAi in CandidateFields
+    reverseAdaptSkills(source?: CandidateSkillsAi): CandidateSkills | null {
+
+        if (!source || !Object.keys(source).length)
+            return null;
+
+        return {
+            skill: source.data.skills.filter((x) => x.skillCategory_id != 116),
+            languageSkill: source.data.skills.filter((x) => x.skillCategory_id == 116),
+
+            seniority: RequestSeniority.find(p => p.name == source.data.seniority) || { id: 0, name: 'Seleziona Seniority' },
         };
     }
 }
