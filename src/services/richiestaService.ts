@@ -56,8 +56,18 @@ class RichiestaServiceC extends BaseHttpService{
     searchProfile (text:string) {
       return client.get(`api/v1/crud/CandidateProfile?term=${text}`).then(res => res.data.data)
    };
-      
 
+   // Da testare  valutare di splittare la chimata ?
+   getDataSkillTextAI = (text:string) =>
+    client
+      .post("/api/v1/ai/upload_request_ts", { text: text })
+      .then((res) => res.data);
+
+      
+   getDataSkillExcelAI = (file) =>
+    client
+      .post("/api/v1/ai/upload_request_ts", { Attachment: file })
+      .then((res) => res.data);
 }
 
 export const richiestaService = new RichiestaServiceC();

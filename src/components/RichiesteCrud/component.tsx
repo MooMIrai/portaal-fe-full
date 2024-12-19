@@ -9,8 +9,9 @@ import { RequestServer } from "./models";
 import withAiBox from "common/hoc/AiBox";
 import {
     fileBacIcon
-  } from "common/icons";
+} from "common/icons";
 import fileService from 'common/services/FileService'
+import { richiestaService } from "../../services/richiestaService";
 
 type RichiesteCrudProps = {
     row: RequestServer;
@@ -18,45 +19,95 @@ type RichiesteCrudProps = {
     closeModalCallback: () => void;
     refreshTable: () => void;
     //onSubmit: (type: any, formData: any, refreshTable: () => void, id: any) => void;
-  };
+};
 
-function RichiesteCrudC(props:PropsWithChildren<RichiesteCrudProps>){
+function RichiesteCrudC(props: PropsWithChildren<RichiesteCrudProps>) {
 
     const formRichiesta = useRef();
-    const [formRichiestaData,setFormRichiestaData] = useState(requestAdapter.reverseAdapt(props.row));
-    
+    const [formRichiestaData, setFormRichiestaData] = useState(requestAdapter.reverseAdapt(props.row));
+
 
     return <div className={styles.formContainer}>
-        <Form submitText={"Salva"} 
+        <Form submitText={"Salva"}
             customDisabled={false}
             formData={formRichiestaData}
-            fields={Object.values(getFormRichiesta({},props.type))}
+            fields={Object.values(getFormRichiesta({}, props.type))}
             addedFields={customFields}
             showSubmit={true}
             extraButton={true}
             extraBtnAction={props.closeModalCallback}
             ref={formRichiesta}
-            onSubmit={()=>{
+            onSubmit={() => {
                 debugger;
             }}
-    /></div>
+        /></div>
 }
 
-export const RichiesteCrud = withAiBox(RichiesteCrudC,[
+//  IMPORTANT !
+
+// gestire eventuali messaggi d'errore (warning ed error proveniente da back-end) => piccolo allert ? 
+// o proposta d'inserimento per eventuali warning ?? sentire anche Flavio
+
+export const RichiesteCrud = withAiBox(RichiesteCrudC, [
     {
         id: '1',
-        text: 'Riempi Dati dal Cv',
+        text: ' Inserisci testo offerta',
+        svgIcon: fileBacIcon
+    },
+    {
+        id: '2',
+        text: ' Seleziona File excel', // valutare inserimento riga
         svgIcon: fileBacIcon
     }
-], (command,closeAiPopup)=>{
+], (command, closeAiPopup) => {
 
-    debugger;
-    if(command.id==='1'){
+    //  Testo input
+    if (command.id === '1') {
 
-        fileService.selectFile().then(f=>{
+        // apertura piccola modale per il testo o aggiungere qualche input ??
+
+        richiestaService.getDataSkillTextAI("TEsto prova").then((dataResult) => {
+
             debugger;
+
+
+
+        }).catch(() => {
+
+        }).finally(() => {
+
+        });
+    }
+
+    // File Excel 
+    if (command.id === '2') {
+
+        fileService.selectFile().then(f => {
+
+            fileService.convertToBE(f).then(fileData => {
+
+
+                richiestaService.getDataSkillExcelAI(fileData).then((dataResult) => {
+
+                    debugger;
+
+                    /*  
+                    setFormCandidateData((prevState: any) => {
+                       return {
+                         ...prevState,
+                         ...adapter.adapt(dataResult.jsonData)
+                       }
+                     }) 
+                     */
+                }).catch(() => {
+
+                }).finally(() => {
+
+                })
+            })
+
             closeAiPopup();
-        }).catch(()=>{
+        }).catch(() => {
             debugger;
         })
     }

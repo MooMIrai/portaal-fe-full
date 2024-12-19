@@ -97,7 +97,7 @@ export interface RequestServer {
     },
     {
         id:'J_A',
-        name:'Junior Avanzato'
+        name:'Junior advanced'
     },
     {
         id:'M',
@@ -105,7 +105,7 @@ export interface RequestServer {
     },
     {
         id:'M_A',
-        name:'Middle Avanzato'
+        name:'Middle advanced'
     },
     {
         id:'S',
@@ -113,7 +113,7 @@ export interface RequestServer {
     },
     {
         id:'S_A',
-        name:'Senior Avanzato'
+        name:'Senior advanced'
     }
 ];
 
