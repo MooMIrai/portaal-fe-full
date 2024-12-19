@@ -4,7 +4,7 @@ import { getFormCandidate } from "./form";
 import styles from './style.module.scss';
 import NotificationActions from 'common/providers/NotificationProvider';
 import { candidatoService } from '../../services/candidatoService';
-import {formFields} from './customFields'
+import { formFields } from './customFields'
 import { candidateAdapter } from "./adapters/adapter";
 import { CandidateServer } from "./models/models";
 import withAiBox from "common/hoc/AiBox";
@@ -15,26 +15,26 @@ import fileService from 'common/services/FileService'
 import { candidateAiAdapter } from "./adapters/adapter-ai";
 
 type CandidatiCrudProps = {
-    row: CandidateServer;
-    type: any;
-    closeModalCallback: () => void;
-    refreshTable: () => void;
-    //onSubmit: (type: any, formData: any, refreshTable: () => void, id: any) => void;
-  };
+  row: CandidateServer;
+  type: any;
+  closeModalCallback: () => void;
+  refreshTable: () => void;
+  //onSubmit: (type: any, formData: any, refreshTable: () => void, id: any) => void;
+};
 
-export function CandidatiCrud(props:PropsWithChildren<CandidatiCrudProps>){
+export function CandidatiCrud(props: PropsWithChildren<CandidatiCrudProps>) {
 
-    const formCandidato = useRef();
-    const [formCandidateData, setFormCandidateData] = useState(candidateAdapter.reverseAdapt(props.row))
-    const [formLoading, setFormLoading] = useState<boolean>(false);
-    const [skillLoading, setSkillLoading] = useState<boolean>(false);
+  const formCandidato = useRef();
+  const [formCandidateData, setFormCandidateData] = useState(candidateAdapter.reverseAdapt(props.row))
+  const [formLoading, setFormLoading] = useState<boolean>(false);
+  const [skillLoading, setSkillLoading] = useState<boolean>(false);
 
-    const CandidatiCrudInner = withAiBox(()=><div className={styles.formContainer}>
-      <Form
-        submitText={"Salva"}
-        customDisabled={false}
-        formData={formCandidateData}
-        fields={Object.values(getFormCandidate({}, props.type, skillLoading))/* .filter((e: any) => {
+  const CandidatiCrudInner = withAiBox(() => <div className={styles.formContainer}>
+    <Form
+      submitText={"Salva"}
+      customDisabled={false}
+      formData={formCandidateData}
+      fields={Object.values(getFormCandidate({}, props.type, skillLoading))/* .filter((e: any) => {
           return e.name !== "id" && e.name !== "date_created" &&
             e.name !== "date_modified" &&
             e.name !== "user_created" &&
@@ -45,87 +45,92 @@ export function CandidatiCrud(props:PropsWithChildren<CandidatiCrudProps>){
             disabled: false
           }
         })*/}
-        addedFields={formFields}
-        showSubmit={true}
-        extraButton={true}
-        extraBtnAction={props.closeModalCallback}
-        ref={formCandidato}
-        onSubmit={(data)=>{
+      addedFields={formFields}
+      showSubmit={true}
+      extraButton={true}
+      extraBtnAction={props.closeModalCallback}
+      ref={formCandidato}
+      onSubmit={(data) => {
+        debugger;
+
+        let action = Promise.resolve()
+
+        let dataServer = candidateAdapter.adapt(data);
+
+        console.log(formCandidato);
+        //let formCandidato.current.values
+
+        if (props.type === "create")
+          action = candidatoService.createResource(dataServer);
+        else
+          action = candidatoService.updateResource(props.row.id, dataServer);
+
+        return action.then(res => {
+          NotificationActions.openModal(
+            { icon: true, style: "success" },
+            "Operazione avvenuta con successo "
+          );
+        })
+
+      }}
+    /></div>, [
+    {
+      id: '1',
+      text: 'Riempi Dati dal Cv',
+      svgIcon: fileBacIcon
+    }
+  ], (command, closeAiPopup) => {
+
+    debugger;
+    if (command.id === '1') {
+
+      fileService.selectFile().then(f => {
+        debugger;
+        fileService.convertToBE(f).then(fileData => {
+
+          candidatoService.getCVDataAI(fileData).then((dataResult) => {
+
             debugger;
 
-            let action = Promise.resolve()
-            
-            let dataServer = candidateAdapter.adapt(data);
-
-            console.log(formCandidato);
-            //let formCandidato.current.values
-
-            if (props.type === "create")
-              action = candidatoService.createResource(dataServer);
-            else
-              action = candidatoService.updateResource(props.row.id, dataServer);
-
-            return action.then(res=>{
-              NotificationActions.openModal(
-                { icon: true, style: "success" },
-                "Operazione avvenuta con successo "
-              );
+            //quando finisce 
+            setFormCandidateData((prevState: any) => {
+              return {
+                ...prevState,
+                ...candidateAiAdapter.reverseAdapt(dataResult.jsonData)
+                // ...adapter.adapt(dataResult)
+              }
             })
+          }).catch(() => {
+
+          }).finally(() => {
             
-      }}
-      /></div>,[
-      {
-          id: '1',
-          text: 'Riempi Dati dal Cv',
-          svgIcon: fileBacIcon
-      }
-  ], (command,closeAiPopup)=>{
-  
-      debugger;
-      if(command.id==='1'){
-  
-          fileService.selectFile().then(f=>{
-              debugger;
-              fileService.convertToBE(f).then(fileData=>{
+          });
 
-                candidatoService.getCVDataAI(fileData).then((dataResult)=>{
+          setSkillLoading(true);
+          candidatoService.getSkillAI(fileData).then((skillResult) => {
 
-                  debugger;
-                  
-                  //quando finisce 
-                  setFormCandidateData((prevState:any)=>{
-                    return {
-                      ...prevState,
-                      ...candidateAiAdapter.reverseAdapt(dataResult.jsonData)
-                     // ...adapter.adapt(dataResult)
-                    }
-                  })
-                }).finally(()=>{
-                });
+            debugger;
 
-                setSkillLoading(true);
-                candidatoService.getSkillAI(fileData).then((skillResult)=>{
+            setFormCandidateData((prevState: any) => {
+              return {
+                ...prevState,
+                ...candidateAiAdapter.reverseAdaptSkills(skillResult.jsonData)
+              }
+            })
+          }).catch(() => {
 
-                  debugger;
-
-                  setFormCandidateData((prevState:any)=>{
-                    return {
-                      ...prevState,
-                     // ...adapter.adapt(dataResult)
-                    }
-                  })
-                }).finally(()=>{
-                  setSkillLoading(false);
-                })
-              })
-              closeAiPopup();
-          }).catch(()=>{
-              debugger;
+          }).finally(() => {
+            setSkillLoading(false);
           })
-      }
-      //closeAiPopup()
+        })
+        closeAiPopup();
+      }).catch(() => {
+        debugger;
+      })
+    }
+    //closeAiPopup()
   });
 
-    return <CandidatiCrudInner />
+  return <CandidatiCrudInner />
 }
 

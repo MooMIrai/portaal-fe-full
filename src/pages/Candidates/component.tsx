@@ -8,7 +8,7 @@ import { TestComponent } from "../../components/TestComponent/component";
 
 export default function CandidatePage() {
 
-  const [showModal,setShowModal] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
 
   const columns = [
 
@@ -24,21 +24,14 @@ export default function CandidatePage() {
         let skills = row.Person.PersonSkillAreas;
         let skillsDescription = skills.map(skill => skill.SkillArea.name).filter(name => name).join(", ");
 
-        if (skillsDescription.lenght > 50)
-        {
-
-        }
-
-        let substring = !skillsDescription || skillsDescription.lenght <= 50 ? skillsDescription : `${skillsDescription.substring(0, 46)} ...`;
-
         return <td>
-                <span
-                  title={skillsDescription}
-                  style={{ cursor: "pointer" }}
-                >
-                  {substring}
-                </span>
-              </td>;
+          <span
+            title={skillsDescription}
+            style={{ cursor: "pointer" }}>
+
+            {skillsDescription}
+          </span>
+        </td>;
       }
     },
     {
@@ -46,9 +39,9 @@ export default function CandidatePage() {
 
         let assignment = getMaxDateLog(row.RecruitingAssignments);
 
-        if(assignment == null)
+        if (assignment == null)
           return <td></td>;
-        
+
         let date_last_revision = new Date(assignment).toLocaleDateString();
 
         return <td>{date_last_revision}</td>;
@@ -83,7 +76,7 @@ export default function CandidatePage() {
           updateMaxDate(interview.date_log);
         });
       }
-  
+
       updateMaxDate(item?.RecruitingSendContract?.date_log);
       updateMaxDate(item?.RecruitingOffer?.date_log);
       updateMaxDate(item?.RecruitingSendCv?.date_log);
@@ -95,41 +88,41 @@ export default function CandidatePage() {
 
   return (
     <>
-    <GridTable
+      <GridTable
 
-      customToolBarComponent={()=>{
-        return <Button themeColor={"info"} disabled={false} onClick={()=>{setShowModal(true)}}>Prova Modale</Button>
-      }}
+        customToolBarComponent={() => {
+          return <Button themeColor={"info"} disabled={false} onClick={() => { setShowModal(true) }}>Prova Modale</Button>
+        }}
 
-      filterable={true}
-      sortable={true}
-      getData={loadData}
-      columns={columns}
-      resizableWindow={true}
-      initialHeightWindow={800}
-      draggableWindow={true}
-      initialWidthWindow={900}
-      resizable={true}
-      actions={() => [
-        "create",
-        "edit",
-        "delete",
+        filterable={true}
+        sortable={true}
+        getData={loadData}
+        columns={columns}
+        resizableWindow={true}
+        initialHeightWindow={800}
+        draggableWindow={true}
+        initialWidthWindow={900}
+        resizable={true}
+        actions={() => [
+          "create",
+          "edit",
+          "delete",
 
-      ]}
+        ]}
 
-      formCrud={(row: any, type: string, closeModalCallback: any, refreshTable: any) => (
-        <CandidatiCrud refreshTable={refreshTable} type={type} row={row} closeModalCallback={closeModalCallback} />
-      )}
-    />
-    <Modal
-      title="Titolo"
-      isOpen={showModal}
-      onClose={()=>setShowModal(false)}
-      width="100%"
-      height="100%"
-    >
-      <TestComponent id={1} />
-   </Modal>
-   </>
+        formCrud={(row: any, type: string, closeModalCallback: any, refreshTable: any) => (
+          <CandidatiCrud refreshTable={refreshTable} type={type} row={row} closeModalCallback={closeModalCallback} />
+        )}
+      />
+      <Modal
+        title="Titolo"
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        width="100%"
+        height="100%"
+      >
+        <TestComponent id={1} />
+      </Modal>
+    </>
   )
 }
