@@ -40,6 +40,8 @@ const mfeConfig = {
 
     "./SignDocumentScanner" : "./src/components/SignDocument/component",
 
+    "./AiBox":"./src/components/AiBox/component",
+
     "./services/AuthService": "./src/services/AuthService",
     "./services/BEService": "./src/services/BEService",
     "./services/BaseHTTPService": "./src/services/BaseHTTPService",
