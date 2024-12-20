@@ -17,6 +17,9 @@ class CandidatoServiceC extends BaseHttpService {
       .post("/api/v1/ai/upload_cv_ts", { Attachment: file })
       .then((res) => res.data);
 
+  getGenders() {
+    return client.get(`api/v1/crud/Gender`).then(res => res.data)
+  };
 }
 
 export const candidatoService = new CandidatoServiceC();

@@ -5,6 +5,8 @@ export const getFormCandidate = (
     skillLoading: boolean
 ) => {
 
+    // Validators
+
     const createValidator = (isDisabled: boolean, validationFn: (value: any) => string) => {
         return (value: any) => {
             if (isDisabled) return "";
@@ -34,6 +36,9 @@ export const getFormCandidate = (
 
     };
 
+
+    // Colonne tabella
+
     const fields = {
         firstName: {
             name: "firstName",
@@ -61,6 +66,15 @@ export const getFormCandidate = (
             value: formData?.birthDate,
             disabled: (type === "view"),
             validator: createValidator(type === "view", dateValidator)
+        },
+        gender: {
+            name: "gender",
+            label: "Sesso",
+            type: "gender-selector",
+            disabled: (type === "view"),
+            value: formData.sesso,
+            required: true,
+            validator: (value: any) => value ? "" : "Il campo sesso è obbligatorio",
         },
         phoneNumber: {
             name: "phoneNumber",
@@ -189,34 +203,32 @@ export const getFormCandidate = (
             //valueOnChange: valueOnChange,
             disabled: type === "view"
         },
-        skill: {
-            name: "skill",
+        skills: {
+            name: "skills",
             label: "Skill",
             type: "skill",
             value: formData.skill || "",
             required: true,
             disabled: (type === "view" || skillLoading),
-            options:  {
+            options: {
                 field: "skillCategory_id",
                 operator: "neq", // diverso da
                 value: 116
             }
         },
-        languageSkill: {
-            name: "languageSkill",
+        languageSkills: {
+            name: "languageSkills",
             label: "Lingue",
             type: "skill",
             value: formData.languageSkill || "",
             required: true,
             disabled: (type === "view" || skillLoading),
-            options:  {
+            options: {
                 field: "skillCategory_id",
                 operator: "equals",
                 value: 116
             }
-
         },
-
     };
 
 

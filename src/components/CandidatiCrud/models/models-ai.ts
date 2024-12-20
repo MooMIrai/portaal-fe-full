@@ -26,7 +26,7 @@ export interface ContentSkill {
 }
 
 export interface SkillsAi {
-
+    id: number
     code: string
     name: string
     skillCategory_id: number

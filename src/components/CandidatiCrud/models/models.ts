@@ -8,12 +8,20 @@ export interface OptionCandidateField {
 
 export interface CandidateFields {
 
+  id?: number,
   firstName: string,
   lastName: string,
   birthDate: string,
   phoneNumber?: string,
   email: string,
   residenza?: ResidenceFields,
+  gender: OptionCandidateField,
+
+  /*   residenza?: {
+      country: { id: number; name: string; code: string };
+      province?: { id: number; name: string; code: string };
+      city: { id: number; name: string; code: string };
+    }; */
   sede?: OptionCandidateField,
   ral?: number,
   ralMin?: number,
@@ -26,25 +34,29 @@ export interface CandidateFields {
   isActivity_104: boolean,
   contract_type?: OptionCandidateField,
   seniority?: OptionCandidateField,
+  skills: SkillsAi[],
+  languageSkills: SkillsAi[]
+
 }
 
-export interface CandidateSkills{
-  
+
+export interface CandidateSkills {
+
   seniority?: OptionCandidateField,
-  skill?: SkillsAi[],
-  languageSkill?: SkillsAi[]
+  skills?: SkillsAi[],
+  languageSkills?: SkillsAi[]
 }
 
 export interface ResidenceFields {
 
-  country?: SubResidenceFields;
+  country: SubResidenceFields;
   province?: SubResidenceFields;
-  city?: SubResidenceFields;
+  city: SubResidenceFields;
 
 }
 
 export interface SubResidenceFields {
-  id?: number;
+  id: number;
   name?: string;
   code?: string;
 }
@@ -66,13 +78,13 @@ export interface CandidateServer {
   // RecruitingAssignments: RecruitingAssignment[];
 }
 
-interface CandidateProfile {
+export interface CandidateProfile {
   id: number;
   code: string;
   description: string;
 }
 
-interface CurrentContractType {
+export interface CurrentContractType {
   id: number;
   code: string;
   description: string;
@@ -80,7 +92,7 @@ interface CurrentContractType {
   fillTimesheet: boolean;
 }
 
-interface RecruitingContact {
+export interface RecruitingContact {
   id: number;
   assignment_id: number;
   date_log: string; // ISO date string
@@ -123,36 +135,41 @@ interface RecruitingContact {
   RecruitingSendContract: any | null; // Define as needed
 } */
 
-interface SkillArea {
+export interface SkillArea {
   id: number;
   code: string;
   name: string;
   description: string | null;
   skillCategory_id: number;
-  date_created: string; // ISO date string
-  date_modified: string; // ISO date string
+  date_created?: string; // ISO date string
+  date_modified?: string; // ISO date string
 }
 
-interface PersonSkillArea {
-  person_id: number;
+export interface PersonSkillArea {
+  person_id?: number | null;
   skillArea_id: number;
   SkillArea: SkillArea;
 }
 
-interface Person {
+
+export interface Person {
 
   id: number;
   firstName: string;
   lastName: string;
+  gender_id: number;
+  Gender?: any | null;
   cityRes_id: number | null;
+  CityRes: any | null,
   location_id: number | null;
+  Location: any | null;
   phoneNumber: string | null;
   privateEmail: string | null;
   dateBirth: string; // ISO date string
   Attachment: any; //
   PersonSkillAreas: PersonSkillArea[];
   isActivity_104: boolean;
-  Seniority: string;
+  Seniority: string | null;
   date_created: string; // ISO date string
   date_modified: string; // ISO date string
   user_created: string;
@@ -174,3 +191,15 @@ interface Person {
   */
 
 }
+
+
+export const CandidateGender = [
+  {
+    id: 1,
+    name: 'M'
+  },
+  {
+    id: 2,
+    name: 'F'
+  }
+];

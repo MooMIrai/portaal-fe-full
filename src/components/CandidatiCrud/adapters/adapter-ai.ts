@@ -4,7 +4,8 @@ import { CandidateAi, CandidateSkillsAi } from "../models/models-ai";
 import { RequestSeniority } from '../../RichiesteCrud/models';
 
 class CandidateAiFieldsAdapter extends BaseAdapter<CandidateFields, CandidateAi> {
-    // Adatta CandidateFields in CandidateAi
+
+    // Mappa CandidateFields in CandidateAi
     adapt(source?: CandidateFields): CandidateAi | null {
         if (!source) {
             return null;
@@ -17,12 +18,12 @@ class CandidateAiFieldsAdapter extends BaseAdapter<CandidateFields, CandidateAi>
             country_id: 0,
             province_id: 0,
             cityRes_id: source.residenza?.city?.id ? source.residenza.city.id : null,
-            phoneNumber:source.phoneNumber,
+            phoneNumber: source.phoneNumber,
             email: source.email
         };
     }
 
-    // Adatta CandidateAi in CandidateFields
+    // Mappa CandidateAi in CandidateFields
     reverseAdapt(source?: CandidateAi): CandidateFields | null {
 
         if (!source || !Object.keys(source).length)
@@ -32,7 +33,8 @@ class CandidateAiFieldsAdapter extends BaseAdapter<CandidateFields, CandidateAi>
             firstName: source.firstName,
             lastName: source.lastName,
             birthDate: source.dateBirth,
-            phoneNumber:  source.phoneNumber,
+            gender: { id: 1, name: "M" },
+            phoneNumber: source.phoneNumber,
             email: source.email,
             residenza: undefined, // Mappatura aggiuntiva se necessaria
             sede: undefined, // Mappatura aggiuntiva se necessaria
@@ -46,18 +48,21 @@ class CandidateAiFieldsAdapter extends BaseAdapter<CandidateFields, CandidateAi>
             willingToTransfer: false,
             isActivity_104: false,
             contract_type: undefined,
-            seniority: undefined
+            seniority: undefined,
+            skills: [],
+            languageSkills: [],
         };
     }
-    // Adatta CandidateSkillsAi in CandidateFields
+
+    // Mappa CandidateSkillsAi in CandidateFields
     reverseAdaptSkills(source?: CandidateSkillsAi): CandidateSkills | null {
 
         if (!source || !Object.keys(source).length)
             return null;
 
         return {
-            skill: source.data.skills.filter((x) => x.skillCategory_id != 116),
-            languageSkill: source.data.skills.filter((x) => x.skillCategory_id == 116),
+            skills: source.data.skills.filter((x) => x.skillCategory_id != 116),
+            languageSkills: source.data.skills.filter((x) => x.skillCategory_id == 116),
 
             seniority: RequestSeniority.find(p => p.name == source.data.seniority) || { id: 0, name: 'Seleziona Seniority' },
         };
