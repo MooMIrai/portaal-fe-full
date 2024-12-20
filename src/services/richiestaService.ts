@@ -64,7 +64,7 @@ class RichiestaServiceC extends BaseHttpService{
       .then((res) => res.data);
 
       
-   getDataSkillExcelAI = (file) =>
+   getDataSkillFileAI = (file) =>
     client
       .post("/api/v1/ai/upload_request_ts", { Attachment: file })
       .then((res) => res.data);
