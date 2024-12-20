@@ -107,17 +107,40 @@ export const getFormRichiesta = (
             name: "PrimarySkill",
             label: "Skill primarie",
             type: "skill",
-            value: formData.Seniority || "",
+            value: formData.PrimarySkill || "",
             required: true,
-            disabled: type === "view"
+            disabled: type === "view",
+            options: {
+                field: "skillCategory_id",
+                operator: "neq", // diverso da
+                value: 116
+            }
         },
         SecondarySkill: {
             name: "SecondarySkill",
             label: "Skill secondarie",
             type: "skill",
-            value: formData.Seniority || "",
+            value: formData.SecondarySkill || "",
             required: false,
-            disabled: type === "view"
+            disabled: type === "view",
+            options: {
+                field: "skillCategory_id",
+                operator: "neq", // diverso da
+                value: 116
+            }
+        },
+        LanguagesSkill: {
+            name: "LanguagesSkill",
+            label: "Skill linguistiche",
+            type: "skill",
+            value: formData.LanguagesSkill || "",
+            required: false,
+            disabled: type === "view",
+            options: {
+                field: "skillCategory_id",
+                operator: "equals",
+                value: 116
+            }
         },
         saleRate: {
             name: "saleRate",

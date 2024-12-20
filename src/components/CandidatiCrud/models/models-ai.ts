@@ -1,5 +1,5 @@
 
-
+// Candidate
 export interface CandidateAi {
 
     firstName: string
@@ -32,5 +32,18 @@ export interface SkillsAi {
     skillCategory_id: number
 
 }
+
+// Recruiting
+export interface SkillDetailsRecruiting {
+    type: string; // enum primary, secondary, languages 
+    skills: SkillsAi[];
+  }
+  export interface RecruitingSkillArea {
+  
+    seniority?: string | null;  // enum
+    profileType?: string | null; // enum
+    skillDetails: SkillDetailsRecruiting[];
+  
+  }
 
 

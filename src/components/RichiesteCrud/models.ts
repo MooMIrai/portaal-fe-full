@@ -1,3 +1,5 @@
+import { SkillsAi } from "../CandidatiCrud/models/models-ai";
+
 export interface OptionRequestField {
     id: number|string;
     name: string;
@@ -12,8 +14,9 @@ export interface RequestFields {
     ref_code: string; // Tipizzato direttamente per coerenza
     id_code: string; // Tipizzato direttamente per coerenza
     Seniority: OptionRequestField;
-    PrimarySkill: string[];
-    SecondarySkill: string[];
+    PrimarySkill: SkillsAi[];
+    SecondarySkill: SkillsAi[];
+    LanguagesSkill: SkillsAi[];
     saleRate: number | null;
     continuative: boolean;
     notes: string;
@@ -85,6 +88,7 @@ export interface RequestServer {
     description: string;
   }
   
+  // non usata
    class Skill {
     // Assuming skills have properties; adjust if needed
   }

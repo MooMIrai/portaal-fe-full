@@ -1,7 +1,7 @@
 import { BaseAdapter } from 'common/gof/Adapter';
 import { CandidateFields, CandidateGender, CandidateServer, OptionCandidateField, PersonSkillArea, ResidenceFields, SubResidenceFields } from '../models/models';
 import { RequestSeniority } from '../../RichiesteCrud/models';
-import { SkillsAi } from '../models/models-ai';
+import { RecruitingSkillArea, SkillDetailsRecruiting, SkillsAi } from '../models/models-ai';
 
 class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, CandidateServer> {
 
@@ -127,6 +127,7 @@ class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, Candidat
 
 }
 
+// Field => Server
 export function convertSkillsAiToPersonSkillArea(skillsAiArray: SkillsAi[], personId?: number | null): PersonSkillArea[] {
     return skillsAiArray?.map(skillAi => ({
         person_id: personId || null,
@@ -140,8 +141,9 @@ export function convertSkillsAiToPersonSkillArea(skillsAiArray: SkillsAi[], pers
     }));
 }
 
+// Server => Field (Candidate)
+///  type = 1 => only languages , type != 1 => others
 export function convertPersonSkillAreaToSkillsAi(personSkillAreas: PersonSkillArea[], type: number): SkillsAi[] {
-
     const filtered_skills = type === 1 ? personSkillAreas?.filter(skillAi => skillAi.SkillArea.skillCategory_id == 116) : personSkillAreas?.filter(skillAi => skillAi.SkillArea.skillCategory_id != 116);
 
     return filtered_skills?.map(psa => ({
@@ -151,6 +153,34 @@ export function convertPersonSkillAreaToSkillsAi(personSkillAreas: PersonSkillAr
         skillCategory_id: psa.SkillArea.skillCategory_id,
     }));
 }
+
+
+// Server => Field (Recruiting)
+export function convertRecruitingSkillAreaToSkillsAi(recruitingSkillAreas: RecruitingSkillArea, type: string): SkillsAi[] {
+    let filteredSkills: SkillDetailsRecruiting[] = [];
+
+    switch (type) {
+        case "PRIMARY":
+            filteredSkills = recruitingSkillAreas.skillDetails.filter(detail => detail.type === "PRIMARY");
+            break;
+        case "SECONDARY":
+            filteredSkills = recruitingSkillAreas.skillDetails.filter(detail => detail.type === "SECONDARY");
+            break;
+        case "LANGUAGES":
+            filteredSkills = recruitingSkillAreas.skillDetails.filter(detail => detail.type === "LANGUAGES");
+            break;
+        default:
+            return [];
+    }
+
+    return filteredSkills?.flatMap(detail => detail.skills.map(skill => ({
+        id: skill.id,
+        code: skill.code,
+        name: skill.name,
+        skillCategory_id: skill.skillCategory_id,
+    })));
+}
+
 
 
 export const candidateAdapter = new CandidateFieldsServerAdapter();
