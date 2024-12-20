@@ -139,7 +139,6 @@ export interface SkillArea {
   id: number;
   code: string;
   name: string;
-  description: string | null;
   skillCategory_id: number;
   date_created?: string; // ISO date string
   date_modified?: string; // ISO date string

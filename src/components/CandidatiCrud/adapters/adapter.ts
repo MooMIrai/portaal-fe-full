@@ -12,8 +12,8 @@ class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, Candidat
             return null;
         }
 
-        const personSkillAreas_1 = this.convertSkillsAiToPersonSkillArea(source.languageSkills, null);
-        const personSkillAreas_2 = this.convertSkillsAiToPersonSkillArea(source.skills, null);
+        const personSkillAreas_1 = convertSkillsAiToPersonSkillArea(source.languageSkills, null);
+        const personSkillAreas_2 = convertSkillsAiToPersonSkillArea(source.skills, null);
 
         const combinedPersonSkillAreas = [
             ...(personSkillAreas_1 ?? []),
@@ -96,6 +96,7 @@ class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, Candidat
             name: source.Person?.CityRes?.Province?.name,
 
         };
+
         let residence: ResidenceFields = { city, country, province };
 
         return {
@@ -119,37 +120,37 @@ class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, Candidat
             isActivity_104: source.Person.isActivity_104,
             contract_type: source.currentContractType ? { id: source.currentContractType.id, name: source.currentContractType.description } : undefined,
             seniority: RequestSeniority.find(p => p.id === source.Person.Seniority) || { id: 0, name: 'Seleziona Seniority' },
-            skills: source.Person.PersonSkillAreas ? this.convertPersonSkillAreaToSkillsAi(source.Person.PersonSkillAreas, 1) : [],
-            languageSkills: source.Person.PersonSkillAreas ? this.convertPersonSkillAreaToSkillsAi(source.Person.PersonSkillAreas, 0) : [],
+            skills: source.Person.PersonSkillAreas ? convertPersonSkillAreaToSkillsAi(source.Person.PersonSkillAreas, 0) : [],
+            languageSkills: source.Person.PersonSkillAreas ? convertPersonSkillAreaToSkillsAi(source.Person.PersonSkillAreas, 1) : [],
         };
     }
 
-    // Personal functions
-    private convertPersonSkillAreaToSkillsAi(personSkillAreas: PersonSkillArea[], type: number): SkillsAi[] {
-
-        const filtered_skills = type === 0 ? personSkillAreas?.filter(skillAi => skillAi.SkillArea.skillCategory_id == 116) : personSkillAreas?.filter(skillAi => skillAi.SkillArea.skillCategory_id != 116);
-
-        return filtered_skills?.map(psa => ({
-            id: psa.skillArea_id,
-            code: psa.SkillArea.code,
-            name: psa.SkillArea.name,
-            skillCategory_id: psa.SkillArea.skillCategory_id,
-        }));
-    }
-
-    private convertSkillsAiToPersonSkillArea(skillsAiArray: SkillsAi[], personId?: number | null): PersonSkillArea[] {
-        return skillsAiArray?.map(skillAi => ({
-            person_id: personId || null,
-            skillArea_id: skillAi.id,
-            SkillArea: {
-                id: skillAi.id,
-                code: skillAi.code,
-                description: "",
-                skillCategory_id: skillAi.skillCategory_id,
-                name: skillAi.name
-            }
-        }));
-    }
 }
+
+export function convertSkillsAiToPersonSkillArea(skillsAiArray: SkillsAi[], personId?: number | null): PersonSkillArea[] {
+    return skillsAiArray?.map(skillAi => ({
+        person_id: personId || null,
+        skillArea_id: skillAi.id,
+        SkillArea: {
+            id: skillAi.id,
+            code: skillAi.code,
+            skillCategory_id: skillAi.skillCategory_id,
+            name: skillAi.name
+        }
+    }));
+}
+
+export function convertPersonSkillAreaToSkillsAi(personSkillAreas: PersonSkillArea[], type: number): SkillsAi[] {
+
+    const filtered_skills = type === 1 ? personSkillAreas?.filter(skillAi => skillAi.SkillArea.skillCategory_id == 116) : personSkillAreas?.filter(skillAi => skillAi.SkillArea.skillCategory_id != 116);
+
+    return filtered_skills?.map(psa => ({
+        id: psa.skillArea_id,
+        code: psa.SkillArea.code,
+        name: psa.SkillArea.name,
+        skillCategory_id: psa.SkillArea.skillCategory_id,
+    }));
+}
+
 
 export const candidateAdapter = new CandidateFieldsServerAdapter();
