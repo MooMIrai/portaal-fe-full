@@ -1,5 +1,3 @@
-import { RequestServer } from "../../RichiesteCrud/models";
-import { SkillsAi } from "./models-ai";
 
 export interface OptionCandidateField {
   id: number | string;
@@ -34,8 +32,8 @@ export interface CandidateFields {
   isActivity_104: boolean,
   contract_type?: OptionCandidateField,
   seniority?: OptionCandidateField,
-  skills: SkillsAi[],
-  languageSkills: SkillsAi[]
+  skills: SkillArea[],
+  languageSkills: SkillArea[]
 
 }
 
@@ -43,8 +41,8 @@ export interface CandidateFields {
 export interface CandidateSkills {
 
   seniority?: OptionCandidateField,
-  skills?: SkillsAi[],
-  languageSkills?: SkillsAi[]
+  skills?: SkillArea[],
+  languageSkills?: SkillArea[]
 }
 
 export interface ResidenceFields {
@@ -149,6 +147,13 @@ export interface PersonSkillArea {
   skillArea_id: number;
   SkillArea: SkillArea;
 }
+
+export interface RecruitingSkill {
+  skillArea_id: number;
+  type: string   // enum => recruitingSkillType
+  SkillArea?: SkillArea;
+}
+ 
 
 
 export interface Person {

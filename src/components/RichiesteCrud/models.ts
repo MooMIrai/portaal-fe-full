@@ -1,4 +1,4 @@
-import { SkillsAi } from "../CandidatiCrud/models/models-ai";
+import { RecruitingSkill, SkillArea } from "../CandidatiCrud/models/models";
 
 export interface OptionRequestField {
     id: number|string;
@@ -6,22 +6,23 @@ export interface OptionRequestField {
 }
 
 export interface RequestFields {
-    ReferrerHr: OptionRequestField;
+    ReferrerHr?: OptionRequestField;
     RequestState: OptionRequestField;
     Priority: OptionRequestField;
-    Customer: OptionRequestField;
-    CustomerReferer: string;
+    Customer?: OptionRequestField;
     ref_code: string; // Tipizzato direttamente per coerenza
     id_code: string; // Tipizzato direttamente per coerenza
     Seniority: OptionRequestField;
-    PrimarySkill: SkillsAi[];
-    SecondarySkill: SkillsAi[];
-    LanguagesSkill: SkillsAi[];
+    PrimarySkill: SkillArea[];
+    SecondarySkill: SkillArea[];
+    LanguagesSkill: SkillArea[];
     saleRate: number | null;
     continuative: boolean;
     notes: string;
-    Location: OptionRequestField,
-    Profile:OptionRequestField
+    profileType:string;
+    Location?: OptionRequestField,
+    Profile?:OptionRequestField,
+    WorkModel:OptionRequestField
 }
 
   
@@ -43,11 +44,12 @@ export interface RequestServer {
     saleRate: number;
     continuative: boolean;
     //tenant_code: string;
-    RequestingEmployee: RequestingEmployee;
-    Customer: Customer;
-    Location: Location;
-    CandidateProfile: CandidateProfile;
-    Skills: Skill[];
+    // Oggetti non necessari verso il server
+    RequestingEmployee?: RequestingEmployee;
+    Customer?: Customer;
+    Location?: Location;
+    CandidateProfile?: CandidateProfile;
+    Skills: RecruitingSkill[];
   }
   
    interface RequestingEmployee {
@@ -158,3 +160,26 @@ export const RequestStatus = [
             name:'Eliminata'
         }
     ];
+
+    
+export const recruitingSkillType = {
+   
+    PRIMARY:"PRIMARY",
+    SECONDARY:"SECONDARY",
+    LANGUAGE:"LANGUAGE"  
+};
+
+export const WorkModel = [
+    {
+        id:'R',
+        name:'R verificare ed aggiornare'
+    },
+    {
+        id:'S',
+        name:'S verificare ed aggiornare'
+    },
+    {
+        id:'H',
+        name:'H verificare ed aggiornare'
+    }
+];

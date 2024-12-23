@@ -27,7 +27,6 @@ const getGenders = () => {
 
     return candidatoService.getGenders().then((res) => {
         if (res) {
-            debugger;
             return res.data.map((r: any) => ({ id: r.id, name: r.code }));
         }
         return []

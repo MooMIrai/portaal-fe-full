@@ -36,7 +36,7 @@ export const getFormCandidate = (
 
     };
 
-
+    const id_spoken_category_skill =  process.env.SPOKEN_LANGUAGES ? process.env.SPOKEN_LANGUAGES:"116";
     // Colonne tabella
 
     const fields = {
@@ -213,7 +213,7 @@ export const getFormCandidate = (
             options: {
                 field: "skillCategory_id",
                 operator: "neq", // diverso da
-                value: 116
+                value: parseInt(id_spoken_category_skill)
             }
         },
         languageSkills: {
@@ -226,7 +226,7 @@ export const getFormCandidate = (
             options: {
                 field: "skillCategory_id",
                 operator: "equals",
-                value: 116
+                value: parseInt(id_spoken_category_skill) 
             }
         },
     };

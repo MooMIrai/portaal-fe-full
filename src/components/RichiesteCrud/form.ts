@@ -16,7 +16,7 @@ export const getFormRichiesta = (
             name: "ReferrerHr",
             label: "HR di riferimento",
             type: "hr-selector",
-            value: {id:0,name:"Seleziona un dipendente"},
+            value: formData.Hr,
             required: true,
             disabled: type === "view"
         },
@@ -44,14 +44,15 @@ export const getFormRichiesta = (
             required: true,
             disabled: type === "view"
         },
-        CustomerReferer: {
-            name: "CustomerReferer",
+       /* Campo non creato, eventualmente si recupera dal cliente
+       customerReferer: {
+            name: "customerReferer",
             label: "Referente Cliente",
             type: "text",
             value: formData.CustomerReferer || "",
             required: false,
             disabled: type === "view"
-        },
+        }, */
         ref_code: {
             name: "ref_code",
             label: "Codice di Riferimento",
@@ -75,24 +76,29 @@ export const getFormRichiesta = (
             value: formData.Location || "",
             required: false,
             disabled: type === "view"
-        }
-        /* ,
+        },
         WorkModel: {
             name: "WorkModel",
             label: "Ambito lavorativo",
-            type: "select",
-            options: ["R", "S", "H"],
+            type: "workModel-selector",
             value: formData.WorkModel || "",
             required: true,
-            showLabel:false,
             disabled: type === "view"
-        } */,
+        } ,
         Profile: {
             name: "Profile",
             label: "Profilo",
             type: "profile-selector",
             value: formData.Profile || "",
             required: true,
+            disabled: type === "view"
+        },
+        profileType: {
+            name: "profileType",
+            label: "Tipologia Profilo",
+            type: "text",
+            value: formData.profileType || "",
+            required: false,
             disabled: type === "view"
         },
         Seniority: {

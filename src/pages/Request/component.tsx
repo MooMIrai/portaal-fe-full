@@ -159,7 +159,7 @@ export default function RequestPage(){
             { key: "Customer.name", label: "Cliente", type: "string", sortable: true, filter: "text" },
             { key: "Location.description", label: "Citta di competenza", type: "string", sortable: true, filter: "text" },
             { key: "RequestingEmployee.Person.firstName", label: "HR incaricaricata", type: "custom", render:(rowData)=><td>{rowData.RequestingEmployee.Person.firstName} {rowData.RequestingEmployee.Person.lastName}</td> },
-            { key: "profileType", label: "Profilo", type: "string", sortable: true, filter: "text" }
+            { key: "CandidateProfile.description", label: "Profilo", type: "string", sortable: true, filter: "text" }
           ];
           
         const loadData = (

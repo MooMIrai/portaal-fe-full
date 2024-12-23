@@ -14,6 +14,8 @@ import fileService from 'common/services/FileService';
 import { richiestaService } from "../../services/richiestaService";
 import { AiTextArea } from "./components/aiText";
 import AiBox from 'common/AiBox'
+import NotificationActions from 'common/providers/NotificationProvider';
+
 
 type RichiesteCrudProps = {
     row: RequestServer;
@@ -32,6 +34,9 @@ export function RichiesteCrud(props: RichiesteCrudProps) {
     const [aiModalLoading, setAiModalLoading] = useState<boolean>(false);
 
     const adaptAiData = useCallback((aiData) => {//cristian
+        console.log("cristian");
+       debugger;
+        // convertPersonSkillAreaToSkillsAi(prevData.)
         // Adatta i dati AI e aggiorna lo stato
         setFormRichiestaData((prevData) => ({ ...prevData, ...aiData }));
     }, []);
@@ -98,8 +103,25 @@ export function RichiesteCrud(props: RichiesteCrudProps) {
                     extraButton={true}
                     extraBtnAction={props.closeModalCallback}
                     ref={formRichiestaRef}
-                    onSubmit={() => {
-                        console.log("Form Submitted", formRichiestaData);
+                    onSubmit={(data) => {
+                        console.log("Form Submitted", data);
+                          let action = Promise.resolve()
+                        
+                                let dataServer = requestAdapter.adapt(data);
+                        
+                                console.log(dataServer);
+                          
+                                if (props.type === "create")
+                                  action = richiestaService.createResource(dataServer);
+                                else
+                                  action = richiestaService.updateResource(props.row.id, dataServer);
+                        
+                                return action.then(res => {
+                                  NotificationActions.openModal(
+                                    { icon: true, style: "success" },
+                                    "Operazione avvenuta con successo "
+                                  );
+                                })  
                     }}
                 />
             </div>

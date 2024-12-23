@@ -1,3 +1,4 @@
+import { SkillArea } from "./models"
 
 // Candidate
 export interface CandidateAi {
@@ -22,23 +23,16 @@ export interface CandidateSkillsAi {
 }
 export interface ContentSkill {
     seniority: string
-    skills: SkillsAi[]
+    skills: SkillArea[]
 }
 
-export interface SkillsAi {
-    id: number
-    code: string
-    name: string
-    skillCategory_id: number
 
-}
-
-// Recruiting
+// Recruiting Ai
 export interface SkillDetailsRecruiting {
     type: string; // enum primary, secondary, languages 
-    skills: SkillsAi[];
+    skills: SkillArea[];
   }
-  export interface RecruitingSkillArea {
+  export interface RecruitingSkillAreaAi {
   
     seniority?: string | null;  // enum
     profileType?: string | null; // enum

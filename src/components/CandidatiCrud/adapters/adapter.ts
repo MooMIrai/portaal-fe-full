@@ -1,7 +1,7 @@
 import { BaseAdapter } from 'common/gof/Adapter';
-import { CandidateFields, CandidateGender, CandidateServer, OptionCandidateField, PersonSkillArea, ResidenceFields, SubResidenceFields } from '../models/models';
+import { CandidateFields, CandidateGender, CandidateServer, PersonSkillArea, RecruitingSkill, ResidenceFields, SkillArea, SubResidenceFields } from '../models/models';
 import { RequestSeniority } from '../../RichiesteCrud/models';
-import { RecruitingSkillArea, SkillDetailsRecruiting, SkillsAi } from '../models/models-ai';
+import { RecruitingSkillAreaAi, SkillDetailsRecruiting } from '../models/models-ai';
 
 class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, CandidateServer> {
 
@@ -127,8 +127,8 @@ class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, Candidat
 
 }
 
-// Field => Server
-export function convertSkillsAiToPersonSkillArea(skillsAiArray: SkillsAi[], personId?: number | null): PersonSkillArea[] {
+// Field => Server (Candidate)
+export function convertSkillsAiToPersonSkillArea(skillsAiArray: SkillArea[], personId?: number | null): PersonSkillArea[] {
     return skillsAiArray?.map(skillAi => ({
         person_id: personId || null,
         skillArea_id: skillAi.id,
@@ -143,7 +143,7 @@ export function convertSkillsAiToPersonSkillArea(skillsAiArray: SkillsAi[], pers
 
 // Server => Field (Candidate)
 ///  type = 1 => only languages , type != 1 => others
-export function convertPersonSkillAreaToSkillsAi(personSkillAreas: PersonSkillArea[], type: number): SkillsAi[] {
+export function convertPersonSkillAreaToSkillsAi(personSkillAreas: PersonSkillArea[], type: number): SkillArea[] {
     const filtered_skills = type === 1 ? personSkillAreas?.filter(skillAi => skillAi.SkillArea.skillCategory_id == 116) : personSkillAreas?.filter(skillAi => skillAi.SkillArea.skillCategory_id != 116);
 
     return filtered_skills?.map(psa => ({
@@ -154,9 +154,42 @@ export function convertPersonSkillAreaToSkillsAi(personSkillAreas: PersonSkillAr
     }));
 }
 
+//(Recruiting)
+//
+// Field => Server (Recruiting)
+export function convertSkillsFormsToRecruitingSkills(skillsArray: SkillArea[], type: string): RecruitingSkill[] {
+    return skillsArray?.map(skillAi => ({
+        type: type,
+        skillArea_id: skillAi.id,
+         SkillArea: {
+            id: skillAi.id,
+            code: skillAi.code,
+            skillCategory_id: skillAi.skillCategory_id,
+            name: skillAi.name
+        } 
+    }));
+}
 
 // Server => Field (Recruiting)
-export function convertRecruitingSkillAreaToSkillsAi(recruitingSkillAreas: RecruitingSkillArea, type: string): SkillsAi[] {
+export function convertRecruitingSkillAreaToSkillsForms(recruitingSkillAreas: RecruitingSkill[], type: string): SkillArea[] {
+
+    if(recruitingSkillAreas.length == 0){
+        return [] as SkillArea[];
+    }
+    switch (type) {
+        case "PRIMARY":
+            return recruitingSkillAreas.filter(detail => detail.type === "PRIMARY").map(x => x.SkillArea).filter(skillArea => skillArea !== undefined) as SkillArea[];
+        case "SECONDARY":
+            return recruitingSkillAreas.filter(detail => detail.type === "SECONDARY").map(x => x.SkillArea).filter(skillArea => skillArea !== undefined) as SkillArea[];
+        case "LANGUAGE":
+            return recruitingSkillAreas.filter(detail => detail.type === "LANGUAGE").map(x => x.SkillArea).filter(skillArea => skillArea !== undefined) as SkillArea[];
+        default:
+            return [] as SkillArea[];
+    }
+}
+
+// Server => Field (Recruiting Ai)
+export function convertRecruitingSkillAreaToSkillsAi(recruitingSkillAreas: RecruitingSkillAreaAi, type: string): SkillArea[] {
     let filteredSkills: SkillDetailsRecruiting[] = [];
 
     switch (type) {
