@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useRef, useState } from "react";
+import React, { PropsWithChildren, useEffect, useRef, useState } from "react";
 import Form from "common/Form";
 import { getFormCandidate } from "./form";
 import styles from './style.module.scss';
@@ -29,6 +29,30 @@ export function CandidatiCrud(props: PropsWithChildren<CandidatiCrudProps>) {
   const [formLoading, setFormLoading] = useState<boolean>(false);
   const [skillLoading, setSkillLoading] = useState<boolean>(false);
 
+
+
+  useEffect(() => {
+    if (props.type === 'delete') {
+      NotificationActions.openConfirm('Sei sicuro di rimuovere il Candidato?',
+        () => {
+          candidatoService.deleteResource(props.row.id).then(() => {
+            NotificationActions.openModal(
+              { icon: true, style: "success" },
+              "Operazione avvenuta con successo "
+            );
+            props.closeModalCallback();
+            props.refreshTable();
+          })
+
+        },
+        'Cancella Candidato'
+      )
+    }
+  }, [props.type])
+
+  if (props.type === "delete") {
+    return <div></div>
+  }
   const CandidatiCrudInner = withAiBox(() => <div className={styles.formContainer}>
     <Form
       submitText={"Salva"}
@@ -103,7 +127,7 @@ export function CandidatiCrud(props: PropsWithChildren<CandidatiCrudProps>) {
           }).catch(() => {
 
           }).finally(() => {
-            
+
           });
 
           setSkillLoading(true);
