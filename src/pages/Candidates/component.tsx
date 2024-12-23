@@ -16,7 +16,7 @@ export default function CandidatePage() {
     { key: "Person.lastName", label: "Cognome", type: "string", sortable: true, filter: "text" },
     { key: "CandidateProfile.description", label: "Mansione", type: "string", sortable: true, filter: "text" },
     {
-      key: "Person.PersonSkillAreas.SkillArea.name", label: "Skills", type: "custom", sortable: true, filter: "text", width: 250, render: (row) => {
+      key: "Person.PersonSkillAreas.SkillArea.name", label: "Skills", type: "custom", sortable: false, filter: "text", width: 250, render: (row) => {
 
         if (row?.Person?.PersonSkillAreas == null || row.Person.PersonSkillAreas.lenght == 0)
           return <td></td>;
