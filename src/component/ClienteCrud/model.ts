@@ -3,7 +3,7 @@ export interface CustomerModel{
     customer_code:string;
     name:string;
     vatNumber?:string;
-    website?:string;
+    web_site?:string;
     email?:string;
     phone?:string;
     fax?:string;

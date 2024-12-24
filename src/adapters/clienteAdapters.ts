@@ -7,7 +7,7 @@ export function adaptToCustomerModel(customer: CustomerBEModel): CustomerModel {
       customer_code: customer.customer_code, // Mappiamo 'customer_code' a 'code'
        name: customer.name,
       vatNumber: customer.vatNumber || customer.taxCode, // Mappiamo 'taxCode' a 'vatNumber' se 'vatNumber' è assente
-      website: customer.web_site,
+      web_site: customer.web_site,
       email: customer.email,
       phone: customer.phoneNumber,
       fax: customer.fax,
@@ -24,7 +24,7 @@ export function adaptToCustomerModel(customer: CustomerBEModel): CustomerModel {
       customer_code: customerModel.customer_code, // Mappiamo 'code' a 'customer_code'
       name: customerModel.name,
       phoneNumber: customerModel.phone,
-      web_site: customerModel.website,
+      web_site: customerModel.web_site,
       fax: customerModel.fax,
       email: customerModel.email,
       address: customerModel.address,

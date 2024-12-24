@@ -9,7 +9,7 @@ const columns = [
   { key: "customer_code", label: "Codice", type: "string", sortable: true, filter: "text" },
   { key: "name", label: "Ragione sociale", type: "string", sortable: true, filter: "text" },
   { key: "email", label: "Email", type: "string", sortable: true, filter: "text" },
-  { key: "website", label: "Sito web", type: "string", sortable: true, filter: "text" },
+  { key: "web_site", label: "Sito web", type: "string", sortable: true, filter: "text" },
   { key: "vatNumber", label: "P.IVA", type: "string", sortable: true, filter: "numeric" },
 
 ];

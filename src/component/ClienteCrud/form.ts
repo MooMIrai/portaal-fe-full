@@ -46,11 +46,11 @@ export const getFormCustomerFields = (formData: CustomerModel, type:string) => {
             value: formData.vatNumber || "",
             validator: (value: any) => optional(value,partitaIVAValidator),
         },
-        website: {
-            name: "website",
+        web_site: {
+            name: "web_site",
             label: "Sito web",
             type: "text",
-            value: formData.website || "",
+            value: formData.web_site || "",
             disabled:type === "view",
         },
         email: {
