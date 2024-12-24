@@ -29,13 +29,18 @@ export function RichiesteCrud(props: RichiesteCrudProps) {
     const formRichiestaRef = useRef(requestAdapter.reverseAdapt(props.row));
     const [formRichiestaData, setFormRichiestaData] = useState(formRichiestaRef.current);
 
+    const [selectedPrimarySkill, setSelectedPrimarySkill] = useState<number[]>([]);
+    const [selectedSecondarySkill, setSelectedSecondarySkill] = useState<number[]>([]);
+
+
+
     const [aiModalOpen, setAiModalOpen] = useState<boolean>(false);
     const [aiModalText, setAiModalText] = useState<string>();
     const [aiModalLoading, setAiModalLoading] = useState<boolean>(false);
 
     const adaptAiData = useCallback((aiData) => {//cristian
         console.log("cristian");
-       debugger;
+        debugger;
         // convertPersonSkillAreaToSkillsAi(prevData.)
         // Adatta i dati AI e aggiorna lo stato
         setFormRichiestaData((prevData) => ({ ...prevData, ...aiData }));
@@ -55,7 +60,8 @@ export function RichiesteCrud(props: RichiesteCrudProps) {
         }
     }, [aiModalText, adaptAiData]);
 
-    const formFields = useMemo(() => Object.values(getFormRichiesta({}, props.type)), [props.type]);
+    const formFields = useMemo(() => Object.values(getFormRichiesta({}, props.type, selectedPrimarySkill, setSelectedPrimarySkill,
+        selectedSecondarySkill, setSelectedSecondarySkill)), [props.type, selectedPrimarySkill,selectedSecondarySkill]);
 
     const handleCommandExecuted = (command, closeAiPopup) => {
         if (command.id === '1') {
@@ -105,23 +111,23 @@ export function RichiesteCrud(props: RichiesteCrudProps) {
                     ref={formRichiestaRef}
                     onSubmit={(data) => {
                         console.log("Form Submitted", data);
-                          let action = Promise.resolve()
-                        
-                                let dataServer = requestAdapter.adapt(data);
-                        
-                                console.log(dataServer);
-                          
-                                if (props.type === "create")
-                                  action = richiestaService.createResource(dataServer);
-                                else
-                                  action = richiestaService.updateResource(props.row.id, dataServer);
-                        
-                                return action.then(res => {
-                                  NotificationActions.openModal(
-                                    { icon: true, style: "success" },
-                                    "Operazione avvenuta con successo "
-                                  );
-                                })  
+                        let action = Promise.resolve()
+
+                        let dataServer = requestAdapter.adapt(data);
+
+                        console.log(dataServer);
+
+                        if (props.type === "create")
+                            action = richiestaService.createResource(dataServer);
+                        else
+                            action = richiestaService.updateResource(props.row.id, dataServer);
+
+                        return action.then(res => {
+                            NotificationActions.openModal(
+                                { icon: true, style: "success" },
+                                "Operazione avvenuta con successo "
+                            );
+                        })
                     }}
                 />
             </div>

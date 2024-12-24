@@ -142,6 +142,7 @@ export function CandidatiCrud(props: PropsWithChildren<CandidatiCrudProps>) {
               }
             })
           }).catch(() => {
+            // NotificationProviderActions.openModal({style:"error",icon:true},"Errore nella lettura della clipboard. Copia nuovamente il link.");
 
           }).finally(() => {
             setSkillLoading(false);
