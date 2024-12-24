@@ -1,10 +1,15 @@
 
 export const getFormRichiesta = (
-    formData: any, 
-    type: string
+    formData: any,
+    type: string,
+    primarySkillSelected: number[],
+    setPrimarySkill: any,
+    secondarySkillSelected: number[],
+    setSecondarySkill: any
+
 ) => {
 
-    
+
     const optionalCellulareValidator = (value: any) => {
         if (!value) return true;
         return /^(\+?\d{1,4}\s?\d{7,15}|00\d{1,4}\s?\d{7,15})$/.test(value);
@@ -27,7 +32,7 @@ export const getFormRichiesta = (
             value: formData.RequestState || "",
             required: true,
             disabled: type === "view"
-          },
+        },
         Priority: {
             name: "Priority",
             label: "Priorità",
@@ -44,22 +49,22 @@ export const getFormRichiesta = (
             required: true,
             disabled: type === "view"
         },
-       /* Campo non creato, eventualmente si recupera dal cliente
-       customerReferer: {
-            name: "customerReferer",
-            label: "Referente Cliente",
-            type: "text",
-            value: formData.CustomerReferer || "",
-            required: false,
-            disabled: type === "view"
-        }, */
+        /* Campo non creato, eventualmente si recupera dal cliente
+        customerReferer: {
+             name: "customerReferer",
+             label: "Referente Cliente",
+             type: "text",
+             value: formData.CustomerReferer || "",
+             required: false,
+             disabled: type === "view"
+         }, */
         ref_code: {
             name: "ref_code",
             label: "Codice di Riferimento",
             type: "text",
             value: formData.ref_code || "",
             required: false,
-            disabled: type === "view" 
+            disabled: type === "view"
         },
         id_code: {
             name: "id_code",
@@ -67,7 +72,7 @@ export const getFormRichiesta = (
             type: "text",
             value: formData.id_code || "",
             required: false,
-            disabled: type === "view" 
+            disabled: type === "view"
         },
         Location: {
             name: "Location",
@@ -84,7 +89,7 @@ export const getFormRichiesta = (
             value: formData.WorkModel || "",
             required: true,
             disabled: type === "view"
-        } ,
+        },
         Profile: {
             name: "Profile",
             label: "Profilo",
@@ -114,12 +119,14 @@ export const getFormRichiesta = (
             label: "Skill primarie",
             type: "skill",
             value: formData.PrimarySkill || "",
+            valueOnChange: (name: string, value: any) => setPrimarySkill(value ? value.map((x: any) => x.id) : []),
             required: true,
             disabled: type === "view",
             options: {
                 field: "skillCategory_id",
                 operator: "neq", // diverso da
-                value: 116
+                value: 116,
+                disabledArray: secondarySkillSelected
             }
         },
         SecondarySkill: {
@@ -127,12 +134,14 @@ export const getFormRichiesta = (
             label: "Skill secondarie",
             type: "skill",
             value: formData.SecondarySkill || "",
+            valueOnChange: (name: string, value: any) => setSecondarySkill(value ? value.map((x: any) => x.id) : []),
             required: false,
             disabled: type === "view",
             options: {
                 field: "skillCategory_id",
                 operator: "neq", // diverso da
-                value: 116
+                value: 116,
+                disabledArray: primarySkillSelected
             }
         },
         LanguagesSkill: {
@@ -162,7 +171,7 @@ export const getFormRichiesta = (
             type: "checkbox",
             value: formData.continuative || false,
             required: false,
-            showLabel:false,
+            showLabel: false,
             disabled: type === "view"
         },
         notes: {
@@ -175,6 +184,6 @@ export const getFormRichiesta = (
         }
     };
 
-    
+
     return fields;
 };
