@@ -178,7 +178,16 @@ const SkillMultiSelect: React.FC<SkillMultiSelectProps | any> = (props) => {
         }; */
         try {
             const response = await client.post("/api/v1/skillArea", body);
-            setSkills(response.data.data);
+            let resp=response.data.data;
+
+            if(props.options && props.options.disabledArray){
+                resp = resp.map((x:any)=>{
+                    let mapped = x;
+                    mapped.disabled = props.options.disabledArray.some((l:number)=>l===x.id);
+                    return mapped;
+                })
+            }
+            setSkills(resp);
         } catch (error) {
             console.error("Errore nel recupero delle skill filtrate:", error);
         } finally {
@@ -277,7 +286,6 @@ const SkillMultiSelect: React.FC<SkillMultiSelectProps | any> = (props) => {
                 filter={filter}
                 onFilterChange={handleSearch}
                 //label="Skill"
-
                 onChange={handleChange}
                 listNoDataRender={listNoDataRender}
                 placeholder="Seleziona o cerca skill..."
