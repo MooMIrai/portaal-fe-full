@@ -12,6 +12,8 @@ class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, Candidat
             return null;
         }
 
+        debugger;
+
         const personSkillAreas_1 = convertSkillsAiToPersonSkillArea(source.languageSkills, null);
         const personSkillAreas_2 = convertSkillsAiToPersonSkillArea(source.skills, null);
 
@@ -20,7 +22,6 @@ class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, Candidat
             ...(personSkillAreas_2 ?? [])
         ];
 
-        debugger;
         return {
             id: 0,
             willingToTransfer: source.willingToTransfer ? source.willingToTransfer : false,
@@ -67,12 +68,15 @@ class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, Candidat
                 Attachment: null,
                 PersonSkillAreas: combinedPersonSkillAreas, // Mappatura non specificata
                 isActivity_104: source.isActivity_104 ? source.isActivity_104 : false,
+                PersonActivities: []
             }
         };
     }
 
     // Mappa CandidateServer in CandidateFields
     reverseAdapt(source?: CandidateServer): CandidateFields | null {
+
+        debugger;
 
         if (!source || !Object.keys(source).length)
             return null;
@@ -86,8 +90,8 @@ class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, Candidat
         let country: SubResidenceFields = {
 
             id: source.Person?.CityRes?.isProvince ? source.Person?.CityRes?.country_id : source.Person?.CityRes?.Province?.country_id,
-            code: source.Person?.CityRes?.Country.code,
-            name: source.Person?.CityRes?.Country.name,
+            code: source.Person?.CityRes?.Province?.Country.code,
+            name: source.Person?.CityRes?.Province?.Country.name,
 
         };
         let province: SubResidenceFields = {
@@ -98,6 +102,8 @@ class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, Candidat
         };
 
         let residence: ResidenceFields = { city, country, province };
+        debugger;
+        const isActivity_104 = source.Person?.PersonActivities ? source.Person.PersonActivities.some(activity => activity?.ActivityType?.code && activity.ActivityType.code === "HPE_104") : false;
 
         return {
             firstName: source.Person.firstName,
@@ -117,7 +123,7 @@ class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, Candidat
             profile_autocomplete: source.CandidateProfile ? { id: source.CandidateProfile.id, name: source.CandidateProfile.description } : undefined,
             profile_type: source.profileType || undefined,
             willingToTransfer: source.willingToTransfer,
-            isActivity_104: source.Person.isActivity_104,
+            isActivity_104: isActivity_104,
             contract_type: source.currentContractType ? { id: source.currentContractType.id, name: source.currentContractType.description } : undefined,
             seniority: RequestSeniority.find(p => p.id === source.Person.Seniority) || { id: 0, name: 'Seleziona Seniority' },
             skills: source.Person.PersonSkillAreas ? convertPersonSkillAreaToSkillsAi(source.Person.PersonSkillAreas, 0) : [],

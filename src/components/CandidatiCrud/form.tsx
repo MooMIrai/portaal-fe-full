@@ -176,12 +176,12 @@ export const getFormCandidate = (
             disabled: (type === "view")
 
         },
-        assistance_104: {
-            name: "assistance_104",
+        isActivity_104: {
+            name: "isActivity_104",
             label: "104",
             type: "checkbox",
             showLabel: false,
-            value: formData?.assistance_104 || false,
+            value: formData?.isActivity_104 || false,
             disabled: (type === "view")
 
         },
