@@ -284,7 +284,7 @@ const SkillMultiSelect: React.FC<SkillMultiSelectProps | any> = (props) => {
                 textField="name"
                 dataItemKey="id"
                 loading={loading}
-                style={{ height: 33.33 }}
+                style={{ height: 99.99, overflowY: "auto" }}
                 size={"medium"}
             />
 
