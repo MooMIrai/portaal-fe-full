@@ -85,9 +85,15 @@ export function CandidatiCrud(props: PropsWithChildren<CandidatiCrudProps>) {
         //let formCandidato.current.values
 
         if (props.type === "create")
+        {
+          debugger;
           action = candidatoService.createResource(dataServer);
+        }
         else
+        {
+          debugger;
           action = candidatoService.updateResource(props.row.id, dataServer);
+        }
 
         return action.then(res => {
           NotificationActions.openModal(

@@ -178,6 +178,7 @@ export interface Person {
   date_modified: string; // ISO date string
   user_created: string;
   user_modified: string;
+  PersonActivities: Activity[];
 
   /* phoneNumber2: string | null;
   address: string | null;
@@ -207,3 +208,46 @@ export const CandidateGender = [
     name: 'F'
   }
 ];
+
+export interface Activity {
+
+  id: number;
+  description: string;
+  start_date: string;
+  end_date: string;
+  project_id: number | null;
+  activityType_id: number;
+  activityManager_id: number | null;
+  ActivityType: ActivityType;
+}
+
+export interface ActivityType {
+
+  id: number,
+  code: string,
+  description: string
+}
+
+/*
+
+
+"PersonActivities": [
+                    {
+                        "Activity": {
+                            "id": 4,
+                            "description": "Permesso 104",
+                            "start_date": "1970-01-01T00:00:00.000Z",
+                            "end_date": "2050-01-01T00:00:00.000Z",
+                            "project_id": null,
+                            "activityType_id": 4,
+                            "activityManager_id": null,
+                            "date_created": "2024-11-20T17:40:42.396Z",
+                            "date_modified": "2024-11-20T17:40:42.396Z",
+                            "user_created": "SEED",
+                            "user_modified": "SEED",
+                            "tenant_code": "TAAL"
+                        }
+                    }
+                ],
+
+*/
