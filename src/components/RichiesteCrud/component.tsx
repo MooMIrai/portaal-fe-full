@@ -15,6 +15,7 @@ import { richiestaService } from "../../services/richiestaService";
 import { AiTextArea } from "./components/aiText";
 import AiBox from 'common/AiBox'
 import NotificationActions from 'common/providers/NotificationProvider';
+import { adaptSkillsAi } from "../CandidatiCrud/adapters/adapter";
 
 
 type RichiesteCrudProps = {
@@ -41,9 +42,13 @@ export function RichiesteCrud(props: RichiesteCrudProps) {
     const adaptAiData = useCallback((aiData) => {//cristian
         console.log("cristian");
         debugger;
-        // convertPersonSkillAreaToSkillsAi(prevData.)
+        console.log(formRichiestaData);
+        console.log(aiData);
+
+        setFormRichiestaData(adaptSkillsAi(formRichiestaData,aiData.jsonData.data));
+
         // Adatta i dati AI e aggiorna lo stato
-        setFormRichiestaData((prevData) => ({ ...prevData, ...aiData }));
+       // setFormRichiestaData((prevData) => ({ ...prevData, ...aiData }));
     }, []);
 
     useEffect(() => {

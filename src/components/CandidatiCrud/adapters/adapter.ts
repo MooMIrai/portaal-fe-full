@@ -1,6 +1,6 @@
 import { BaseAdapter } from 'common/gof/Adapter';
 import { CandidateFields, CandidateGender, CandidateServer, PersonSkillArea, RecruitingSkill, ResidenceFields, SkillArea, SubResidenceFields } from '../models/models';
-import { RequestSeniority } from '../../RichiesteCrud/models';
+import { recruitingSkillType, RequestFields, RequestSeniority } from '../../RichiesteCrud/models';
 import { RecruitingSkillAreaAi, SkillDetailsRecruiting } from '../models/models-ai';
 
 class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, CandidateServer> {
@@ -189,29 +189,28 @@ export function convertRecruitingSkillAreaToSkillsForms(recruitingSkillAreas: Re
 }
 
 // Server => Field (Recruiting Ai)
-export function convertRecruitingSkillAreaToSkillsAi(recruitingSkillAreas: RecruitingSkillAreaAi, type: string): SkillArea[] {
-    let filteredSkills: SkillDetailsRecruiting[] = [];
-
-    switch (type) {
-        case "PRIMARY":
-            filteredSkills = recruitingSkillAreas.skillDetails.filter(detail => detail.type === "PRIMARY");
-            break;
-        case "SECONDARY":
-            filteredSkills = recruitingSkillAreas.skillDetails.filter(detail => detail.type === "SECONDARY");
-            break;
-        case "LANGUAGES":
-            filteredSkills = recruitingSkillAreas.skillDetails.filter(detail => detail.type === "LANGUAGES");
-            break;
-        default:
-            return [];
+export function adaptSkillsAi(form: RequestFields|null,data:any): RequestFields|null {
+  debugger;
+    if(form!=null){
+        const primarySkills = data.skillDetails.find(detail => detail.type === "PRIMARY")?.skills || [];
+        const secondarySkills = data.skillDetails.find(detail => detail.type === "SECONDARY")?.skills || [];
+        const languageSkills = data.skillDetails.find(detail => detail.type === "LANGUAGE")?.skills || [];
+        
+        form.PrimarySkill = convertRecruitingSkillAiToSkillsForms(primarySkills) ;
+        form.SecondarySkill = convertRecruitingSkillAiToSkillsForms(secondarySkills) ;
+        form.LanguagesSkill = convertRecruitingSkillAiToSkillsForms(languageSkills) ;
     }
+    
 
-    return filteredSkills?.flatMap(detail => detail.skills.map(skill => ({
-        id: skill.id,
-        code: skill.code,
-        name: skill.name,
-        skillCategory_id: skill.skillCategory_id,
-    })));
+   return form;
+}
+
+function convertRecruitingSkillAiToSkillsForms(recruitingSkillAreas: SkillArea[]): SkillArea[] {
+    if(recruitingSkillAreas.length == 0){
+        return [] as SkillArea[];
+    }
+    return recruitingSkillAreas.filter(skillArea => skillArea !== undefined) as SkillArea[];
+ 
 }
 
 

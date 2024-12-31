@@ -1,6 +1,6 @@
 import { BaseAdapter } from 'common/gof/Adapter';
 import { OptionRequestField, recruitingSkillType, RequestFields, RequestPriority, RequestSeniority, RequestServer, RequestStatus, WorkModel } from './models';
-import { convertRecruitingSkillAreaToSkillsAi, convertRecruitingSkillAreaToSkillsForms, convertSkillsFormsToRecruitingSkills } from '../CandidatiCrud/adapters/adapter';
+import { convertRecruitingSkillAreaToSkillsForms, convertSkillsFormsToRecruitingSkills } from '../CandidatiCrud/adapters/adapter';
 
 // Adapter per RequestFields e RequestServer
 class RequestFieldsServerAdapter extends BaseAdapter<RequestFields, RequestServer> {

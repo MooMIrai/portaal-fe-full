@@ -36,6 +36,8 @@ export interface SkillDetailsRecruiting {
   
     seniority?: string | null;  // enum
     profileType?: string | null; // enum
+    id_code?: string | null;
+    candidateProfile_id?:number|null; 
     skillDetails: SkillDetailsRecruiting[];
   
   }
