@@ -27,7 +27,7 @@ const mfeConfig = (path, mode) => {
       lookups: "lookups@lookups/remoteEntry.js",
       sales: "sales@sales/remoteEntry.js",
       hr: "hr@hr/remoteEntry.js",
-      //recruiting: "recruiting@recruiting/remoteEntry.js",
+      recruiting: "recruiting@recruiting/remoteEntry.js",
       stock:"stock@stock/remoteEntry.js",
       notification:"notification@notification/remoteEntry.js"
     };
