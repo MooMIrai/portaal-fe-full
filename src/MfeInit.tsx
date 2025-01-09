@@ -6,7 +6,7 @@ export default function(){
     menuItems:[
       {
           id:13,
-          text:'Recruting',
+          text:'Recruiting',
           level:0,
           route:'/',
           

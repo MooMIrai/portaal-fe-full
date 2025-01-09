@@ -103,7 +103,9 @@ class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, Candidat
 
         let residence: ResidenceFields = { city, country, province };
         debugger;
-        const isActivity_104 = source.Person?.PersonActivities ? source.Person.PersonActivities.some(activity => activity?.ActivityType?.code && activity.ActivityType.code === "HPE_104") : false;
+        const isActivity_104 = source.Person?.PersonActivities ? source.Person.PersonActivities.some(activity => activity?.["Activity"]?.ActivityType?.code && activity?.["Activity"].ActivityType.code === "HPE_104") : false;
+
+        //source.Person.PersonActivities[0].Activity.ActivityType.code
 
         return {
             firstName: source.Person.firstName,
