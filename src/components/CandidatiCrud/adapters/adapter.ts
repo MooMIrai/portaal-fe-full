@@ -22,6 +22,8 @@ class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, Candidat
             ...(personSkillAreas_2 ?? [])
         ];
 
+        let location_id = source.sede?.id == "0" ? null : source.sede?.id;
+
         return {
             id: 0,
             willingToTransfer: source.willingToTransfer ? source.willingToTransfer : false,
@@ -63,7 +65,7 @@ class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, Candidat
                 date_modified: '', // Da aggiungere se disponibile
                 user_created: '', // Da aggiungere se disponibile
                 user_modified: '', // Da aggiungere se disponibile
-                location_id: source.sede?.id ? parseInt(source.sede.id.toString()) : null,
+                location_id: location_id ? parseInt(location_id.toString()) : null,
                 Seniority: source.seniority ? source.seniority.id.toString() : null,
                 Attachment: null,
                 PersonSkillAreas: combinedPersonSkillAreas, // Mappatura non specificata
@@ -169,19 +171,19 @@ export function convertSkillsFormsToRecruitingSkills(skillsArray: SkillArea[], t
     return skillsArray?.map(skillAi => ({
         type: type,
         skillArea_id: skillAi.id,
-         SkillArea: {
+        SkillArea: {
             id: skillAi.id,
             code: skillAi.code,
             skillCategory_id: skillAi.skillCategory_id,
             name: skillAi.name
-        } 
+        }
     }));
 }
 
 // Server => Field (Recruiting)
 export function convertRecruitingSkillAreaToSkillsForms(recruitingSkillAreas: RecruitingSkill[], type: string): SkillArea[] {
 
-    if(recruitingSkillAreas.length == 0){
+    if (recruitingSkillAreas.length == 0) {
         return [] as SkillArea[];
     }
     switch (type) {
@@ -197,28 +199,29 @@ export function convertRecruitingSkillAreaToSkillsForms(recruitingSkillAreas: Re
 }
 
 // Server => Field (Recruiting Ai)
-export function adaptSkillsAi(form: RequestFields|null,data:any): RequestFields|null {
-  debugger;
-    if(form!=null){
+export function adaptSkillsAi(form: RequestFields | null, data: any): RequestFields | null {
+    debugger;
+    if (form != null) {
         const primarySkills = data.skillDetails.find(detail => detail.type === "PRIMARY")?.skills || [];
         const secondarySkills = data.skillDetails.find(detail => detail.type === "SECONDARY")?.skills || [];
         const languageSkills = data.skillDetails.find(detail => detail.type === "LANGUAGE")?.skills || [];
-        
-        form.PrimarySkill = convertRecruitingSkillAiToSkillsForms(primarySkills) ;
-        form.SecondarySkill = convertRecruitingSkillAiToSkillsForms(secondarySkills) ;
-        form.LanguagesSkill = convertRecruitingSkillAiToSkillsForms(languageSkills) ;
-    }
-    
 
-   return form;
+        form.PrimarySkill = convertRecruitingSkillAiToSkillsForms(primarySkills);
+        form.SecondarySkill = convertRecruitingSkillAiToSkillsForms(secondarySkills);
+        form.LanguagesSkill = convertRecruitingSkillAiToSkillsForms(languageSkills);
+
+    }
+
+
+    return form;
 }
 
 function convertRecruitingSkillAiToSkillsForms(recruitingSkillAreas: SkillArea[]): SkillArea[] {
-    if(recruitingSkillAreas.length == 0){
+    if (recruitingSkillAreas.length == 0) {
         return [] as SkillArea[];
     }
     return recruitingSkillAreas.filter(skillArea => skillArea !== undefined) as SkillArea[];
- 
+
 }
 
 
