@@ -38,7 +38,7 @@ export const getFormRichiesta = (
             label: "Priorità",
             type: "priority-selector",
             value: formData.Priority || "",
-            required: false,
+            required: true,
             disabled: type === "view"
         },
         Customer: {
@@ -79,7 +79,7 @@ export const getFormRichiesta = (
             label: "Sede di riferimento",
             type: "location-selector",
             value: formData.Location || "",
-            required: false,
+            required: true,
             disabled: type === "view"
         },
         WorkModel: {
@@ -134,6 +134,7 @@ export const getFormRichiesta = (
             label: "Skill secondarie",
             type: "skill",
             value: formData.SecondarySkill || "",
+            //valueOnInit: (name: string, value: any) => setPrimarySkill(value ? value.map((x: any) => x.id) : []),
             valueOnChange: (name: string, value: any) => setSecondarySkill(value ? value.map((x: any) => x.id) : []),
             required: false,
             disabled: type === "view",
