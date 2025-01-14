@@ -1,9 +1,9 @@
-import React, { PropsWithChildren, useCallback, useEffect, useState } from "react";
+import React, { PropsWithChildren, useCallback, useEffect, useRef, useState } from "react";
 import { richiestaService } from "../../services/richiestaService";
 import GridTable from "common/Table";
 import Tab from 'common/Tab';
 import { candidatoService } from "../../services/candidatoService";
-import {checkCircleIcon ,xCircleIcon} from 'common/icons';
+import {checkCircleIcon ,xCircleIcon, pencilIcon, plusIcon} from 'common/icons';
 import SvgIcon from 'common/SvgIcon';
 import Accordion from 'common/Accordion';
 
@@ -11,10 +11,13 @@ export function CandidateForRequest(props: PropsWithChildren<{ requestId: number
 
     const [selectedTab, setSelectedTab] = useState<number>(0);
     
+    const tableAssigned= useRef<any>();
+    const tableSystem = useRef<any>();
+    const tableManual = useRef<any>();
 
     const columnsAssociated = [
 
-        //{ key: "date", label: "Data Richiesta", type: "date", sortable: true, filter: "date" },
+        { key: "id", label: " ", type: "custom",width:'40px', render:(rowData)=> <td style={{cursor:'pointer'}} onClick={()=>alert('ciao')}><SvgIcon icon={pencilIcon} themeColor="warning" /></td> },
         { key: "id", label: "Nominativo", type: "custom", render:(rowData)=><td>{rowData.Candidate.Person.firstName} {rowData.Candidate.Person.lastName}</td>},
         { key: "RecruitingContact", label: "Contattato", type: "custom", render:(rowData)=><td>{rowData.RecruitingContact?<SvgIcon icon={checkCircleIcon} themeColor="success" />:<SvgIcon icon={xCircleIcon} themeColor="error" />}</td>},
         { key: "RecruitingInterview", label: "Colloquiato", type: "custom", render:(rowData)=><td>{rowData.RecruitingInterview?<SvgIcon icon={checkCircleIcon} themeColor="success" />:<SvgIcon icon={xCircleIcon} themeColor="error" />}</td>},
@@ -30,7 +33,7 @@ export function CandidateForRequest(props: PropsWithChildren<{ requestId: number
 
     const columns = [
 
-        //{ key: "date", label: "Data Richiesta", type: "date", sortable: true, filter: "date" },
+        { key: "id", label: " ", type: "custom",width:'40px', render:(rowData)=> <td style={{cursor:'pointer'}} onClick={()=>alert('ciao')}><SvgIcon icon={plusIcon} themeColor="success" /></td> },
         { key: "Candidate.Person.firstName", label: "Nome", type: "string", sortable: false },
         { key: "Candidate.Person.lastName", label: "Cognome", type: "string", sortable: false },
         { key: "Candidate.CandidateProfile.description", label: "Mansione", type: "string", sortable: false },
@@ -76,7 +79,7 @@ export function CandidateForRequest(props: PropsWithChildren<{ requestId: number
 
 
     const columnsManual = [
-
+        { key: "id", label: " ", type: "custom",width:'40px', render:(rowData)=> <td style={{cursor:'pointer'}} onClick={()=>alert('ciao')}><SvgIcon icon={plusIcon} themeColor="success" /></td> },
         { key: "Person.firstName", label: "Nome", type: "string", sortable: true, filter: "text" },
         { key: "Person.lastName", label: "Cognome", type: "string", sortable: true, filter: "text" },
         { key: "CandidateProfile.description", label: "Mansione", type: "string", sortable: true, filter: "text" },
@@ -157,10 +160,12 @@ export function CandidateForRequest(props: PropsWithChildren<{ requestId: number
     }
 
     return <>
+
     <span>
         Candidati Associati alla richiesta
     </span>
     <GridTable
+        ref={tableAssigned}
         filterable={true}
         sortable={true}
         getData={loadDataAssociated}
@@ -207,6 +212,7 @@ export function CandidateForRequest(props: PropsWithChildren<{ requestId: number
                         title: "Scelti dal sistema",
                         children: (
                             <GridTable
+                            ref={tableSystem}
                                 filterable={true}
                                 sortable={true}
                                 getData={loadData}
@@ -229,6 +235,7 @@ export function CandidateForRequest(props: PropsWithChildren<{ requestId: number
                         title: "Ricerca Manuale",
                         children: (
                             <GridTable
+                            ref={tableManual}
                             filterable={true}
                             sortable={true}
                             getData={loadDataManual}
