@@ -75,6 +75,8 @@ class RichiestaServiceC extends BaseHttpService{
         "pageSize": pageSize
       })
       .then((res) => res.data);
+
+    getDetails = (requestId:number)=>client.get('/api/v1/recruitingRequest/getAssignmentsDetails/'+requestId).then(res=>res.data)
 }
 
 export const richiestaService = new RichiestaServiceC();

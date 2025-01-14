@@ -25,8 +25,8 @@ declare module "common/hoc/Field"
 declare module "common/hoc/AutoComplete"
 declare module "common/hoc/AiBox"
 declare module "common/AiBox"
-
+declare module 'common/Accordion';
 declare module "common/services/FileService"
-
+declare module 'common/SvgIcon';
 declare module 'common/gof/Adapter'
 declare module 'common/Loader';
