@@ -18,7 +18,7 @@ export default function CandidatePage() {
     {
       key: "Person.PersonSkillAreas.SkillArea.name", label: "Skills", type: "custom", sortable: false, filter: "text", width: 250, render: (row) => {
 
-        if (row?.Person?.PersonSkillAreas == null || row.Person.PersonSkillAreas.lenght == 0)
+        if (row?.Person?.PersonSkillAreas == null || row.Person.PersonSkillAreas.length == 0)
           return <td></td>;
 
         let skills = row.Person.PersonSkillAreas;

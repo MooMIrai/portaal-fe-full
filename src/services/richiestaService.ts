@@ -68,6 +68,13 @@ class RichiestaServiceC extends BaseHttpService{
     client
       .post("/api/v1/ai/upload_request_ts", { Attachment: file })
       .then((res) => res.data);
+
+    getPossibleCandidates = (requestId:number,pageNum:number,pageSize:number)=> client.post('/api/v1/recruitingCandidate/findAllListByRequest',{
+        "recruitingRequestId": requestId,
+        "pageNum": pageNum,
+        "pageSize": pageSize
+      })
+      .then((res) => res.data);
 }
 
 export const richiestaService = new RichiestaServiceC();
