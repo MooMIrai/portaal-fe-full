@@ -3,7 +3,16 @@ import GridTable from "common/Table";
 import PersonaleSection from "./../../component/TabPersonaleHR/component";
 import { CrudGenericService } from "../../services/personaleServices";
 import {
+  ActivityTypeOption,
+  companyAdapter,
+  companyOption,
+  genderAdapter,
+  genderOption,
   locationOption,
+  MappedSkill,
+  permessiAdapter,
+  roleAdapter,
+  RoleOption,
   sedeAdapter,
   transformUserData,
 } from "../../adapters/personaleAdapters";
@@ -87,7 +96,11 @@ const PersonalPage = () => {
   const [data, setData] = useState<any>();
   const [sede, setSede] = useState<locationOption[]>([]);
   const [isLocationDataReady, setIsLocationDataReady] = useState(false); // Nuovo stato per i dati geografici
-
+  const [roles, setRoles] = useState<RoleOption[]>([]);
+  const [companies, setCompanies] = useState<companyOption[]>([]);
+  const [genders, setGenders] = useState<genderOption[]>([]);
+  const [activity, setActivity] = useState<ActivityTypeOption[]>([]);
+   const [skills, setSkills] = useState<MappedSkill[] | undefined>()
   useEffect(() => {
     const fetchCountryData = async () => {
 
@@ -106,7 +119,35 @@ const PersonalPage = () => {
     fetchCountryData();
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [rolesResponse, companiesResponse, gendersResponse, activityResponse,skillResponse] = await Promise.all([
+          CrudGenericService.fetchResources("role"),
+          CrudGenericService.fetchResources("Company"),
+          CrudGenericService.fetchResources("Gender"),
+          CrudGenericService.fetchResources("ActivityType"),
+          CrudGenericService.getSkillArea(true)
+        ]);
+        const adaptedRoles = roleAdapter(rolesResponse);
+        const adaptedCompany = companyAdapter(companiesResponse);
+        const adaptedGender = genderAdapter(gendersResponse);
+        const adaptedActivities = permessiAdapter(activityResponse);
+        if (Array.isArray(skillResponse.data)) {
+          const adaptedSkillsArea = skillResponse.data.map(r => ({ id: r.id, name: r.name }))
+          setSkills(adaptedSkillsArea);
+        }
+        setActivity(adaptedActivities)
+        setRoles(adaptedRoles);
+        setCompanies(adaptedCompany);
+        setGenders(adaptedGender);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
+    fetchData();
+  }, []);
   const loadData = async (pagination: any, filter: any, sorting: any[]) => {
     if (!isLocationDataReady) {
       return {
@@ -134,7 +175,7 @@ const PersonalPage = () => {
       resources.data,
       sede
     );
-    console.log("transfoermedData",transformedData)
+    console.log("transfoermedData", transformedData)
     setData(transformedData);
 
     return {
@@ -160,7 +201,7 @@ const PersonalPage = () => {
         "Operazione avvenuta con successo"
       );
       refreshTable();
-      
+
     } catch (error) {
       console.error("Error during form submission:", error);
     }
@@ -211,6 +252,11 @@ const PersonalPage = () => {
               <PersonaleSection
                 row={row}
                 type={type}
+                roles={roles}
+                companies={companies}
+                genders={genders}
+                skills={skills}
+                activities={activity}
                 closeModalCallback={closeModalCallback}
                 refreshTable={refreshTable}
                 onSubmit={handleFormSubmit}
