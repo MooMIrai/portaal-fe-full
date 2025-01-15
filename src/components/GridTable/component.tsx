@@ -23,7 +23,7 @@ import {
 import { Button } from "@progress/kendo-react-buttons";
 import { FORM_TYPE } from "../../models/formModel";
 import { TableToFormTypeAdapter } from "../../adapters/tableToFormTypeAdapter";
-import { Pager, PagerProps } from "@progress/kendo-react-data-tools";
+import { FilterChangeEvent, Pager, PagerProps } from "@progress/kendo-react-data-tools";
 import { PaginationModel } from "../../models/gridModel";
 import {
   CompositeFilterDescriptor,
@@ -46,6 +46,7 @@ import { useDebounce } from "@uidotdev/usehooks";
 import { WindowActionsEvent } from "@progress/kendo-react-dialogs";
 import { Loader } from "@progress/kendo-react-indicators";
 import CellAction from "./CellAction/component";
+import CustomFilter, { FilterField } from "../ExternalFilter/component";
 
 interface CustomRowAction {
   icon: any;
@@ -59,6 +60,7 @@ interface CustomRowAction {
 }
 
 interface TablePaginatedProps extends GridProps {
+
   ref?: any;
   pageSizeOptions?: number[];
   getData: (
@@ -71,6 +73,10 @@ interface TablePaginatedProps extends GridProps {
 
   // Filter
   filterable?: boolean;
+  externalFilter?: boolean;
+  onFilterChangeExternalFilter?: (filter: CompositeFilterDescriptor) => void;
+  filter?: CompositeFilterDescriptor;
+  filterFields?: FilterField[];
 
   // Style
   className?: string;
@@ -103,7 +109,7 @@ interface TablePaginatedProps extends GridProps {
   expand?: {
     enabled: boolean;
     render: (props: GridDetailRowProps) => JSX.Element;
-    onExpandChange?:(rowData:any,expanded:boolean) => void
+    onExpandChange?: (rowData: any, expanded: boolean) => void
   };
 
   customToolBarComponent?: (refreshTable: () => void) => JSX.Element;
@@ -135,7 +141,7 @@ interface TablePaginatedProps extends GridProps {
 
   forceRefresh?: number;
 
-  rowStyle?:(row:any)=>Record<string,any>
+  rowStyle?: (row: any) => Record<string, any>
 }
 
 const MyPager = (props: PagerProps) => (
@@ -223,8 +229,8 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
       let newData = data.map((item: any, indexP) => {
         if (indexP === event.dataIndex) {
           item.gridtable_expanded = !event.dataItem.gridtable_expanded;
-          if(props.expand && props.expand.onExpandChange){
-            props.expand.onExpandChange(item,item.gridtable_expanded);
+          if (props.expand && props.expand.onExpandChange) {
+            props.expand.onExpandChange(item, item.gridtable_expanded);
           }
         }
         return item;
@@ -234,6 +240,21 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
   };
 
   const refreshTable = async () => {
+    const hasValidFilters = filter.filters.every((f: any) => {
+      if ("filters" in f) {
+          // Controlla ricorsivamente i filtri figli (CompositeFilterDescriptor)
+          return f.filters.every((nestedFilter: any) => nestedFilter.value !== null);
+      } else {
+          // Controlla il valore del filtro (FilterDescriptor)
+          return f.value !== null;
+      }
+  });
+
+  // Se non ci sono filtri validi, esci senza effettuare la chiamata
+  if (!hasValidFilters) {
+      console.log("Nessun filtro valido, chiamata API non effettuata.");
+      return;
+  }
     setLoading(true);
     const res = await props.getData(pagination, filter, sorting);
     setData(res?.data);
@@ -370,26 +391,35 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
       : props.classNameWindow;
 
 
-    const rowRender = (trElement:any, propsR:GridRowProps) => {
-      
-      const trProps:any = {};
-      
-      if(props.rowStyle && propsR.dataItem){
-        trProps.style = props.rowStyle(propsR.dataItem);
-      }
-        
-      
-      return React.cloneElement(
-        trElement,
-        {
-          ...trProps,
-        },
-        trElement.props.children
-      );
-    };
+  const rowRender = (trElement: any, propsR: GridRowProps) => {
 
+    const trProps: any = {};
+
+    if (props.rowStyle && propsR.dataItem) {
+      trProps.style = props.rowStyle(propsR.dataItem);
+    }
+
+
+    return React.cloneElement(
+      trElement,
+      {
+        ...trProps,
+      },
+      trElement.props.children
+    );
+  };
+  const onFilterChangeExternal = (event: FilterChangeEvent) => {
+    setFilter(event.filter);
+};
   return (
     <div className={styles.gridContainer}>
+      {props.externalFilter && props.filterFields && (
+        <CustomFilter
+          filter={filter}
+          onFilterExternalChange={onFilterChangeExternal}
+          fields={props.filterFields}
+        />
+      )}
       <Grid
         ref={gridRef}
         rowRender={rowRender}
@@ -429,7 +459,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
           )}
         </GridNoRecords>
 
-        {props.customToolBarComponent || hasActionCreate() ?<GridToolbar className={styles.toolBarContainer}>
+        {props.customToolBarComponent || hasActionCreate() ? <GridToolbar className={styles.toolBarContainer}>
           {props.customToolBarComponent?.(refreshTable)}
 
           {hasActionCreate() && (
@@ -443,7 +473,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
               </Button>
             </div>
           )}
-        </GridToolbar>:null}
+        </GridToolbar> : null}
 
         {props.columns.map((column: TableColumn, idx: number) => {
 
@@ -451,14 +481,14 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
           if (column.type === TABLE_COLUMN_TYPE.date) {
             cell = (cellGrid: GridCellProps) => {
               let dateString = 'Nessuna data';
-              if(cellGrid.dataItem[column.key]){
+              if (cellGrid.dataItem[column.key]) {
                 const date = new Date(cellGrid.dataItem[column.key]);
                 const day = String(date.getDate()).padStart(2, "0");
                 const month = String(date.getMonth() + 1).padStart(2, "0");
                 const year = date.getFullYear();
-                dateString=`${day}/${month}/${year}`;
+                dateString = `${day}/${month}/${year}`;
               }
-              
+
               return (
                 <td>
                   <strong>
