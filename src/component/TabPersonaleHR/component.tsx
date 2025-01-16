@@ -11,7 +11,7 @@ import {
   getFormPermessiFields,
 } from "./FormFields";
 import { AnagraficaData, TrattamentoEconomicoData, RuoliData, PermessiData } from "./modelForms";
-import { ActivityTypeOption, anagraficaAiButtonAdapter, cityTypeOption,companyOption, dataAdapter, genderOption, MappedSkill,reverseAdapter, reverseAdapterUpdate,  RoleOption} from "../../adapters/personaleAdapters";
+import { ActivityTypeOption, anagraficaAiButtonAdapter, cityTypeOption, companyOption, dataAdapter, genderOption, MappedSkill, reverseAdapter, reverseAdapterUpdate, RoleOption } from "../../adapters/personaleAdapters";
 import { CrudGenericService } from "../../services/personaleServices";
 import Button from "common/Button";
 import { formFields } from "./customfields";
@@ -60,7 +60,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps & {
   genders: genderOption[];
   activities: ActivityTypeOption[];
   skills: MappedSkill[] | undefined
-}> = ({ row, type, closeModalCallback, refreshTable, onSubmit, roles,skills, companies, genders, activities }) => {
+}> = ({ row, type, closeModalCallback, refreshTable, onSubmit, roles, skills, companies, genders, activities }) => {
   const isCreate = type === "create";
   const isUpdate = type === "edit"
 
@@ -362,16 +362,16 @@ const PersonaleSection: React.FC<PersonaleSectionProps & {
 
   const handleFileUpload = async () => {
     if (formAnagrafica.current && formAnagrafica.current.values.attachment && formAnagrafica.current.values.attachment.create && formAnagrafica.current.values.attachment.create.length) {
-      debugger
+
       const response = await CrudGenericService.getCVaI(formAnagrafica.current.values.attachment.create[0]);
       const skillsData = await CrudGenericService.getSkillAI(formAnagrafica.current.values.attachment.create[0]);
 
       const data = response.jsonData;
-      const dataSKill = skillsData.jsonData.skills
-      const seniority = skillsData.jsonData.seniority
+      const dataSKill = skillsData.jsonData.data.skills
+      const seniority = skillsData.jsonData.data.seniority
 
       const updatedFormAnagraficaData = anagraficaAiButtonAdapter(data, formAnagraficaData, modifiedFields, localGenders, dataSKill, seniority);
-
+      console.log("updatedFormAnagraficaData", updatedFormAnagraficaData)
       setFormAnagraficaData(updatedFormAnagraficaData);
 
       const newModifiedFields = {};
