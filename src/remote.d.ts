@@ -30,3 +30,4 @@ declare module "common/services/FileService"
 declare module 'common/SvgIcon';
 declare module 'common/gof/Adapter'
 declare module 'common/Loader';
+declare module 'common/Stepper';

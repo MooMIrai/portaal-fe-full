@@ -6,9 +6,12 @@ import { candidatoService } from "../../services/candidatoService";
 import {checkCircleIcon ,xCircleIcon, pencilIcon, plusIcon} from 'common/icons';
 import SvgIcon from 'common/SvgIcon';
 import Accordion from 'common/Accordion';
+import { CandidateStepper } from "../CandidateStepper/component";
+import Modal from 'common/Modal';
 
 export function CandidateForRequest(props: PropsWithChildren<{ requestId: number, requestSkills?:any[] }>) {
 
+    const [currentPerson,setCurrentPerson] = useState<any>();
     const [selectedTab, setSelectedTab] = useState<number>(0);
     
     const tableAssigned= useRef<any>();
@@ -17,10 +20,10 @@ export function CandidateForRequest(props: PropsWithChildren<{ requestId: number
 
     const columnsAssociated = [
 
-        { key: "id", label: " ", type: "custom",width:'40px', render:(rowData)=> <td style={{cursor:'pointer'}} onClick={()=>alert('ciao')}><SvgIcon icon={pencilIcon} themeColor="warning" /></td> },
+        { key: "id", label: " ", type: "custom",width:'40px', render:(rowData)=> <td style={{cursor:'pointer'}} onClick={()=>setCurrentPerson(rowData)}><SvgIcon icon={pencilIcon} themeColor="warning" /></td> },
         { key: "id", label: "Nominativo", type: "custom", render:(rowData)=><td>{rowData.Candidate.Person.firstName} {rowData.Candidate.Person.lastName}</td>},
         { key: "RecruitingContact", label: "Contattato", type: "custom", render:(rowData)=><td>{rowData.RecruitingContact?<SvgIcon icon={checkCircleIcon} themeColor="success" />:<SvgIcon icon={xCircleIcon} themeColor="error" />}</td>},
-        { key: "RecruitingInterview", label: "Colloquiato", type: "custom", render:(rowData)=><td>{rowData.RecruitingInterview?<SvgIcon icon={checkCircleIcon} themeColor="success" />:<SvgIcon icon={xCircleIcon} themeColor="error" />}</td>},
+        { key: "RecruitingInterview", label: "Colloquiato", type: "custom", render:(rowData)=><td>{rowData.RecruitingInterview.length?<SvgIcon icon={checkCircleIcon} themeColor="success" />:<SvgIcon icon={xCircleIcon} themeColor="error" />}</td>},
         { key: "RecruitingOffer", label: "Proposta economica", type: "custom", render:(rowData)=><td>{rowData.RecruitingOffer?<SvgIcon icon={checkCircleIcon} themeColor="success" />:<SvgIcon icon={xCircleIcon} themeColor="error" />}</td>},
         { key: "RecruitingFinalEvaluation", label: "Valutazione finale", type: "custom", render:(rowData)=><td>{rowData.RecruitingFinalEvaluation?<SvgIcon icon={checkCircleIcon} themeColor="success" />:<SvgIcon icon={xCircleIcon} themeColor="error" />}</td>},
         { key: "RecruitingSendCv", label: "Invio CV", type: "custom", render:(rowData)=><td>{rowData.RecruitingSendCv?<SvgIcon icon={checkCircleIcon} themeColor="success" />:<SvgIcon icon={xCircleIcon} themeColor="error" />}</td>},
@@ -262,6 +265,18 @@ export function CandidateForRequest(props: PropsWithChildren<{ requestId: number
         />
         </Accordion>
     </div>
+    <Modal title="Gestisci il candidato"
+        width="100%"
+        height="100%"
+        isOpen={currentPerson}
+        onClose={()=>{
+           
+            setCurrentPerson(undefined);
+            tableAssigned.current.refreshTable();
+            
+        }}>
+        {currentPerson && <CandidateStepper data={currentPerson}/>}
+    </Modal>
 </>
 
 
