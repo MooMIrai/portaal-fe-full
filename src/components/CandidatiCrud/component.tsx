@@ -75,23 +75,18 @@ export function CandidatiCrud(props: PropsWithChildren<CandidatiCrudProps>) {
       extraBtnAction={props.closeModalCallback}
       ref={formCandidato}
       onSubmit={(data) => {
-        debugger;
 
         let action = Promise.resolve()
-
         let dataServer = candidateAdapter.adapt(data);
-
-        console.log(formCandidato);
-        //let formCandidato.current.values
 
         if (props.type === "create")
         {
-          debugger;
+
           action = candidatoService.createResource(dataServer);
         }
         else
         {
-          debugger;
+
           action = candidatoService.updateResource(props.row.id, dataServer);
         }
 
@@ -111,16 +106,16 @@ export function CandidatiCrud(props: PropsWithChildren<CandidatiCrudProps>) {
     }
   ], (command, closeAiPopup) => {
 
-    debugger;
+
     if (command.id === '1') {
 
       fileService.selectFile().then(f => {
-        debugger;
+
         fileService.convertToBE(f).then(fileData => {
 
           candidatoService.getCVDataAI(fileData).then((dataResult) => {
 
-            debugger;
+
 
             //quando finisce 
             setFormCandidateData((prevState: any) => {
@@ -139,7 +134,7 @@ export function CandidatiCrud(props: PropsWithChildren<CandidatiCrudProps>) {
           setSkillLoading(true);
           candidatoService.getSkillAI(fileData).then((skillResult) => {
 
-            debugger;
+
 
             setFormCandidateData((prevState: any) => {
               return {
@@ -155,8 +150,6 @@ export function CandidatiCrud(props: PropsWithChildren<CandidatiCrudProps>) {
           })
         })
         closeAiPopup();
-      }).catch(() => {
-        debugger;
       })
     }
     //closeAiPopup()

@@ -1,27 +1,31 @@
 import React, { useEffect, useState } from "react";
 import Form from 'common/Form';
-import { contactForm } from "./form";
-import { contactAddedFields } from "./customFields";
-import { contactService } from "../../services/contactService";
 import NotificationProviderActions from "common/providers/NotificationProvider";
+import { sendCvForm } from "./form";
+import { sendCvService } from "../../services/sendCvService";
+import { sendCvAddedFields } from "./customFields";
 
-const mapContactType = rowData=>{
+const mapOutcometype = (rowData) => {
     let tipoText = "";
-    switch (rowData.ContactType) {
-        case "SCREENING":
-            tipoText = 'Screening Telefonico';
+    switch (rowData.OutComeType) {
+        case "P":
+            tipoText = 'Positivo';
             break;
-        case "EMAIL":
-            tipoText = 'Email';
+        case "N":
+            tipoText = 'Negativo';
             break;
-        case "IN_PERSON":
-            tipoText = 'Di persona';
+        case "R":
+            tipoText = 'Rimandato';
             break;
+        case "A":
+            tipoText = 'Annullato';
+            break;
+
     }
     return tipoText
 }
 
-export function CandidateContact(props:{currentData:any,assignmentId: number, onChange: (interviews: any[]) => void }){
+export function CandidateSendCv(props:{currentData:any,assignmentId: number, onChange: (interviews: any[]) => void }){
 
     const [formData,setFormData] = useState<any>();
 
@@ -29,9 +33,9 @@ export function CandidateContact(props:{currentData:any,assignmentId: number, on
         setFormData(props.currentData?{
             ...props.currentData,
             date_log:props.currentData.date_log?new Date(props.currentData.date_log):undefined,
-            ContactType:props.currentData.ContactType?{
-                id:props.currentData.ContactType,
-                name:mapContactType(props.currentData)
+            OutComeType:props.currentData.OutComeType?{
+                id:props.currentData.OutComeType,
+                name:mapOutcometype(props.currentData)
             }:{}
         }:{});
     },[props.currentData])
@@ -42,12 +46,12 @@ export function CandidateContact(props:{currentData:any,assignmentId: number, on
         const mappedData = {
             ...data,
             assignment_id:props.assignmentId,
-            ContactType: data.ContactType.id
+            OutComeType: data.OutComeType.id
         }
-        let promise:()=>Promise<any> = ()=>contactService.createResource(mappedData);
+        let promise:()=>Promise<any> = ()=>sendCvService.createResource(mappedData);
         if(formData.id){
             //edit
-            promise = ()=>contactService.updateResource(formData.id,mappedData);
+            promise = ()=>sendCvService.updateResource(formData.id,mappedData);
         }
         
         promise().then(result=>{
@@ -60,17 +64,17 @@ export function CandidateContact(props:{currentData:any,assignmentId: number, on
     }
 
     return  <div style={{ display: "flex", flexDirection: 'column', gap: 20, margin: 50, marginTop: 20 }}>
-                <h2>Contatto</h2>
+                <h2>Invio Cv</h2>
                 
                 {formData && <Form
                     submitText={formData.id?'Modifica':'Aggiungi'}
                     showSubmit
                     //ref={formInterview}
-                    fields={contactForm}
+                    fields={sendCvForm}
                     formData={formData}
                     onSubmit={handleSubmit}
                     description="Dati Contatto"
-                    addedFields={contactAddedFields}
+                    addedFields={sendCvAddedFields}
         
                 />}
             </div>

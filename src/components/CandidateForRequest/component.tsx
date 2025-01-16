@@ -25,7 +25,7 @@ export function CandidateForRequest(props: PropsWithChildren<{ requestId: number
         { key: "RecruitingContact", label: "Contattato", type: "custom", render:(rowData)=><td>{rowData.RecruitingContact?<SvgIcon icon={checkCircleIcon} themeColor="success" />:<SvgIcon icon={xCircleIcon} themeColor="error" />}</td>},
         { key: "RecruitingInterview", label: "Colloquiato", type: "custom", render:(rowData)=><td>{rowData.RecruitingInterview.length?<SvgIcon icon={checkCircleIcon} themeColor="success" />:<SvgIcon icon={xCircleIcon} themeColor="error" />}</td>},
         { key: "RecruitingOffer", label: "Proposta economica", type: "custom", render:(rowData)=><td>{rowData.RecruitingOffer?<SvgIcon icon={checkCircleIcon} themeColor="success" />:<SvgIcon icon={xCircleIcon} themeColor="error" />}</td>},
-        { key: "RecruitingFinalEvaluation", label: "Valutazione finale", type: "custom", render:(rowData)=><td>{rowData.RecruitingFinalEvaluation?<SvgIcon icon={checkCircleIcon} themeColor="success" />:<SvgIcon icon={xCircleIcon} themeColor="error" />}</td>},
+        //{ key: "RecruitingFinalEvaluation", label: "Valutazione finale", type: "custom", render:(rowData)=><td>{rowData.RecruitingFinalEvaluation?<SvgIcon icon={checkCircleIcon} themeColor="success" />:<SvgIcon icon={xCircleIcon} themeColor="error" />}</td>},
         { key: "RecruitingSendCv", label: "Invio CV", type: "custom", render:(rowData)=><td>{rowData.RecruitingSendCv?<SvgIcon icon={checkCircleIcon} themeColor="success" />:<SvgIcon icon={xCircleIcon} themeColor="error" />}</td>},
         { key: "RecruitingSendContract", label: "Contratto", type: "custom", render:(rowData)=><td>{rowData.RecruitingSendContract?<SvgIcon icon={checkCircleIcon} themeColor="success" />:<SvgIcon icon={xCircleIcon} themeColor="error" />}</td>}
         /*{ key: "Location.description", label: "Citta di competenza", type: "string", sortable: true, filter: "text" },
@@ -266,8 +266,8 @@ export function CandidateForRequest(props: PropsWithChildren<{ requestId: number
         </Accordion>
     </div>
     <Modal title="Gestisci il candidato"
-        width="100%"
-        height="100%"
+        width="70%"
+        height="90%"
         isOpen={currentPerson}
         onClose={()=>{
            
