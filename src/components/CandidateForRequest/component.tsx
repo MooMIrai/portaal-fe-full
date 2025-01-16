@@ -8,11 +8,13 @@ import SvgIcon from 'common/SvgIcon';
 import Accordion from 'common/Accordion';
 import { CandidateStepper } from "../CandidateStepper/component";
 import Modal from 'common/Modal';
+import NotificationActions from 'common/providers/NotificationProvider';
 
 export function CandidateForRequest(props: PropsWithChildren<{ requestId: number, requestSkills?:any[] }>) {
 
     const [currentPerson,setCurrentPerson] = useState<any>();
     const [selectedTab, setSelectedTab] = useState<number>(0);
+    const [loading,setLoading] = useState<boolean>(false);
     
     const tableAssigned= useRef<any>();
     const tableSystem = useRef<any>();
@@ -36,7 +38,7 @@ export function CandidateForRequest(props: PropsWithChildren<{ requestId: number
 
     const columns = [
 
-        { key: "id", label: " ", type: "custom",width:'40px', render:(rowData)=> <td style={{cursor:'pointer'}} onClick={()=>alert('ciao')}><SvgIcon icon={plusIcon} themeColor="success" /></td> },
+        { key: "id", label: " ", type: "custom",width:'40px', render:(rowData)=> <td style={{cursor:'pointer'}} onClick={()=>handleAssociate(rowData.Candidate)}><SvgIcon icon={plusIcon} themeColor="success" /></td> },
         { key: "Candidate.Person.firstName", label: "Nome", type: "string", sortable: false },
         { key: "Candidate.Person.lastName", label: "Cognome", type: "string", sortable: false },
         { key: "Candidate.CandidateProfile.description", label: "Mansione", type: "string", sortable: false },
@@ -82,7 +84,12 @@ export function CandidateForRequest(props: PropsWithChildren<{ requestId: number
 
 
     const columnsManual = [
-        { key: "id", label: " ", type: "custom",width:'40px', render:(rowData)=> <td style={{cursor:'pointer'}} onClick={()=>alert('ciao')}><SvgIcon icon={plusIcon} themeColor="success" /></td> },
+        { key: "id", label: " ", type: "custom",width:'40px', render:(rowData)=> {
+            if(tableAssigned.current?.grid._data?.some(d=>d.dataItem.candidate_id === rowData.id)){
+                return <td></td>
+            }
+            return <td style={{cursor:'pointer'}} onClick={()=>handleAssociate(rowData)}><SvgIcon icon={plusIcon} themeColor="success" /></td>
+        } },
         { key: "Person.firstName", label: "Nome", type: "string", sortable: true, filter: "text" },
         { key: "Person.lastName", label: "Cognome", type: "string", sortable: true, filter: "text" },
         { key: "CandidateProfile.description", label: "Mansione", type: "string", sortable: true, filter: "text" },
@@ -137,6 +144,32 @@ export function CandidateForRequest(props: PropsWithChildren<{ requestId: number
     const handleSelect = (e: any) => {
         setSelectedTab(e.selected);
     };
+
+
+    const handleAssociate = (candidate:any)=>{
+        NotificationActions.openConfirm('Sei sicuro di associare "'+
+             candidate.Person.firstName + ' '+ candidate.Person.lastName + '" alla richiesta?',
+            () => {
+                setLoading(true)
+                richiestaService.associateCandidate(candidate.id,props.requestId).then(res=>{
+                    NotificationActions.openModal(
+                        { icon: true, style: "success" },
+                        "Operazione avvenuta con successo "
+                      );
+                    if(tableAssigned.current){
+                        tableAssigned.current.refreshTable();
+                    }
+                    /*if(tableManual.current){
+                        tableManual.current.refreshTable();
+                    }
+                    if(tableSystem.current){
+                        tableSystem.current.refreshTable();
+                    }*/
+                }).finally(()=>setLoading(false))
+            },
+            'Conferma azione'
+        )
+    }
 
     const loadData = (
         pagination: any,
@@ -207,7 +240,7 @@ export function CandidateForRequest(props: PropsWithChildren<{ requestId: number
             </span>
             
         }
-        <Tab
+        { !loading && <Tab
             renderAllContent={false}
             tabs={
                 [
@@ -262,7 +295,7 @@ export function CandidateForRequest(props: PropsWithChildren<{ requestId: number
             onSelect={handleSelect}
             selected={selectedTab}
         //button={{ label: props.type === 'view' ? "Esci" : "Salva", onClick: handleSubmit }}
-        />
+        />}
         </Accordion>
     </div>
     <Modal title="Gestisci il candidato"

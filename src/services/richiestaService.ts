@@ -77,6 +77,11 @@ class RichiestaServiceC extends BaseHttpService{
       .then((res) => res.data);
 
     getDetails = (requestId:number)=>client.get('/api/v1/recruitingRequest/getAssignmentsDetails/'+requestId).then(res=>res.data)
-}
+
+    associateCandidate = (candidateId:number,requestid:number) => client.post('/api/v1/recruitingAssignment/create',{
+      candidate_id:candidateId,
+      request_id:requestid
+    }).then(res=>res.data)
+  }
 
 export const richiestaService = new RichiestaServiceC();
