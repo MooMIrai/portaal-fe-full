@@ -3,7 +3,6 @@ import Form from 'common/Form';
 import { InterviewForm } from "./form";
 import { interviewAddedFields } from "./customFields";
 import { interviewService } from "../../services/interviewService";
-import GridTable from 'common/Table';
 
 export function Candidateinterviews(props: { currentInterviews: any[], assignmentId: number, onChange: (interviews: any[]) => void }) {
 

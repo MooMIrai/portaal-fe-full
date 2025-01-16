@@ -1,33 +1,35 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Stepper from 'common/Stepper'
 import { Candidateinterviews } from "../CandidateInterviews/component";
+import { CandidateContact } from "../CandidateContact/component";
 
 export function CandidateStepper(props){
+    
     const [step, setStep] = useState(0);
     const [data,setData] = useState<any>(props.data);
-
-    console.log(props.data)
-
-    const [steps, setSteps] = React.useState<Array<any>>([
-        { label: 'Contatto', isValid: data.RecruitingContact },
-        { label: 'Colloqui', isValid: data.RecruitingInterview.length },
-        { label: 'Proposta economica', isValid: data.RecruitingOffer },
-        { label: 'Valutazione finale', isValid: data.RecruitingFinalEvaluation },
-        { label: 'Invio CV', isValid: data.RecruitingSendCv },
-        { label: 'Contratto', isValid: data.RecruitingSendContract }
-    ]);
+    const [steps, setSteps] = useState<Array<any>>([]);
+    
+    useEffect(()=>{
+        setSteps([
+            { label: 'Contatto', isValid: data.RecruitingContact },
+            { label: 'Colloqui', isValid: data.RecruitingInterview.length },
+            { label: 'Proposta economica', isValid: data.RecruitingOffer },
+            { label: 'Valutazione finale', isValid: data.RecruitingFinalEvaluation },
+            { label: 'Invio CV', isValid: data.RecruitingSendCv },
+            { label: 'Contratto', isValid: data.RecruitingSendContract }
+        ])
+    },[data])
 
     const handleChange = (e: any) => {
-        const isValid = step % 2 === 0;
-
-        /*const currentSteps = steps.map((currentStep, index) => ({
-            ...currentStep,
-            isValid: index === step ? isValid : currentStep.isValid
-        }));
-
-        setSteps(currentSteps);*/
+        
         setStep(e.value);
     };
+
+    const handleContactChange=(contact)=>{
+        setData((prevData)=>{
+            return {...prevData,RecruitingContact:contact}
+        })
+    }
 
     const handleInterviewChange=(interviews)=>{
         setData((prevData)=>{
@@ -39,6 +41,9 @@ export function CandidateStepper(props){
     return <>
         <Stepper items={steps} value={step} onChange={handleChange} />
         <div>
+        {
+            step===0 && <CandidateContact onChange={handleContactChange}  currentData={data.RecruitingContact} assignmentId={props.data.id}/>
+        }
         {
             step===1 && <Candidateinterviews onChange={handleInterviewChange}  currentInterviews={data.RecruitingInterview} assignmentId={props.data.id}/>
         }
