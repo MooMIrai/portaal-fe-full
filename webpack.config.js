@@ -42,6 +42,8 @@ const mfeConfig = {
 
     "./AiBox":"./src/components/AiBox/component",
 
+    "./Stepper" : "./src/components/Stepper/component",
+
     "./services/AuthService": "./src/services/AuthService",
     "./services/BEService": "./src/services/BEService",
     "./services/BaseHTTPService": "./src/services/BaseHTTPService",
