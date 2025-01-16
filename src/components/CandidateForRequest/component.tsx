@@ -3,16 +3,18 @@ import { richiestaService } from "../../services/richiestaService";
 import GridTable from "common/Table";
 import Tab from 'common/Tab';
 import { candidatoService } from "../../services/candidatoService";
-import {checkCircleIcon ,xCircleIcon, pencilIcon, plusIcon} from 'common/icons';
+import {checkCircleIcon ,xCircleIcon, pencilIcon, plusIcon, reportElementIcon} from 'common/icons';
 import SvgIcon from 'common/SvgIcon';
 import Accordion from 'common/Accordion';
 import { CandidateStepper } from "../CandidateStepper/component";
 import Modal from 'common/Modal';
 import NotificationActions from 'common/providers/NotificationProvider';
+import { CandidateLogs } from "../CandidateLogs/component";
 
 export function CandidateForRequest(props: PropsWithChildren<{ requestId: number, requestSkills?:any[] }>) {
 
     const [currentPerson,setCurrentPerson] = useState<any>();
+    const [currentTimeline,setCurrentTimeline] = useState<any>();
     const [selectedTab, setSelectedTab] = useState<number>(0);
     const [loading,setLoading] = useState<boolean>(false);
     
@@ -22,7 +24,8 @@ export function CandidateForRequest(props: PropsWithChildren<{ requestId: number
 
     const columnsAssociated = [
 
-        { key: "id", label: " ", type: "custom",width:'40px', render:(rowData)=> <td style={{cursor:'pointer'}} onClick={()=>setCurrentPerson(rowData)}><SvgIcon icon={pencilIcon} themeColor="warning" /></td> },
+        { key: "id", label: " ", type: "custom",width:'40px', render:(rowData)=> <td style={{cursor:'pointer'}} onClick={()=>setCurrentPerson(rowData)} title="gestisci"><SvgIcon icon={pencilIcon} themeColor="warning" /></td> },
+        { key: "id", label: " ", type: "custom",width:'40px', render:(rowData)=> <td style={{cursor:'pointer'}} onClick={()=>setCurrentTimeline(rowData)} title="visualizza log"><SvgIcon icon={reportElementIcon} themeColor="info" /></td> },
         { key: "id", label: "Nominativo", type: "custom", render:(rowData)=><td>{rowData.Candidate.Person.firstName} {rowData.Candidate.Person.lastName}</td>},
         { key: "RecruitingContact", label: "Contattato", type: "custom", render:(rowData)=><td>{rowData.RecruitingContact?<SvgIcon icon={checkCircleIcon} themeColor="success" />:<SvgIcon icon={xCircleIcon} themeColor="error" />}</td>},
         { key: "RecruitingInterview", label: "Colloquiato", type: "custom", render:(rowData)=><td>{rowData.RecruitingInterview.length?<SvgIcon icon={checkCircleIcon} themeColor="success" />:<SvgIcon icon={xCircleIcon} themeColor="error" />}</td>},
@@ -309,6 +312,18 @@ export function CandidateForRequest(props: PropsWithChildren<{ requestId: number
             
         }}>
         {currentPerson && <CandidateStepper data={currentPerson}/>}
+    </Modal>
+    <Modal title="Vedi storico"
+        width="70%"
+        height="90%"
+        isOpen={currentTimeline}
+        onClose={()=>{
+           
+            setCurrentTimeline(undefined);
+            
+            
+        }}>
+        {currentTimeline && <CandidateLogs data={currentTimeline} />}
     </Modal>
 </>
 
