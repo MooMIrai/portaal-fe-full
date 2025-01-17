@@ -46,7 +46,7 @@ import { useDebounce } from "@uidotdev/usehooks";
 import { WindowActionsEvent } from "@progress/kendo-react-dialogs";
 import { Loader } from "@progress/kendo-react-indicators";
 import CellAction from "./CellAction/component";
-import CustomFilter, { FilterField } from "../ExternalFilter/component";
+import CustomFilter, { FilterField } from "../ExternalFilterKendoUI/component";
 
 interface CustomRowAction {
   icon: any;
