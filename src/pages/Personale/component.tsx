@@ -185,27 +185,47 @@ const PersonalPage = () => {
       },
     };
   };
+  const handleFormSubmit = (type: string, formData: any, refreshTable: any, id: any, closeModal: () => void) => {
+    let promise: Promise<any> | undefined = undefined;
 
-  const handleFormSubmit = async (type, formData, refreshTable, id) => {
+    if (type === "create") {
+      promise = CrudGenericService.createResource(formData);
+    } else if (type === "edit") {
+      promise = CrudGenericService.updateResource(id, formData);
+    } else if (type === "delete") {
+      promise = CrudGenericService.deleteResource(id);
+    }
+
+    if (promise) {
+      promise.then(() => {
+        NotificationProviderActions.openModal({ icon: true, style: 'success' }, "Operazione avvenuta con successo");
+        refreshTable();
+        closeModal();
+      })
+    }
+
+  }
+/*   const handleFormSubmit = (type, formData, refreshTable, id,closeModal: () => void) => {
     try {
       if (type === "create") {
-        await CrudGenericService.createResource(formData);
+        promise = CrudGenericService.createResource(formData);
       } else if (type === "edit") {
         await CrudGenericService.updateResource(id, formData);
       } else if (type === "delete") {
         await CrudGenericService.deleteResource(id);
       }
 
-      NotificationProviderActions.openModal(
-        { icon: true, style: "success" },
-        "Operazione avvenuta con successo"
-      );
-      refreshTable();
-
+     if (promise) {
+         promise.then(() => {
+           NotificationProviderActions.openModal({ icon: true, style: 'success' }, "Operazione avvenuta con successo");
+           refreshTable();
+           closeModal();
+         })
+       }
     } catch (error) {
       console.error("Error during form submission:", error);
     }
-  };
+  }; */
 
   // Se i dati non sono pronti, non renderizzare nulla
   if (!isLocationDataReady) {
@@ -226,29 +246,7 @@ const PersonalPage = () => {
         classNameWindow={styles.windowStyle}
         classNameWindowDelete={styles.windowDelete}
         formCrud={(row, type, closeModalCallback, refreshTable) => (
-          <>
-            {type === "delete" ? (
-              <div className={styles.formDelete}>
-                <span>{"Sei sicuro di voler eliminare il record?"}</span>
-                <div>
-                  <Button onClick={closeModalCallback}>Cancel</Button>
-                  <Button
-                    themeColor={"error"}
-                    onClick={async () => {
-                      await handleFormSubmit(
-                        type,
-                        null,
-                        refreshTable,
-                        row?.id
-                      );
-                      closeModalCallback();
-                    }}
-                  >
-                    {"Elimina"}
-                  </Button>
-                </div>
-              </div>
-            ) : (
+          
               <PersonaleSection
                 row={row}
                 type={type}
@@ -261,8 +259,6 @@ const PersonalPage = () => {
                 refreshTable={refreshTable}
                 onSubmit={handleFormSubmit}
               />
-            )}
-          </>
         )}
       />
     </div>

@@ -24,7 +24,7 @@ type PersonaleSectionProps = {
   type: any;
   closeModalCallback: () => void;
   refreshTable: () => void;
-  onSubmit: (type: any, formData: any, refreshTable: () => void, id: any) => void;
+  onSubmit: (type: any, formData: any, refreshTable: () => void, id: any,closeModalCallback: () => void) => void;
 };
 
 interface AutocompleteField {
@@ -343,17 +343,19 @@ const PersonaleSection: React.FC<PersonaleSectionProps & {
         const formattedData = reverseAdapter(combinedData);
         console.log("formattedData", formattedData);
         const idrow = row.id;
-        onSubmit(type, formattedData, refreshTable, idrow);
+        onSubmit(type, formattedData, refreshTable, idrow,closeModalCallback);
         setNewFormTrattamentoUpdate(false)
 
       } else {
         const formattedData = reverseAdapterUpdate(combinedData);
         const idrow = row.id;
-        onSubmit(type, formattedData, refreshTable, idrow);
+        onSubmit(type, formattedData, refreshTable, idrow,closeModalCallback);
         setNewFormTrattamentoUpdate(false)
 
       }
-
+      if (type === 'delete') {
+        onSubmit(type, {}, refreshTable, row.id, closeModalCallback);
+      }
 
     }
 
@@ -556,6 +558,22 @@ const PersonaleSection: React.FC<PersonaleSectionProps & {
     return <div className={styles.loader}><LoaderComponent type="pulsing"></LoaderComponent></div>;
   }
 
+  if (type === 'delete') {
+    return (
+
+      <div className={styles.formDelete}>
+        <span>{"Sei sicuro di voler eliminare il record?"}</span>
+
+        <div >
+          <Button onClick={() => closeModalCallback()}>Cancel</Button>
+          <Button themeColor={"error"} onClick={handleSubmit}>
+            Elimina
+          </Button>
+        </div>
+      </div>
+
+    )
+  }
 
   const tabs = [
     {

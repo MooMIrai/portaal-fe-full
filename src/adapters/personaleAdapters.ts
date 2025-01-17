@@ -76,11 +76,11 @@ const mapToAnagraficaData = (
         : undefined,
   },
 
-  attachment_id: Array.isArray(Person.files)
-    ? Person.files.map((file) => ({
-        id: file.uniqueRecordIdentifier,
-      }))
-    : [],
+  attachment_id : Person && Array.isArray(Person.files)
+  ? Person.files.map((file) => ({
+      id: file.uniqueRecordIdentifier,
+    }))
+  : [],
   nascita: {
     city: {
       id: Person?.CityBirth?.id,
@@ -125,7 +125,7 @@ const mapToAnagraficaData = (
         seniority: skillArea?.Seniority,
       }))
     : [],
-  seniority: Person?.Seniority || "",
+  seniority: getSeniorAbbrevation(Person?.Seniority) || "",
   indirizzoResidenza: Person?.address || "",
   dataNascita: Person?.dateBirth ? new Date(Person.dateBirth) : null,
   cap: Person?.zipCode ? parseInt(Person.zipCode, 10) : 0,
@@ -659,9 +659,7 @@ export const reverseAdapter = (combinedData: {
   newFormTrattamentoEconomico: boolean;
   skills: MappedSkill[];
 }) => {
-
-  const attachments =
-    combinedData.anagrafica.attachment;
+  const attachments = combinedData.anagrafica.attachment;
   const personSkillAreas =
     combinedData.anagrafica.skills?.map((skill) => {
       const skillId =
@@ -720,7 +718,7 @@ export const reverseAdapter = (combinedData: {
         combinedData.anagrafica.cap.toString().trim() !== ""
           ? combinedData.anagrafica.cap
           : null,
-      Seniority: combinedData.anagrafica.seniority,
+      Seniority: getSeniorAbbrevationToBe(combinedData.anagrafica.seniority),
       PersonSkillAreas: personSkillAreas,
       taxCode:
         !combinedData.anagrafica.codiceFiscale ||
@@ -820,8 +818,10 @@ export const reverseAdapterUpdate = (combinedData: {
 }) => {
   const permessiIDs =
     mapPermessiNamesToIDs(combinedData.permessi, combinedData.idPermessi) || [];
-
+  
   const result: any = {};
+  console.log(combinedData.anagrafica)
+  console.log(combinedData.modifiedData.seniority)
   const attachments = combinedData.modifiedData.attachment
     ? combinedData.modifiedData.attachment.create.map((o) => ({
         ...o,
@@ -927,7 +927,8 @@ export const reverseAdapterUpdate = (combinedData: {
   }
 
   if ("seniority" in combinedData.modifiedData) {
-    result.Person.Seniority = combinedData.modifiedData.seniority;
+    result.Person.Seniority = getSeniorAbbrevationToBe(combinedData.modifiedData.seniority);
+    console.log(getSeniorAbbrevationToBe(combinedData.modifiedData.seniority))
   }
   if ("skills" in combinedData.modifiedData) {
     result.Person.PersonSkillAreas =
@@ -1127,7 +1128,7 @@ export const anagraficaAiButtonAdapter = (
   return {
     ...formAnagraficaData,
     skills: uniqueSkills,
-    seniority: getSeniorAbbrevation(seniority),
+    seniority: getSeniorAbbrevation(seniority) || seniority,
     nome: fallbackIfEmpty(
       data.firstName,
       modifiedFields.nome || formAnagraficaData.nome || ""
@@ -1320,13 +1321,37 @@ export const anagraficaAiButtonAdapter = (
 };
 
 const getSeniorAbbrevation = (seniority: string): string => {
-  switch (seniority.toLowerCase()) {
-    case "junior":
+  switch (seniority) {
+    case "J":
+      return "Junior";
+    case "J_A":
+      return "Junior Advance";
+    case "M":
+      return "Middle";
+    case "M_A":
+      return "Middle Advance";
+    case "S":
+      return "Senior";
+    case "S_A":
+      return "Senior Advance";
+    default:
+      return "";
+  }
+};
+const getSeniorAbbrevationToBe = (seniority: string | undefined): string => {
+  switch (seniority) {
+    case "Junior":
       return "J";
-    case "middle":
+    case "Junior Advance":
+      return "J_A";
+    case "Middle":
       return "M";
-    case "senior":
+    case "Middle Advance":
+      return "M_A";
+    case "Senior":
       return "S";
+    case "Senior Advance":
+      return "S_A";
     default:
       return "";
   }

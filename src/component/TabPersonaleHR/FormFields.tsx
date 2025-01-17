@@ -136,7 +136,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             type: "select",
             showLabel: false,
             value: formData.seniority,
-            options: ["J", "M", "S"],
+            options: ["Junior","Junior Advance", "Middle","Middle Advance", "Senior","Senior Advance"],
             valueOnChange: valueOnChange,
             disabled: (type === "view" || isViewOnly),
         },
