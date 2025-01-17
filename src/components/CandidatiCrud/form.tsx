@@ -198,6 +198,7 @@ export const getFormCandidate = (
             label: "Seniority",
             type: "seniority-selector",
             showLabel: true,
+            require: true,
             value: formData.seniority,
             //options: ["J", "J_A", "M", "M_A", "S", "S_A"],
             //valueOnChange: valueOnChange,
