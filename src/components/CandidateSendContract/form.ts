@@ -19,7 +19,7 @@ export const sendContractForm = [
     },
     {
         name: "ContractType",
-        label: "Tipo contratto(il be deve mandare la descrizione)",
+        label: "Tipo contratto",
         type: "contracttype-selector",
         required:true,
         validator:(value:any)=> {

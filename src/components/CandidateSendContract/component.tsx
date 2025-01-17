@@ -18,7 +18,7 @@ export function CandidateSendContract(props: { currentData: any, assignmentId: n
             date_start_contract: props.currentData.date_start_contract?new Date(props.currentData.date_start_contract):undefined,
             ContractType:props.currentData.contractType_id?{
                 id:props.currentData.contractType_id,
-                name:props.currentData.contractType_id//TODO gestione include
+                name:props.currentData.ContractType.description
             }:undefined
         }:{});
     },[props.currentData])
