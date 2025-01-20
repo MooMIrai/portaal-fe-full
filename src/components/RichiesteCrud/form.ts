@@ -23,6 +23,7 @@ export const getFormRichiesta = (
             type: "hr-selector",
             value: formData.Hr,
             required: true,
+            validator: (value: any) => value ? "" : "Il campo HR di riferimento è obbligatorio",
             disabled: type === "view"
         },
         RequestState: {
@@ -31,6 +32,7 @@ export const getFormRichiesta = (
             type: "status-selector",
             value: formData.RequestState || "",
             required: true,
+            validator: (value: any) => value ? "" : "Il campo Stato della Richiesta è obbligatorio",
             disabled: type === "view"
         },
         Priority: {
@@ -39,6 +41,7 @@ export const getFormRichiesta = (
             type: "priority-selector",
             value: formData.Priority || "",
             required: true,
+            validator: (value: any) => value ? "" : "Il campo Priorità è obbligatorio",
             disabled: type === "view"
         },
         Customer: {
@@ -47,6 +50,7 @@ export const getFormRichiesta = (
             type: "customer-selector",
             value: formData.Customer || "",
             required: true,
+            validator: (value: any) => value ? "" : "Il campo Cliente è obbligatorio",
             disabled: type === "view"
         },
         /* Campo non creato, eventualmente si recupera dal cliente
@@ -80,6 +84,7 @@ export const getFormRichiesta = (
             type: "location-selector",
             value: formData.Location || "",
             required: true,
+            validator: (value: any) => value ? "" : "Il campo Sede di riferimento è obbligatorio",
             disabled: type === "view"
         },
         WorkModel: {
@@ -88,6 +93,7 @@ export const getFormRichiesta = (
             type: "workModel-selector",
             value: formData.WorkModel || "",
             required: true,
+            validator: (value: any) => value ? "" : "Il campo Ambito lavorativo è obbligatorio",
             disabled: type === "view"
         },
         Profile: {
@@ -96,6 +102,7 @@ export const getFormRichiesta = (
             type: "profile-selector",
             value: formData.Profile || "",
             required: true,
+            validator: (value: any) => value ? "" : "Il campo Profilo è obbligatorio",
             disabled: type === "view"
         },
         profileType: {
@@ -112,6 +119,7 @@ export const getFormRichiesta = (
             type: "seniority-selector",
             value: formData.Seniority || "",
             required: true,
+            validator: (value: any) => value ? "" : "Il campo Seniority è obbligatorio",
             disabled: type === "view"
         },
         PrimarySkill: {
@@ -121,6 +129,7 @@ export const getFormRichiesta = (
             value: formData.PrimarySkill || "",
             valueOnChange: (name: string, value: any) => setPrimarySkill(value ? value.map((x: any) => x.id) : []),
             required: true,
+            validator: (value: any) => value ? "" : "Il campo Skill primarie è obbligatorio",
             disabled: type === "view",
             options: {
                 field: "skillCategory_id",

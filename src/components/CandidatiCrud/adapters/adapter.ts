@@ -117,7 +117,7 @@ class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, Candidat
             email: source.Person.privateEmail || '',
             residenza: residence,
             //residenza: source.Person.cityRes_id ? { id: source.Person.cityRes_id, name: '' } : undefined, // Mappatura aggiuntiva se necessaria
-            gender: CandidateGender.find(g => g.id === source.Person.gender_id) || { id: 0, name: 'Seleziona Sesso' },
+            gender: CandidateGender.find(g => g.id === source.Person.gender_id) || { id: 0, name: '' },
             sede: source.Person.location_id ? { id: source.Person.location_id, name: source.Person.Location.description } : undefined, // Mappatura aggiuntiva se necessaria
             ral: source.currentRAL,
             ralMin: source.minRequiredRAL,
@@ -129,7 +129,7 @@ class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, Candidat
             willingToTransfer: source.willingToTransfer,
             isActivity_104: isActivity_104,
             contract_type: source.currentContractType ? { id: source.currentContractType.id, name: source.currentContractType.description } : undefined,
-            seniority: RequestSeniority.find(p => p.id === source.Person.Seniority) || { id: 0, name: 'Seleziona Seniority' },
+            seniority: RequestSeniority.find(p => p.id === source.Person.Seniority) || { id: 0, name: '' },
             skills: source.Person.PersonSkillAreas ? convertPersonSkillAreaToSkillsAi(source.Person.PersonSkillAreas, 0) : [],
             languageSkills: source.Person.PersonSkillAreas ? convertPersonSkillAreaToSkillsAi(source.Person.PersonSkillAreas, 1) : [],
         };
@@ -210,6 +210,20 @@ export function adaptSkillsAi(form: RequestFields | null, data: any): RequestFie
         form.SecondarySkill = convertRecruitingSkillAiToSkillsForms(secondarySkills);
         form.LanguagesSkill = convertRecruitingSkillAiToSkillsForms(languageSkills);
 
+        if (data.profileType)
+            form.profileType = data.profileType;
+
+        if (data.id_code)
+            form.id_code = data.id_code;
+
+        // in attesa di modifiche 
+        if(data.candidateProfile_id)
+            form.Profile = {id:parseInt(data.candidateProfile_id) , name:""}
+
+        if (data.seniority)
+            form.Seniority = RequestSeniority.find(p => p.id === data.seniority) || { id: 0, name: '' }
+
+ 
     }
 
 

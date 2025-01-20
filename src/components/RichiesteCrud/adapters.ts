@@ -59,12 +59,12 @@ class RequestFieldsServerAdapter extends BaseAdapter<RequestFields, RequestServe
 
     return {
       ReferrerHr: source.RequestingEmployee?.id ? { id: source.RequestingEmployee.id, name: source.RequestingEmployee.Person.firstName + ' ' + source.RequestingEmployee.Person.lastName } : undefined, // Aggiungi mappatura se necessario
-      RequestState: RequestStatus.find(p => p.id === source.RequestState) || { id: 0, name: 'Seleziona Stato' },
-      Priority: RequestPriority.find(p => p.id === source.Priority) || { id: 0, name: 'Seleziona Priorità' },
+      RequestState: RequestStatus.find(p => p.id === source.RequestState) || { id: 0, name: '' },
+      Priority: RequestPriority.find(p => p.id === source.Priority) || { id: 0, name: '' },
       Customer: source.Customer?.id ? { id: source.Customer.id, name: source.Customer.name } : undefined,
       ref_code: source.ref_code,
       id_code: source.id_code,
-      Seniority: RequestSeniority.find(p => p.id === source.Seniority) || { id: 0, name: 'Seleziona Seniority' },
+      Seniority: RequestSeniority.find(p => p.id === source.Seniority) || { id: 0, name: '' },
       PrimarySkill: convertRecruitingSkillAreaToSkillsForms(source.Skills, recruitingSkillType.PRIMARY), 
       SecondarySkill: convertRecruitingSkillAreaToSkillsForms(source.Skills, recruitingSkillType.SECONDARY),  
       LanguagesSkill: convertRecruitingSkillAreaToSkillsForms(source.Skills, recruitingSkillType.LANGUAGE),
@@ -72,7 +72,7 @@ class RequestFieldsServerAdapter extends BaseAdapter<RequestFields, RequestServe
       continuative: source.continuative ? source.continuative : false,
       notes: source.notes,
       profileType: source.profileType,
-      WorkModel: WorkModel.find(p => p.id === source.WorkModel) || { id: 0, name: 'Seleziona Tipologia di Lavoro' },
+      WorkModel: WorkModel.find(p => p.id === source.WorkModel) || { id: 0, name: '' },
       Location: source.Location?.id ? { id: source.Location.id, name: source.Location.description } : undefined,
       Profile: source.CandidateProfile?.id ? { id: source.CandidateProfile.id, name: source.CandidateProfile.description } : undefined
     };

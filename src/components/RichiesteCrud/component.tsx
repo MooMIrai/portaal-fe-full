@@ -1,12 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState, useMemo } from "react";
 import Form from "common/Form";
 import styles from './style.module.scss';
-
 import { customFields } from "./customFields";
 import { getFormRichiesta } from "./form";
 import { requestAdapter } from "./adapters";
-import { RequestServer } from "./models";
-
+import { RequestFields, RequestServer } from "./models";
 import {
     fileBacIcon
 } from "common/icons";
@@ -27,7 +25,7 @@ type RichiesteCrudProps = {
 
 export function RichiesteCrud(props: RichiesteCrudProps) {
 
-    const formRichiestaRef = useRef(requestAdapter.reverseAdapt(props.row));
+    const formRichiestaRef = useRef<any>(requestAdapter.reverseAdapt(props.row));
     const [formRichiestaData, setFormRichiestaData] = useState(formRichiestaRef.current);
 
     const [selectedPrimarySkill, setSelectedPrimarySkill] = useState<number[]>([]);
@@ -40,15 +38,12 @@ export function RichiesteCrud(props: RichiesteCrudProps) {
     const [aiModalLoading, setAiModalLoading] = useState<boolean>(false);
 
     const adaptAiData = useCallback((aiData) => {//cristian
-        console.log("cristian");
-        debugger;
-        console.log(formRichiestaData);
-        console.log(aiData);
+        let upd = adaptSkillsAi(formRichiestaData, aiData.jsonData.data) as RequestFields;
 
-        setFormRichiestaData(adaptSkillsAi(formRichiestaData,aiData.jsonData.data));
+        Object.keys(upd).forEach((x) => {
+            formRichiestaRef.current.valueSetter(x, upd[x]);
+        })
 
-        // Adatta i dati AI e aggiorna lo stato
-       // setFormRichiestaData((prevData) => ({ ...prevData, ...aiData }));
     }, []);
 
     useEffect(() => {
@@ -66,7 +61,7 @@ export function RichiesteCrud(props: RichiesteCrudProps) {
     }, [aiModalText, adaptAiData]);
 
     const formFields = useMemo(() => Object.values(getFormRichiesta({}, props.type, selectedPrimarySkill, setSelectedPrimarySkill,
-        selectedSecondarySkill, setSelectedSecondarySkill)), [props.type, selectedPrimarySkill,selectedSecondarySkill]);
+        selectedSecondarySkill, setSelectedSecondarySkill)), [props.type, selectedPrimarySkill, selectedSecondarySkill]);
 
     const handleCommandExecuted = (command, closeAiPopup) => {
         if (command.id === '1') {
@@ -115,12 +110,9 @@ export function RichiesteCrud(props: RichiesteCrudProps) {
                     extraBtnAction={props.closeModalCallback}
                     ref={formRichiestaRef}
                     onSubmit={(data) => {
-                        console.log("Form Submitted", data);
                         let action = Promise.resolve()
 
                         let dataServer = requestAdapter.adapt(data);
-
-                        console.log(dataServer);
 
                         if (props.type === "create")
                             action = richiestaService.createResource(dataServer);

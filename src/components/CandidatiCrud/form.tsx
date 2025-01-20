@@ -74,7 +74,7 @@ export const getFormCandidate = (
             disabled: (type === "view"),
             value: formData.sesso,
             required: true,
-            validator: (value: any) => value ? "" : "Il campo sesso è obbligatorio",
+            validator: (value: any) => value ? "" : "Il campo Sesso è obbligatorio",
         },
         phoneNumber: {
             name: "phoneNumber",
@@ -156,7 +156,7 @@ export const getFormCandidate = (
             disabled: (type === "view"),
             //valueOnChange: valueOnChange,
             validator: createValidator(type === "view", (value: any) =>
-                value ? "" : "Il campo profilo è obbligatorio"
+                value ? "" : "Il campo Profilo è obbligatorio"
             ),
         },
         profile_type: {
@@ -198,11 +198,10 @@ export const getFormCandidate = (
             label: "Seniority",
             type: "seniority-selector",
             showLabel: true,
-            require: true,
+            required: true,
+            validator: (value: any) => value ? "" : "Il campo Seniority è obbligatorio",
             value: formData.seniority,
-            //options: ["J", "J_A", "M", "M_A", "S", "S_A"],
-            //valueOnChange: valueOnChange,
-            disabled: type === "view"
+            disabled: (type === "view"),
         },
         skills: {
             name: "skills",
@@ -210,6 +209,7 @@ export const getFormCandidate = (
             type: "skill",
             value: formData.skill || "",
             required: true,
+            validator: (value: any) =>  value ? "" : "Il campo Skill è obbligatorio",
             disabled: (type === "view" || skillLoading),
             options: {
                 field: "skillCategory_id",
@@ -223,6 +223,7 @@ export const getFormCandidate = (
             type: "skill",
             value: formData.languageSkill || "",
             required: true,
+            validator: (value: any) => value ? "" : "Il campo Lingue è obbligatorio",
             disabled: (type === "view" || skillLoading),
             options: {
                 field: "skillCategory_id",

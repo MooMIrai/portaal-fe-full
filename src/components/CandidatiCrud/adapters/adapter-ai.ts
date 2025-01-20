@@ -60,14 +60,12 @@ class CandidateAiFieldsAdapter extends BaseAdapter<CandidateFields, CandidateAi>
         if (!source || !Object.keys(source).length)
             return null;
 
-        debugger;
         let id_spoken= process.env.SPOKEN_LANGUAGES ? process.env.SPOKEN_LANGUAGES : "116";
 
         return {
             skills: source.data.skills.filter((x) => x.skillCategory_id != parseInt(id_spoken)),
             languageSkills: source.data.skills.filter((x) => x.skillCategory_id == parseInt(id_spoken)),
-
-            seniority: RequestSeniority.find(p => p.name == source.data.seniority) || { id: 0, name: 'Seleziona Seniority' },
+            seniority: RequestSeniority.find(p => p.name == source.data.seniority) || { id: 0, name: '' },
         };
     }
 }
