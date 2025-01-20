@@ -281,6 +281,7 @@ const UploadSingleFIleInputC = (
         existingFile={existingFile}
         disabled={disabled}
         onDownload={handleDownload}
+        externalValue={fieldRenderProps.options}
       />
     </div>
   );

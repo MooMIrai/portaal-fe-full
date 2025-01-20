@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button } from '@progress/kendo-react-buttons';
 import styles from './styles.module.scss';
 import { downloadIcon, googleIcon } from '@progress/kendo-svg-icons';
@@ -23,19 +23,32 @@ type CustomUploadProps = {
   accept?: string;
   disabled?: boolean;
   existingFile?: { id: string, name: string; }[];
-  name:string
+  name:string,
+  externalValue?:FileList 
 };
 
 function UploadSingleFileComponent(props: CustomUploadProps) {
-  const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedFileName, setSelectedFileName] = useState<string | null | undefined>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null >(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [selectedLink,setSelectedLink] = useState<string>();
   const [deleteDrive,setDeleteDrive] = useState<boolean | undefined>();
 
+  useEffect(()=>{
+    
+    if(props.externalValue){
+      debugger;
+      convertFiles(props.externalValue);
+    }
+  },[props.externalValue])
+
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputElement = event.target;
     const files = inputElement.files;
+    await convertFiles(files);
+  };
+
+  const convertFiles = async (files:FileList| null )=>{
     if (files) {
       const fileDataArray = await FileService.convertListToBE(files);
       const fileArray = Array.from(files);
@@ -65,8 +78,7 @@ function UploadSingleFileComponent(props: CustomUploadProps) {
 
 
     }
-  };
-
+  }
 
   const triggerFileInputClick = () => {
     if (inputRef.current) {
