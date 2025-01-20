@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from "react";
-import "@progress/kendo-theme-fluent/dist/all.css";
+/* import "@progress/kendo-theme-fluent/dist/all.css"; */
 import "./theme.css";
 import {
   IntlProvider,
