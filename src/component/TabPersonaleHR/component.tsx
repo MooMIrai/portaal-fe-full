@@ -356,6 +356,10 @@ const PersonaleSection: React.FC<PersonaleSectionProps & {
       if (type === 'delete') {
         onSubmit(type, {}, refreshTable, row.id, closeModalCallback);
       }
+      
+      if(type === 'view'){
+        closeModalCallback();
+      }
 
     }
 

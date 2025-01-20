@@ -194,7 +194,7 @@ const PersonalPage = () => {
       promise = CrudGenericService.updateResource(id, formData);
     } else if (type === "delete") {
       promise = CrudGenericService.deleteResource(id);
-    }
+    } 
 
     if (promise) {
       promise.then(() => {
