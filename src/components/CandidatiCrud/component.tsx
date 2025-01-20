@@ -24,11 +24,11 @@ type CandidatiCrudProps = {
 
 export function CandidatiCrud(props: PropsWithChildren<CandidatiCrudProps>) {
 
-  const formCandidato = useRef();
-  const [formCandidateData, setFormCandidateData] = useState(candidateAdapter.reverseAdapt(props.row))
+  const formCandidato = useRef<any>();
+  const [formCandidateData, setFormCandidateData] = useState(candidateAdapter.reverseAdapt(props.row) || {})
   const [formLoading, setFormLoading] = useState<boolean>(false);
   const [skillLoading, setSkillLoading] = useState<boolean>(false);
-
+  const [aiFile, setAiFile] = useState<FileList | undefined>();
 
 
   useEffect(() => {
@@ -58,7 +58,7 @@ export function CandidatiCrud(props: PropsWithChildren<CandidatiCrudProps>) {
       submitText={"Salva"}
       customDisabled={false}
       formData={formCandidateData}
-      fields={Object.values(getFormCandidate({}, props.type, skillLoading))/* .filter((e: any) => {
+      fields={Object.values(getFormCandidate(formCandidateData, props.type, skillLoading,aiFile))/* .filter((e: any) => {
           return e.name !== "id" && e.name !== "date_created" &&
             e.name !== "date_modified" &&
             e.name !== "user_created" &&
@@ -74,6 +74,7 @@ export function CandidatiCrud(props: PropsWithChildren<CandidatiCrudProps>) {
       extraButton={true}
       extraBtnAction={props.closeModalCallback}
       ref={formCandidato}
+      pageable={true}
       onSubmit={(data) => {
 
         let action = Promise.resolve()
@@ -91,6 +92,8 @@ export function CandidatiCrud(props: PropsWithChildren<CandidatiCrudProps>) {
         }
 
         return action.then(res => {
+          props.closeModalCallback();
+          props.refreshTable();
           NotificationActions.openModal(
             { icon: true, style: "success" },
             "Operazione avvenuta con successo "
@@ -109,27 +112,25 @@ export function CandidatiCrud(props: PropsWithChildren<CandidatiCrudProps>) {
 
     if (command.id === '1') {
 
-      fileService.selectFile().then(f => {
-
-        fileService.convertToBE(f).then(fileData => {
+      fileService.selectFiles().then(f => {
+        setAiFile(f);
+        fileService.convertToBE(f[0]).then(fileData => {
+          
+          
 
           candidatoService.getCVDataAI(fileData).then((dataResult) => {
 
-
-
+           
             //quando finisce 
             setFormCandidateData((prevState: any) => {
               return {
                 ...prevState,
-                ...candidateAiAdapter.reverseAdapt(dataResult.jsonData)
+                ...candidateAiAdapter.reverseAdapt(dataResult.jsonData),
+                
                 // ...adapter.adapt(dataResult)
               }
             })
-          }).catch(() => {
-
-          }).finally(() => {
-
-          });
+          })
 
           setSkillLoading(true);
           candidatoService.getSkillAI(fileData).then((skillResult) => {
@@ -145,8 +146,6 @@ export function CandidatiCrud(props: PropsWithChildren<CandidatiCrudProps>) {
           }).catch(() => {
             // NotificationProviderActions.openModal({style:"error",icon:true},"Errore nella lettura della clipboard. Copia nuovamente il link.");
 
-          }).finally(() => {
-            setSkillLoading(false);
           })
         })
         closeAiPopup();

@@ -12,7 +12,6 @@ class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, Candidat
             return null;
         }
 
-        debugger;
 
         const personSkillAreas_1 = convertSkillsAiToPersonSkillArea(source.languageSkills, null);
         const personSkillAreas_2 = convertSkillsAiToPersonSkillArea(source.skills, null);
@@ -23,6 +22,10 @@ class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, Candidat
         ];
 
         let location_id = source.sede?.id == "0" ? null : source.sede?.id;
+
+        const files = source.files;
+        if(files && files.create)
+            files.create= files.create.map(p=>({...p,property:'Person.files'}));
 
         return {
             id: 0,
@@ -50,6 +53,7 @@ class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, Candidat
             },
             //RecruitingAssignments: [], // Mappatura non specificata, dipende dal sistema
             Person: {
+
                 id: 0, // ID persona predefinito
                 firstName: source.firstName,
                 lastName: source.lastName,
@@ -67,7 +71,7 @@ class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, Candidat
                 user_modified: '', // Da aggiungere se disponibile
                 location_id: location_id ? parseInt(location_id.toString()) : null,
                 Seniority: source.seniority ? source.seniority.id.toString() : null,
-                Attachment: null,
+                Attachment: files,
                 PersonSkillAreas: combinedPersonSkillAreas, // Mappatura non specificata
                 isActivity_104: source.isActivity_104 ? source.isActivity_104 : false,
                 PersonActivities: []
@@ -77,8 +81,6 @@ class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, Candidat
 
     // Mappa CandidateServer in CandidateFields
     reverseAdapt(source?: CandidateServer): CandidateFields | null {
-
-        debugger;
 
         if (!source || !Object.keys(source).length)
             return null;
@@ -104,7 +106,7 @@ class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, Candidat
         };
 
         let residence: ResidenceFields = { city, country, province };
-        debugger;
+
         const isActivity_104 = source.Person?.PersonActivities ? source.Person.PersonActivities.some(activity => activity?.["Activity"]?.ActivityType?.code && activity?.["Activity"].ActivityType.code === "HPE_104") : false;
 
         //source.Person.PersonActivities[0].Activity.ActivityType.code
@@ -112,6 +114,7 @@ class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, Candidat
         return {
             firstName: source.Person.firstName,
             lastName: source.Person.lastName,
+            files: source.Person.files,
             birthDate: source.Person.dateBirth,
             phoneNumber: source.Person.phoneNumber || undefined,
             email: source.Person.privateEmail || '',

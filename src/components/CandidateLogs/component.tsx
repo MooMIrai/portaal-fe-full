@@ -54,7 +54,7 @@ const mapContactType = rowData=>{
 
 // Funzione per estrarre i dati (come mostrato prima)
 const extractTimelineData=(data)=> {
-    debugger;
+
     const timeline:any[] = [];
 
     [data].forEach((entry) => {

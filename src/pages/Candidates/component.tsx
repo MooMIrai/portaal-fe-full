@@ -93,7 +93,7 @@ export default function CandidatePage() {
         customToolBarComponent={() => {
           return <Button themeColor={"info"} disabled={false} onClick={() => { setShowModal(true) }}>Prova Modale</Button>
         }}
-
+        pageable={true}
         filterable={true}
         sortable={true}
         getData={loadData}

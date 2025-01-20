@@ -39,6 +39,7 @@ export default function RequestPage(){
     
         return <>
           <GridTable
+          pageable={true}
           filterable={true}
           sortable={true}
           getData={loadData}

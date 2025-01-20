@@ -9,7 +9,7 @@ class RequestFieldsServerAdapter extends BaseAdapter<RequestFields, RequestServe
     if (!source) {
       return null;
     }
-    debugger;
+
 
     const primary = convertSkillsFormsToRecruitingSkills(source.PrimarySkill, recruitingSkillType.PRIMARY);
     const secondary = convertSkillsFormsToRecruitingSkills(source.SecondarySkill, recruitingSkillType.SECONDARY);
@@ -54,7 +54,7 @@ class RequestFieldsServerAdapter extends BaseAdapter<RequestFields, RequestServe
     if (!source || !Object.keys(source).length) {
       return null;
     }
-    debugger;
+
 
 
     return {

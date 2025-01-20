@@ -2,7 +2,8 @@
 export const getFormCandidate = (
     formData: any,
     type: string,
-    skillLoading: boolean
+    skillLoading: boolean,
+    aiFile?:FileList
 ) => {
 
     // Validators
@@ -38,8 +39,20 @@ export const getFormCandidate = (
 
     const id_spoken_category_skill =  process.env.SPOKEN_LANGUAGES ? process.env.SPOKEN_LANGUAGES:"116";
     // Colonne tabella
-
     const fields = {
+        files: {
+            name: "files",
+            label: "Carica Cv",
+            type: "uploadSingleFile",
+            withCredentials: false,
+            disabled: type === "view",
+            value: formData.files || "",
+            existingFile:formData.files && formData.files.length?formData.files.map(f=>({name:f.file_name,id:f.uniqueIdentifier}))
+                :undefined,
+            //accept: ".pdf",
+            options:aiFile,
+            multiple: false,
+        },
         firstName: {
             name: "firstName",
             label: "Nome",

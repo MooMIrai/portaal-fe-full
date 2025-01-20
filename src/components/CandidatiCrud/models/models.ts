@@ -34,7 +34,7 @@ export interface CandidateFields {
   seniority?: OptionCandidateField,
   skills: SkillArea[],
   languageSkills: SkillArea[]
-
+  files?:any
 }
 
 
@@ -170,7 +170,7 @@ export interface Person {
   phoneNumber: string | null;
   privateEmail: string | null;
   dateBirth: string; // ISO date string
-  Attachment: any; //
+  Attachment?: any; //
   PersonSkillAreas: PersonSkillArea[];
   isActivity_104: boolean;
   Seniority: string | null;
@@ -179,7 +179,7 @@ export interface Person {
   user_created: string;
   user_modified: string;
   PersonActivities: Activity[];
-
+  files?:Array<any>
   /* phoneNumber2: string | null;
   address: string | null;
   files: any[]; // Define as needed
