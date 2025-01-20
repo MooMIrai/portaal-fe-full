@@ -10,7 +10,7 @@ const client = axios.create({
 
 client.interceptors.request.use((config) => {
   try {
-    if(config.url && config.url.indexOf('/ai/upload_cv_ts')<=0)
+    if (config.url && config.url.indexOf("/ai/upload_cv_ts") <= 0)
       NotificationProviderActions.openLoader();
     config.headers.Authorization = "Bearer " + AuthService.getToken();
     config.headers["x-tenant"] = sessionStorage.getItem("tenant");
@@ -19,12 +19,16 @@ client.interceptors.request.use((config) => {
   return config;
 });
 
-
-const askConfirmation=(message:string)=>{
-  return new Promise((ok,ko)=>{
-    NotificationProviderActions.openConfirm(message,()=>ok(true),'Conferma la tua azione',()=>ok(false));
-  })
-}
+const askConfirmation = (message: string) => {
+  return new Promise((ok, ko) => {
+    NotificationProviderActions.openConfirm(
+      message,
+      () => ok(true),
+      "Conferma la tua azione",
+      () => ok(false)
+    );
+  });
+};
 
 client.interceptors.response.use(
   (response) => {
@@ -33,18 +37,17 @@ client.interceptors.response.use(
   },
   async (error) => {
     NotificationProviderActions.closeLoader();
-    if(error.response && error.response.status===452){
-      
-      if(error.response.data && error.response.data.message){
+    if (error.response && error.response.status === 452) {
+      if (error.response.data && error.response.data.message) {
         const readBody = JSON.parse(error.response.data.message);
         const val = await askConfirmation(readBody.message);
         const originalRequest = error.config;
-        if(readBody.location ==='query'){
+        if (readBody.location === "query") {
           originalRequest.params = {
             ...originalRequest.params, // Mantiene i parametri esistenti
             [readBody.field]: val, // Aggiungi un parametro "retry" alla query string
           };
-        }else if(readBody.location ==='body'){
+        } else if (readBody.location === "body") {
           originalRequest.data = {
             ...originalRequest.data, // Mantiene i parametri esistenti
             [readBody.field]: val, // Aggiungi un parametro "retry" alla query string
@@ -58,18 +61,28 @@ client.interceptors.response.use(
       window.dispatchEvent(new CustomEvent("LOGOUT"));
       window.location.href = "/";
     } else if (error.response && error.response.status === 409) {
+      const errorResponse = error.response?.data;
+      const modelName = errorResponse?.message?.modelName;
+      const targetFields =
+        errorResponse?.message?.target?.join(", ") ||
+        "Nessun campo specificato";
+
+      const errorMessage = `Errore durante l'operazione sul modello "${modelName}". Problemi con i campi: ${targetFields}.`;
+
       NotificationProviderActions.openModal(
         { icon: true, style: "error" },
-        error.response.data.message
+        errorMessage
       );
-      return Promise.reject(error.response.data.message)
+
+      const customError = new Error(errorMessage);
+      (customError as any).details = error.response.data;
+      return Promise.reject(customError);
     } else {
-      
       NotificationProviderActions.openModal(
         { icon: true, style: "error" },
         "SERVER ERROR"
       );
-      return Promise.reject("SERVER ERROR")
+      return Promise.reject(new Error("SERVER ERROR"));
     }
   }
 );
