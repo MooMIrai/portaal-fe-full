@@ -9,7 +9,9 @@
         }
     }
 
-    & :global(.notes-input), & :global(.PrimarySkill-input), & :global(.SecondarySkill-input){
+    & :global(.notes-input), & :global(.PrimarySkill-input),
+     & :global(.SecondarySkill-input),
+     & :global(.LanguagesSkill-input){
         grid-column: 1 / span 3;
     }
 

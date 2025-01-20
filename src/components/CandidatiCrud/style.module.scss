@@ -8,4 +8,15 @@
             grid-column-end: 4;
         }
     }
+
+    & :global(.notes-input), & :global(.skills-input),
+     & :global(.languageSkills-input),
+     & :global(.files-input){
+        grid-column: 1 / span 3;
+    }
+
+    & :global(.continuative-input){
+        align-self: center;
+        padding-top: 15px;
+    }
 }
