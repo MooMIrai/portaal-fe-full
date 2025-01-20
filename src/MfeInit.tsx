@@ -29,7 +29,7 @@ export default function () {
         parentId: 6,
         id: 64,
         level: 2,
-        text: "Progetti",
+        text: "Commessa",
         route: "/progetti",
         iconKey: "inboxIcon",
       },

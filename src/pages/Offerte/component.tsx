@@ -140,7 +140,7 @@ export default function OffertePage() {
     closeModal: () => void
   ) => {
     let promise: Promise<any> | undefined = undefined;
-
+  
     if (type === "create") {
       promise = offertaService.createResource(formData);
     } else if (type === "edit") {
@@ -148,18 +148,23 @@ export default function OffertePage() {
     } else if (type === "delete") {
       promise = offertaService.deleteResource(id);
     }
-
+  
     if (promise) {
-      promise.then(() => {
-        NotificationProviderActions.openModal(
-          { icon: true, style: "success" },
-          "Operazione avvenuta con successo"
-        );
-        refreshTable();
-        closeModal();
-      });
+      promise
+        .then(() => {
+          NotificationProviderActions.openModal(
+            { icon: true, style: "success" },
+            "Operazione avvenuta con successo"
+          );
+          refreshTable();
+          closeModal();
+        })
+        .catch((error) => {
+          console.error("Error during form submission:", error);
+        });
     }
   };
+  
 
   return (
     <GridTable
