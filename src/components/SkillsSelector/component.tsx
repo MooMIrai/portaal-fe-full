@@ -10,7 +10,7 @@ import CustomWindow from "../Window/component";
 import DynamicForm from "../DynamicForm/component";
 import { Button } from "@progress/kendo-react-buttons";
 import styles from "./styles.module.scss"
-import { Label } from "@progress/kendo-react-labels";
+import { Label,Error } from "@progress/kendo-react-labels";
 
 interface Skill {
     id: number;
@@ -295,7 +295,10 @@ const SkillMultiSelect: React.FC<SkillMultiSelectProps | any> = (props) => {
                 style={{ height: 99.99, overflowY: "auto" }}
                 size={"medium"}
             />
-
+            {
+            // Display an error message after the "visited" or "touched" field is set to true.
+            props.visited && props.validationMessage && <Error>{props.validationMessage}</Error>
+            }
             {showModal && (
                 <CustomWindow
                     show={showModal}
