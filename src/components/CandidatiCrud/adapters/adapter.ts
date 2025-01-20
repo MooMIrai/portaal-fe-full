@@ -200,7 +200,7 @@ export function convertRecruitingSkillAreaToSkillsForms(recruitingSkillAreas: Re
 
 // Server => Field (Recruiting Ai)
 export function adaptSkillsAi(form: RequestFields | null, data: any): RequestFields | null {
-    debugger;
+
     if (form != null) {
         const primarySkills = data.skillDetails.find(detail => detail.type === "PRIMARY")?.skills || [];
         const secondarySkills = data.skillDetails.find(detail => detail.type === "SECONDARY")?.skills || [];
@@ -216,16 +216,12 @@ export function adaptSkillsAi(form: RequestFields | null, data: any): RequestFie
         if (data.id_code)
             form.id_code = data.id_code;
 
-        // in attesa di modifiche 
-        if(data.candidateProfile_id)
-            form.Profile = {id:parseInt(data.candidateProfile_id) , name:""}
+        if (data.candidateProfile)
+            form.Profile = { id: parseInt(data.candidateProfile.id), name: data.candidateProfile.description }
 
         if (data.seniority)
             form.Seniority = RequestSeniority.find(p => p.id === data.seniority) || { id: 0, name: '' }
-
- 
     }
-
 
     return form;
 }
@@ -237,7 +233,6 @@ function convertRecruitingSkillAiToSkillsForms(recruitingSkillAreas: SkillArea[]
     return recruitingSkillAreas.filter(skillArea => skillArea !== undefined) as SkillArea[];
 
 }
-
 
 
 export const candidateAdapter = new CandidateFieldsServerAdapter();
