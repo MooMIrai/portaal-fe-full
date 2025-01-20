@@ -63,10 +63,10 @@ client.interceptors.response.use(
     } else if (error.response && error.response.status === 409) {
       const errorResponse = error.response?.data;
       const modelName = errorResponse?.message?.modelName;
-      const targetFields =
-        errorResponse?.message?.target?.join(", ") ||
-        "Nessun campo specificato";
-
+      const targetFields = errorResponse?.message?.target?.length
+        ? errorResponse?.message?.target.join(", ")
+        : "Nessun campo specificato";
+      console.log("error.response?.data;", error.response?.data);
       const errorMessage = `Errore durante l'operazione sul modello "${modelName}". Problemi con i campi: ${targetFields}.`;
 
       NotificationProviderActions.openModal(
