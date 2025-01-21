@@ -235,8 +235,7 @@ export const getFormCandidate = (
             label: "Lingue",
             type: "skill",
             value: formData.languageSkill || "",
-            required: true,
-            validator: (value: any) => value ? "" : "Il campo Lingue è obbligatorio",
+            required: false,
             disabled: (type === "view" || skillLoading),
             options: {
                 field: "skillCategory_id",
