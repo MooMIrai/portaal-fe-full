@@ -2,16 +2,26 @@ import React, { useEffect, useState } from "react";
 import GridTable from "common/Table";
 import { candidatoService } from "../../services/candidatoService";
 import { CandidatiCrud } from "../../components/CandidatiCrud/component";
-import Button from 'common/Button'
 import Modal from 'common/Modal';
 import { TestComponent } from "../../components/TestComponent/component";
+import SvgIcon from 'common/SvgIcon';
+import {fileIcon} from 'common/icons';
+import fileService from 'common/services/FileService'
 
 export default function CandidatePage() {
 
   const [showModal, setShowModal] = useState<boolean>(false);
 
   const columns = [
+    { key: "Person.files", label: "CV", type: "custom", width:40, render:(rowData)=>{
 
+      if(rowData.Person.files && rowData.Person.files.length){
+        return <td style={{cursor:'pointer'}} title="Vedi il cv" onClick={()=>{
+          fileService.openFromBE(rowData.Person.files[0])
+        }} ><SvgIcon  icon={fileIcon} /></td>
+      }
+      return <td></td>
+    }},
     { key: "Person.firstName", label: "Nome", type: "string", sortable: true, filter: "text" },
     { key: "Person.lastName", label: "Cognome", type: "string", sortable: true, filter: "text" },
     { key: "CandidateProfile.description", label: "Mansione", type: "string", sortable: true, filter: "text" },
@@ -90,9 +100,9 @@ export default function CandidatePage() {
     <>
       <GridTable
 
-        customToolBarComponent={() => {
+        /*customToolBarComponent={() => {
           return <Button themeColor={"info"} disabled={false} onClick={() => { setShowModal(true) }}>Prova Modale</Button>
-        }}
+        }}*/
         pageable={true}
         filterable={true}
         sortable={true}
