@@ -440,7 +440,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
             : 0
         }
         take={pagination.pageSize}
-        pageable={props.pageable}
+        pageable={props.pageable===undefined || props.pageable}
         onPageChange={handlePageChange}
         pager={(pagerProps) => (
           <MyPager
