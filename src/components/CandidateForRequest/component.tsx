@@ -3,13 +3,15 @@ import { richiestaService } from "../../services/richiestaService";
 import GridTable from "common/Table";
 import Tab from 'common/Tab';
 import { candidatoService } from "../../services/candidatoService";
-import {checkCircleIcon ,xCircleIcon, pencilIcon, plusIcon, reportElementIcon} from 'common/icons';
+import {checkCircleIcon ,xCircleIcon, pencilIcon, plusIcon, reportElementIcon ,fileIcon} from 'common/icons';
 import SvgIcon from 'common/SvgIcon';
 import Accordion from 'common/Accordion';
 import { CandidateStepper } from "../CandidateStepper/component";
 import Modal from 'common/Modal';
 import NotificationActions from 'common/providers/NotificationProvider';
 import { CandidateLogs } from "../CandidateLogs/component";
+import fileService from 'common/services/FileService';
+
 
 export function CandidateForRequest(props: PropsWithChildren<{ requestId: number, requestSkills?:any[] }>) {
 
@@ -25,7 +27,16 @@ export function CandidateForRequest(props: PropsWithChildren<{ requestId: number
     const columnsAssociated = [
 
         { key: "id", label: " ", type: "custom",width:'40px', render:(rowData)=> <td style={{cursor:'pointer'}} onClick={()=>setCurrentPerson(rowData)} title="gestisci"><SvgIcon icon={pencilIcon} themeColor="warning" /></td> },
-        { key: "id", label: " ", type: "custom",width:'40px', render:(rowData)=> <td style={{cursor:'pointer'}} onClick={()=>setCurrentTimeline(rowData)} title="visualizza log"><SvgIcon icon={reportElementIcon} themeColor="info" /></td> },
+        { key: "id", label: " ", type: "custom",width:'45px', render:(rowData)=> <td style={{cursor:'pointer'}} onClick={()=>setCurrentTimeline(rowData)} title="visualizza log"><SvgIcon icon={reportElementIcon} themeColor="info" /></td> },
+        { key: "id", label: "CV", type: "custom", width:45, render:(rowData)=>{
+        
+              if(rowData.Candidate.Person.files && rowData.Candidate.Person.files.length){
+                return <td style={{cursor:'pointer'}} title="Vedi il cv" onClick={()=>{
+                  fileService.openFromBE(rowData.Candidate.Person.files[0])
+                }} ><SvgIcon  icon={fileIcon} /></td>
+              }
+              return <td></td>
+        }},
         { key: "id", label: "Nominativo", type: "custom", render:(rowData)=><td>{rowData.Candidate.Person.firstName} {rowData.Candidate.Person.lastName}</td>},
         { key: "RecruitingContact", label: "Contattato", type: "custom", render:(rowData)=><td>{rowData.RecruitingContact?<SvgIcon icon={checkCircleIcon} themeColor="success" />:<SvgIcon icon={xCircleIcon} themeColor="error" />}</td>},
         { key: "RecruitingInterview", label: "Colloquiato", type: "custom", render:(rowData)=><td>{rowData.RecruitingInterview.length?<SvgIcon icon={checkCircleIcon} themeColor="success" />:<SvgIcon icon={xCircleIcon} themeColor="error" />}</td>},
@@ -42,6 +53,15 @@ export function CandidateForRequest(props: PropsWithChildren<{ requestId: number
     const columns = [
 
         { key: "id", label: " ", type: "custom",width:'40px', render:(rowData)=> <td style={{cursor:'pointer'}} onClick={()=>handleAssociate(rowData.Candidate)}><SvgIcon icon={plusIcon} themeColor="success" /></td> },
+        { key: "id", label: "CV", type: "custom", width:45, render:(rowData)=>{
+        
+            if(rowData.Candidate.Person.files && rowData.Candidate.Person.files.length){
+              return <td style={{cursor:'pointer'}} title="Vedi il cv" onClick={()=>{
+                fileService.openFromBE(rowData.Candidate.Person.files[0])
+              }} ><SvgIcon  icon={fileIcon} /></td>
+            }
+            return <td></td>
+        }},
         { key: "Candidate.Person.firstName", label: "Nome", type: "string", sortable: false },
         { key: "Candidate.Person.lastName", label: "Cognome", type: "string", sortable: false },
         { key: "Candidate.CandidateProfile.description", label: "Mansione", type: "string", sortable: false },
@@ -93,6 +113,15 @@ export function CandidateForRequest(props: PropsWithChildren<{ requestId: number
             }
             return <td style={{cursor:'pointer'}} onClick={()=>handleAssociate(rowData)}><SvgIcon icon={plusIcon} themeColor="success" /></td>
         } },
+        { key: "id", label: "CV", type: "custom", width:45, render:(rowData)=>{
+        
+            if(rowData.Person.files && rowData.Person.files.length){
+              return <td style={{cursor:'pointer'}} title="Vedi il cv" onClick={()=>{
+                fileService.openFromBE(rowData.Person.files[0])
+              }} ><SvgIcon  icon={fileIcon} /></td>
+            }
+            return <td></td>
+        }},
         { key: "Person.firstName", label: "Nome", type: "string", sortable: true, filter: "text" },
         { key: "Person.lastName", label: "Cognome", type: "string", sortable: true, filter: "text" },
         { key: "CandidateProfile.description", label: "Mansione", type: "string", sortable: true, filter: "text" },
