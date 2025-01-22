@@ -99,7 +99,7 @@ export interface FieldConfig {
   name: string;
   label: string;
   type: FieldType;
-  validator?: (value: any) => string | undefined;
+  validator?: (value: any,valueGetter?:(name:string)=>void) => string | undefined;
   options?: string[] | any[];
   value: any;
   disabled?: boolean;
@@ -156,8 +156,8 @@ const DynamicField = ({
   if (addedFields && Object.keys(addedFields).some(s => s === type)) {
     Component = addedFields[type];
   }
-
-
+ 
+  
   return (
     <Field
       name={name}
@@ -187,7 +187,7 @@ const DynamicField = ({
         } else if (event.target) {
           value = event.target.value;
         }
-
+      
 
         formRenderProps.onChange(name, {
           value: value,
@@ -196,7 +196,7 @@ const DynamicField = ({
         // Funzione custom per prendere i valori del value 
         if (valueOnChange) {
           valueOnChange(name, value);
-        }
+        } 
       }}
     />
   );

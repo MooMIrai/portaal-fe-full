@@ -283,6 +283,7 @@ const SkillMultiSelect: React.FC<SkillMultiSelectProps | any> = (props) => {
                 ref={multiselectRef}
                 value={selectedSkills}
                 filterable={true}
+                disabled={disabled}
                 filter={filter}
                 onFilterChange={handleSearch}
                 //label="Skill"
