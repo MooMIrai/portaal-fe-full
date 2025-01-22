@@ -299,9 +299,13 @@ export const getFormTrattamentoEconomicoFields = (
     isScadenzaEffettivaDisabled: boolean,
     isFirstTreatmentUpdate: boolean,
     isViewOnly: boolean,
-    valueOnChange: (name: string, value: any) => void
+    valueOnChange: (name: string, value: any) => void,
+    scadenzaEffettivaValidator:any,
+    dataAssunzioneValidator:any,
+    dataInizioTrattamentoValidator:any
 
 ) => {
+    
     const companyOptions = company.map((company) => company.label);
 
     const optionalDateValidator = (field: string) => (
@@ -374,26 +378,7 @@ export const getFormTrattamentoEconomicoFields = (
             valueOnChange: valueOnChange,
             disabled: (type === "view" || isViewOnly),
             required: true,
-            validator: createValidator(type === "view" || isViewOnly, (value: any) => {
-                if (!value) {
-                    return "Il campo Data Inizio Trattamento è obbligatorio";
-                }
-
-                const selectedDate = new Date(value);
-                const hireDate = formData?.dataAssunzione ? new Date(formData.dataAssunzione) : null;
-
-                if (isFirstTreatment || isFirstTreatmentUpdate) {
-                    if (hireDate && selectedDate.getTime() !== hireDate.getTime()) {
-                        return "Per il primo trattamento, la Data di Inizio del Trattamento deve essere uguale alla Data di Assunzione";
-                    }
-                } else {
-                    if (hireDate && selectedDate < hireDate) {
-                        return "La Data di Inizio del Trattamento non può essere precedente alla Data di Assunzione";
-                    }
-                }
-
-                return "";
-            }),
+            validator: dataInizioTrattamentoValidator,
 
 
             value: formData?.dataInizioTrattamento || "",
@@ -407,18 +392,7 @@ export const getFormTrattamentoEconomicoFields = (
             valueOnChange: valueOnChange,
             disabled: (type === "view") || !(isFirstTreatment || isFirstTreatmentUpdate) || isViewOnly,
             value: formData?.dataAssunzione || "",
-            validator: createValidator(type === "view" || isViewOnly, (value: any) => {
-                if (!value) return "";
-                if ((isFirstTreatment || isFirstTreatmentUpdate) && value && formData?.dataInizioTrattamento) {
-                    const assunzioneDate = new Date(value);
-                    const inizioTrattamentoDate = new Date(formData.dataInizioTrattamento);
-
-                    if (assunzioneDate.getTime() !== inizioTrattamentoDate.getTime()) {
-                        return "Per il primo trattamento, la Data di Assunzione deve essere uguale alla Data di Inizio del Trattamento";
-                    }
-                }
-                return "";
-            })
+            validator: dataAssunzioneValidator,
         },
 
         scadenzaEffettiva: {
@@ -428,21 +402,7 @@ export const getFormTrattamentoEconomicoFields = (
             valueOnChange: valueOnChange,
             disabled: (type === "view" || isScadenzaEffettivaDisabled || isViewOnly),
             value: formData?.scadenzaEffettiva || "",
-            validator: createValidator(type === "view" || isScadenzaEffettivaDisabled || isViewOnly, (value: any) => {
-                if (!value) return "";
-                const selectedDate = new Date(value);
-                const hireDate = formData?.dataAssunzione ? new Date(formData.dataAssunzione) : null;
-                const startDate = formData?.dataInizioTrattamento ? new Date(formData.dataInizioTrattamento) : null;
-
-                if (hireDate && selectedDate <= hireDate) {
-                    return "La Scadenza Effettiva non può essere lo stesso giorno o prima della Data di Assunzione";
-                }
-                if (startDate && selectedDate <= startDate) {
-                    return "La Scadenza Effettiva non può essere lo stesso giorno o prima della Data di Inizio del Trattamento";
-                }
-
-                return "";
-            })
+            validator:scadenzaEffettivaValidator
         },
 
         dataRecesso: {

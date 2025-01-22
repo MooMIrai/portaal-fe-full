@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import Tab from "common/Tab";
 import { TabStripSelectEventArguments } from "@progress/kendo-react-layout";
 import Form from "common/Form";
@@ -514,6 +514,63 @@ const PersonaleSection: React.FC<PersonaleSectionProps & {
     }
   };
 
+  const scadenzaEffettivaValidator = useMemo(() => {
+    return (value: any, valueGetter: (name: string) => any) => {
+        if (!value) return "";
+        const selectedDate = new Date(value);
+        const noparseHireDate = valueGetter("dataAssunzione");
+        const hireDate= noparseHireDate ? new Date(noparseHireDate): null;
+        const noparsestartDate= valueGetter("dataInizioTrattamento")
+        const startDate = noparsestartDate ? new Date(noparsestartDate): null;
+
+        if (hireDate && selectedDate <= hireDate) {
+            return "La Scadenza Effettiva non può essere lo stesso giorno o prima della Data di Assunzione";
+        }
+        if (startDate && selectedDate <= startDate) {
+            return "La Scadenza Effettiva non può essere lo stesso giorno o prima della Data di Inizio del Trattamento";
+        }
+
+        return "";
+    };
+}, []);
+
+const dataAssunzioneValidator = useMemo(() => {
+  return (value: any, valueGetter: (name: string) => any) => {
+        if (!value) return "";
+        const inizioTrattamento= valueGetter("dataInizioTrattamento")
+        if (formTrattamentoEconomicoData?.dataInizioTrattamento ||inizioTrattamento ) {
+            const assunzioneDate = new Date(value);
+            const inizioTrattamentoDate = new Date(inizioTrattamento);
+
+            if (assunzioneDate.getTime() !== inizioTrattamentoDate.getTime()) {
+                return "Per il primo trattamento, la Data di Assunzione deve essere uguale alla Data di Inizio del Trattamento";
+            }
+        }
+        return "";
+    };
+}, [formTrattamentoEconomicoData?.dataInizioTrattamento]);
+const dataInizioTrattamentoValidator = useMemo(() => {
+  return (value: any, valueGetter: (name: string) => any) =>  {
+      if (!value) {
+          return "Il campo Data Inizio Trattamento è obbligatorio";
+      }
+
+      const selectedDate = new Date(value);
+      const noparseHireDate = valueGetter("dataAssunzione");
+      const hireDate= noparseHireDate ? new Date(noparseHireDate): null;
+      if (isFirstTreatment || isFirstTreatmentUpdate) {
+          if (hireDate && selectedDate.getTime() !== hireDate.getTime()) {
+              return "Per il primo trattamento, la Data di Inizio del Trattamento deve essere uguale alla Data di Assunzione";
+          }
+      } else {
+          if (hireDate && selectedDate < hireDate) {
+              return "La Data di Inizio del Trattamento non può essere precedente alla Data di Assunzione";
+          }
+      }
+
+      return "";
+  };
+}, [ isFirstTreatment, isFirstTreatmentUpdate]);
 
   const isNewTreatmentButtonDisabled = () => {
     // Controlla se il formTrattamentoEconomicoData è vuoto o se contiene solo la data
@@ -552,7 +609,6 @@ const PersonaleSection: React.FC<PersonaleSectionProps & {
   };
 
   const combinedValueOnChangeContractType = (name: string, value: any) => {
-
     handleContractTypeChange(name, value);
 
     handleFieldChange(name, value);
@@ -605,7 +661,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps & {
           <div className={` ${trattamentoEconomicoClass}`}>
             <Form
               ref={formTrattamentoEconomico}
-              fields={Object.values(getFormTrattamentoEconomicoFields(formTrattamentoEconomicoData, localCompanies, type, isFirstTreatment, newForm, combinedValueOnChangeContractType, isScadenzaEffettivaDisabled, isFirstTreatmentUpdate, isViewOnly, handleFieldChange))}
+              fields={Object.values(getFormTrattamentoEconomicoFields(formTrattamentoEconomicoData, localCompanies, type, isFirstTreatment, newForm, combinedValueOnChangeContractType, isScadenzaEffettivaDisabled, isFirstTreatmentUpdate, isViewOnly, handleFieldChange,scadenzaEffettivaValidator,dataAssunzioneValidator,dataInizioTrattamentoValidator))}
               formData={formTrattamentoEconomicoData}
               onSubmit={(data: TrattamentoEconomicoData) => setFormTrattamentoEconomicoData(data)}
               description={isViewOnly ? "Trattamento dipendente" : "TE"}
