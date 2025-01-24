@@ -1,5 +1,5 @@
 import { BaseAdapter } from 'common/gof/Adapter';
-import { CandidateFields, CandidateSkills } from "../models/models";
+import { CandidateFields, CandidateGender, CandidateSkills, SubResidenceFields } from "../models/models";
 import { CandidateAi, CandidateSkillsAi } from "../models/models-ai";
 import { RequestSeniority } from '../../RichiesteCrud/models';
 
@@ -17,9 +17,11 @@ class CandidateAiFieldsAdapter extends BaseAdapter<CandidateFields, CandidateAi>
             dateBirth: source.birthDate,
             country_id: 0,
             province_id: 0,
-            cityRes_id: source.residenza?.city?.id ? source.residenza.city.id : null,
+            gender_id: source.gender ? parseInt(source.gender.id.toString()) : 1,
+            cityRes_id: source.residenza?.city?.id != null ? source.residenza.city.id : null,
             phoneNumber: source.phoneNumber,
-            email: source.email
+            privateEmail: source.email,
+            note: source.note ? source.note : ""
         };
     }
 
@@ -29,28 +31,41 @@ class CandidateAiFieldsAdapter extends BaseAdapter<CandidateFields, CandidateAi>
         if (!source || !Object.keys(source).length)
             return null;
 
+        let city: SubResidenceFields = {
+            id: source.cityRes.Person?.cityRes_id ? source.cityRes.Person?.cityRes_id : 0,
+            code: source.cityRes.Person?.CityRes?.city_abbreviation,
+            name: source.cityRes.Person?.CityRes?.name ? source.cityRes.Person?.CityRes?.name : "",
+
+        };
+        let country: SubResidenceFields = {
+
+            id: source.cityRes.Person?.CityRes?.isProvince ? source.cityRes.Person?.CityRes?.country_id : source.cityRes.Person?.CityRes?.Province?.country_id,
+            code: source.cityRes.Person?.CityRes?.Province?.Country.code,
+            name: source.cityRes.Person?.CityRes?.Province?.Country.name,
+
+        };
+        let province: SubResidenceFields = {
+            id: source.cityRes.Person?.CityRes?.province_id,
+            code: source.cityRes.Person?.CityRes?.Province?.city_abbreviation,
+            name: source.cityRes.Person?.CityRes?.Province?.name,
+
+        };
+
         return {
             firstName: source.firstName,
             lastName: source.lastName,
             birthDate: source.dateBirth,
-            gender: { id: 1, name: "M" },
+            gender: CandidateGender.find(g => g.id === source.gender_id) || { id: 0, name: '' },
             phoneNumber: source.phoneNumber,
-            email: source.email,
-            residenza: undefined, // Mappatura aggiuntiva se necessaria
-            sede: undefined, // Mappatura aggiuntiva se necessaria
-            ral: 0,
-            ralMin: 0,
-            ralMax: 0,
-            notice: 0,
-            note: undefined,
-            profile_autocomplete: undefined,
-            profile_type: undefined,
-            willingToTransfer: false,
-            isActivity_104: false,
-            contract_type: undefined,
-            seniority: undefined,
-            skills: [],
-            languageSkills: [],
+            email: source.privateEmail,
+            residenza: {
+                city: city,
+                country: country,
+                province: province,
+            },
+            note: source.note,
+            skills: [],  // da sistemare
+            languageSkills: [],  // da sistemare
         };
     }
 
@@ -60,12 +75,12 @@ class CandidateAiFieldsAdapter extends BaseAdapter<CandidateFields, CandidateAi>
         if (!source || !Object.keys(source).length)
             return null;
 
-        let id_spoken= process.env.SPOKEN_LANGUAGES ? process.env.SPOKEN_LANGUAGES : "116";
+        let id_spoken = process.env.SPOKEN_LANGUAGES ? process.env.SPOKEN_LANGUAGES : "116";
 
         return {
             skills: source.data.skills.filter((x) => x.skillCategory_id != parseInt(id_spoken)),
             languageSkills: source.data.skills.filter((x) => x.skillCategory_id == parseInt(id_spoken)),
-            seniority: RequestSeniority.find(p => p.name == source.data.seniority) || { id: 0, name: '' },
+            seniority: RequestSeniority.find(p => p.id == source.data.seniority) || { id: 0, name: '' },
         };
     }
 }

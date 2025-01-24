@@ -12,7 +12,6 @@ class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, Candidat
             return null;
         }
 
-
         const personSkillAreas_1 = convertSkillsAiToPersonSkillArea(source.languageSkills, null);
         const personSkillAreas_2 = convertSkillsAiToPersonSkillArea(source.skills, null);
 

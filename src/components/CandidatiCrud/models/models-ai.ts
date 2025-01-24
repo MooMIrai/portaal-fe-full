@@ -7,10 +7,13 @@ export interface CandidateAi {
     lastName: string
     dateBirth: string
     country_id: number
+    gender_id: number
     province_id: number
     cityRes_id: number | null
+    cityRes?:any,
     phoneNumber?: string
-    email: string
+    privateEmail: string
+    note:string
 
 }
 

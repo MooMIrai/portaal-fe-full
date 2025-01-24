@@ -27,6 +27,7 @@ export function CandidatiCrud(props: PropsWithChildren<CandidatiCrudProps>) {
   const formCandidato = useRef<any>();
   const [formCandidateData, setFormCandidateData] = useState(candidateAdapter.reverseAdapt(props.row) || {})
   const [formLoading, setFormLoading] = useState<boolean>(false);
+  const [cvLoading, setCvLoading] = useState<boolean>(false);
   const [skillLoading, setSkillLoading] = useState<boolean>(false);
   const [aiFile, setAiFile] = useState<FileList | undefined>();
 
@@ -58,7 +59,7 @@ export function CandidatiCrud(props: PropsWithChildren<CandidatiCrudProps>) {
       submitText={"Salva"}
       customDisabled={false}
       formData={formCandidateData}
-      fields={Object.values(getFormCandidate(formCandidateData, props.type, skillLoading,aiFile))/* .filter((e: any) => {
+      fields={Object.values(getFormCandidate(formCandidateData, props.type, skillLoading, cvLoading, aiFile))/* .filter((e: any) => {
           return e.name !== "id" && e.name !== "date_created" &&
             e.name !== "date_modified" &&
             e.name !== "user_created" &&
@@ -80,13 +81,11 @@ export function CandidatiCrud(props: PropsWithChildren<CandidatiCrudProps>) {
         let action = Promise.resolve()
         let dataServer = candidateAdapter.adapt(data);
 
-        if (props.type === "create")
-        {
+        if (props.type === "create") {
 
           action = candidatoService.createResource(dataServer);
         }
-        else
-        {
+        else {
 
           action = candidatoService.updateResource(props.row.id, dataServer);
         }
@@ -115,37 +114,54 @@ export function CandidatiCrud(props: PropsWithChildren<CandidatiCrudProps>) {
       fileService.selectFiles().then(f => {
         setAiFile(f);
         fileService.convertToBE(f[0]).then(fileData => {
-          
-          
+
+          setCvLoading(true);
 
           candidatoService.getCVDataAI(fileData).then((dataResult) => {
 
-           
-            //quando finisce 
             setFormCandidateData((prevState: any) => {
-              return {
+              const res = {
                 ...prevState,
                 ...candidateAiAdapter.reverseAdapt(dataResult.jsonData),
-                
-                // ...adapter.adapt(dataResult)
-              }
+
+              };
+              setCvLoading(false);
+
+              return res;
             })
           })
 
           setSkillLoading(true);
           candidatoService.getSkillAI(fileData).then((skillResult) => {
 
-
-
             setFormCandidateData((prevState: any) => {
-              return {
+              const res = {
                 ...prevState,
                 ...candidateAiAdapter.reverseAdaptSkills(skillResult.jsonData)
+              };
+              setSkillLoading(false);
+
+              if (skillResult.jsonData.warnings?.length > 0) {
+
+                skillResult.jsonData.warnings.forEach((x) => {
+                  let war_text = x.split(':');
+                  let text_mess = war_text.length == 3 ? war_text[1] + war_text[2] : "Errore nelle skill : " + x;
+
+                  NotificationActions.openModal(
+                    { icon: true, style: "warning" },
+                    text_mess
+                  );
+                })
               }
+              return res;
             })
           }).catch(() => {
-            // NotificationProviderActions.openModal({style:"error",icon:true},"Errore nella lettura della clipboard. Copia nuovamente il link.");
-
+            NotificationActions.openModal(
+              { icon: true, style: "error" },
+              "Errore nell'elaborazione del CV. Prova a cambiare il file. "
+            );
+            setCvLoading(false);
+            setSkillLoading(false);
           })
         })
         closeAiPopup();
