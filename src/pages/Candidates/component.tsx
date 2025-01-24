@@ -13,7 +13,7 @@ export default function CandidatePage() {
   const [showModal, setShowModal] = useState<boolean>(false);
 
   const columns = [
-    { key: "Person.files", label: "CV", type: "custom", width:40, render:(rowData)=>{
+    { key: "Person.files", label: "CV", type: "custom", width:50, render:(rowData)=>{
 
       if(rowData.Person.files && rowData.Person.files.length){
         return <td style={{cursor:'pointer'}} title="Vedi il cv" onClick={()=>{
