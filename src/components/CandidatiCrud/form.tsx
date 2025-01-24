@@ -3,6 +3,7 @@ export const getFormCandidate = (
     formData: any,
     type: string,
     skillLoading: boolean,
+    cvLoading:boolean,
     aiFile?:FileList
 ) => {
 
@@ -59,7 +60,7 @@ export const getFormCandidate = (
             type: "text",
             value: formData?.firstName,
             required: true,
-            disabled: (type === "view"),
+            disabled: (type === "view" || cvLoading),
             validator: (value: any) => value ? "" : "Il campo Nome è obbligatorio",
         },
         lastName: {
@@ -68,7 +69,7 @@ export const getFormCandidate = (
             type: "text",
             value: formData?.lastName,
             required: true,
-            disabled: (type === "view"),
+            disabled: (type === "view" || cvLoading),
             validator: (value: any) => value ? "" : "Il campo Cognome è obbligatorio"
         },
         birthDate: {
@@ -77,14 +78,14 @@ export const getFormCandidate = (
             required: true,
             type: "date",
             value: formData?.birthDate,
-            disabled: (type === "view"),
+            disabled: (type === "view" || cvLoading),
             validator: createValidator(type === "view", dateValidator)
         },
         gender: {
             name: "gender",
             label: "Sesso",
             type: "gender-selector",
-            disabled: (type === "view"),
+            disabled: (type === "view" || cvLoading),
             value: formData.sesso,
             required: true,
             validator: (value: any) => value ? "" : "Il campo Sesso è obbligatorio",
@@ -94,7 +95,7 @@ export const getFormCandidate = (
             label: "Numero di Telefono",
             type: "text",
             value: formData?.phoneNumber,
-            disabled: (type === "view"),
+            disabled: (type === "view" || cvLoading),
             validator: (value: any) =>
                 optionalCellulareValidator(value) ? "" : "Il campo Telefono deve essere nel formato +39XXXXXXXXXX o XXXXXXXXXX"
         },
@@ -104,14 +105,14 @@ export const getFormCandidate = (
             type: "text",
             value: formData?.email || "",
             required: true,
-            disabled: (type === "view"),
+            disabled: (type === "view" || cvLoading),
             validator: (value: any) => !value || !value.length ? "Il campo Email è obbligatorio" : ''
         },
         residenza: {
             name: "residenza",
             label: "Comune di Residenza",
             type: "country",
-            disabled: type === "view",
+            disabled: (type === "view" || cvLoading),
             value: formData?.residenza,
         },
         sede: {
@@ -157,7 +158,7 @@ export const getFormCandidate = (
             label: "Note",
             type: "textarea",
             value: formData?.note,
-            disabled: (type === "view")
+            disabled: (type === "view" || cvLoading),
 
         },
         profile_autocomplete: {
@@ -214,7 +215,7 @@ export const getFormCandidate = (
             required: true,
             validator: (value: any) => value ? "" : "Il campo Seniority è obbligatorio",
             value: formData.seniority,
-            disabled: (type === "view"),
+            disabled: (type === "view" || skillLoading),
         },
         skills: {
             name: "skills",
@@ -235,8 +236,7 @@ export const getFormCandidate = (
             label: "Lingue",
             type: "skill",
             value: formData.languageSkill || "",
-            required: true,
-            validator: (value: any) => value ? "" : "Il campo Lingue è obbligatorio",
+            required: false,
             disabled: (type === "view" || skillLoading),
             options: {
                 field: "skillCategory_id",
