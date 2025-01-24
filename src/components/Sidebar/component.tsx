@@ -209,7 +209,7 @@ const Sidebar = ({ children, items }: SidebarPros) => {
       >
         <DrawerContent className={styles.drawerContent}>
           <div className={styles.titleContainer}>
-            <Typography.h4 themeColor="primary">{location.pathname.replace('/','')[0].toUpperCase()+location.pathname.replace('/','').substring(1)}</Typography.h4>
+            <Typography.h4 themeColor="primary">{location.pathname && location.pathname!='/'?location.pathname.replace('/','')[0].toUpperCase()+location.pathname.replace('/','').substring(1):'Homepage'}</Typography.h4>
           </div>
           {children}
         </DrawerContent>

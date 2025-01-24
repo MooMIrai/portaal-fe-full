@@ -37,7 +37,6 @@ function UploadSingleFileComponent(props: CustomUploadProps) {
   useEffect(()=>{
     
     if(props.externalValue){
-      debugger;
       convertFiles(props.externalValue);
     }
   },[props.externalValue])
