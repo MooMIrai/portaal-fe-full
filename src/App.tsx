@@ -4,7 +4,7 @@ import Theme from "common/Theme";
 import authService from "common/services/AuthService";
 import { GlobalRouting, LoginRouting, mfeInitMenu } from "./mfeInit";
 
-import "./index.scss";
+//import "./index.scss";
 
 export const App = () => {
   const [routes, setRoutes] = useState<Array<any>>([]);
