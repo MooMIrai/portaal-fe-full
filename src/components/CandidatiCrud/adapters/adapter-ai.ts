@@ -31,7 +31,6 @@ class CandidateAiFieldsAdapter extends BaseAdapter<CandidateFields, CandidateAi>
         if (!source || !Object.keys(source).length)
             return null;
 
-        debugger;
         // Gestire casi mancanti, paese estero, errori nel ritorno ...
         
         let city: SubResidenceFields = {
@@ -53,7 +52,6 @@ class CandidateAiFieldsAdapter extends BaseAdapter<CandidateFields, CandidateAi>
             name: source.cityRes?.isProvince ? source.cityRes.Province?.name :"",
 
         };
-        debugger;
 
         return {
             firstName: source.firstName,
