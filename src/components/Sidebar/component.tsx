@@ -14,7 +14,7 @@ import {
   chevronRightIcon,
   logoutIcon,
 } from "@progress/kendo-svg-icons";
-import { SVGIcon, SvgIcon } from "@progress/kendo-react-common";
+import { SVGIcon, SvgIcon, Typography } from "@progress/kendo-react-common";
 import styles from "./style.module.scss";
 import * as svgIcons from "@progress/kendo-svg-icons";
 import AuthService from "../../services/AuthService";
@@ -198,7 +198,7 @@ const Sidebar = ({ children, items }: SidebarPros) => {
           <Button svgIcon={logoutIcon} /* fillMode="outline" */ themeColor="primary" onClick={logout}>Logout</Button>
         </div>
       </div>
-
+      <div className={styles.borderBottom}></div>
       <Drawer
         expanded={drawerExpanded}
         mode="push"
@@ -208,6 +208,9 @@ const Sidebar = ({ children, items }: SidebarPros) => {
         mini={true}
       >
         <DrawerContent className={styles.drawerContent}>
+          <div className={styles.titleContainer}>
+            <Typography.h4 themeColor="primary">{location.pathname.replace('/','')[0].toUpperCase()+location.pathname.replace('/','').substring(1)}</Typography.h4>
+          </div>
           {children}
         </DrawerContent>
       </Drawer>

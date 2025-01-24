@@ -17,6 +17,44 @@
   }
   :global(.k-drawer-content) {
     height: 100vh !important;
+    & > div{
+      position: relative;
+     
+      padding-top: 1px;
+      padding-bottom:1px;
+      border-radius: 0px;
+      &:nth-child(2){
+        margin-top:30px;
+      }
+      &::before{
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0px;
+        right: 0px;
+        height: 1px;
+        
+        border-radius: 10px; /* Match the border-radius of .box */
+        background: linear-gradient(90deg, rgba(248, 147, 28, 0) 0%, rgba(248, 147, 28, 1) 10%, rgba(120, 122, 125, 1) 50%, rgba(0, 174, 239, 1) 90%, rgba(0, 174, 239, 0) 100%);
+        //filter: blur(1px); /* Creates the shadow effect */
+        //opacity: 0.7; /* Adjust for desired intensity */
+      }
+      &::after{
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0px;
+        right: 0px;
+        height: 1px;
+        
+        border-radius: 10px; /* Match the border-radius of .box */
+        background: linear-gradient(90deg, rgba(248, 147, 28, 0) 0%, rgba(248, 147, 28, 1) 10%, rgba(120, 122, 125, 1) 50%, rgba(0, 174, 239, 1) 90%, rgba(0, 174, 239, 0) 100%);
+        //filter: blur(1px); /* Creates the shadow effect */
+        //opacity: 0.7; /* Adjust for desired intensity */
+      }
+      
+    }
+    
     /* padding: 0 0 0 0 !important; */
   }
   :global(.k-drawer-item.sub-item) {
@@ -24,7 +62,25 @@
   }
 }
 
+.titleContainer{
+  padding: 10px 5px;
+  background-color: #fff;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  & > h4{
+    margin:0
+  }
+}
+
+.borderBottom{
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(248, 147, 28, 1) 0%, rgba(120, 122, 125, 1) 50%, rgba(0, 174, 239, 1) 100%);
+
+}
+
 .sidebarContainer {
+
   :global(.k-drawer-container) {
     height: 100vh !important;
   }
@@ -37,7 +93,10 @@
 .drawerContent {
   border-radius: 5px !important;
   padding: 0.5rem 0.5rem 0rem 0.5rem;
-  background: #ebf0f4;
+
+  background: rgb(248,147,28);
+  background: linear-gradient(90deg, rgba(248,147,28,0.1) 0%, rgba(120,122,125,0.1) 50%, rgba(0,174,239,0.1) 100%);
+
 }
 
 /* #3e719938 #a2cfe54d  #b3d7ff5c #B3D7FF #b3d7ff2b #b3d7ff3d*/
@@ -46,6 +105,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: sticky;
+
+ 
+
 }
 
 

@@ -4,7 +4,7 @@ import {
     MultiSelectChangeEvent,
     MultiSelectFilterChangeEvent
 } from "@progress/kendo-react-dropdowns";
-import "@progress/kendo-theme-default/dist/all.css";
+
 import client from "../../services/BEService";
 import CustomWindow from "../Window/component";
 import DynamicForm from "../DynamicForm/component";

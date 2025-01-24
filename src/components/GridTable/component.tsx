@@ -681,6 +681,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
 });
 
 const GenericGrid = forwardRef<TablePaginatedProps, any>((props, ref) => {
+  //@ts-ignore
   return <GenericGridC {...props} ref={ref} />;
 });
 

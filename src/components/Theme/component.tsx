@@ -1,6 +1,7 @@
-import React, { PropsWithChildren } from "react";
-/* import "@progress/kendo-theme-fluent/dist/all.css"; */
+import React, { PropsWithChildren, useEffect } from "react";
+//import "@progress/kendo-theme-fluent/dist/all.css"; 
 import "./theme.css";
+import './custom.css'
 import {
   IntlProvider,
   load,
@@ -30,10 +31,11 @@ load(
 import esMessages from "./it-language.json";
 import { NotificationProvider } from "../Notification/provider";
 import { CalendarProvider } from "../Calendar/provider";
-
+ 
 loadMessages(esMessages, "it-IT");
 
 export default function Theme(props: PropsWithChildren<any>) {
+
   return (
     <LocalizationProvider language="it-IT">
       <IntlProvider locale="it">
