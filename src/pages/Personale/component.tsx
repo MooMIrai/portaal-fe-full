@@ -3,7 +3,16 @@ import GridTable from "common/Table";
 import PersonaleSection from "./../../component/TabPersonaleHR/component";
 import { CrudGenericService } from "../../services/personaleServices";
 import {
+  ActivityTypeOption,
+  companyAdapter,
+  companyOption,
+  genderAdapter,
+  genderOption,
   locationOption,
+  MappedSkill,
+  permessiAdapter,
+  roleAdapter,
+  RoleOption,
   sedeAdapter,
   transformUserData,
 } from "../../adapters/personaleAdapters";
@@ -87,7 +96,11 @@ const PersonalPage = () => {
   const [data, setData] = useState<any>();
   const [sede, setSede] = useState<locationOption[]>([]);
   const [isLocationDataReady, setIsLocationDataReady] = useState(false); // Nuovo stato per i dati geografici
-
+  const [roles, setRoles] = useState<RoleOption[]>([]);
+  const [companies, setCompanies] = useState<companyOption[]>([]);
+  const [genders, setGenders] = useState<genderOption[]>([]);
+  const [activity, setActivity] = useState<ActivityTypeOption[]>([]);
+   const [skills, setSkills] = useState<MappedSkill[] | undefined>()
   useEffect(() => {
     const fetchCountryData = async () => {
 
@@ -106,7 +119,35 @@ const PersonalPage = () => {
     fetchCountryData();
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [rolesResponse, companiesResponse, gendersResponse, activityResponse,skillResponse] = await Promise.all([
+          CrudGenericService.fetchResources("role"),
+          CrudGenericService.fetchResources("Company"),
+          CrudGenericService.fetchResources("Gender"),
+          CrudGenericService.fetchResources("ActivityType"),
+          CrudGenericService.getSkillArea(true)
+        ]);
+        const adaptedRoles = roleAdapter(rolesResponse);
+        const adaptedCompany = companyAdapter(companiesResponse);
+        const adaptedGender = genderAdapter(gendersResponse);
+        const adaptedActivities = permessiAdapter(activityResponse);
+        if (Array.isArray(skillResponse.data)) {
+          const adaptedSkillsArea = skillResponse.data.map(r => ({ id: r.id, name: r.name }))
+          setSkills(adaptedSkillsArea);
+        }
+        setActivity(adaptedActivities)
+        setRoles(adaptedRoles);
+        setCompanies(adaptedCompany);
+        setGenders(adaptedGender);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
+    fetchData();
+  }, []);
   const loadData = async (pagination: any, filter: any, sorting: any[]) => {
     if (!isLocationDataReady) {
       return {
@@ -134,7 +175,7 @@ const PersonalPage = () => {
       resources.data,
       sede
     );
-    console.log("transfoermedData",transformedData)
+    console.log("transfoermedData", transformedData)
     setData(transformedData);
 
     return {
@@ -144,27 +185,47 @@ const PersonalPage = () => {
       },
     };
   };
+  const handleFormSubmit = (type: string, formData: any, refreshTable: any, id: any, closeModal: () => void) => {
+    let promise: Promise<any> | undefined = undefined;
 
-  const handleFormSubmit = async (type, formData, refreshTable, id) => {
+    if (type === "create") {
+      promise = CrudGenericService.createResource(formData);
+    } else if (type === "edit") {
+      promise = CrudGenericService.updateResource(id, formData);
+    } else if (type === "delete") {
+      promise = CrudGenericService.deleteResource(id);
+    } 
+
+    if (promise) {
+      promise.then(() => {
+        NotificationProviderActions.openModal({ icon: true, style: 'success' }, "Operazione avvenuta con successo");
+        refreshTable();
+        closeModal();
+      })
+    }
+
+  }
+/*   const handleFormSubmit = (type, formData, refreshTable, id,closeModal: () => void) => {
     try {
       if (type === "create") {
-        await CrudGenericService.createResource(formData);
+        promise = CrudGenericService.createResource(formData);
       } else if (type === "edit") {
         await CrudGenericService.updateResource(id, formData);
       } else if (type === "delete") {
         await CrudGenericService.deleteResource(id);
       }
 
-      NotificationProviderActions.openModal(
-        { icon: true, style: "success" },
-        "Operazione avvenuta con successo"
-      );
-      refreshTable();
-      
+     if (promise) {
+         promise.then(() => {
+           NotificationProviderActions.openModal({ icon: true, style: 'success' }, "Operazione avvenuta con successo");
+           refreshTable();
+           closeModal();
+         })
+       }
     } catch (error) {
       console.error("Error during form submission:", error);
     }
-  };
+  }; */
 
   // Se i dati non sono pronti, non renderizzare nulla
   if (!isLocationDataReady) {
@@ -185,38 +246,19 @@ const PersonalPage = () => {
         classNameWindow={styles.windowStyle}
         classNameWindowDelete={styles.windowDelete}
         formCrud={(row, type, closeModalCallback, refreshTable) => (
-          <>
-            {type === "delete" ? (
-              <div className={styles.formDelete}>
-                <span>{"Sei sicuro di voler eliminare il record?"}</span>
-                <div>
-                  <Button onClick={closeModalCallback}>Cancel</Button>
-                  <Button
-                    themeColor={"error"}
-                    onClick={async () => {
-                      await handleFormSubmit(
-                        type,
-                        null,
-                        refreshTable,
-                        row?.id
-                      );
-                      closeModalCallback();
-                    }}
-                  >
-                    {"Elimina"}
-                  </Button>
-                </div>
-              </div>
-            ) : (
+          
               <PersonaleSection
                 row={row}
                 type={type}
+                roles={roles}
+                companies={companies}
+                genders={genders}
+                skills={skills}
+                activities={activity}
                 closeModalCallback={closeModalCallback}
                 refreshTable={refreshTable}
                 onSubmit={handleFormSubmit}
               />
-            )}
-          </>
         )}
       />
     </div>

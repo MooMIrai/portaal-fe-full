@@ -75,12 +75,19 @@ class CrudGenericServiceC {
     }
   };
 
-  createResource = (resourceData: any) => {
-    client
-      .post(`/api/v1/accounts/create`, resourceData)
-      .then((res) => res.data);
-  };
 
+  createResource = async (resourceData: any) => {
+      try {
+        const response = await client.post(
+          `/api/v1/accounts/create`,
+          resourceData
+        );
+        return response.data;
+      } catch (error) {
+        console.error("Error creating resource:", error);
+        throw error;
+      }
+    };
   getCV = async (id: number) => {
     try {
       const response = await client.get(`api/v1/files/stream/${id}`, {
