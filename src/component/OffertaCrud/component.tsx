@@ -1,4 +1,4 @@
-import React, { PropsWithRef, useEffect, useRef, useState } from "react";
+import React, { PropsWithRef, useEffect, useMemo, useRef, useState } from "react";
 import { OfferModel, Projects } from "./model";
 import Button from 'common/Button';
 import Form from "common/Form";
@@ -318,6 +318,70 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
       props.closeModalCallback();
     }
   };
+  const startValidator = useMemo(() => {
+    return (value: any, valueGetter: (name: string) => any) => {
+        if (!value) {
+            return "Seleziona una data";
+        }
+
+        const selectedDate = new Date(value);
+        const endDate = valueGetter("end_dateP");
+        const parsedEndDate = endDate ? new Date(endDate) : null;
+
+        if (parsedEndDate && selectedDate >= parsedEndDate) {
+            return "La data di inizio deve essere anteriore alla data di fine";
+        }
+        return "";
+    };
+}, []);
+
+const endValidator = useMemo(() => {
+    return (value: any, valueGetter: (name: string) => any) => {
+        if (!value) {
+            return "";
+        }
+
+        const selectedDate = new Date(value);
+        const startDate = valueGetter("start_date");
+        const parsedStartDate = startDate ? new Date(startDate) : null;
+
+        if (parsedStartDate && selectedDate <= parsedStartDate) {
+            return "La data di fine deve essere posteriore alla data di inizio";
+        }
+        return "";
+    };
+}, []);
+const endDateValidator = useMemo(() => {
+  return (value: any, valueGetter: (name: string) => any) => {
+      if (!value) return "";
+
+      const selectedEndDate = new Date(value);
+      const approvalDateValue = valueGetter("approval_date");
+      const approvalDate = approvalDateValue ? new Date(approvalDateValue) : null;
+
+  
+      if (approvalDate && selectedEndDate <= approvalDate) {
+        return "La data di scadenza non può essere uguale o precedente alla data di approvazione";
+    }
+
+    return "";
+  };
+}, []); 
+const approvalDateValidator = useMemo(() => {
+  return (value: any, valueGetter: (name: string) => any) => {
+      if (!value) return "La data di approvazione è obbligatoria";
+
+      const selectedApprovalDate = new Date(value);
+      const endDateValue = valueGetter("end_date");
+      const endDate = endDateValue ? new Date(endDateValue) : null;
+
+      if (endDate && selectedApprovalDate >= endDate) {
+          return "La data di approvazione non può essere uguale o successiva alla data di scadenza";
+      }
+
+      return "";
+  };
+}, []); 
 
 
   /*   const saveOfferData = (dataToSave) => {
@@ -399,7 +463,9 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
                   isDaily,
                   isLumpSum,
                   combinedValueOnChangeBillyngType,
-                  customerForProtocol
+                  customerForProtocol,
+                  endDateValidator,
+                  approvalDateValidator
                 ))}
                 formData={formCustomerData}
                 onSubmit={(data: OfferModel) => setformCustomerData(data)}
@@ -430,7 +496,7 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
             <Form
               ref={formCommessa}
               formData={formProjectData}
-              fields={Object.values(getFormCommesseFields(formProjectData, valueOnChange))}
+              fields={Object.values(getFormCommesseFields(formProjectData, valueOnChange,startValidator,endValidator))}
               onSubmit={(data: Projects) => setformProjectData(data)}
             />
           </div>

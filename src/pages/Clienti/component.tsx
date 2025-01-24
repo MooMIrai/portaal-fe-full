@@ -62,10 +62,11 @@ function Clienti() {
         NotificationProviderActions.openModal({ icon: true, style: 'success' }, "Operazione avvenuta con successo");
         refreshTable();
         closeModal();
-      })
-    }
-
+      }).catch((error) => {
+      console.error("Error during form submission:", error);
+    });
   }
+}
 
   return <GridTable
     /*  inputSearchConfig={{

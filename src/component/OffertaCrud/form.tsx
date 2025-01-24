@@ -1,5 +1,5 @@
-import { locationOption } from "../../adapters/offertaAdapters";
-import { ProjectModel } from "../ProgettoCrud/model";
+
+
 import { OfferModel, Projects } from "./model";
 
 export const getFormOfferFields = (
@@ -14,7 +14,9 @@ export const getFormOfferFields = (
     isDaily: boolean,
     isLupsum: boolean,
     combinedValueOnChangeBillyngType: (name: string, value: any) => void,
-    customerForProtocol
+    customerForProtocol,
+    endDateValidator,
+    approvalDateValidator
 ) => {
 
     // Validators
@@ -34,6 +36,16 @@ export const getFormOfferFields = (
 
     // Fields definition
     const fields: Record<string, any> = {
+        billing_type: {
+            name: "billing_type",
+            label: "Tipo Fatturazione",
+            type: "billingtype-selector",
+            value: formData.billing_type,
+            valueOnChange: combinedValueOnChangeBillyngType,
+            required: true,
+            disabled: type === "view" || isDaily,
+            validator: (value: any) => (value ? "" : "Selezionare un Tipo di fatturazione valida")
+        },
         creation_date: {
             name: "creation_date",
             label: "Data creazione",
@@ -81,16 +93,7 @@ export const getFormOfferFields = (
             validator: (value: any) => (value ? "" : "Selezionare un Cliente valido")
         },
 
-        billing_type: {
-            name: "billing_type",
-            label: "Tipo Fatturazione",
-            type: "billingtype-selector",
-            value: formData.billing_type,
-            valueOnChange: combinedValueOnChangeBillyngType,
-            required: true,
-            disabled: type === "view" || isDaily,
-            validator: (value: any) => (value ? "" : "Selezionare un Tipo di fatturazione valida")
-        },
+      
 
     };
 
@@ -169,7 +172,8 @@ export const getFormOfferFields = (
         label: "Data approvazione",
         type: "date",
         value: formData.approval_date,
-        disabled: type === "view"
+        disabled: type === "view",
+        validator:approvalDateValidator
     };
 
     fields.end_date = {
@@ -178,7 +182,8 @@ export const getFormOfferFields = (
         type: "date",
         //valueOnChange: valueOnChange,
         value: formData.end_date,
-        disabled: type === "view"
+        disabled: type === "view",
+        validator:endDateValidator
     };
     fields.outcome_type = {
         name: "outcome_type",
@@ -232,10 +237,15 @@ export const getFormOfferFields = (
 };
 
 
+
 export const getFormCommesseFields = (
     formData: Projects | undefined,
-    valueOnChange: (name: string, value: any) => void
+    valueOnChange: (name: string, value: any) => void,
+    startValidator:any,
+    endValidator:any
+
 ) => {
+ 
     const fields: Record<string, any> = {
         start_date: {
             name: "start_date",
@@ -243,40 +253,16 @@ export const getFormCommesseFields = (
             type: "date",
             required: true,
             value: formData?.start_date,
-            valueOnChange:(value: any) => valueOnChange("start_date", value),
-            validator: (value: any) => {
-                if (!value) {
-                    return "Seleziona una data";
-                }
-                
-                const selectedDate = new Date(value);
-                const endDate = formData?.end_dateP ? new Date(formData.end_dateP) : null;
-                
-                if (endDate && selectedDate >= endDate) {
-                    return "La data di inizio deve essere anteriore alla data di fine";
-                }
-                return "";
-            },
+            valueOnChange: (value: any) => valueOnChange("start_date", value),
+            validator: startValidator, 
         },
-        end_date: {
-            name: "end_date",
+        end_dateP: {
+            name: "end_dateP",
             label: "Data di fine",
             type: "date",
-            valueOnChange:(value: any) => valueOnChange("end_date", value),
+            valueOnChange: (value: any) => valueOnChange("end_dateP", value),
             value: formData?.end_dateP,
-            validator: (value: any) => {
-                if (!value) {
-                    return "";
-                }
-
-                const selectedDate = new Date(value);
-                const startDate = formData?.start_date ? new Date(formData.start_date) : null;
-                
-                if (startDate && selectedDate <= startDate) {
-                    return "La data di fine deve essere posteriore alla data di inizio";
-                }
-                return "";
-            },
+            validator: endValidator,
         },
         orderNum: {
             name: "orderNum",
