@@ -31,25 +31,29 @@ class CandidateAiFieldsAdapter extends BaseAdapter<CandidateFields, CandidateAi>
         if (!source || !Object.keys(source).length)
             return null;
 
+        debugger;
+        // Gestire casi mancanti, paese estero, errori nel ritorno ...
+        
         let city: SubResidenceFields = {
-            id: source.cityRes.Person?.cityRes_id ? source.cityRes.Person?.cityRes_id : 0,
-            code: source.cityRes.Person?.CityRes?.city_abbreviation,
-            name: source.cityRes.Person?.CityRes?.name ? source.cityRes.Person?.CityRes?.name : "",
+            id: source.cityRes?.id ? source.cityRes.id : 0,
+            code: source.cityRes?.city_abbreviation,
+            name: source.cityRes?.name ? source.cityRes?.name : "",
 
         };
         let country: SubResidenceFields = {
 
-            id: source.cityRes.Person?.CityRes?.isProvince ? source.cityRes.Person?.CityRes?.country_id : source.cityRes.Person?.CityRes?.Province?.country_id,
-            code: source.cityRes.Person?.CityRes?.Province?.Country.code,
-            name: source.cityRes.Person?.CityRes?.Province?.Country.name,
+            id: source.cityRes?.isProvince ? source.cityRes.Country?.id : source.cityRes.Province?.country_id,
+            code: source.cityRes?.Country ? source.cityRes?.Country.code : "",
+            name:source.cityRes?.Country ?  source.cityRes?.Country.name :"",
 
         };
         let province: SubResidenceFields = {
-            id: source.cityRes.Person?.CityRes?.province_id,
-            code: source.cityRes.Person?.CityRes?.Province?.city_abbreviation,
-            name: source.cityRes.Person?.CityRes?.Province?.name,
+            id:  source.cityRes?.Province ? source.cityRes.Province?.id : undefined,
+            code: source.cityRes?.isProvince ? source.cityRes.Province?.city_abbreviation :"",
+            name: source.cityRes?.isProvince ? source.cityRes.Province?.name :"",
 
         };
+        debugger;
 
         return {
             firstName: source.firstName,
