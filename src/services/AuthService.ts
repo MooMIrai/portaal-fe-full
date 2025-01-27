@@ -15,6 +15,27 @@ class AuthService {
     window.addEventListener("LOGOUT", this.removeToken, { once: true });
   }
 
+  
+  
+  getImage(){
+    const token = this.getToken();
+    const tokenData = tokenService.decodeToken(token);
+    if (!tokenData) {
+      throw new Error("Token not valid");
+    }
+    return tokenData.image_url;
+  }
+
+
+  getUserName(){
+    const token = this.getToken();
+    const tokenData = tokenService.decodeToken(token);
+    if (!tokenData) {
+      throw new Error("Token not valid");
+    }
+    return tokenData.username;
+  }
+
   login(token: string) {
     this.setToken(token);
   }

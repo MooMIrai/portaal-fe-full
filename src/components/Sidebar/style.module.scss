@@ -26,7 +26,7 @@
       &:nth-child(2){
         margin-top:30px;
       }
-      &::before{
+/*       &::before{
         content: "";
         position: absolute;
         top: 0;
@@ -34,10 +34,10 @@
         right: 0px;
         height: 1px;
         
-        border-radius: 10px; /* Match the border-radius of .box */
+        border-radius: 10px; 
         background: linear-gradient(90deg, rgba(248, 147, 28, 0) 0%, rgba(248, 147, 28, 1) 10%, rgba(120, 122, 125, 1) 50%, rgba(0, 174, 239, 1) 90%, rgba(0, 174, 239, 0) 100%);
-        //filter: blur(1px); /* Creates the shadow effect */
-        //opacity: 0.7; /* Adjust for desired intensity */
+        //filter: blur(1px); 
+        //opacity: 0.7; 
       }
       &::after{
         content: "";
@@ -47,11 +47,11 @@
         right: 0px;
         height: 1px;
         
-        border-radius: 10px; /* Match the border-radius of .box */
+        border-radius: 10px; 
         background: linear-gradient(90deg, rgba(248, 147, 28, 0) 0%, rgba(248, 147, 28, 1) 10%, rgba(120, 122, 125, 1) 50%, rgba(0, 174, 239, 1) 90%, rgba(0, 174, 239, 0) 100%);
-        //filter: blur(1px); /* Creates the shadow effect */
-        //opacity: 0.7; /* Adjust for desired intensity */
-      }
+        //filter: blur(1px); 
+        //opacity: 0.7; 
+      } */
       
     }
     
@@ -64,7 +64,7 @@
 
 .titleContainer{
   padding: 10px 5px;
-  background-color: #fff;
+  //background-color: #fff;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   & > h4{
@@ -99,6 +99,11 @@
 
 }
 
+.popoverContainer{
+  display: flex;
+  flex-direction: column;
+  gap:5px;
+}
 /* #3e719938 #a2cfe54d  #b3d7ff5c #B3D7FF #b3d7ff2b #b3d7ff3d*/
 
 .toolbarContainer {

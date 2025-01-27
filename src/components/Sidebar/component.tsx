@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
+  Avatar,
   Drawer,
   DrawerContent,
   DrawerItem,
@@ -13,13 +14,14 @@ import {
   chevronDownIcon,
   chevronRightIcon,
   logoutIcon,
+  userIcon
 } from "@progress/kendo-svg-icons";
 import { SVGIcon, SvgIcon, Typography } from "@progress/kendo-react-common";
 import styles from "./style.module.scss";
 import * as svgIcons from "@progress/kendo-svg-icons";
 import AuthService from "../../services/AuthService";
 import withAutocomplete from "../../hoc/AutoComplete";
-
+import { Popover } from '@progress/kendo-react-tooltip';
 
 interface SidebarPros {
   items: DrawerItemProps[];
@@ -73,6 +75,8 @@ const Sidebar = ({ children, items }: SidebarPros) => {
     name: string;
   } | null>(null);
   const [tenants, setTenants] = useState<any[]>([]);
+
+  const [popoverUser,setPopoverUser] = useState<boolean>(false);
 
   const updateItems = (list: any[]): DrawerItemProps[] => {
     return list.map((item, index) => {
@@ -170,6 +174,7 @@ const Sidebar = ({ children, items }: SidebarPros) => {
     window.location.href='/';
   };
 
+  const anchor = useRef<any>();
 
   return (
     <div className={styles.sidebarContainer}>
@@ -195,7 +200,31 @@ const Sidebar = ({ children, items }: SidebarPros) => {
             )}
 
           </div>
-          <Button svgIcon={logoutIcon} /* fillMode="outline" */ themeColor="primary" onClick={logout}>Logout</Button>
+          <Button ref={anchor}  fillMode="outline"  themeColor="primary" onClick={()=>setPopoverUser(!popoverUser)}>
+          {AuthService.getImage() && <Avatar rounded="full" type="image" style={{ marginRight: 5 }}>
+										<img src={AuthService.getImage()} alt="user avatar" />
+									</Avatar>}
+            {
+              AuthService.getUserName()
+            }
+          </Button>
+          <Popover
+            show={popoverUser}
+            anchor={anchor.current && anchor.current.element}
+            position={'bottom'}
+            callout={true}
+            collision={{
+              horizontal:'fit',
+              vertical:'fit'
+            }}
+            title="Azioni per l'utente"
+          >
+            <div className={styles.popoverContainer}>
+              <Button svgIcon={logoutIcon} fillMode={'clear'} themeColor="error" onClick={logout}>Logout</Button>
+              <Button svgIcon={userIcon} fillMode={'clear'} themeColor="primary" onClick={()=>navigate('/profile')}>Profilo</Button>
+            </div>
+            
+          </Popover>
         </div>
       </div>
       <div className={styles.borderBottom}></div>
