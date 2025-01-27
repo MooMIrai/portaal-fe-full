@@ -10,10 +10,27 @@ const App = () => {
     
     notificationService.tryConnect().then(id=>{
 
-    })
+    });
+    
+    const event = new CustomEvent("AddMenuItems", { detail: [
+      {
+        menu:{
+          id:122,
+          text:'inner',
+          level:1,
+          route:'/pippo',
+          parentId: 12,
+        },
+        route:<Route path={"/pippo"} element={<div>pippo</div>} />
+      }
+    ] });
+    window.dispatchEvent(event);
+
     return ()=>{
       //ondestroy
     }
+
+    
   },[]);
 
   return (<Routes >
