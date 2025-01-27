@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, Suspense, useEffect, useState } from "react";
 import Drawer from "common/Drawer";
 import Theme from "common/Theme";
 import authService from "common/services/AuthService";
 import { GlobalRouting, LoginRouting, mfeInitMenu } from "./mfeInit";
+import { Route, Routes } from "react-router-dom";
 
 //import "./index.scss";
 
@@ -11,6 +12,7 @@ export const App = () => {
   const [loaded, setLoaded] = useState<boolean>(false);
   const [token, setToken] = useState<string>();
 
+  const [addedRoutes,setAddedRoutes] = useState<Array<any>>([]);
 
   useEffect(() => {
     try {
@@ -26,7 +28,21 @@ export const App = () => {
   }, []);
 
   useEffect(() => {
-    let r: Array<any> = [];
+    const handleAddMenuItems = (ev: any) => {
+      if (ev?.detail) {
+        setAddedRoutes((prevRoutes) => [...prevRoutes, ...ev.detail]);
+      }
+    };
+
+    window.addEventListener("AddMenuItems", handleAddMenuItems);
+
+    return () => {
+      window.removeEventListener("AddMenuItems", handleAddMenuItems);
+    };
+  }, []);
+
+  useEffect(() => {
+    
     if (loaded) {
       if (token) {
         if(location.pathname == '/login'){
@@ -34,8 +50,9 @@ export const App = () => {
         }else{
         
 
-        mfeInitMenu().then((menus)=>{
-          setRoutes(menus)
+        mfeInitMenu().then((menus) => {
+          
+          setRoutes([...menus, ...addedRoutes.map(ar=>ar.menu)]);
         });
 
 
@@ -55,7 +72,7 @@ export const App = () => {
 
       
     }
-  }, [token, loaded]);
+  }, [token, loaded,addedRoutes]);
 
 
 
@@ -68,10 +85,14 @@ if (!token) {
 }
 
 
+
 return (
   <Theme>
     <Drawer items={routes}>
      <GlobalRouting />
+      {
+        addedRoutes && addedRoutes.length && <Routes>{addedRoutes.map((ar,index)=><Fragment key={'addedR_'+index}>{ar.route}</Fragment>)}</Routes> 
+      }
     </Drawer>
   </Theme>
 );
