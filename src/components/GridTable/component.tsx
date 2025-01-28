@@ -28,6 +28,7 @@ import { PaginationModel } from "../../models/gridModel";
 import {
   CompositeFilterDescriptor,
   SortDescriptor,
+  //@ts-ignore
 } from "@progress/kendo-data-query";
 import styles from "./styles.module.scss";
 import {
@@ -35,6 +36,7 @@ import {
   pencilIcon,
   trashIcon,
   eyeIcon,
+  fileExcelIcon,
 } from "@progress/kendo-svg-icons";
 import {
   TableColumn,
@@ -47,6 +49,8 @@ import { WindowActionsEvent } from "@progress/kendo-react-dialogs";
 import { Loader } from "@progress/kendo-react-indicators";
 import CellAction from "./CellAction/component";
 import CustomFilter, { FilterField } from "../ExternalFilterKendoUI/component";
+import * as XLSX from 'xlsx';
+import ReactDOM from "react-dom";
 
 interface CustomRowAction {
   icon: any;
@@ -411,6 +415,77 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
   const onFilterChangeExternal = (event: FilterChangeEvent) => {
     setFilter(event.filter);
 };
+
+
+
+//excel export CM 
+  //const _export = React.useRef<ExcelExport | null>(null);
+
+  const getProperty=( propertyName:string, object:any )=> {
+    var parts = propertyName.split( "." ),
+      length = parts.length,
+      i,
+      property = object || this;
+  
+    for ( i = 0; i < length; i++ ) {
+      property = property[parts[i]];
+    }
+  
+    return property;
+  }
+  const readInnerTextFromElement=(element:any)=> {
+    // Creare un container nascosto
+    const container = document.createElement('div');
+    container.style.display = 'none'; // Nascondere il container
+    document.body.appendChild(container);
+  
+    // Renderizzare il componente React nel container
+    ReactDOM.render(element, container);
+  
+    // Leggere l'innerText del container
+    const innerText = container.innerText;
+  
+    // Rimuovere il container dopo aver letto il contenuto
+    document.body.removeChild(container);
+  
+    return innerText;
+  }
+
+  const excelExport = () => {
+    if(data){
+      const workbook = XLSX.utils.book_new();
+      
+      const newArr = data.map((row,rowIndex)=>{
+        let objRow:any={};
+        props.columns.forEach(column=>{
+          
+          try{
+            if(column.render){
+              objRow[column.label]=readInnerTextFromElement(column.render(row));
+            }else{
+              objRow[column.label]=getProperty(column.key,row)
+            }
+            
+          }catch(ex){
+            console.log('excel error on row ' + rowIndex+ ' column '+ column.label )
+          }
+            
+          
+        });
+        return objRow;
+      });
+      // Convert JSON data to a worksheet
+      const worksheet = XLSX.utils.json_to_sheet(newArr);
+
+      // Append the worksheet to the workbook
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+      // Export the workbook as an Excel file
+      XLSX.writeFile(workbook, "data.xlsx");
+    }
+    
+  };
+
   return (
     <div className={styles.gridContainer}>
       {props.externalFilter && props.filterFields && (
@@ -420,6 +495,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
           fields={props.filterFields}
         />
       )}
+      
       <Grid
         ref={gridRef}
         rowRender={rowRender}
@@ -445,7 +521,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
         pager={(pagerProps) => (
           <MyPager
             {...pagerProps}
-            pageSizes={props.pageSizeOptions || [5, 10, 15, 20, 30]}
+            pageSizes={props.pageSizeOptions || [5, 10, 15, 20, 30, "ALL"]}
           />
         )}
       >
@@ -473,6 +549,15 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
               </Button>
             </div>
           )}
+          
+            <Button
+              svgIcon={fileExcelIcon}
+              themeColor={"success"}
+              onClick={excelExport}
+            >
+              Esporta
+            </Button>
+          
         </GridToolbar> : null}
 
         {props.columns.map((column: TableColumn, idx: number) => {
