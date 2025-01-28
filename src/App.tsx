@@ -16,12 +16,12 @@ const App = () => {
       {
         menu:{
           id:122,
-          text:'inner',
+          text:'categoria 4',
           level:1,
-          route:'/pippo',
+          route:'/notifications/cat/4',
           parentId: 12,
         },
-        route:<Route path={"/pippo"} element={<div>pippo</div>} />
+        //route:<Route path={"/pippo"} element={<div>pippo</div>} />
       }
     ] });
     window.dispatchEvent(event);
@@ -36,6 +36,7 @@ const App = () => {
   return (<Routes >
           <Route path={"/notifications"} element={<MainPage />} />
           <Route path={"/notifications/inner"} element={<MainPage />} />
+          <Route path={"/notifications/cat/:id"} element={<MainPage />} />
         </Routes>
   );
 };
