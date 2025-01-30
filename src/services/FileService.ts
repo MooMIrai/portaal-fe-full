@@ -209,8 +209,28 @@ class FileService{
             
                     const result:any = {};
                     workbook.SheetNames.forEach((sheetName) => {
-                    const sheet = workbook.Sheets[sheetName];
-                        result[sheetName] = XLSX.utils.sheet_to_json(sheet, { header: 1 }); // Dati come array di array
+                        const sheet = workbook.Sheets[sheetName];
+
+                        const sheetRef= sheet["!ref"];
+                        if(sheetRef){
+                            // Ottieni il range massimo (es. "A1:D10")
+                            const range = XLSX.utils.decode_range(sheetRef);
+                            const numRows = range.e.r + 1; // Numero di righe
+                            const numCols = range.e.c + 1; // Numero di colonne
+                
+                            // Inizializza la matrice vuota con `null`
+                            const jsonData = Array.from({ length: numRows }, () => Array(numCols).fill(null));
+                
+                            // Riempie la matrice basandosi sulle coordinate delle celle
+                            for (const cellAddress in sheet) {
+                            if (cellAddress[0] === "!") continue; // Ignora i metadati di SheetJS
+                
+                            const cell = sheet[cellAddress];
+                            const { r, c } = XLSX.utils.decode_cell(cellAddress);
+                            jsonData[r][c] = cell.v;
+                            }
+                            result[sheetName] = jsonData;
+                        }
                     });
             
                     resolve(result);
