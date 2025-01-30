@@ -92,13 +92,13 @@ return (
       window.opener?<>
         <GlobalRouting />
         {
-          addedRoutes && addedRoutes.length && <Routes>{addedRoutes.map((ar,index)=><Fragment key={'addedR_'+index}>{ar.route}</Fragment>)}</Routes> 
+          addedRoutes && addedRoutes.length ?<Routes>{addedRoutes.map((ar,index)=><Fragment key={'addedR_'+index}>{ar.route}</Fragment>)}</Routes> :null
         }
       </>:
       <Drawer items={routes}>
         <GlobalRouting />
         {
-          addedRoutes && addedRoutes.length && <Routes>{addedRoutes.map((ar,index)=><Fragment key={'addedR_'+index}>{ar.route}</Fragment>)}</Routes> 
+          addedRoutes && addedRoutes.length ?<Routes>{addedRoutes.map((ar,index)=><Fragment key={'addedR_'+index}>{ar.route}</Fragment>)}</Routes> :null
         }
       </Drawer>
     }
