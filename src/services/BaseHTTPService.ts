@@ -69,7 +69,7 @@ export default abstract class BaseHTTPService{
   
     fetchResource = async ( id: number) => {
       try {
-        const response = await client.get(`/api/v1/${this.getTableName()}/${id}`);
+        const response = await client.get(`/api/v1/${this.getTableName()}/${id}?include=true`);
         return response.data;
       } catch (error) {
         console.error("Error fetching resource:", error);
