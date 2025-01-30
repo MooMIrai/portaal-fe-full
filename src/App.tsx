@@ -8,6 +8,7 @@ export default function(){
     
     <Routes>
     <Route path={"/richieste"} element={<RequestPage />}></Route>
+    <Route path={"/richieste/:id/:candidateId"} element={<RequestPage />}></Route>
     <Route path={"/candidati"} element={<CandidatePage />}></Route>
     
   </Routes>

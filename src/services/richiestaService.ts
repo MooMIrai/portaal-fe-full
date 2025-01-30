@@ -82,6 +82,13 @@ class RichiestaServiceC extends BaseHttpService{
       candidate_id:candidateId,
       request_id:requestid
     }).then(res=>res.data)
+
+    getByCandidate= (candidateId:number,pageNum:number,pageSize:number)=> client.post('/api/v1/recruitingRequest/findAllListByCandidate',{
+      "recruitingCandidateId": candidateId,
+      "pageNum": pageNum,
+      "pageSize": pageSize
+    })
+
   }
 
 export const richiestaService = new RichiestaServiceC();

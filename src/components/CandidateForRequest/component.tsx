@@ -13,7 +13,7 @@ import { CandidateLogs } from "../CandidateLogs/component";
 import fileService from 'common/services/FileService';
 
 
-export function CandidateForRequest(props: PropsWithChildren<{ requestId: number, requestSkills?:any[] }>) {
+export function CandidateForRequest(props: PropsWithChildren<{ requestId: number, requestSkills?:any[],preselectedId?:string }>) {
 
     const [currentPerson,setCurrentPerson] = useState<any>();
     const [currentTimeline,setCurrentTimeline] = useState<any>();
@@ -220,9 +220,12 @@ export function CandidateForRequest(props: PropsWithChildren<{ requestId: number
         
     ) => {
         return richiestaService.getDetails(props.requestId).then(res => {
+            const dataR = res[0].RecruitingAssignment.filter(p=>{
+                return !props.preselectedId || p.Candidate.id===parseInt(props.preselectedId);
+            })
             return {
-                data: res[0].RecruitingAssignment,
-                meta: { total: res[0].RecruitingAssignment.length }
+                data:dataR,
+                meta: { total: dataR.length }
             }
         })
     }
@@ -230,7 +233,7 @@ export function CandidateForRequest(props: PropsWithChildren<{ requestId: number
     return <>
 
     <span>
-        Candidati Associati alla richiesta
+        Candidati Associati alla richiesta 
     </span>
     <GridTable
         ref={tableAssigned}
@@ -250,7 +253,7 @@ export function CandidateForRequest(props: PropsWithChildren<{ requestId: number
 
 
     />
-    <div style={{marginTop:20}}>
+    {!props.preselectedId && <div style={{marginTop:20}}>
         <Accordion title="Aggiungi candidato" defaultOpened={false}>
         {
             props.requestSkills && 
@@ -329,7 +332,7 @@ export function CandidateForRequest(props: PropsWithChildren<{ requestId: number
         //button={{ label: props.type === 'view' ? "Esci" : "Salva", onClick: handleSubmit }}
         />}
         </Accordion>
-    </div>
+    </div>}
     <Modal title="Gestisci il candidato"
         width="70%"
         height="90%"

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { richiestaService } from "../../services/richiestaService";
 import GridTable from "common/Table";
 import { RichiesteCrud } from "../../components/RichiesteCrud/component";
@@ -6,8 +6,12 @@ import Button from 'common/Button'
 import {tellAFriendIcon} from 'common/icons';
 import Modal from 'common/Modal'; 
 import { CandidateForRequest } from "../../components/CandidateForRequest/component";
+import { useParams } from "react-router-dom";
 
 export default function RequestPage(){
+
+    const {id,candidateId} = useParams();
+
      const columns = [
     
             //{ key: "date", label: "Data Richiesta", type: "date", sortable: true, filter: "date" },
@@ -16,17 +20,28 @@ export default function RequestPage(){
             { key: "RequestingEmployee.Person.firstName", label: "HR incaricaricata", type: "custom", render:(rowData)=><td>{rowData.RequestingEmployee.Person.firstName} {rowData.RequestingEmployee.Person.lastName}</td> },
             { key: "id", label: "Profilo", type: "custom", sortable: false, filter: false, render:(rowData)=><td>
               <Button size="small" svgIcon={tellAFriendIcon} onClick={() => {
-                setCurrentrequestId(rowData.id)
+                setCurrentrequest(rowData)
                 setModalOpened(true);
                 setCurrentrequestSkills(rowData.Skills)
               }}>{rowData.RecruitingAssignment?rowData.RecruitingAssignment.length:0} - Candidati Associati</Button>
             </td>} ,
             { key: "CandidateProfile.description", label: "Profilo", type: "string", sortable: true, filter: "text" }
-          ];
+    ];
 
     const [modalOpened,setModalOpened] = useState<boolean>(false);
-    const [currentrequestId,setCurrentrequestId] = useState<number>();
+    const [currentrequest,setCurrentrequest] = useState<any>();
     const [currentrequestSkills,setCurrentrequestSkills] = useState<Array<any>>();
+
+    useEffect(()=>{
+      if(id){
+        richiestaService.fetchResource(id).then(data=>{
+          setCurrentrequest(data)
+          setModalOpened(true);
+          setCurrentrequestSkills(data.Skills)
+        })
+      }
+    },[id])
+
 
       const loadData = (
           pagination: any,
@@ -38,38 +53,43 @@ export default function RequestPage(){
       }
     
         return <>
-          <GridTable
-          pageable={true}
-          filterable={true}
-          sortable={true}
-          getData={loadData}
-          columns={columns}
-          resizableWindow={true}
-          initialHeightWindow={800}
-          draggableWindow={true}
-          initialWidthWindow={900}
-          resizable={true}
-          actions={()=>[
-            "create",
-            "edit",
-            "delete",
-            
-          ]}
-      
-          formCrud={(row: any, type: string, closeModalCallback: any, refreshTable: any) => (
-            <RichiesteCrud row={row}  closeModalCallback={closeModalCallback} refreshTable={refreshTable} type={type} />
-          )}
-        />
-        <Modal title="Cerca candidati per la richiesta "
+          {!id && <GridTable
+            pageable={true}
+            filterable={true}
+            sortable={true}
+            getData={loadData}
+            columns={columns}
+            resizableWindow={true}
+            initialHeightWindow={800}
+            draggableWindow={true}
+            initialWidthWindow={900}
+            resizable={true}
+            actions={()=>[
+              "create",
+              "edit",
+              "delete",
+              
+            ]}
+        
+            formCrud={(row: any, type: string, closeModalCallback: any, refreshTable: any) => (
+              <RichiesteCrud row={row}  closeModalCallback={closeModalCallback} refreshTable={refreshTable} type={type} />
+            )}
+          />
+        }
+        <Modal title={"Cerca candidati per la richiesta "+ (currentrequest?'id:'+currentrequest.id_code + ' ref:'+ currentrequest.ref_code:'')}
           width="100%"
           height="100%"
             isOpen={modalOpened}
             onClose={()=>{
-              setCurrentrequestId(undefined)
-              setModalOpened(false);
-              setCurrentrequestSkills(undefined)
+              if(id || candidateId){
+                window.close();
+              }else{
+                setCurrentrequest(undefined)
+                setModalOpened(false);
+                setCurrentrequestSkills(undefined)
+              }
             }}>
-          {modalOpened && currentrequestId && <CandidateForRequest requestId={currentrequestId} requestSkills={currentrequestSkills} />}
+          {modalOpened && currentrequest && <CandidateForRequest requestId={currentrequest.id} requestSkills={currentrequestSkills} preselectedId={candidateId} />}
         </Modal>
        </>
 }

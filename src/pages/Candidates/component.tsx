@@ -3,14 +3,17 @@ import GridTable from "common/Table";
 import { candidatoService } from "../../services/candidatoService";
 import { CandidatiCrud } from "../../components/CandidatiCrud/component";
 import Modal from 'common/Modal';
-import { TestComponent } from "../../components/TestComponent/component";
 import SvgIcon from 'common/SvgIcon';
-import {fileIcon} from 'common/icons';
+import {fileIcon, tellAFriendIcon} from 'common/icons';
 import fileService from 'common/services/FileService'
+import Button from 'common/Button';
+import { RequestByCandidate } from "../../components/RequestByCandidate/component";
 
 export default function CandidatePage() {
 
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [recruitingAssignments,setRecruitingAssignments] = useState<any[] | undefined>();
+  const [candidateSelected,setCandidateSelected] = useState<any>();
 
   const columns = [
     { key: "Person.files", label: "CV", type: "custom", width:50, render:(rowData)=>{
@@ -22,8 +25,18 @@ export default function CandidatePage() {
       }
       return <td></td>
     }},
+    { key: "id", label: "Richieste", type: "custom", sortable: false, filter: false, render:(rowData)=><td>
+                  <Button size="small" svgIcon={tellAFriendIcon}
+                  disabled = {!rowData.RecruitingAssignments || !rowData.RecruitingAssignments.length}
+                   onClick={() => {
+                      setRecruitingAssignments(rowData.RecruitingAssignments);
+                      setShowModal(true);
+                      setCandidateSelected(rowData)
+                  }}>{rowData.RecruitingAssignments?rowData.RecruitingAssignments.length:0} - Richieste Associate</Button>
+                </td>} ,
     { key: "Person.firstName", label: "Nome", type: "string", sortable: true, filter: "text" },
     { key: "Person.lastName", label: "Cognome", type: "string", sortable: true, filter: "text" },
+    
     { key: "CandidateProfile.description", label: "Mansione", type: "string", sortable: true, filter: "text" },
     {
       key: "Person.PersonSkillAreas.SkillArea.name", label: "Skills", type: "custom", sortable: false, filter: "text", width: 250, render: (row) => {
@@ -96,6 +109,11 @@ export default function CandidatePage() {
     return maxDate;
   }
 
+  let title = "";
+  if(candidateSelected && candidateSelected.Person){
+    title="Dettaglio richieste di "+ candidateSelected.Person.firstName + ' '+ candidateSelected.Person.lastName;
+  }
+
   return (
     <>
       <GridTable
@@ -124,14 +142,15 @@ export default function CandidatePage() {
           <CandidatiCrud refreshTable={refreshTable} type={type} row={row} closeModalCallback={closeModalCallback} />
         )}
       />
+      
       <Modal
-        title="Titolo"
+        title={title}
         isOpen={showModal}
         onClose={() => setShowModal(false)}
         width="100%"
         height="100%"
       >
-        <TestComponent id={1} />
+        {recruitingAssignments && candidateSelected && <RequestByCandidate idCandidate={candidateSelected.id} requests={recruitingAssignments} />}
       </Modal>
     </>
   )
