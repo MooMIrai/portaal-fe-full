@@ -1,35 +1,39 @@
 import React, { useEffect } from "react";
-import { useState } from "react";
 import fileService from "common/services/FileService";
 import Button from 'common/Button';
 import {fileExcelIcon} from 'common/icons';
+import styles from './style.module.scss';
 
 export function ReportPreview(props:{ excelFile:any }) {
-  const [sheetNames,setSheetName] = useState<string[]>([]); // Nomi dei fogli
-  const [selectedSheet, setSelectedSheet] = useState<string>(''); // Primo foglio di default
-  const [excelData, setExcelData] = useState<Record<string,any>>();
+  //const [sheetNames,setSheetName] = useState<string[]>([]); // Nomi dei fogli
+  //const [selectedSheet, setSelectedSheet] = useState<string>(''); // Primo foglio di default
+  //const [excelData, setExcelData] = useState<Record<string,any>>();
 
   useEffect(()=>{
     if(props.excelFile){
-        fileService.getJsonFromExcelBlob(props.excelFile).then((edata)=>{
+        /* fileService.getJsonFromExcelBlob(props.excelFile).then((edata)=>{
             setExcelData(edata);
             setSheetName(Object.keys(edata));
             setSelectedSheet(Object.keys(edata)[0])
-        })
+        }); */
+        setTimeout(()=>{
+          fileService.fromBlobToarrayBuffer(props.excelFile).then(arraybuffer=>{
+            fileService.showExcelPreview(arraybuffer,"#report-container");
+          })
+        },500)
+        
+        
     }
   },[props.excelFile])
 
-  if(!excelData){
-    return <div> nessun dato</div>
-  }
 
   return (
-    <div style={{overflow:'auto'}}>
+    <div style={{overflow:'auto'}} className={styles.container}>
       
         <Button svgIcon={fileExcelIcon} themeColor="success" onClick={()=>fileService.downloadBlobFile(props.excelFile,Date.now()+'.xlsx')}> Scarica</Button>
       {/* Tabs per selezionare il foglio */}
       <h3>Anteprima Excel</h3>
-      <div style={{ display: "flex", borderBottom: "2px solid #ddd" }}>
+      {/* <div style={{ display: "flex", borderBottom: "2px solid #ddd" }}>
         {sheetNames.map((sheet) => (
           <button
             key={sheet}
@@ -47,10 +51,11 @@ export function ReportPreview(props:{ excelFile:any }) {
             {sheet}
           </button>
         ))}
-      </div>
+      </div> */}
 
+      <div id="report-container"></div>
       {/* Tabella con i dati del foglio selezionato */}
-      {excelData[selectedSheet]?.length > 0 ? (
+      {/* {excelData[selectedSheet]?.length > 0 ? (
         <table border={1} style={{ marginTop: "10px", width: "100%", borderCollapse: "collapse" }}>
           <thead>
             <tr>
@@ -75,7 +80,7 @@ export function ReportPreview(props:{ excelFile:any }) {
         </table>
       ) : (
         <p style={{ marginTop: "10px" }}>Nessun dato disponibile.</p>
-      )}
+      )} */}
     </div>
   );
 
