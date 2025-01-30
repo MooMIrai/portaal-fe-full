@@ -88,12 +88,21 @@ if (!token) {
 
 return (
   <Theme>
-    <Drawer items={routes}>
-     <GlobalRouting />
-      {
-        addedRoutes && addedRoutes.length && <Routes>{addedRoutes.map((ar,index)=><Fragment key={'addedR_'+index}>{ar.route}</Fragment>)}</Routes> 
-      }
-    </Drawer>
+    {
+      window.opener?<>
+        <GlobalRouting />
+        {
+          addedRoutes && addedRoutes.length && <Routes>{addedRoutes.map((ar,index)=><Fragment key={'addedR_'+index}>{ar.route}</Fragment>)}</Routes> 
+        }
+      </>:
+      <Drawer items={routes}>
+        <GlobalRouting />
+        {
+          addedRoutes && addedRoutes.length && <Routes>{addedRoutes.map((ar,index)=><Fragment key={'addedR_'+index}>{ar.route}</Fragment>)}</Routes> 
+        }
+      </Drawer>
+    }
+    
   </Theme>
 );
 
