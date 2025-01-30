@@ -57,19 +57,18 @@ export default function CandidatePage() {
         </td>;
       }
     },
-    {
-      key: "date_last_revision", label: "Data Ultima Revisione", type: "custom", sortable: true, filter: "date", width: 270, render: (row) => {
+  //  { key: "last_update_assignment", label: "Data Ultima Azione", type: "date", sortable: true, filter: "date", width: 270 },
+  {
+    key: "last_update_assignment", label: "Data Ultima Azione", type: "custom", sortable: true, filter: "date", width: 270, render: (row) => {
 
-        let assignment = getMaxDateLog(row.RecruitingAssignments);
+      if (row.last_update_assignment == null || row.last_update_assignment == undefined)
+        return <td></td>;
 
-        if (assignment == null)
-          return <td></td>;
+      let date_action = new Date(row.last_update_assignment).toLocaleDateString();
 
-        let date_last_revision = new Date(assignment).toLocaleDateString();
-
-        return <td>{date_last_revision}</td>;
-      }
-    },
+      return <td>{date_action}</td>;
+    }
+  },
   ];
 
   const loadData = (
@@ -81,6 +80,7 @@ export default function CandidatePage() {
     return candidatoService.search(pagination.currentPage, pagination.pageSize, filter, sorting, undefined, true)
   }
 
+  // REMOVE ???
   const getMaxDateLog = (assignment: any): Date | null => {
 
     let maxDate: Date | null = null;
