@@ -6,11 +6,13 @@
 }
 
 .container{
-    margin-left:14.4%;
-    margin-right:14.4%;
-    margin-top:30px;
+/*     margin-left:14.4%;
+    margin-right:14.4%; */
     position: relative;
-    margin-top: 20px;
+    margin-top: 30px;
+    border-top: 1px solid #999;
+    padding-top: 30px;
+    
     & > form > fieldset {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -24,6 +26,9 @@
 
 .page{
     background: #fff;
-    padding:15px;
-    border-radius:20px
+    padding: 15px;
+    border-radius: 7px !important;
+    padding-top: 30px !important;
+    padding-bottom: 30px !important;
+    border: 1px solid #999;
 }
