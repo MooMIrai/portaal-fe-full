@@ -28,7 +28,7 @@ export default function(){
         }
     }
 
-    return <>
+    return <div className={styles.page}>
 
         <Stepper items={[
             { label: 'Seleziona Report' },
@@ -58,5 +58,5 @@ export default function(){
         
      </div> */}
      
-    </>
+    </div>
 }
