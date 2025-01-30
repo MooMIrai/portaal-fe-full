@@ -1,6 +1,7 @@
 import NotificationProviderActions from "../components/Notification/provider";
 import client from "./BEService";
 import { saveAs } from '@progress/kendo-file-saver';
+import * as XLSX from 'xlsx';
 class FileService{
 
     convertToBE(file:File,provider?:"DRIVE"|"DATABASE"){
@@ -192,6 +193,38 @@ class FileService{
       
           input.click();
         });
+    }
+
+    getJsonFromExcelBlob(fileBlob:Blob){
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            
+            reader.onload = (e) => {
+              try {
+                if(e.target){
+
+                
+                    const arrayBuffer = e.target.result;
+                    const workbook = XLSX.read(arrayBuffer, { type: "array" });
+            
+                    const result:any = {};
+                    workbook.SheetNames.forEach((sheetName) => {
+                    const sheet = workbook.Sheets[sheetName];
+                        result[sheetName] = XLSX.utils.sheet_to_json(sheet, { header: 1 }); // Dati come array di array
+                    });
+            
+                    resolve(result);
+                }else{
+                    throw new Error('file corrupted')
+                }
+              } catch (error) {
+                reject(error);
+              }
+            };
+        
+            reader.onerror = (error) => reject(error);
+            reader.readAsArrayBuffer(fileBlob);
+          });
     }
 }
 
