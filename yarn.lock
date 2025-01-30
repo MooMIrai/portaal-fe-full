@@ -2490,7 +2490,7 @@ core-js-compat@^3.37.1, core-js-compat@^3.38.0:
   dependencies:
     browserslist "^4.23.3"
 
-core-js@^2.4.0:
+core-js@^2.4.0, core-js@^2.6.12:
   version "2.6.12"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.12.tgz#d9333dfa7b065e347cc5682219d6f690859cc2ec"
   integrity sha512-Kb2wC0fvsWfQrgk8HU5lW6U/Lcs8+9aaYcy4ZFc6DDlo4nZ7n70dEgE5rtR0oG6ufKDUnrwfWL1mXR5ljDatrQ==
@@ -2862,6 +2862,13 @@ events@^3.2.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/events/-/events-3.3.0.tgz#31a95ad0a924e2d2c419a813aeb2c4e878ea7400"
   integrity sha512-mQw+2fkQbALzQ7V0MY0IqdnXNOeTtP4r0lN9z7AAawCXgqea7bDii20AYrIBrFd/Hx0M2Ocz6S111CaFkUcb0Q==
+
+excel-viewer@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/excel-viewer/-/excel-viewer-1.0.1.tgz#ad4b0570a18033fbcdd539f48109c5a08d24cddb"
+  integrity sha512-P3FnvMUrEredne+qnZnQL+o7ERvYr0mIJQa2fo9plyKNcxTqBAQyOAo31AvyTbnGx0LuIi4Lm/12HVm5GsQnTQ==
+  dependencies:
+    core-js "^2.6.12"
 
 execa@^5.0.0:
   version "5.1.1"

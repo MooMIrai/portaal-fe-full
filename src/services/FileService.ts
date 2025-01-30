@@ -2,6 +2,8 @@ import NotificationProviderActions from "../components/Notification/provider";
 import client from "./BEService";
 import { saveAs } from '@progress/kendo-file-saver';
 import * as XLSX from 'xlsx';
+//@ts-ignore
+import ExcelViewer from 'excel-viewer';
 class FileService{
 
     convertToBE(file:File,provider?:"DRIVE"|"DATABASE"){
@@ -245,6 +247,24 @@ class FileService{
             reader.onerror = (error) => reject(error);
             reader.readAsArrayBuffer(fileBlob);
           });
+    }
+
+    fromBlobToarrayBuffer(fileBlob:Blob){
+        return new Promise((ok,ko)=>{
+            const fileReader = new FileReader();
+            fileReader.onload = function(event) {
+                if(event.target)
+                    ok(event.target.result);
+                else
+                    ko('error')
+            };
+            fileReader.readAsArrayBuffer(fileBlob);
+        })
+        
+    }
+
+    showExcelPreview(file:ArrayBuffer,container:string|HTMLElement){
+        new ExcelViewer(container,file)
     }
 }
 
