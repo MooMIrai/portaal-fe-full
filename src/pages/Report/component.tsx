@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import { ReportsSelector } from "../../components/reportSelector/component";
 import { ReportForm } from "../../components/reportForm/component";
 import { reportService } from "../../services/ReportService";
-import fileService from "common/services/FileService";
 import Stepper from 'common/Stepper';
 import styles from './style.module.scss';
 import { ReportPreview } from "../../components/reportpreview/component";
