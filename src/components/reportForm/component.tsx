@@ -5,7 +5,7 @@ import React from "react";
 import { FormField } from "../../models/FormModel";
 import { formAdapter } from "../../adapters/FormAdapter";
 
-export function ReportForm(props:{report:string | undefined, onSubmit:(data:any)=>void}){
+export function ReportForm(props:{report:string | undefined, reportName:string | undefined, onSubmit:(data:any)=>void}){
 
     const [formFields,setFormFields] = useState<FormField[]>();
 
@@ -25,8 +25,8 @@ export function ReportForm(props:{report:string | undefined, onSubmit:(data:any)
             fields={formFields}
             formData={{}}
             onSubmit={props.onSubmit}
-            description="Parametri"
-            submitText={"Genera"}
+            description={"Parametri per il report " + props.reportName}
+            submitText={"Genera Report"}
             showSubmit
 
         />

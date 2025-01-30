@@ -1,0 +1,23 @@
+.reportSelector{
+    
+        max-width: 300px;
+        
+    
+}
+
+.container{
+    margin-left:14.4%;
+    margin-right:14.4%;
+    margin-top:30px;
+    position: relative;
+    margin-top: 20px;
+    & > form > fieldset {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        gap:10px;
+       
+    }
+
+    
+    
+}
