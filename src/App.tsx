@@ -12,19 +12,7 @@ const App = () => {
 
     });
     
-    const event = new CustomEvent("AddMenuItems", { detail: [
-      {
-        menu:{
-          id:122,
-          text:'categoria 4',
-          level:1,
-          route:'/notifications/cat/4',
-          parentId: 12,
-        },
-        //route:<Route path={"/pippo"} element={<div>pippo</div>} />
-      }
-    ] });
-    window.dispatchEvent(event);
+   
 
     return ()=>{
       //ondestroy
