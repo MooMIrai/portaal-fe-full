@@ -235,8 +235,8 @@ const Sidebar = ({ children, items }: SidebarPros) => {
             title="Azioni per l'utente"
           >
             <div className={styles.popoverContainer}>
-              <Button svgIcon={logoutIcon} fillMode={'clear'} themeColor="error" onClick={logout}>Logout</Button>
               <Button svgIcon={userIcon} fillMode={'clear'} themeColor="primary" onClick={()=>navigate('/profile')}>Profilo</Button>
+              <Button svgIcon={logoutIcon} fillMode={'clear'} themeColor="error" onClick={logout}>Logout</Button>
             </div>
             
           </Popover>
