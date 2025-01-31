@@ -88,7 +88,7 @@ class SalService extends BaseHttpService {
       };
 
       const response = await client.post(
-        `api/v1/sal/getSalByProject/${projectId}`,
+        `api/v1/sal/getSalFromProject/${projectId}`,
         { filtering, sorting },
         { params }
       );
