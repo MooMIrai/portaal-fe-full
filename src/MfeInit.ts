@@ -6,7 +6,8 @@ export default function(){
         id:15,
         text:'Report',
         level:0,
-        route:'/reports'
+        route:'/reports',
+        iconKey:'fileReportIcon'
       }
     ]
   }
