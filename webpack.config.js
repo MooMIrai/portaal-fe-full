@@ -118,6 +118,17 @@ module.exports = (_, argv) => {
           use: ["style-loader", "css-loader", "postcss-loader"],
         },
         {
+          test: /\.svg$/,
+          use: [
+            {
+              loader: 'file-loader',
+              options: {
+                name: "[name].[ext]"
+              },
+            },
+          ],
+        },
+        {
           test: /public\/themes\/.(css|s[ac]ss)$/i,
           use: [
             {
