@@ -9,6 +9,7 @@ export default function(){
           text:'Recruiting',
           level:0,
           route:'/',
+          iconKey:'tellAFriendIcon'
           
       },
       {
