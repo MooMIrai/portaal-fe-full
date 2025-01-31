@@ -392,7 +392,7 @@ export default function RapportinoCalendar(props: RapportinoCalendarProps) {
   return (
     <>
       {!props.forcePerson ? <div style={{ display: 'flex', flexDirection: size.width && size.width >= 768 ? 'row' : 'column', justifyContent: "space-between", marginBottom: 10 }}>
-        <p>Tocca una data per inserire le ore di attività</p>
+        <p>Tocca una data per inserire le ore di attività o trascina per selezionare più date</p>
         <div style={{ display: 'flex', justifyContent: "space-between", alignItems: 'flex-end', gap: 15 }}>
           <div style={{ width: 300 }}>Utente Selezionato <AutoCompletePerson label="" value={userSelected} onChange={(e) => {
             if (!e.value) {
