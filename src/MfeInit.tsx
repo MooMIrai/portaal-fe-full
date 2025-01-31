@@ -6,7 +6,7 @@ export default function () {
         id: 6,
         text: "Vendite",
         level: 0,
-        route: "/Vendite",
+        route: "#",
         iconKey: "cartIcon",
       },
       {
