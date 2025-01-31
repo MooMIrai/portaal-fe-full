@@ -41,8 +41,8 @@ loadMessages(esMessages, "it-IT");
 export default function Theme(props: PropsWithChildren<any>) {
 
   const themes = {
-    dark: `${process.env.RELEASE_ASSETS_PATH}assets/themes/theme_dark.css`,
-    light: `${process.env.RELEASE_ASSETS_PATH}assets/themes/theme.css`,
+    dark: `${process.env.RELEASE_ASSETS_PATH}/themes/theme_dark.css`,
+    light: `${process.env.RELEASE_ASSETS_PATH}/themes/theme.css`,
   };
 
   return (<>
