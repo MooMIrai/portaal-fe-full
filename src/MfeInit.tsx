@@ -8,7 +8,7 @@ export default function(){
           id:13,
           text:'Recruiting',
           level:0,
-          route:'/',
+          route:'#',
           iconKey:'tellAFriendIcon'
           
       },
