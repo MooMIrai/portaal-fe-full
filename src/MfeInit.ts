@@ -6,7 +6,7 @@ export default function(){
           id:12,
           text:'Notifications',
           level:0,
-          route:'/notifications',
+          route:'#',
           iconKey:'bellIcon'
       },
       {
