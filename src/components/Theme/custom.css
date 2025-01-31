@@ -4,5 +4,76 @@
   
   
   body{
-    margin:0
+    margin:0;
+    overflow: hidden;
   }
+
+  
+
+body::before{
+  content:'';
+  position: absolute;
+  top:0;
+  right:0;
+  bottom:70%;
+  left:0;
+  background: linear-gradient(87deg, #f5365c 0, #f56036 100%) ;
+}
+
+.k-drawer-container{
+  position: absolute;
+  background: none;
+  top:0px;
+  bottom:30px;
+  left:0;
+  right: 0px;
+}
+
+.k-drawer{
+  margin:20px;
+  margin-top:0;
+  border-radius:20px;
+  padding:30px 15px;
+  border:none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.k-drawer > .k-drawer-wrapper{
+  width: 100% !important;
+}
+
+.k-drawer .k-drawer-items{
+  gap:10px;
+}
+
+.k-drawer .k-drawer-logo{
+  margin:auto;
+  margin-bottom:20px;
+}
+
+.k-drawer .k-drawer-item{
+  border-radius:20px;
+}
+
+.k-drawer-content{
+  margin-right: 20px;
+  height: 100%;
+}
+
+.k-drawer-container{
+  padding-top:50px;
+  
+}
+
+.page-container{
+  padding-top: 20px;
+  background-color: #fff;
+  border-radius: 20px !important;
+  margin:0;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+.k-grid, .k-pager,.k-grid-toolbar{
+  border:none;
+  background-color: #fff;
+}
+

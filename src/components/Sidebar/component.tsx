@@ -46,7 +46,19 @@ const CustomItem = (props: CustomItemProps) => {
   const itemStyle = parentId
     ? { marginLeft: "2rem" }
     : {};
-  return props.visible === false ? null : (
+  
+  return props.visible === false ? null : (<>
+  {
+    props.index ===0?
+      <div className="k-drawer-logo"><img
+        width={150}
+        height={30}
+        src="/image/logoTaal.png"
+        alt="Logo Taal"
+      />
+      </div>
+    :null
+  }
     <DrawerItem {...others} style={itemStyle}>
       {resolvedIcon && <SvgIcon icon={resolvedIcon} />}
       <span className={"k-item-text"}>{props.text}</span>
@@ -59,6 +71,7 @@ const CustomItem = (props: CustomItemProps) => {
         />
       )}
     </DrawerItem>
+    </>
   );
 };
 
@@ -180,13 +193,13 @@ const Sidebar = ({ children, items }: SidebarPros) => {
     <div className={styles.sidebarContainer}>
       <div className={styles.toolbarContainer + " custom-toolbar"}>
         <div className={styles.parentButtonHamburgerText}>
-          <img
+         {/*  <img
             width={150}
             height={30}
             src="/image/logoTaal.png"
             alt="Logo Taal"
           />
-          <Button svgIcon={menuIcon} fillMode={"flat"} onClick={handleClick} />
+          <Button svgIcon={menuIcon} fillMode={"flat"} onClick={handleClick} /> */}
           <span className="title">{""}</span>
         </div>
         <div className={styles.buttonToolBar}>
@@ -200,7 +213,7 @@ const Sidebar = ({ children, items }: SidebarPros) => {
             )}
 
           </div>
-          <Button ref={anchor}  fillMode="outline"  themeColor="primary" onClick={()=>setPopoverUser(!popoverUser)}>
+          <Button ref={anchor}  fillMode="solid"  themeColor="light" onClick={()=>setPopoverUser(!popoverUser)}>
           {AuthService.getImage() && <Avatar rounded="full" type="image" style={{ marginRight: 5 }}>
 										<img src={AuthService.getImage()} alt="user avatar" />
 									</Avatar>}
@@ -227,7 +240,8 @@ const Sidebar = ({ children, items }: SidebarPros) => {
           </Popover>
         </div>
       </div>
-      <div className={styles.borderBottom}></div>
+
+     
       <Drawer
         expanded={drawerExpanded}
         mode="push"
@@ -235,12 +249,18 @@ const Sidebar = ({ children, items }: SidebarPros) => {
         item={CustomItem}
         onSelect={onSelect}
         mini={true}
+
       >
+        
         <DrawerContent className={styles.drawerContent}>
+        
           <div className={styles.titleContainer}>
             <Typography.h4 themeColor="primary">{location.pathname && location.pathname!='/'?location.pathname.replace('/','')[0].toUpperCase()+location.pathname.replace('/','').substring(1):'Homepage'}</Typography.h4>
           </div>
-          {children}
+          <div className="page-container">
+            {children}
+          </div>
+         
         </DrawerContent>
       </Drawer>
     </div>
