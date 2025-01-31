@@ -7,7 +7,7 @@ export default function () {
         id: 5,
         text: "HR",
         level: 0,
-        route: "/HR",
+        route: "#",
         iconKey: "globeOutlineIcon",
       },
       {
