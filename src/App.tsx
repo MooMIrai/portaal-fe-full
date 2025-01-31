@@ -8,8 +8,9 @@ const App = () => {
   useEffect(()=>{
 
     reportService.getAllCategories().then(data=>{
+
       if(data && data.length){
-        data.map((catName,index)=>{
+        const menu=data.map((catName,index)=>{
           return {
               menu:{
                 id:(150+index),
@@ -20,7 +21,7 @@ const App = () => {
               }
             }
         });
-        const event = new CustomEvent("AddMenuItems", { detail: data})
+        const event = new CustomEvent("AddMenuItems", { detail: menu})
         window.dispatchEvent(event);
       }
     })
