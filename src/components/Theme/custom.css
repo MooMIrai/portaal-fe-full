@@ -1,41 +1,44 @@
 .k-dialog-wrapper.k-scheduler-edit-dialog {
-    position: absolute;
+    position: absolute !important;
   }
   
   
   body{
-    margin:0;
-    overflow: hidden;
+    margin:0 !important;
+    overflow: hidden !important;
+    background: var(--kendo-color-app-surface) !important;
   }
+
+
 
   
 
 body::before{
-  content:'';
-  position: absolute;
-  top:0;
-  right:0;
-  bottom:70%;
-  left:0;
-  background: linear-gradient(87deg, #f5365c 0, #f56036 100%) ;
+  content:'' !important;
+  position: absolute !important;
+  top:0 !important;
+  right:0 !important;
+  bottom:70% !important;
+  left:0 !important;
+  background: linear-gradient(87deg, var(--kendo-color-primary) 0, var(--kendo-color-tertiary) 100%)  !important;
 }
 
 .k-drawer-container{
-  position: absolute;
-  background: none;
-  top:0px;
-  bottom:30px;
-  left:0;
-  right: 0px;
+  position: absolute !important;
+  background: none !important;
+  top:0px !important;
+  bottom:30px !important;
+  left:0 !important;
+  right: 0px !important;
 }
 
 .k-drawer{
-  margin:20px;
-  margin-top:0;
-  border-radius:20px;
-  padding:30px 15px;
-  border:none;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  margin:20px !important;
+  margin-top:0 !important;
+  border-radius:20px !important;
+  padding:30px 15px !important;
+  border:none !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
 }
 
 .k-drawer > .k-drawer-wrapper{
@@ -43,37 +46,37 @@ body::before{
 }
 
 .k-drawer .k-drawer-items{
-  gap:10px;
+  gap:10px !important;
 }
 
 .k-drawer .k-drawer-logo{
-  margin:auto;
-  margin-bottom:20px;
+  margin:auto !important;
+  margin-bottom:20px !important;
 }
 
 .k-drawer .k-drawer-item{
-  border-radius:20px;
+  border-radius:20px !important;
 }
 
 .k-drawer-content{
-  margin-right: 20px;
-  height: 100%;
+  margin-right: 20px !important;
+  height: 100% !important;
 }
 
 .k-drawer-container{
-  padding-top:50px;
+  padding-top:50px !important;
   
 }
 
 .page-container{
-  padding-top: 20px;
-  background-color: #fff;
+  padding-top: 20px !important;
+  background-color: var(--kendo-color-app-surface) !important;
   border-radius: 20px !important;
-  margin:0;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  margin:0 !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
 }
 .k-grid, .k-pager,.k-grid-toolbar{
-  border:none;
-  background-color: #fff;
+  border:none !important;
+  background-color: var(--kendo-color-app-surface) !important;
 }
 

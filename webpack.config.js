@@ -4,6 +4,8 @@ const Dotenv = require("dotenv-webpack");
 const deps = require("./package.json").dependencies;
 const { FederatedTypesPlugin } = require("@module-federation/typescript");
 const webpack = require("webpack");
+const CopyPlugin = require('copy-webpack-plugin');
+const path = require('path');
 
 const mfeConfig = {
   name: "common",
@@ -116,6 +118,17 @@ module.exports = (_, argv) => {
           use: ["style-loader", "css-loader", "postcss-loader"],
         },
         {
+          test: /public\/themes\/.(css|s[ac]ss)$/i,
+          use: [
+            {
+              loader: "file-loader",
+              options: {
+                name: "[name].[ext]",
+              },
+            },
+          ],
+        },
+        {
           test: /\.json$/,
           type: "json",
         },
@@ -145,6 +158,15 @@ module.exports = (_, argv) => {
             }),
           ]
         : []),
+      new CopyPlugin({
+        patterns: [
+          {
+            from: path.resolve(__dirname, 'public/themes'),
+            to: path.resolve(__dirname, 'dist/assets/themes'),
+          },
+        ],
+      }),
     ],
+
   };
 };

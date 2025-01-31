@@ -1,6 +1,6 @@
-import React, { PropsWithChildren, useEffect } from "react";
+import React, { PropsWithChildren } from "react";
 //import "@progress/kendo-theme-fluent/dist/all.css"; 
-import "./theme.css";
+//import "./theme.css";
 import './custom.css'
 import {
   IntlProvider,
@@ -18,6 +18,8 @@ import itLocalCurrency from "cldr-numbers-full/main/it/currencies.json";
 import itCaGregorian from "cldr-dates-full/main/it/ca-gregorian.json";
 import itDateFields from "cldr-dates-full/main/it/dateFields.json";
 
+
+
 load(
   likelySubtags,
   currencyData,
@@ -31,20 +33,34 @@ load(
 import esMessages from "./it-language.json";
 import { NotificationProvider } from "../Notification/provider";
 import { CalendarProvider } from "../Calendar/provider";
- 
+import { ThemeSwitcherProvider } from "react-css-theme-switcher";
+import CookieRepo from "../../repositories/CookieRepo";
+
 loadMessages(esMessages, "it-IT");
 
 export default function Theme(props: PropsWithChildren<any>) {
 
-  return (
-    <LocalizationProvider language="it-IT">
-      <IntlProvider locale="it">
-        <NotificationProvider>
-          <CalendarProvider>
-          {props.children}
-          </CalendarProvider>
-        </NotificationProvider>
-        </IntlProvider>
-    </LocalizationProvider>
+  const themes = {
+    dark: `${process.env.RELEASE_ASSETS_PATH}assets/themes/theme_dark.css`,
+    light: `${process.env.RELEASE_ASSETS_PATH}assets/themes/theme.css`,
+  };
+
+  return (<>
+  <ThemeSwitcherProvider
+      themeMap={themes}
+      defaultTheme={CookieRepo.read('theme') || 'light'}
+      insertionPoint={document.getElementById('inject-theme')}
+    >
+      <LocalizationProvider language="it-IT">
+        <IntlProvider locale="it">
+          <NotificationProvider>
+            <CalendarProvider>
+            {props.children}
+            </CalendarProvider>
+          </NotificationProvider>
+          </IntlProvider>
+      </LocalizationProvider>
+    </ThemeSwitcherProvider>
+    </>
   );
 }

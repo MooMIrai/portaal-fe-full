@@ -22,6 +22,7 @@ import * as svgIcons from "@progress/kendo-svg-icons";
 import AuthService from "../../services/AuthService";
 import withAutocomplete from "../../hoc/AutoComplete";
 import { Popover } from '@progress/kendo-react-tooltip';
+import { ThemeSwitcher } from "../ThemeSwitcher/component";
 
 interface SidebarPros {
   items: DrawerItemProps[];
@@ -213,6 +214,7 @@ const Sidebar = ({ children, items }: SidebarPros) => {
             )}
 
           </div>
+          
           <Button ref={anchor}  fillMode="solid"  themeColor="light" onClick={()=>setPopoverUser(!popoverUser)}>
           {AuthService.getImage() && <Avatar rounded="full" type="image" style={{ marginRight: 5 }}>
 										<img src={AuthService.getImage()} alt="user avatar" />
@@ -238,6 +240,7 @@ const Sidebar = ({ children, items }: SidebarPros) => {
             </div>
             
           </Popover>
+          <ThemeSwitcher />
         </div>
       </div>
 
