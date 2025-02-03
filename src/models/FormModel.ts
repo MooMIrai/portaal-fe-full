@@ -11,6 +11,7 @@ export type ReportParameterType =
   export interface ReportParameter {
     id: string;
     reportId: string;
+    label:string;
     name: string;
     type: ReportParameterType;
     mandatory: boolean;
@@ -32,6 +33,7 @@ export interface FormField {
     label: string;
     type: string;
     required: boolean;
+    showLabel:boolean;
     options:any;
     validator?: (value: any) => string;
   }

@@ -4,6 +4,8 @@ import Form from "common/Form";
 import React from "react";
 import { FormField } from "../../models/FormModel";
 import { formAdapter } from "../../adapters/FormAdapter";
+import withField from "common/hoc/Field";
+import withAutoComplete from "common/hoc/AutoComplete";
 
 export function ReportForm(props:{report:string | undefined, reportName:string | undefined, onSubmit:(data:any)=>void}){
 
@@ -19,16 +21,47 @@ export function ReportForm(props:{report:string | undefined, reportName:string |
     },[props.report])
 
     if(formFields){
+        const addedField ={};
+        const customFields = formFields.filter(f=>f.type.indexOf('custom-autocomplete')>=0);
+        customFields.forEach(cf=>{
+            const type = cf.type.split('__')[1];
+            addedField[cf.type]=withField(withAutoComplete(((term:string)=>{
+                if(type==='STATIC_LIST'){
+                    return Promise.resolve(
+                        cf.options.filter(p=>!term || !term.length || p.toLocaleLowerCase().indexOf(term.toLocaleLowerCase)>=0)
+                        .map(p=>({id:p,name:p}))
+                    );
+                }else if(type==='DYNAMIC_LIST'){
+                    return Promise.resolve(
+                        cf.options.filter(p=>!term || !term.length || p.description.toLocaleLowerCase().indexOf(term.toLocaleLowerCase)>=0)
+                        .map(p=>({id:p.id,name:p.description}))
+                    );
+                }else{
+                    return Promise.resolve([])
+                }
+            })));
+        })
 
         return <Form
         
             fields={formFields}
             formData={{}}
-            onSubmit={props.onSubmit}
+            onSubmit={(data:any)=>{
+                const mappedObj = {};
+                Object.keys(data).forEach(key=>{
+                    const v = data[key];
+                    if(v.id){
+                        mappedObj[key]=v.id;
+                    }else{
+                        mappedObj[key] = v;
+                    }
+                });
+                props.onSubmit(mappedObj);
+            }}
             description={"Parametri per il report " + props.reportName}
             submitText={"Genera Report"}
             showSubmit
-
+            addedFields={addedField}
         />
     }
 
