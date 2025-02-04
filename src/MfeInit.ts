@@ -13,7 +13,7 @@ export default function(){
         id:121,
         text:'inner',
         level:1,
-        route:'/notifications/inner',
+        route:'/notifications/inbox',
         parentId: 12,
       }
     ]

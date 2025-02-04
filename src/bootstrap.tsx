@@ -4,7 +4,7 @@ import App from "./App";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Theme from "common/Theme";
 
-const root = createRoot(document.getElementById("lookups-root")!);
+const root = createRoot(document.getElementById("notification-root")!);
 root.render(
   <BrowserRouter basename="">
     <Theme>

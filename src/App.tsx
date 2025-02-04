@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import {  Route, Routes } from "react-router-dom";
 import { MainPage } from "./pages/Main/component";
 import { notificationService } from "./services/notification";
+import { InboxPage } from "./pages/Inbox/component";
 
 
 const App = () => {
@@ -22,9 +23,7 @@ const App = () => {
   },[]);
 
   return (<Routes >
-          <Route path={"/notifications"} element={<MainPage />} />
-          <Route path={"/notifications/inner"} element={<MainPage />} />
-          <Route path={"/notifications/cat/:id"} element={<MainPage />} />
+          <Route path={"/notifications/inbox"} element={<InboxPage />} />
         </Routes>
   );
 };
