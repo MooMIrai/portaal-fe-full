@@ -32,6 +32,26 @@ export function RequestByCandidate(props:{idCandidate:number,requests:Array<any>
                     { key: "Location.description", label: "Citta di competenza", type: "string", sortable: true, filter: "text" },
                     { key: "RequestingEmployee.Person.firstName", label: "HR incaricaricata", type: "custom", render:(rowData)=><td>{rowData.RequestingEmployee.Person.firstName} {rowData.RequestingEmployee.Person.lastName}</td> },
                     { key: "CandidateProfile.description", label: "Profilo", type: "string", sortable: true, filter: "text" },
+                    { key: "date_created", label: "Data creazione", type: "date", sortable: true, filter: "text" },
+                    {
+                        key: "SkillArea.name", label: "Skills", type: "custom", sortable: false, filter: "text", width: 250, render: (row) => {
+                  
+                          if (row?.Skills == null || row.Skills.length == 0)
+                            return <td></td>;
+                  
+                          let skills = row.Skills;
+                          let skillsDescription = skills.map(skill => skill.SkillArea.name).filter(name => name).join(", ");
+                  
+                          return <td>
+                            <span
+                              title={skillsDescription}
+                              style={{ cursor: "pointer" }}>
+                  
+                              {skillsDescription}
+                            </span>
+                          </td>;
+                        }
+                      },
                     { key: "id", label: "Apri dettaglio", type: "custom", sortable: false, render:(rowData)=><td>
                         <Button themeColor="info" fillMode="outline" svgIcon={hyperlinkOpenIcon} onClick={()=>{
                             window.open('/richieste/'+rowData.id+'/'+props.idCandidate ,"Dettaglio richiesta", "width=700,height=500" )
