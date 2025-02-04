@@ -11,7 +11,7 @@ export default function(){
       },
       {
         id:121,
-        text:'inner',
+        text:'Inbox',
         level:1,
         route:'/notifications/inbox',
         parentId: 12,
