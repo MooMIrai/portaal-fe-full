@@ -25,6 +25,26 @@ export default function RequestPage(){
                 setCurrentrequestSkills(rowData.Skills)
               }}>{rowData.RecruitingAssignment?rowData.RecruitingAssignment.length:0} - Candidati Associati</Button>
             </td>} ,
+            { key: "date_created", label: "Data creazione", type: "date", sortable: true, filter: "text" },
+            {
+                key: "SkillArea.name", label: "Skills", type: "custom", sortable: false, filter: "text", width: 250, render: (row) => {
+          
+                  if (row?.Skills == null || row.Skills.length == 0)
+                    return <td></td>;
+          
+                  let skills = row.Skills;
+                  let skillsDescription = skills.map(skill => skill.SkillArea.name).filter(name => name).join(", ");
+          
+                  return <td>
+                    <span
+                      title={skillsDescription}
+                      style={{ cursor: "pointer" }}>
+          
+                      {skillsDescription}
+                    </span>
+                  </td>;
+                }
+              },
             { key: "CandidateProfile.description", label: "Profilo", type: "string", sortable: true, filter: "text" }
     ];
 
