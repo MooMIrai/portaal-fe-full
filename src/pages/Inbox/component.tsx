@@ -5,10 +5,12 @@ import Typography from 'common/Typography';
 import { notificationServiceHttp } from "../../services/notificationService";
 import SvgIcon from 'common/SvgIcon';
 import {starOutlineIcon, starIcon} from 'common/icons';
+import { MessageDetail } from "../../components/MessageDetail/component";
 
 export function InboxPage(){
 
     const [notificationList, setNotificationList] = useState<any[]>([]);
+    const [notification, setNotification] = useState<any>();
     
     useEffect(()=>{
 
@@ -21,13 +23,13 @@ export function InboxPage(){
     return <div className={styles.container}>
 
         {
-            notificationList?.map(n=><div key={n.id} className={styles.list+ ' ' +  (n.NotificationStatus.notificationStatus==='SENT'?styles.unread:'')}>
+            notificationList?.map((n,ni)=><div onClick={()=>setNotification(n)} key={n.id} className={styles.list+ ' ' +  (n.NotificationStatus.notificationStatus==='SENT'?styles.unread:'')+ ' '+(ni===notificationList.length-1?styles.lastlist:'')}>
                 {n.isFlagged?<SvgIcon size="large" themeColor="warning" icon={starIcon} color={'yellow'}></SvgIcon>:<SvgIcon size="large" themeColor="warning" icon={starOutlineIcon}></SvgIcon>}
                 <Typography.p>{n.user_created}</Typography.p>
                 <Typography.p>{n.NotifyUser.content.title} - <span>{n.NotifyUser.content.sub_title}</span></Typography.p>
                 <Typography.p>{new Date(n.NotifyUser.date_start).toLocaleDateString()}</Typography.p>
             </div>)
         }
-
+        <MessageDetail onClose={()=>setNotification(undefined)} currentMessage={notification} />
     </div>
 }
