@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import {  Route, Routes } from "react-router-dom";
-import { MainPage } from "./pages/Main/component";
 import { notificationService } from "./services/notification";
 import { InboxPage } from "./pages/Inbox/component";
 
@@ -11,14 +10,19 @@ const App = () => {
     
     notificationService.tryConnect().then(id=>{
 
+      notificationService.listen('newNotification',(data)=>{
+        debugger;
+      });
+
+
     });
     
+
    
 
     return ()=>{
       //ondestroy
     }
-
     
   },[]);
 

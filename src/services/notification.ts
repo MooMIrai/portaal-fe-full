@@ -51,30 +51,18 @@ class NotificationServiceC {
             
             this.client.on("connect_error", (error) => {
                 console.log(`Notification connect error: ${error}`);
+                ko(error)
               });
-
-            this.client.on('newNotification', function(data) {
-                console.log('Dati ricevuti dal client:', data);
-
-                const notificationSpan = document.getElementById("span_notification");
-                if (notificationSpan) {
-                    notificationSpan.innerText = data.message || JSON.stringify(data);
-                }
-
-                // Restituisce la funzione debounced
-                const debouncedLog = notificationDebouncing.setDebouncing(2000);
-                
-                // Chiama la funzione debounced con il messaggio
-                debouncedLog(data.message || JSON.stringify(data));
-                
-            });
 
         })
 
     }
 
+    listen(event:string,callback:(...args: any[]) => void){
+        this.client?.on(event,callback);
+    }
+
 }
 
 export const notificationService = new NotificationServiceC();
-(window as any).notificationService = notificationService;
 

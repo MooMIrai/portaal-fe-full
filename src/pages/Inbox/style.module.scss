@@ -1,9 +1,35 @@
 .container{
     height:100%;
-    background-color: #f2f6fc;
+    background-color: var(--kendo-color-surface);
     //padding:10px;
     display: flex;
     flex-direction: column;
+
+    & thead, & :global(.k-grid-header){
+        display: none;
+    }
+
+    & :global(.k-table-td), & td{
+        border:0 !important;
+        padding-top:5px;
+        padding-bottom:5px;
+        border-bottom: 1px solid #dedede !important;
+    }
+    & :global(.k-table-row){
+        margin-top:10px;
+        cursor: pointer;
+        &:hover > td{
+            background:var(--kendo-color-base-active);
+            //box-shadow: inset 1px 0 0 rgb(218, 220, 224), inset -1px 0 0 rgb(218, 220, 224), 0 1px 2px 0 rgba(60, 64, 67, .3), 0 1px 3px 1px rgba(60, 64, 67, .15);
+            //border: 1px solid rgb(128, 128, 128);
+           
+        }
+    }
+
+    & .dateColumn{
+        text-align: right;
+        padding-right: 20px;
+    }
 }
 
 .list{
