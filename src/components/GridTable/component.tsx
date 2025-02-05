@@ -402,12 +402,19 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
     if (props.rowStyle && propsR.dataItem) {
       trProps.style = props.rowStyle(propsR.dataItem);
     }
+  
+    if(props.onRowClick){
+      trProps.onClick=()=>{
+        if(props.onRowClick)
+          props.onRowClick(propsR.dataItem)
 
+      }
+    }
 
     return React.cloneElement(
       trElement,
       {
-        ...trProps,
+        ...trProps
       },
       trElement.props.children
     );

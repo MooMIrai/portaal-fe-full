@@ -12,14 +12,14 @@
   :global(.k-drawer-item .k-icon) {
     font-size: 20px !important;
   }
-  :global(.k-drawer-content) {
+ /*  :global(.k-drawer-content) {
    
     & > div{
       position: relative;
 
     }
 
-  }
+  } */
 
   :global(.page-container) {
     padding:10px;
@@ -58,7 +58,7 @@
 .drawerContent {
   border-radius: 5px !important;
   padding: 0.5rem 0.5rem 0rem 0.5rem;
-
+  position: relative;
   //background: rgb(248,147,28);
   //background: linear-gradient(90deg, rgba(248,147,28,0.1) 0%, rgba(120,122,125,0.1) 50%, rgba(0,174,239,0.1) 100%);
 
