@@ -3,6 +3,7 @@ import fileService from "common/services/FileService";
 import Button from 'common/Button';
 import {fileExcelIcon} from 'common/icons';
 import styles from './style.module.scss';
+import Typography from 'common/Typography'
 
 export function ReportPreview(props:{ excelFile:any }) {
   //const [sheetNames,setSheetName] = useState<string[]>([]); // Nomi dei fogli
@@ -32,7 +33,7 @@ export function ReportPreview(props:{ excelFile:any }) {
       
         <Button svgIcon={fileExcelIcon} themeColor="success" onClick={()=>fileService.downloadBlobFile(props.excelFile,Date.now()+'.xlsx')}> Scarica</Button>
       {/* Tabs per selezionare il foglio */}
-      <h3>Anteprima Excel</h3>
+      <Typography.h3>Anteprima Excel</Typography.h3>
       {/* <div style={{ display: "flex", borderBottom: "2px solid #ddd" }}>
         {sheetNames.map((sheet) => (
           <button

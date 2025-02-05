@@ -28,12 +28,15 @@ export function ReportForm(props:{report:string | undefined, reportName:string |
             addedField[cf.type]=withField(withAutoComplete(((term:string)=>{
                 if(type==='STATIC_LIST'){
                     return Promise.resolve(
-                        cf.options.filter(p=>!term || !term.length || p.toLocaleLowerCase().indexOf(term.toLocaleLowerCase)>=0)
+                        cf.options.filter(p=>{
+                           
+                            return !term || !term.length || p.toLocaleLowerCase().indexOf(term.toLocaleLowerCase())>=0
+                        })
                         .map(p=>({id:p,name:p}))
                     );
                 }else if(type==='DYNAMIC_LIST'){
                     return Promise.resolve(
-                        cf.options.filter(p=>!term || !term.length || p.description.toLocaleLowerCase().indexOf(term.toLocaleLowerCase)>=0)
+                        cf.options.filter(p=>!term || !term.length || p.description.toLocaleLowerCase().indexOf(term.toLocaleLowerCase())>=0)
                         .map(p=>({id:p.id,name:p.description}))
                     );
                 }else{

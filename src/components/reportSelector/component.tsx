@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import React from "react";
 import Button from 'common/Button';
 import styles from './style.module.scss';
+import Typography from 'common/Typography';
 
 export function ReportsSelector(props:{category?:string,onChange:(value:any)=>void}){
 
@@ -23,7 +24,7 @@ export function ReportsSelector(props:{category?:string,onChange:(value:any)=>vo
       {
         reportlist.map(ri=><div key={ri.id} className={styles.listItem}>
            <input onChange={()=>setSelected(ri)} title="Seleziona riga" type="radio" checked={ri.id===selected.id} style={{width:20,height:20}} />
-           <span>{ri.name}</span>
+           <Typography.p>{ri.name}</Typography.p>
         </div>)
       }
 

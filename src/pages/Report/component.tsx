@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ReportsSelector } from "../../components/reportSelector/component";
 import { ReportForm } from "../../components/reportForm/component";
@@ -13,6 +13,10 @@ export default function(){
     const [report,setReport] = useState<{id:string,name:string}>();
     const [step,setStep] = useState<number>(0);
     const [fileBlob, setFileBlob] = useState<Blob>()
+
+    useEffect(()=>{
+        setStep(0);
+    },[category])
 
     const handleChangeStep = (e: any) => {
         if(e.value<step)
