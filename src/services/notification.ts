@@ -25,7 +25,8 @@ class NotificationServiceC {
                     "x-tenant": sessionStorage.getItem("tenant") || ""
                 },
                 query: {
-                    token: AuthService.getToken()
+                    token: AuthService.getToken(),
+                    "x-tenant": sessionStorage.getItem("tenant") || ""
                 },
                 transports: ['websocket', 'polling']
 
@@ -56,6 +57,15 @@ class NotificationServiceC {
 
         })
 
+    }
+
+    getCount(){
+        debugger;
+        return new Promise((ok,ko)=>{
+            debugger;
+            notificationService.client?.on("getSentNotifyCount",ok)
+            notificationService.client?.emit("getSentNotifyCount");
+        })
     }
 
     listen(event:string,callback:(...args: any[]) => void){

@@ -9,10 +9,10 @@ const App = () => {
   useEffect(()=>{//on init
     
     notificationService.tryConnect().then(id=>{
-
-      notificationService.listen('newNotification',(data)=>{
-        debugger;
-      });
+ 
+      notificationService.getCount().then((count)=>{
+        console.log(count);
+      })
 
 
     });
