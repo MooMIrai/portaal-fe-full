@@ -60,9 +60,8 @@ class NotificationServiceC {
     }
 
     getCount(){
-        debugger;
+
         return new Promise((ok,ko)=>{
-            debugger;
             notificationService.client?.on("getSentNotifyCount",ok)
             notificationService.client?.emit("getSentNotifyCount");
         })
