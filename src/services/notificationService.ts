@@ -16,6 +16,14 @@ class NotificationServiceC extends BaseHttpService {
 
   }
 
+  updateStatus(id:number,status:"RESPONDED" | "SENT" | "VIEWED" | "RESPONDED" | "COMPLETED"){
+    return client.patch(`/api/v1/notificationDetail/updateStatus/${id}`, {"notificationStatus_value":status} ).then(res=>res.data)
+  }
+
+  updateFlagStar(id:number,isFlagged:boolean){
+    return client.patch(`/api/v1/notificationDetail/updateFlag/${id}`,{isFlagged:isFlagged}).then(res=>res.data)
+  }
+
 }
 
 export const notificationServiceHttp = new NotificationServiceC();
