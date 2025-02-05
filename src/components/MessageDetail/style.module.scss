@@ -6,6 +6,7 @@
     right:0;
     background-color: var(--kendo-color-app-surface);
     transition: all ease 0.5s;
+    border-radius: 20px;
     z-index: 3;
     &.opened{
         left:0;
@@ -42,4 +43,5 @@
 
 .body{
     padding: 30px;
+    background-color: var(--kendo-color-app-surface);
 }
