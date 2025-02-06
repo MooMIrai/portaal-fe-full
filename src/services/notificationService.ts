@@ -32,6 +32,10 @@ class NotificationServiceC extends BaseHttpService {
     return client.patch(`/api/v1/notificationDetail/updateFlag/${id}`,{isFlagged:isFlagged}).then(res=>res.data)
   }
 
+  searchAccount (text: string) {
+    return client.get(`api/v1/accounts/findByName?search=${text}`).then(res => res.data);
+  }
+
 }
 
 export const notificationServiceHttp = new NotificationServiceC();

@@ -6,6 +6,7 @@ import Typography from 'common/Typography';
 import Button from 'common/Button';
 import { StarFlag } from "../StarFlag/component";
 import { notificationServiceHttp } from "../../services/notificationService";
+import HtmlParser from 'common/HtmlParser';
 
 export function MessageDetail(props:PropsWithRef<{
     id:number,
@@ -37,6 +38,9 @@ export function MessageDetail(props:PropsWithRef<{
                 </Button>
                 <div>
                 <StarFlag n={data} type="DETAIL" className={styles.icon} />
+                {
+                    
+                }
                 <SvgIcon className={styles.icon} flip="horizontal" size="xxlarge" themeColor="tertiary" icon={redoIcon} ></SvgIcon>
                 <SvgIcon className={styles.icon} size="xxlarge" themeColor="error" icon={trashIcon} ></SvgIcon>
                 </div>
@@ -53,7 +57,7 @@ export function MessageDetail(props:PropsWithRef<{
             {data && <div className={styles.body}>
                 <Typography.h3>{data.NotifyUser.content.title}</Typography.h3>
                 <Typography.h5>{data.NotifyUser.content.sub_title}</Typography.h5>
-                <Typography.p>{data.NotifyUser.content.text}</Typography.p>
+                <HtmlParser html={data.NotifyUser.content.text} />
             </div>}
         </div>
 }

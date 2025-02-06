@@ -6,6 +6,7 @@ import { notificationServiceHttp } from "../../services/notificationService";
 import { MessageDetail } from "../../components/MessageDetail/component";
 import { StarFlag } from "../../components/StarFlag/component";
 import GridTable from "common/Table";
+import { MessageCreate } from "../../components/MessageCreate/component";
 
 export function InboxPage(){
 
@@ -57,8 +58,12 @@ export function InboxPage(){
             draggableWindow={true}
             initialWidthWindow={900}
             resizable={true}
-
-
+            actions={() => [
+                "create"
+            ]}
+            formCrud={(row: any, type: string, closeModalCallback: any, refreshTable: any) => (
+            <MessageCreate />
+            )}
             
         />
         <MessageDetail onClose={()=>{
