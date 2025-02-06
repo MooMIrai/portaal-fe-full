@@ -39,7 +39,7 @@ const {
 } = EditorTools;
 
 export default function HtmlEditor(props:EditorProps){
-    <Editor
+    return <Editor
             {...props}
             tools={[
                 [Bold, Italic, Underline, Strikethrough],

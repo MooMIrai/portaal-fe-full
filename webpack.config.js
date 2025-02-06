@@ -49,7 +49,7 @@ const mfeConfig = {
     "./Typography": "./src/components/Typography/component",
     "./HtmlParser": "./src/components/HtmlParser/component",
     "./HtmlEditor": "./src/components/HtmlEditor/component",
-    "./MultiSelect": "./src/components/HtmlEditor/component",
+    "./MultiSelect": "./src/components/MultiSelect/component",
 
     "./services/AuthService": "./src/services/AuthService",
     "./services/BEService": "./src/services/BEService",
@@ -92,6 +92,9 @@ module.exports = (_, argv) => {
     devtool: "source-map",
     resolve: {
       extensions: [".tsx", ".ts", ".jsx", ".js", ".json"],
+      alias: {
+        "prosemirror-model": require.resolve("prosemirror-model")
+      }
     },
     devServer: {
       port: 3003,

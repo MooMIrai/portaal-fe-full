@@ -146,3 +146,7 @@ td{
 {
     margin: 0 !important;
 }
+
+.k-editor{
+  border-radius:var(--kendo-border-radius-md, 20px) !important
+}
