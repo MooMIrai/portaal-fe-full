@@ -5,7 +5,7 @@ import authService from "common/services/AuthService";
 import { GlobalRouting, LoginRouting, mfeInitMenu } from "./mfeInit";
 import { Route, Routes } from "react-router-dom";
 
-//import "./index.scss";
+//import "./index.css";
 
 export const App = () => {
   const [routes, setRoutes] = useState<Array<any>>([]);
