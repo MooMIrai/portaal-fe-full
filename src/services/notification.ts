@@ -67,6 +67,10 @@ class NotificationServiceC {
         })
     }
 
+    onNewNotification(callback:(...args: any[]) => void){
+        this.listen('newNotification',callback)
+    }
+
     listen(event:string,callback:(...args: any[]) => void){
         this.client?.on(event,callback);
     }

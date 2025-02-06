@@ -7,6 +7,7 @@ import { MessageDetail } from "../../components/MessageDetail/component";
 import { StarFlag } from "../../components/StarFlag/component";
 import GridTable from "common/Table";
 import { MessageCreate } from "../../components/MessageCreate/component";
+import { notificationService } from "../../services/notification";
 
 export function InboxPage(){
 
@@ -14,6 +15,17 @@ export function InboxPage(){
     const [notification, setNotification] = useState<any>();
     
     const tableRef = useRef<any>();
+    useEffect(()=>{
+        notificationService.onNewNotification((ard)=>{
+            debugger;
+            if(tableRef.current){
+                tableRef.current.refreshTable();
+            }
+        })
+        return ()=>{
+            notificationService.client?.off('newNotification')
+        }
+    },[]);
 
     const columns = [
         { key: "id", label: "", type: "custom", width:50, render:(n)=><td>
