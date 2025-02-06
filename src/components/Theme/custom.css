@@ -135,3 +135,14 @@ td{
   border-radius: 4px!important;
   box-shadow: -10px 0 0 white !important;
 }
+
+.k-paragraph,
+.k-h1,
+.k-h2,
+.k-h3,
+.k-h4,
+.k-h5,
+.k-h6
+{
+    margin: 0 !important;
+}

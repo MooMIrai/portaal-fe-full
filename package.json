@@ -101,6 +101,7 @@
     "cldr-dates-full": "^45.0.0",
     "cldr-numbers-full": "^45.0.0",
     "excel-viewer": "^1.0.1",
+    "html-react-parser": "^5.2.2",
     "react": "^18.2.0",
     "react-css-theme-switcher": "^0.3.0",
     "react-dark-mode-toggle": "^0.2.0",

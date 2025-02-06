@@ -47,6 +47,9 @@ const mfeConfig = {
     "./Stepper" : "./src/components/Stepper/component",
     "./Timeline": "./src/components/Timeline/component",
     "./Typography": "./src/components/Typography/component",
+    "./HtmlParser": "./src/components/HtmlParser/component",
+    "./HtmlEditor": "./src/components/HtmlEditor/component",
+    "./MultiSelect": "./src/components/HtmlEditor/component",
 
     "./services/AuthService": "./src/services/AuthService",
     "./services/BEService": "./src/services/BEService",
