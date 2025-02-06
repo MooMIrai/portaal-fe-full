@@ -615,6 +615,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
                 icon={column.cellActionIcon!}
                 cellModalContent={column.cellModalContent}
                 columnLabel={column.label}
+                
               />
             );
           } else if (column.type === TABLE_COLUMN_TYPE.custom) {
@@ -641,11 +642,20 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
             sortable={false}
             field="action"
             title="Azioni"
+            locked={true}
+            
             cell={(cellGrid: GridCellProps) => {
               const actions = props.actions?.(cellGrid.dataItem);
 
               return (
-                <td>
+                <td 
+                style={{
+                  position: "sticky",
+                  right: 0,
+                  //background: "white", // Evita sovrapposizioni visive
+                  //zIndex: 1, // Assicura che sia sopra le altre celle
+                }}
+                >
                   <div className={styles.commandButtons}>
                     {actions?.includes(TABLE_ACTION_TYPE.show) && (
                       <Button
