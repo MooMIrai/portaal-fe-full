@@ -1,5 +1,6 @@
-import React from "react";
-import { Editor, EditorProps, EditorTools } from '@progress/kendo-react-editor';
+import React, { forwardRef, useImperativeHandle, useRef } from "react";
+import { Editor, EditorProps, EditorTools, EditorUtils } from '@progress/kendo-react-editor';
+
 
 
 const {
@@ -38,10 +39,25 @@ const {
     SplitCell
 } = EditorTools;
 
-export default function HtmlEditor(props:EditorProps){
+export default forwardRef(({ customToolbarActions = [], ...props }:any, ref) => {
+
+    const editorRef = useRef<any>(null);
+    
+
+  
+    useImperativeHandle(ref, () => ({
+        setHtml: (html: string) => {
+        if (editorRef.current) {
+            EditorUtils.setHtml(editorRef.current.view,html)
+        }
+        }
+    }));
+  
     return <Editor
             {...props}
+            ref={editorRef}
             tools={[
+                ...customToolbarActions,
                 [Bold, Italic, Underline, Strikethrough],
                 [Subscript, Superscript],
                 [AlignLeft, AlignCenter, AlignRight, AlignJustify],
@@ -55,9 +71,10 @@ export default function HtmlEditor(props:EditorProps){
                 [InsertTable],
                 [AddRowBefore, AddRowAfter, AddColumnBefore, AddColumnAfter],
                 [DeleteRow, DeleteColumn, DeleteTable],
-                [MergeCells, SplitCell]
+                [MergeCells, SplitCell],
+                
             ]}
             defaultEditMode="div"
             
         />
-}
+})
