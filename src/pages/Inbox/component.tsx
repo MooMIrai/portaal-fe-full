@@ -7,25 +7,29 @@ import { MessageDetail } from "../../components/MessageDetail/component";
 import { StarFlag } from "../../components/StarFlag/component";
 import GridTable from "common/Table";
 import { MessageCreate } from "../../components/MessageCreate/component";
-import { notificationService } from "../../services/notification";
+
+import {useSocketConnected} from '../../hooks/useSocket';
+
 
 export function InboxPage(){
 
-    const [notificationList, setNotificationList] = useState<any[]>([]);
+    
     const [notification, setNotification] = useState<any>();
     
     const tableRef = useRef<any>();
+    const {connected,notificationService} = useSocketConnected();
+
     useEffect(()=>{
-        notificationService.onNewNotification((ard)=>{
-            debugger;
-            if(tableRef.current){
-                tableRef.current.refreshTable();
-            }
-        })
-        return ()=>{
-            notificationService.client?.off('newNotification')
+        if(connected && notificationService){
+            notificationService.onNewNotification((arg)=>{
+
+                if(tableRef.current){
+                    tableRef.current.refreshTable();
+                }
+            })
         }
-    },[]);
+        
+    },[connected,notificationService])
 
     const columns = [
         { key: "id", label: "", type: "custom", width:50, render:(n)=><td>
@@ -103,3 +107,4 @@ export function InboxPage(){
             }} id={notification?.id} />
     </div> */
 }
+

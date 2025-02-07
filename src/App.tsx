@@ -6,7 +6,7 @@ import { InboxPage } from "./pages/Inbox/component";
 
 const App = () => {
 
-  useEffect(()=>{//on init
+  /* useEffect(()=>{//on init
     
     notificationService.tryConnect().then(id=>{
  
@@ -14,6 +14,10 @@ const App = () => {
         console.log(count);
       })
 
+      notificationService.onNewNotification((ard)=>{
+        debugger;
+        
+      })
 
     });
     
@@ -24,7 +28,7 @@ const App = () => {
       //ondestroy
     }
     
-  },[]);
+  },[]); */
 
   return (<Routes >
           <Route path={"/notifications/inbox"} element={<InboxPage />} />

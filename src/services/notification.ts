@@ -68,7 +68,11 @@ class NotificationServiceC {
     }
 
     onNewNotification(callback:(...args: any[]) => void){
-        this.listen('newNotification',callback)
+        this.listen('newNotification',(arg)=>{
+            if(AuthService.getData().sub.toString()===arg.split('::')[1]){
+                callback(arg);
+            }   
+        })
     }
 
     listen(event:string,callback:(...args: any[]) => void){

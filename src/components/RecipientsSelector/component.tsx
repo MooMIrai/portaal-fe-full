@@ -42,8 +42,8 @@ export function RecipientsSelector(props:{
         return React.cloneElement(li, li.props, itemChildren);
     };
 
-    return <div>
-            <Typography.p>{props.label}</Typography.p>
+    return (
+            
             <MultiSelect
                 disabled={props.disabled}
                 data={data}
@@ -60,5 +60,6 @@ export function RecipientsSelector(props:{
                 style={{ width: '100%' }}
             />
             
-        </div>
+        
+        )
 }
