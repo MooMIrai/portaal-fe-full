@@ -23,11 +23,11 @@ export const MessageRecipientForm=[
         type: "person_selector",
         required: false,
         conditions: (formData) => !formData.isAll,
-        validator: (value: any) =>{
+       /*  validator: (value: any) =>{
             if(!value || !value.length)
                 return 'Il campo Copia Carbone è obbligatorio'
             return '';
-        }
+        } */
     },
     {
         name: "bcc",
@@ -36,10 +36,10 @@ export const MessageRecipientForm=[
         required: false,
         conditions: (formData) => {
             return !formData.isAll},
-        validator: (value: any) =>{
+        /* validator: (value: any) =>{
             if(!value || !value.length)
                 return 'Il campo Copia Carbone nascosta è obbligatorio'
             return '';
-        }
+        } */
     }
 ]
