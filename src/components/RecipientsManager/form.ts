@@ -21,7 +21,7 @@ export const MessageRecipientForm=[
         name: "cc",
         label: "Copia Carbone",
         type: "person_selector",
-        required: true,
+        required: false,
         conditions: (formData) => !formData.isAll,
         validator: (value: any) =>{
             if(!value || !value.length)
@@ -33,7 +33,7 @@ export const MessageRecipientForm=[
         name: "bcc",
         label: "Copia Carbone Nascosta",
         type: "person_selector",
-        required: true,
+        required: false,
         conditions: (formData) => {
             return !formData.isAll},
         validator: (value: any) =>{

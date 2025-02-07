@@ -36,6 +36,14 @@ class NotificationServiceC extends BaseHttpService {
     return client.get(`api/v1/accounts/findByName?search=${text}`).then(res => res.data);
   }
 
+  getTemplate(){
+    return client.get(`api/v1/crud/EmailDefault`).then(res => res.data);
+  }
+
+  getResponseTypeList(){
+    return client.get(`api/v1/crud/NotifyResponseType`).then(res => res.data);
+  }
+
 }
 
 export const notificationServiceHttp = new NotificationServiceC();

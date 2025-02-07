@@ -4,7 +4,8 @@ import { MessageBody } from '../MessageBody/component';
 import Stepper from 'common/Stepper';
 import Button from 'common/Button';
 import SvgIcon from 'common/SvgIcon';
-import { arrowRightIcon, arrowLeftIcon } from 'common/icons';
+import { arrowRightIcon, arrowLeftIcon, paperPlaneIcon } from 'common/icons';
+import { MessageResponseTypeSelector } from '../MessageResponseTypeSelector/component';
 
 export function MessageCreate() {
     const [step, setStep] = useState(0);
@@ -45,7 +46,7 @@ export function MessageCreate() {
                     { label: 'Tipo risposta' },
                 ]}
                 value={step}
-                onChange={(e: any) => handleChange(e.value)}
+                //onChange={(e: any) => handleChange(e.value)}
             />
             <div
                 style={{ height: 1, background: 'var(--kendo-color-border)', marginTop: 10, marginBottom: 10 }}
@@ -53,6 +54,7 @@ export function MessageCreate() {
 
             {<div style={{display:step===0?'block':'none'}}><RecipientsManager ref={formRecipients} /></div>}
             {<div style={{display:step===1?'block':'none'}}><MessageBody ref={formBody}  /></div>}
+            {<div style={{display:step===2?'block':'none'}}><MessageResponseTypeSelector onChange={(e)=>mergeData({responseType:e})} /></div>}
 
             <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 15 }}>
                 {step > 0 ? (
@@ -65,7 +67,8 @@ export function MessageCreate() {
                     >
                         Indietro
                     </Button>
-                ) : (
+                ) : 
+                (
                     <div></div>
                 )}
                 {step < 2 && (
@@ -77,6 +80,19 @@ export function MessageCreate() {
                         fillMode="link"
                     >
                         Avanti
+                    </Button>
+                )}
+                {step === 2 && (
+                    <Button
+                        onClick={()=>{
+                            alert('appp')
+                        }}
+                        endIcon={<SvgIcon icon={paperPlaneIcon} />}
+                        size="large"
+                        themeColor="success"
+                        fillMode="link"
+                    >
+                        Invia notifica
                     </Button>
                 )}
             </div>

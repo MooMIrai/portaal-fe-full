@@ -1,5 +1,20 @@
 export const MessageBodyForm=[
     {
+        name: "isEmail",
+        label: "Vuoi inviare una copia per email?",
+        type: "checkbox",
+        showLabel:false
+    },
+    {
+        name: "attachments",
+        label: "Carica Allegato (Solo email)",
+        type: "uploadSingleFile",
+        withCredentials: false,
+        existingFile:undefined,
+        conditions:(fd)=>fd.isEmail,
+        multiple: false,
+    },
+    {
         name: "title",
         label: "Titolo",
         type: "text",
