@@ -10,7 +10,8 @@ const getLookups = () =>
     { id: 6, name: "ContractType" },
     { id: 7, name: "ProjectExpenses"},
     { id: 8, name: "NotificationStatus"},
-    { id: 9, name: "NotifyResponseType"}
+    { id: 9, name: "NotifyResponseType"},
+    { id: 10, name: "EmailDefault"}
   ]);
 
 export const LookUpsSelector = withAutoComplete(getLookups);
