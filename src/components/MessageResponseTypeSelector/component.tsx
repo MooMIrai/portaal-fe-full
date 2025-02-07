@@ -24,7 +24,7 @@ export function MessageResponseTypeSelector(props:{onChange:(value:any)=>void}){
       {
         responseTypeList.map(ri=><div key={ri.id} className={styles.listItem}>
            <input onChange={()=>{setSelected(ri);props.onChange(ri)}} title="Seleziona riga" type="radio" checked={ri.id===selected.id} style={{width:20,height:20}} />
-           <Typography.p>{ri.description || ri.responseType}</Typography.p>
+           <Typography.p className={styles.typographyLabel}>{ri.description || ri.responseType}</Typography.p>
         </div>)
       }
 

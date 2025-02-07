@@ -9,7 +9,7 @@ import { MessageResponseTypeSelector } from '../MessageResponseTypeSelector/comp
 
 export function MessageCreate() {
     const [step, setStep] = useState(0);
-    const [data,setData] = useState<any>({});
+    const [data, setData] = useState<any>({});
     const formRecipients = useRef<any>(null);
     const formBody = useRef<any>(null);
 
@@ -17,23 +17,23 @@ export function MessageCreate() {
         setStep(newStep);
     };
 
-    const mergeData = (newData)=>setData((p)=>({...p,newData}))
+    const mergeData = (newData) => setData((p) => ({ ...p, newData }))
 
     const handleNextStep = () => {
-        if(step===0 && formRecipients.current){
+        if (step === 0 && formRecipients.current) {
             formRecipients.current.onSubmit(); // Esegue il submit del form
-           if(formRecipients.current.isValid()){
+            if (formRecipients.current.isValid()) {
                 mergeData(formRecipients.current.values);
                 handleChange(step + 1);
-           }  
-        }else if (step === 1 && formBody.current) {
-           formBody.current.onSubmit(); // Esegue il submit del form
-           if(formBody.current.isValid()){
+            }
+        } else if (step === 1 && formBody.current) {
+            formBody.current.onSubmit(); // Esegue il submit del form
+            if (formBody.current.isValid()) {
                 mergeData(formBody.current.values);
                 handleChange(step + 1);
-           }  
-        } else{
-            handleChange(step+1)
+            }
+        } else {
+            handleChange(step + 1)
         }
     };
 
@@ -48,13 +48,6 @@ export function MessageCreate() {
                 value={step}
                 //onChange={(e: any) => handleChange(e.value)}
             />
-            <div
-                style={{ height: 1, background: 'var(--kendo-color-border)', marginTop: 10, marginBottom: 10 }}
-            ></div>
-
-            {<div style={{display:step===0?'block':'none'}}><RecipientsManager ref={formRecipients} /></div>}
-            {<div style={{display:step===1?'block':'none'}}><MessageBody ref={formBody}  /></div>}
-            {<div style={{display:step===2?'block':'none'}}><MessageResponseTypeSelector onChange={(e)=>mergeData({responseType:e})} /></div>}
 
             <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 15 }}>
                 {step > 0 ? (
@@ -67,10 +60,10 @@ export function MessageCreate() {
                     >
                         Indietro
                     </Button>
-                ) : 
-                (
-                    <div></div>
-                )}
+                ) :
+                    (
+                        <div></div>
+                    )}
                 {step < 2 && (
                     <Button
                         onClick={handleNextStep}
@@ -84,7 +77,7 @@ export function MessageCreate() {
                 )}
                 {step === 2 && (
                     <Button
-                        onClick={()=>{
+                        onClick={() => {
                             alert('appp')
                         }}
                         endIcon={<SvgIcon icon={paperPlaneIcon} />}
@@ -96,6 +89,15 @@ export function MessageCreate() {
                     </Button>
                 )}
             </div>
+            <div
+                style={{ height: 1, background: 'var(--kendo-color-border)', marginTop: 10, marginBottom: 10 }}
+            ></div>
+
+            {<div style={{ display: step === 0 ? 'block' : 'none' }}><RecipientsManager ref={formRecipients} /></div>}
+            {<div style={{ display: step === 1 ? 'block' : 'none' }}><MessageBody ref={formBody} /></div>}
+            {<div style={{ display: step === 2 ? 'block' : 'none' }}><MessageResponseTypeSelector onChange={(e) => mergeData({ responseType: e })} /></div>}
+            <br /> <br />
+
         </>
     );
 }
