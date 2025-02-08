@@ -35,9 +35,10 @@ export function InboxPage(){
         { key: "id", label: "", type: "custom", width:50, render:(n)=><td>
             <StarFlag n={n} type={"LIST"} className={styles.starIcon} />
         </td>},
-        { key: "user_created", label: "Mittente", type: "string", sortable: false },
-        { key: "NotifyUser.content.title", label: "Titolo", type: "string" },
-        { key: "NotifyUser.content.sub_title", label: "Sottotitolo", type: "string"},
+        { key: "user_created", label: "Mittente", type: "string", sortable: false, width:'150px' },
+        { key: "NotifyUser.content.title", label: "Titolo", type: "custom",  render:(n)=><td>
+            {n.NotifyUser.content.title} - {n.NotifyUser.content.sub_title}
+        </td> },
         { key: "id", label: "", type: "custom",  render:(n)=><td className={styles.dateColumn}>
             {new Date(n.NotifyUser.date_start).toLocaleDateString()}
         </td>},
@@ -78,7 +79,7 @@ export function InboxPage(){
                 "create"
             ]}
             formCrud={(row: any, type: string, closeModalCallback: any, refreshTable: any) => (
-            <MessageCreate />
+            <MessageCreate closeModal={closeModalCallback} />
             )}
             
         />

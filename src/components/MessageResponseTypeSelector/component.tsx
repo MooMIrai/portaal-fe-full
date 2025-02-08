@@ -1,6 +1,4 @@
-import withAutoComplete from "common/hoc/AutoComplete";
-
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import React from "react";
 import styles from './style.module.scss';
 import Typography from 'common/Typography';
@@ -22,8 +20,11 @@ export function MessageResponseTypeSelector(props:{onChange:(value:any)=>void}){
   return <>
   
       {
-        responseTypeList.map(ri=><div key={ri.id} className={styles.listItem}>
-           <input onChange={()=>{setSelected(ri);props.onChange(ri)}} title="Seleziona riga" type="radio" checked={ri.id===selected.id} style={{width:20,height:20}} />
+        responseTypeList.map(ri=><div key={ri.id} onClick={()=>{
+            setSelected(ri);
+            props.onChange(ri)
+          }} className={styles.listItem + ' '+(ri.id===selected.id?styles.active:'')}>
+           <input title="Seleziona riga" type="radio" checked={ri.id===selected.id} style={{width:20,height:20}} />
            <Typography.p className={styles.typographyLabel}>{ri.description || ri.responseType}</Typography.p>
         </div>)
       }

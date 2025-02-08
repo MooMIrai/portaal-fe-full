@@ -6,8 +6,13 @@ import Button from 'common/Button';
 import SvgIcon from 'common/SvgIcon';
 import { arrowRightIcon, arrowLeftIcon, paperPlaneIcon } from 'common/icons';
 import { MessageResponseTypeSelector } from '../MessageResponseTypeSelector/component';
+import { formNotificationAdapter } from '../../adapters/formNotificationAdapter';
+import { notificationServiceHttp } from '../../services/notificationService';
+import NotificationProviderActions from "common/providers/NotificationProvider";
 
-export function MessageCreate() {
+export function MessageCreate(props:{
+    closeModal:()=>void
+}) {
     const [step, setStep] = useState(0);
     const [data, setData] = useState<any>({});
     const formRecipients = useRef<any>(null);
@@ -17,7 +22,9 @@ export function MessageCreate() {
         setStep(newStep);
     };
 
-    const mergeData = (newData) => setData((p) => ({ ...p, newData }))
+    const mergeData = (newData) => setData((p) => {
+        return { ...p, ...newData }
+    })
 
     const handleNextStep = () => {
         if (step === 0 && formRecipients.current) {
@@ -32,10 +39,15 @@ export function MessageCreate() {
                 mergeData(formBody.current.values);
                 handleChange(step + 1);
             }
-        } else {
-            handleChange(step + 1)
-        }
+        } 
     };
+
+    const handleSend = ()=>{
+        notificationServiceHttp.createResource(formNotificationAdapter.adapt(data)).then(r=>{
+            NotificationProviderActions.openModal({ icon: true, style: 'success' }, "Operazione avvenuta con successo");
+            props.closeModal();
+        })
+    }
 
     return (
         <>
@@ -86,9 +98,7 @@ export function MessageCreate() {
                 )}
                 {step === 2 && (
                     <Button
-                        onClick={() => {
-                            alert('appp')
-                        }}
+                        onClick={handleSend}
                         endIcon={<SvgIcon icon={paperPlaneIcon} />}
                         size="large"
                         themeColor="success"

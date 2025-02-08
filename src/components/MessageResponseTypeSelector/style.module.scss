@@ -1,18 +1,24 @@
 
 .listItem{
-    border-radius: 20px;
     padding: 10px;
-    margin-bottom: 5px;
-    background-color: #f8f8f8;
-    box-shadow: 10px -5px 10px rgba(45, 5, 35, 0.1);
+    
     display: flex;
     gap: 15px;
     flex-direction: row;
     align-items: flex-end;
-    width: 50%;
     padding-left: 2%;
+    border-bottom: 1px solid var(--kendo-color-border);
+    transition: all ease .5s;
+    cursor:pointer;
+
     & > span {
         margin-top:3px
+    }
+    &:hover{
+        background: var(--kendo-color-base-subtle-hover);
+    }
+    &.active{
+        background: var(--kendo-color-base-subtle-active);
     }
 }
 .buttonContainer{
