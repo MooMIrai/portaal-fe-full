@@ -49,6 +49,15 @@ export function MessageCreate() {
                 //onChange={(e: any) => handleChange(e.value)}
             />
 
+           
+            <div
+                style={{ height: 1, background: 'var(--kendo-color-border)', marginTop: 10, marginBottom: 10 }}
+            ></div>
+
+            {<div style={{ display: step === 0 ? 'block' : 'none' }}><RecipientsManager ref={formRecipients} /></div>}
+            {<div style={{ display: step === 1 ? 'block' : 'none' }}><MessageBody ref={formBody} /></div>}
+            {<div style={{ display: step === 2 ? 'block' : 'none' }}><MessageResponseTypeSelector onChange={(e) => mergeData({ responseType: e })} /></div>}
+            
             <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 15 }}>
                 {step > 0 ? (
                     <Button
@@ -89,14 +98,6 @@ export function MessageCreate() {
                     </Button>
                 )}
             </div>
-            <div
-                style={{ height: 1, background: 'var(--kendo-color-border)', marginTop: 10, marginBottom: 10 }}
-            ></div>
-
-            {<div style={{ display: step === 0 ? 'block' : 'none' }}><RecipientsManager ref={formRecipients} /></div>}
-            {<div style={{ display: step === 1 ? 'block' : 'none' }}><MessageBody ref={formBody} /></div>}
-            {<div style={{ display: step === 2 ? 'block' : 'none' }}><MessageResponseTypeSelector onChange={(e) => mergeData({ responseType: e })} /></div>}
-            <br /> <br />
 
         </>
     );
