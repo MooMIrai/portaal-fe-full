@@ -11,7 +11,8 @@ import Modal from 'common/Modal';
 import NotificationActions from 'common/providers/NotificationProvider';
 import { CandidateLogs } from "../CandidateLogs/component";
 import fileService from 'common/services/FileService';
-
+import Typography from 'common/Typography';
+import AvatarIcon from 'common/AvatarIcon';
 
 export function CandidateForRequest(props: PropsWithChildren<{ requestId: number, requestSkills?:any[],preselectedId?:string }>) {
 
@@ -37,7 +38,18 @@ export function CandidateForRequest(props: PropsWithChildren<{ requestId: number
               }
               return <td></td>
         }},
-        { key: "id", label: "Nominativo", type: "custom", render:(rowData)=><td>{rowData.Candidate.Person.firstName} {rowData.Candidate.Person.lastName}</td>},
+        { key: "id", label: "Nominativo", type: "custom", render:(rowData)=><td>
+            <div style={{ display: 'flex', justifyContent:'flex-start', gap:15, alignItems:'center', paddingTop:5,paddingBottom:5 }}>
+                <AvatarIcon name={rowData.Candidate.Person.firstName + ' ' + rowData.Candidate.Person.lastName} initials={
+                    rowData.Candidate.Person.firstName[0].toUpperCase()
+                    +rowData.Candidate.Person.lastName[0].toUpperCase()
+                    } />
+                    <div style={{display:'flex',flexDirection:'column', gap:0}}>
+                        <Typography.h6>{rowData.Candidate.Person.firstName} {rowData.Candidate.Person.lastName}</Typography.h6>
+                        <Typography.p>{rowData.Candidate.Person.privateEmail}</Typography.p>
+                    </div>
+            </div>
+        </td>},
         { key: "RecruitingContact", label: "Contattato", type: "custom", render:(rowData)=><td>{rowData.RecruitingContact?<SvgIcon icon={checkCircleIcon} themeColor="success" />:<SvgIcon icon={xCircleIcon} themeColor="error" />}</td>},
         { key: "RecruitingInterview", label: "Colloquiato", type: "custom", render:(rowData)=><td>{rowData.RecruitingInterview.length?<SvgIcon icon={checkCircleIcon} themeColor="success" />:<SvgIcon icon={xCircleIcon} themeColor="error" />}</td>},
         { key: "RecruitingOffer", label: "Proposta economica", type: "custom", render:(rowData)=><td>{rowData.RecruitingOffer?<SvgIcon icon={checkCircleIcon} themeColor="success" />:<SvgIcon icon={xCircleIcon} themeColor="error" />}</td>},
