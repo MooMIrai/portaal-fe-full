@@ -47,10 +47,10 @@ class NotificationServiceC {
         }).then(()=>{
             //global listener
             this.onNewNotification((args)=>{
-                if(Notification.permission==='granted'){
-                    const data = args.split('::')[0];
-                    const id=data.split(',')[0];
-                    const title=data.split(',')[1];
+                if(Notification.permission==='granted'){//::151,Allora questo è il titolo"
+                    const data = args.split('::')[1];
+                    const id=data.split('%%')[0];
+                    const title=data.split('%%')[1];
                     new Notification("Nuova notifica", {
                         body: title || "Apri portaal per maggiori dettagli."
                       }).onclick = function () {
