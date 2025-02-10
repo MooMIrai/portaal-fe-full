@@ -7,52 +7,61 @@ class NotificationServiceC {
 
     remotePath = `${process.env.BE_URL_SOCKET}`;
     serverPath = `${this.remotePath}`;
-    client: Socket | undefined;
+    client: Socket  = io(this.serverPath, {
+        extraHeaders: {
+            "x-tenant": sessionStorage.getItem("tenant") || ""
+        },
+        query: {
+            token: AuthService.getToken(),
+            "x-tenant": sessionStorage.getItem("tenant") || ""
+        },
+        transports: ['websocket', 'polling']
+
+    });
+
+    isConnecting=false;
 
     tryConnect() {
-
-
-        console.log("Notification: enter");
-
+        this.isConnecting = true; // Blocca nuove connessioni in corso
         return new Promise((ok, ko) => {
-
-            console.log("Notification: promise");
-
-            this.client = io(this.serverPath, {
-                extraHeaders: {
-                    "x-tenant": sessionStorage.getItem("tenant") || ""
-                },
-                query: {
-                    token: AuthService.getToken(),
-                    "x-tenant": sessionStorage.getItem("tenant") || ""
-                },
-                transports: ['websocket', 'polling']
-
-            });
-
-            console.log("Server Path:", this.serverPath);
-
             this.client.connect()
             // client-side
             this.client.on("connect", () => {
 
-                if (this.client?.id) {
+                if (this.client.id) {
                     console.log("Notification: connected");
-                    ok(this.client?.id);
-                }
-            });
+                    this.isConnecting=false;
+                    ok(this.client.id);
 
-            this.client.on("error", (error) => {
-                console.log(`Notification error: ${error}`);
-                ko(error)
+                }
             });
 
             
             this.client.on("connect_error", (error) => {
                 console.log(`Notification connect error: ${error}`);
                 ko(error)
-              });
+                this.isConnecting=false;
+            });
+            
 
+        }).then(()=>{
+            //global listener
+            this.onNewNotification(()=>{
+                if(Notification.permission==='granted'){
+                    new Notification("Nuova notifica", {
+                        body: "Apri portaal per maggiori dettagli."
+                      }).onclick = function () {
+                        window.open("/notification/inbox", "_blank");
+                    };
+                }
+                
+            });
+
+            this.client.on("error", (error) => {
+                
+                console.log(`Notification error: ${error}`);
+                return error;
+            });
         })
 
     }
@@ -60,8 +69,8 @@ class NotificationServiceC {
     getCount(){
 
         return new Promise((ok,ko)=>{
-            notificationService.client?.on("getSentNotifyCount",ok)
-            notificationService.client?.emit("getSentNotifyCount");
+            notificationService.client.on("getSentNotifyCount",ok)
+            notificationService.client.emit("getSentNotifyCount");
         })
     }
 
@@ -74,7 +83,7 @@ class NotificationServiceC {
     }
 
     listen(event:string,callback:(...args: any[]) => void){
-        this.client?.on(event,callback);
+        this.client.on(event,callback);
     }
 
 }

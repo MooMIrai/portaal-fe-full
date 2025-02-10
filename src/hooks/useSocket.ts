@@ -1,20 +1,25 @@
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from "react";
 import { notificationService as notificationS } from "../services/notification";
 
-export function useSocketConnected(){
+export function useSocketConnected() {
+  const [connected, setConnected] = useState(notificationS.client.connected);
 
-    const [connected,setConnected] = useState<boolean>();
-    const [notificationService, setnotificationService] = useState<typeof notificationService>()
+  useEffect(() => {
+    let isMounted = true; // Previene update di stato dopo l’unmount
 
-    useEffect(()=>{
-        notificationS.tryConnect().then(()=>{
-            setConnected(true);
-            setnotificationService(notificationS)
-        });
-        return () => {notificationS.client?.disconnect();}
-    },[]);
+    if (!notificationS.client.connected &&  !notificationS.isConnecting) {
+      notificationS.tryConnect().then(() => {
+        if (isMounted) {
+          setConnected(true);
+        }
+      });
+    }
 
+    return () => {
+      isMounted = false; // Evita aggiornamenti di stato dopo l'unmount
+      //notificationS.client.disconnect(); // Opzionale: mantieni la connessione attiva
+    };
+  }, []);
 
-    return {connected,notificationService}
-
+  return { connected, notificationService: notificationS };
 }
