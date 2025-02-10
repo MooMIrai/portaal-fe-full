@@ -51,7 +51,7 @@ class NotificationServiceC {
                     new Notification("Nuova notifica", {
                         body: "Apri portaal per maggiori dettagli."
                       }).onclick = function () {
-                        window.open("/notification/inbox", "_blank");
+                        window.open("/notifications/inbox", "_blank");
                     };
                 }
                 
@@ -75,11 +75,17 @@ class NotificationServiceC {
     }
 
     onNewNotification(callback:(...args: any[]) => void){
-        this.listen('newNotification',(arg)=>{
+        const fn = (arg)=>{
             if(AuthService.getData().sub.toString()===arg.split('::')[1]){
                 callback(arg);
             }   
-        })
+        };
+        this.listen('newNotification',fn);
+        return ()=>this.offNewNotification(fn);
+    }
+
+    offNewNotification(callback:(...args: any[]) => void){
+        this.client.off('newNotification',callback);
     }
 
     listen(event:string,callback:(...args: any[]) => void){

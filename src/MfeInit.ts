@@ -11,9 +11,16 @@ export default function(){
       },
       {
         id:121,
-        text:'Inbox',
+        text:'Ricevute',
         level:1,
         route:'/notifications/inbox',
+        parentId: 12,
+      },
+      {
+        id:122,
+        text:'Inviate',
+        level:1,
+        route:'/notifications/sent',
         parentId: 12,
       }
     ]

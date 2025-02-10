@@ -9,17 +9,17 @@ import GridTable from "common/Table";
 import { MessageCreate } from "../../components/MessageCreate/component";
 
 import {useSocketConnected} from '../../hooks/useSocket';
+import { notificationService } from "../../services/notification";
 
 
-export function InboxPage(){
+export function SentPage(){
 
     
     const [notification, setNotification] = useState<any>();
     
     const tableRef = useRef<any>();
-    const {connected,notificationService} = useSocketConnected();
+    const {connected} = useSocketConnected();
 
-        
     useEffect(()=>{
         if(connected && notificationService){
             const offEvent = notificationService.onNewNotification(()=>{

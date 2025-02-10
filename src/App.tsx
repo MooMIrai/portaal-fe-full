@@ -3,6 +3,7 @@ import {  Route, Routes } from "react-router-dom";
 import { notificationService } from "./services/notification";
 import { InboxPage } from "./pages/Inbox/component";
 import { useSocketConnected } from "./hooks/useSocket";
+import { SentPage } from "./pages/Sent/component";
 
 
 const App = () => {
@@ -27,6 +28,7 @@ const App = () => {
 
   return (<Routes >
           <Route path={"/notifications/inbox"} element={<InboxPage />} />
+          <Route path={"/notifications/sent"} element={<SentPage />} />
         </Routes>
   );
 };
