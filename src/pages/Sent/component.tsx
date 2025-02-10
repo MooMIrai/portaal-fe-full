@@ -10,6 +10,7 @@ import { MessageCreate } from "../../components/MessageCreate/component";
 
 import {useSocketConnected} from '../../hooks/useSocket';
 import { notificationService } from "../../services/notification";
+import { MessageSentDetail } from "../../components/MessageSentDetail/component";
 
 
 export function SentPage(){
@@ -32,16 +33,19 @@ export function SentPage(){
     },[connected,notificationService])
 
     const columns = [
-        { key: "id", label: "", type: "custom", width:50, render:(n)=><td>
-            <StarFlag n={n} type={"LIST"} className={styles.starIcon} />
-        </td>},
-        { key: "user_created", label: "Mittente", type: "string", sortable: false, width:'150px' },
-        { key: "NotifyUser.content.title", label: "Titolo", type: "custom",  render:(n)=><td>
-            {n.NotifyUser.content.title} - {n.NotifyUser.content.sub_title}
+        
+        { key: "content.title", label: "Titolo", type: "custom",  render:(n)=><td>
+            {n.content.title} - {n.content.sub_title}
         </td> },
         { key: "id", label: "", type: "custom",  render:(n)=><td className={styles.dateColumn}>
-            {new Date(n.NotifyUser.date_start).toLocaleDateString()}
+            {new Date(n.date_start).toLocaleDateString()}
         </td>},
+        { key: "id", label: "Destinatari", type: "custom",  render:(n)=><td className={styles.dateColumn}>
+        {
+            n.isGlobal?'Tutti i dipendenti':
+            n.NotificationDetail.map(nd=>nd.Account.Person.firstName + ' ' + nd.Account.Person.lastName).join(', ')
+        }
+    </td>} ,
     ];
 
     const loadData = (
@@ -50,19 +54,15 @@ export function SentPage(){
         sorting: any[],
       ) => {
     
-        return notificationServiceHttp.getMy(pagination.pageSize,pagination.currentPage)
+        return notificationServiceHttp.getMySent(pagination.pageSize,pagination.currentPage)
       }
     
 
     return <div className={styles.container}>
         <GridTable
-            rowStyle={(rowData) => ({
-                background: rowData.NotificationStatus.notificationStatus==='SENT' ?
-                'var(--kendo-color-app-surface)' :
-                 'var(--kendo-color-base)' ,
-            })}
-            onRowClick={(n)=>{
-                setNotification(n)
+            expand={{
+                enabled: true,
+                render: (rowProps) => <MessageSentDetail onRowClick={(n)=>setNotification(n)} data={rowProps.dataItem.NotificationDetail}/>
             }}
             ref={tableRef}
             pageable={true}
@@ -83,12 +83,16 @@ export function SentPage(){
             )}
             
         />
-        <MessageDetail onClose={()=>{
-            setNotification(undefined);
-            if(tableRef.current){
-                tableRef.current.refreshTable();
-            }
-            }} id={notification?.id} />
+        <MessageDetail 
+            isSent
+            onClose={()=>{
+                setNotification(undefined);
+                
+                if(tableRef.current){
+                    tableRef.current.refreshTable();
+                }
+                }} id={notification?.id} 
+            />
   </div>
 
 

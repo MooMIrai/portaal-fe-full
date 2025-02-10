@@ -7,10 +7,9 @@ import { MessageDetail } from "../../components/MessageDetail/component";
 import { StarFlag } from "../../components/StarFlag/component";
 import GridTable from "common/Table";
 import { MessageCreate } from "../../components/MessageCreate/component";
-
 import {useSocketConnected} from '../../hooks/useSocket';
 import { useParams } from "react-router-dom";
-
+import AvatarIcon from 'common/AvatarIcon';
 
 export function InboxPage(){
 
@@ -37,7 +36,23 @@ export function InboxPage(){
         { key: "id", label: "", type: "custom", width:50, render:(n)=><td>
             <StarFlag n={n} type={"LIST"} className={styles.starIcon} />
         </td>},
-        { key: "user_created", label: "Mittente", type: "string", sortable: false, width:'150px' },
+        { key: "id", label: "Destinatario", type: "custom",  render:(n)=>{
+        if(!n.NotifyUser.ManagerAccount){
+            return <td>{n.user_created}</td>
+        }
+        return <td>
+            <div style={{ display: 'flex', justifyContent:'flex-start', gap:15, alignItems:'center', paddingTop:5,paddingBottom:5 }}>
+                <AvatarIcon name={n.NotifyUser.ManagerAccount.Person.firstName + ' ' + n.NotifyUser.ManagerAccount.Person.lastName}  
+                    initials={
+                        n.NotifyUser.ManagerAccount.Person.firstName[0].toUpperCase()
+                        +n.NotifyUser.ManagerAccount.Person.lastName[0].toUpperCase()
+                    } />
+                    <div style={{display:'flex',flexDirection:'column', gap:0}}>
+                        <Typography.h6>{n.NotifyUser.ManagerAccount.Person.firstName} {n.NotifyUser.ManagerAccount.Person.lastName}</Typography.h6>
+                        <Typography.p>{n.NotifyUser.ManagerAccount.email}</Typography.p>
+                    </div>
+            </div>
+        </td>}},
         { key: "NotifyUser.content.title", label: "Titolo", type: "custom",  render:(n)=><td>
             {n.NotifyUser.content.title} - {n.NotifyUser.content.sub_title}
         </td> },

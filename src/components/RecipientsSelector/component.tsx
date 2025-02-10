@@ -28,7 +28,7 @@ export function RecipientsSelector(props:{
        
         const itemChildren = (
             <div style={{ display: 'flex', justifyContent:'flex-start', gap:15, alignItems:'center', paddingTop:5,paddingBottom:5 }}>
-                <AvatarIcon initials={
+                <AvatarIcon name={itemProps.dataItem.nominativo} initials={
                     itemProps.dataItem.firstName[0].toUpperCase()
                     +itemProps.dataItem.lastName[0].toUpperCase()
                     } />

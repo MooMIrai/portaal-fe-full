@@ -20,6 +20,17 @@ class NotificationServiceC extends BaseHttpService {
 
   }
 
+  getMySent(pageSize:number,pageNum:number,idUser?:number){
+    return client.get('/api/v1/notificationDetail/getMyNotifyManager',{
+      params: { 
+        id_account: idUser,
+        pageSize:pageSize,
+        pageNum:pageNum
+      },
+  }).then(r=>r.data);
+    
+  }
+
   getMyUnreadCount(){
     return client.patch(`/api/v1/notificationDetail/getSentNotifyCount`).then(res=>res.data)
   }

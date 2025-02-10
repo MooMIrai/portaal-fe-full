@@ -10,17 +10,19 @@ import HtmlParser from 'common/HtmlParser';
 
 export function MessageDetail(props:PropsWithRef<{
     id:number,
-    onClose:()=>void
+    onClose:()=>void,
+    isSent?:boolean
 }>){
 
     const [data,setData] = useState<any>();
 
     useEffect(()=>{
-        if(props.id){
+        if(props.id ){
             
             notificationServiceHttp.fetchResource(props.id).then(res=>{
                 setData(res);
-                notificationServiceHttp.updateStatus(props.id,"VIEWED");
+                if(!props.isSent)
+                    notificationServiceHttp.updateStatus(props.id,"VIEWED");
             });
         }else{
             setData(undefined)
@@ -38,10 +40,11 @@ export function MessageDetail(props:PropsWithRef<{
                 </Button>
                 <div>
                 <StarFlag n={data} type="DETAIL" className={styles.icon} />
+                
                 {
-                    
+                    !props.isSent && <SvgIcon className={styles.icon} flip="horizontal" size="xxlarge" themeColor="tertiary" icon={redoIcon} ></SvgIcon>
                 }
-                <SvgIcon className={styles.icon} flip="horizontal" size="xxlarge" themeColor="tertiary" icon={redoIcon} ></SvgIcon>
+                
                 <SvgIcon className={styles.icon} size="xxlarge" themeColor="error" icon={trashIcon} ></SvgIcon>
                 </div>
                 

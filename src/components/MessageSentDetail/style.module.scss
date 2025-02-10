@@ -1,0 +1,25 @@
+
+.starIcon{
+    cursor: pointer;
+    padding: 5px;
+    transition: all ease .5s;
+    color: var(--kendo-color-warning, #ffa41f) !important;
+    &:hover{
+        background: #dedede;
+        border-radius: 50%;
+    }
+}
+
+.container {
+    & :global(.k-table){
+        width:100%;
+
+        & :global(.k-table-row){
+            & td:last-of-type{
+                text-align: right;
+            }
+
+        }
+
+    }
+}
