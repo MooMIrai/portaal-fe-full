@@ -9,12 +9,14 @@ import GridTable from "common/Table";
 import { MessageCreate } from "../../components/MessageCreate/component";
 
 import {useSocketConnected} from '../../hooks/useSocket';
+import { useParams } from "react-router-dom";
 
 
 export function InboxPage(){
 
     
     const [notification, setNotification] = useState<any>();
+    const paramsPath = useParams();
     
     const tableRef = useRef<any>();
     const {connected,notificationService} = useSocketConnected();
@@ -55,7 +57,7 @@ export function InboxPage(){
     
 
     return <div className={styles.container}>
-        <GridTable
+        {paramsPath.id?null:<GridTable
             rowStyle={(rowData) => ({
                 background: rowData.NotificationStatus.notificationStatus==='SENT' ?
                 'var(--kendo-color-app-surface)' :
@@ -82,13 +84,16 @@ export function InboxPage(){
             <MessageCreate closeModal={closeModalCallback} />
             )}
             
-        />
+        />}
         <MessageDetail onClose={()=>{
+            if(paramsPath.id){
+                window.close();
+            }
             setNotification(undefined);
             if(tableRef.current){
                 tableRef.current.refreshTable();
             }
-            }} id={notification?.id} />
+            }} id={paramsPath.id || notification?.id} />
   </div>
 
 

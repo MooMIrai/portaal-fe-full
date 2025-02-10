@@ -46,12 +46,16 @@ class NotificationServiceC {
 
         }).then(()=>{
             //global listener
-            this.onNewNotification(()=>{
+            this.onNewNotification((args)=>{
                 if(Notification.permission==='granted'){
+                    const data = args.split('::')[0];
+                    const id=data.split(',')[0];
+                    const title=data.split(',')[1];
                     new Notification("Nuova notifica", {
-                        body: "Apri portaal per maggiori dettagli."
+                        body: title || "Apri portaal per maggiori dettagli."
                       }).onclick = function () {
-                        window.open("/notifications/inbox", "_blank");
+                       
+                        window.open("/notifications/inbox/"+id, "Dettaglio richiesta", "width=700,height=500" );
                     };
                 }
                 
@@ -75,13 +79,8 @@ class NotificationServiceC {
     }
 
     onNewNotification(callback:(...args: any[]) => void){
-        const fn = (arg)=>{
-            if(AuthService.getData().sub.toString()===arg.split('::')[1]){
-                callback(arg);
-            }   
-        };
-        this.listen('newNotification',fn);
-        return ()=>this.offNewNotification(fn);
+        this.listen('newNotification',callback);
+        return ()=>this.offNewNotification(callback);
     }
 
     offNewNotification(callback:(...args: any[]) => void){

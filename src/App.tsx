@@ -31,6 +31,7 @@ const App = () => {
 
   return (<Routes >
           <Route path={"/notifications/inbox"} element={<InboxPage />} />
+          <Route path={"/notifications/inbox/:id"} element={<InboxPage />} />
           <Route path={"/notifications/sent"} element={<SentPage />} />
         </Routes>
   );
