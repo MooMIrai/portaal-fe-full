@@ -37,8 +37,9 @@
   border-top-right-radius: 10px;
   & > h4{
     margin:0;
-    color: var(--kendo-color-light);
-
+    color: var(--kendo-color-app-surface);
+    top: 25px;
+    position: fixed;
   }
 }
 

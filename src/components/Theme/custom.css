@@ -20,7 +20,7 @@ body::before{
   right:0 !important;
   bottom:60% !important;
   left:0 !important;
-  background: linear-gradient(87deg, var(--kendo-color-primary) 0, var(--kendo-color-tertiary) 100%)  !important;
+  background: linear-gradient(87deg, var(--kendo-color-primary) 40%, var(--kendo-color-tertiary) 100%)  !important;
   -webkit-box-shadow: inset -2px -50px 41px -9px var(--kendo-color-app-surface); 
   box-shadow: inset -2px -50px 41px -9px var(--kendo-color-app-surface);
 }
@@ -111,6 +111,7 @@ td{
 }
 
 .k-toolbar {
+  padding-bottom: 25px !important;
   position: sticky !important;
   top:0 !important;
 }
