@@ -39,12 +39,16 @@ class FormAdapter extends BaseAdapter<NotificationParameter,FormField>{
             showLabel:param.type !="BOOLEAN",
             options: param.type === 'STATIC_LIST'?param.values:param.type === 'DYNAMIC_LIST'?JSON.parse(param.values):null,
             validator: (value: any) => {
+              debugger;
               if (param.mandatory ) {
                 if((param.type==='STATIC_LIST' || param.type==='DYNAMIC_LIST')){
                   if( !value || !value.id)
                     return `Il campo ${param.name} è obbligatorio`;
                 }else if(param.type==='BOOLEAN'){
                   if(value===undefined) return `Il campo ${param.name} è obbligatorio`;
+                }
+                else if(param.type==='DATE' || param.type==='DATETIME'){
+                  if(value===undefined || value===null) return `Il campo ${param.name} è obbligatorio`;
                 }
                 else if(!value || !value.length){
                   return `Il campo ${param.name} è obbligatorio`;

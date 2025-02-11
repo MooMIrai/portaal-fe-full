@@ -74,3 +74,30 @@
         border-radius: 50%;
     }
 }
+.statusColumn{
+    display: grid;
+    align-items: center;
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap:5px;
+
+    & > span{
+        border-radius:var(--kendo-border-radius-md);
+        background-color: var(--kendo-color-primary);
+        padding: 5px;
+        display: flex;
+        gap: 5px;
+        align-items: center;
+        color:var(--kendo-color-app-surface);
+        justify-content: space-between;
+    }
+    & .statusBadge{
+        background-color: var(--kendo-color-app-surface);
+        color:var(--kendo-color-primary);
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}

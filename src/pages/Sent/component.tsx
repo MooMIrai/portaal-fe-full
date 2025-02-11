@@ -41,6 +41,16 @@ export function SentPage(){
         { key: "id", label: "", type: "custom",  render:(n)=><td className={styles.dateColumn}>
             {new Date(n.date_start).toLocaleDateString()}
         </td>},
+        { key: "id", label: "Status", type: "custom",  render:(n)=>{
+            const statusCount = n.NotificationDetail.filter(p=>p.NotificationStatus.notificationStatus==='RESPONDED').reduce((acc, item) => {
+                const status = item.NotificationStatus.description; // Usa "description" invece di "notificationStatus"
+                acc[status] = (acc[status] || 0) + 1;
+                return acc;
+            }, {});
+            return <td className={Object.keys(statusCount).length?styles.statusColumn:''}>
+            
+            {Object.keys(statusCount).map((k)=><span>{k}<span className={styles.statusBadge}>{statusCount[k]}</span></span>)}
+        </td>}},
         { key: "id", label: "Destinatari", type: "custom",  render:(n)=><td className={styles.dateColumn}>
         {
             n.isGlobal?'Tutti i dipendenti':
@@ -92,7 +102,7 @@ export function SentPage(){
                 "create"
             ]}
             formCrud={(row: any, type: string, closeModalCallback: any, refreshTable: any) => (
-            <MessageCreate closeModal={closeModalCallback} />
+                <MessageCreate closeModal={closeModalCallback} />
             )}
             
         />

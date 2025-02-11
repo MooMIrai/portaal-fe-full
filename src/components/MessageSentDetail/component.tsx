@@ -23,8 +23,10 @@ export function MessageSentDetail(props:{data,onRowClick}){
                     </div>
             </div>
         </td>},
-        { key: "id", label: "Stato Notifica", type: "custom",  render:(n)=><td>
-            {n.NotificationStatus.description || n.NotificationStatus.notificationStatus}
+        { key: "id", label: "Stato Notifica", type: "custom",  render:(n)=><td className={styles.statusColumn}>
+ 
+            <span>{n.NotificationStatus.description || n.NotificationStatus.notificationStatus}</span>
+
         </td>}
     ];
 
