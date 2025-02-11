@@ -18,9 +18,9 @@ export default function(){
       },
       {
         id:122,
-        text:'Inviate',
+        text:'Manager',
         level:1,
-        route:'/notifications/sent',
+        route:'/notifications/manager',
         parentId: 12,
       }
     ]

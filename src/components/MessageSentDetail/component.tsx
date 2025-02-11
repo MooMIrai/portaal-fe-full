@@ -7,6 +7,23 @@ import AvatarIcon from 'common/AvatarIcon';
 
 export function MessageSentDetail(props:{data,onRowClick}){
 
+    
+    const stringToColor = (name: string) => {
+        let hash = 0;
+    
+        for (let i = 0; i < name.length; i++) {
+            hash = name.charCodeAt(i) + ((hash << 5) - hash);
+        }
+    
+        const h = Math.abs(hash * 137) % 360;  // Maggiore variazione della tonalità
+        const s = 40 + (Math.abs(hash) % 30); // Saturazione tra 40% e 70%
+        const l = 40 + (Math.abs(hash) % 20); // Luminosità tra 40% e 60%
+    
+        return `hsl(${h}, ${s}%, ${l}%)`;
+    }
+    
+
+
     const columns=[
         { key: "id", label: "", type: "custom", width:50, render:(n)=><td>
             <StarFlag n={n} type={"LIST"} className={styles.starIcon} />
@@ -23,11 +40,17 @@ export function MessageSentDetail(props:{data,onRowClick}){
                     </div>
             </div>
         </td>},
-        { key: "id", label: "Stato Notifica", type: "custom",  render:(n)=><td className={styles.statusColumn}>
- 
-            <span>{n.NotificationStatus.description || n.NotificationStatus.notificationStatus}</span>
-
-        </td>}
+      { key: "id", label: "Stato Notifica", type: "custom", render: (n) => {
+        const statusDescription = n.NotificationStatus.description || n.NotificationStatus.notificationStatus;
+        return (
+            <td className={styles.statusColumn}>
+                <span style={statusDescription ? { background: stringToColor(statusDescription) } : undefined}>
+                    {statusDescription}
+                </span>
+            </td>
+        );
+    }}
+    
     ];
 
     const loadData =()=>{
