@@ -32,6 +32,10 @@ td{
   border-bottom:none !important;
 }
 
+.k-grid{
+  border-radius: var(--kendo-border-radius-md) !important;
+}
+
 .k-grid-aria-root{
   border-radius: var(--kendo-border-radius-md, 20px);
 }
