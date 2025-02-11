@@ -20,6 +20,7 @@ export function SentPage(){
     
     const tableRef = useRef<any>();
     const {connected} = useSocketConnected();
+    const [expanded,setExpanded] = useState<number[]>([]);
 
     useEffect(()=>{
         if(connected && notificationService){
@@ -54,7 +55,12 @@ export function SentPage(){
         sorting: any[],
       ) => {
     
-        return notificationServiceHttp.getMySent(pagination.pageSize,pagination.currentPage)
+        return notificationServiceHttp.getMySent(pagination.pageSize,pagination.currentPage).then(res=>{
+            return {
+                data:res.data.map(r=>({...r,gridtable_expanded:expanded.some(e=>e===r.id)})),
+                meta:res.meta
+            }
+        })
       }
     
 
@@ -62,6 +68,13 @@ export function SentPage(){
         <GridTable
             expand={{
                 enabled: true,
+                onExpandChange:(data:any,isExpanded)=>{
+                    if(isExpanded){
+                        setExpanded([...expanded,data.id]);
+                    }else{
+                        setExpanded(expanded.filter(e=>e!=data.id));
+                    }
+                },
                 render: (rowProps) => <MessageSentDetail onRowClick={(n)=>setNotification(n)} data={rowProps.dataItem.NotificationDetail}/>
             }}
             ref={tableRef}

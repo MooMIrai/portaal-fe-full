@@ -8,13 +8,14 @@ export function MessageResponseTypeSelector(props:{onChange:(value:any)=>void}){
 
   useEffect(()=>{
     notificationServiceHttp.getResponseTypeList().then(res=>{
-      setResponseTypeList([{id:0,description:'Nessuna riposta'},...res.data]);
-      props.onChange({id:0})
+      setResponseTypeList([...res.data]);
+      props.onChange(res.data.find(n=>n.responseType==='NONE') || {id:0} );
+      setSelected(res.data.find(n=>n.responseType==='NONE') || {id:0} );
     })
   },[])
   
   const [responseTypeList,setResponseTypeList]  = useState<any[]>([])
-  const [selected,setSelected]  = useState<any>({id:0})
+  const [selected,setSelected]  = useState<any>()
 
 
   return <>

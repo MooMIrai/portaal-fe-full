@@ -1,12 +1,13 @@
-import React, { PropsWithRef, useEffect, useState } from "react";
+import React, { PropsWithRef, useCallback, useEffect, useState } from "react";
 import styles from './style.module.scss';
 import SvgIcon from 'common/SvgIcon';
-import {chevronLeftIcon, starIcon, starOutlineIcon, trashIcon, redoIcon} from 'common/icons';
+import {chevronLeftIcon, trashIcon, redoIcon} from 'common/icons';
 import Typography from 'common/Typography';
 import Button from 'common/Button';
 import { StarFlag } from "../StarFlag/component";
 import { notificationServiceHttp } from "../../services/notificationService";
 import HtmlParser from 'common/HtmlParser';
+import { MessageResponse } from "../MessageResponse/component";
 
 export function MessageDetail(props:PropsWithRef<{
     id:number,
@@ -15,13 +16,14 @@ export function MessageDetail(props:PropsWithRef<{
 }>){
 
     const [data,setData] = useState<any>();
+    const [modalData,setModalData] = useState<any>();
 
-    useEffect(()=>{
+    const updateData = useCallback(()=>{
         if(props.id ){
             
             notificationServiceHttp.fetchResource(props.id).then(res=>{
                 setData(res);
-                if(!props.isSent)
+                if(!props.isSent && res.NotificationStatus.notificationStatus==='SENT')
                     notificationServiceHttp.updateStatus(props.id,"VIEWED");
             });
         }else{
@@ -29,8 +31,12 @@ export function MessageDetail(props:PropsWithRef<{
         }
     },[props.id])
 
+    useEffect(()=>{
+       updateData();
+    },[props.id]);
 
-  return <div className={styles.container+ ' ' + (data?styles.opened:'')}>
+
+  return <><div className={styles.container+ ' ' + (data?styles.opened:'')}>
             <div className={styles.header}>
                 {
                     data ?<>
@@ -39,21 +45,23 @@ export function MessageDetail(props:PropsWithRef<{
                     Indietro
                 </Button>
                 <div>
-                <StarFlag n={data} type="DETAIL" className={styles.icon} />
+                    <StarFlag n={data} type="DETAIL" className={styles.icon} />
                 
-                {
-                    !props.isSent && <SvgIcon className={styles.icon} flip="horizontal" size="xxlarge" themeColor="tertiary" icon={redoIcon} ></SvgIcon>
-                }
+                    {
+                        !props.isSent && data?.NotifyUser?.NotifyResponseType?.responseType!='NONE' &&
+                         (data?.NotificationStatus?.notificationStatus==='SENT' ||data?.NotificationStatus?.notificationStatus==='VIEWED') &&
+                         <SvgIcon onClick={()=>{
+                            setModalData(data.NotifyUser.NotifyResponseType);
+                        }} className={styles.icon} flip="horizontal" size="xxlarge" themeColor="tertiary" icon={redoIcon} ></SvgIcon>
+                    }
                 
-                <SvgIcon className={styles.icon} size="xxlarge" themeColor="error" icon={trashIcon} ></SvgIcon>
+                    <SvgIcon className={styles.icon} size="xxlarge" themeColor="error" icon={trashIcon} ></SvgIcon>
                 </div>
                 
                 
                 </>
                 :null
                 }
-                
-                
 
             </div>
 
@@ -63,4 +71,9 @@ export function MessageDetail(props:PropsWithRef<{
                 <HtmlParser html={data.NotifyUser.content.text} />
             </div>}
         </div>
+        <MessageResponse onClose={() => { 
+            setModalData(undefined);
+            updateData();
+         } } responseType={modalData} id={data?.id} />
+        </>
 }

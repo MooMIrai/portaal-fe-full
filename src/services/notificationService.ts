@@ -39,6 +39,10 @@ class NotificationServiceC extends BaseHttpService {
     return client.patch(`/api/v1/notificationDetail/updateStatus/${id}`, {"notificationStatus_value":status} ).then(res=>res.data)
   }
 
+  updateResponse(id:number,response:string){
+    return client.patch(`/api/v1/notificationDetail/updateResponse/${id}`, {"response":response} ).then(res=>res.data)
+  }
+
   updateFlagStar(id:number,isFlagged:boolean){
     return client.patch(`/api/v1/notificationDetail/updateFlag/${id}`,{isFlagged:isFlagged}).then(res=>res.data)
   }
