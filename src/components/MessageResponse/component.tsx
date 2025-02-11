@@ -1,6 +1,5 @@
 import React, { useRef } from "react";
 import Modal from 'common/Modal';
-import { formAdapter } from "../../adapters/FormAdapter";
 import { MessageResponseForm } from "./form";
 import { notificationServiceHttp } from "../../services/notificationService";
 
@@ -14,8 +13,10 @@ export function MessageResponse(props:{id:number,responseType:any, onClose:()=>v
             formRef.current.onSubmit();
             if (formRef.current.isValid()) {
 
-               notificationServiceHttp.updateResponse(props.id,JSON.stringify(formRef.current.value));
-               props.onClose();
+               notificationServiceHttp.updateResponse(props.id,JSON.stringify(formRef.current.values)).then(()=>{
+                    props.onClose();
+               });
+              
             }
         }
     }

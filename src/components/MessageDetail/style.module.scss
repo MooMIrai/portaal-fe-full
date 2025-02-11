@@ -8,6 +8,7 @@
     transition: all ease 0.5s;
     border-radius: 20px;
     z-index: 3;
+   
     &.opened{
         left:0;
     }
@@ -42,6 +43,37 @@
 }
 
 .body{
-    padding: 30px;
+    padding-left:20px;
     background-color: var(--kendo-color-app-surface);
+    &.hasResponse{
+        padding-top:20px;
+        padding-bottom:20px;
+        border-radius: var(--kendo-border-radius-md);
+        margin: 50px;
+        margin-bottom:100px;
+        border:1px solid var(--kendo-color-border);
+    }
+}
+
+.bodyContainer{
+    display: grid;
+    grid-template-columns: 100%;
+    column-gap: 20px;
+    height: 100%;
+     & div.separator{
+        background: var(--kendo-color-border);
+        height: 100%;
+     }
+}
+
+.nameContainer{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap:15px;
+}
+
+.responseContainer{
+    padding-top:20px;
+    padding-left:20px;
 }
