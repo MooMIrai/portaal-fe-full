@@ -1,13 +1,13 @@
 import { BadgeContainer } from "@progress/kendo-react-indicators";
 import { Label } from "@progress/kendo-react-labels";
-import { Avatar } from "@progress/kendo-react-layout";
+import { Avatar, AvatarProps } from "@progress/kendo-react-layout";
 import React from "react";
 
 type AvatarIconProps = {
   initials: string;
 };
 
-export default function AvatarIcon(props: AvatarIconProps & {name?:string}) {
+export default function AvatarIcon(props: AvatarProps & AvatarIconProps & {name?:string}) {
 
   const stringToColor=(name:string) =>{
     let hash1 = 0, hash2 = 0;
@@ -31,8 +31,8 @@ export default function AvatarIcon(props: AvatarIconProps & {name?:string}) {
 
   return (
     <BadgeContainer>
-      <Avatar type="initials" style={props.name?{background:stringToColor(props.name)}:undefined}>
-        <Label className="k-item-text">{props.initials}</Label>
+      <Avatar size={props.size || 'medium'} type="initials" style={props.name?{background:stringToColor(props.name)}:undefined}>
+        <Label className="k-item-text" style={props.size==='large'?{fontSize:20}:undefined}>{props.initials}</Label>
       </Avatar>
     </BadgeContainer>
   );
