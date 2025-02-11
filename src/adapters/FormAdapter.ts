@@ -45,6 +45,8 @@ class FormAdapter extends BaseAdapter<ReportParameter,FormField>{
                     return `Il campo ${param.name} è obbligatorio`;
                 }else if(param.type==='BOOLEAN'){
                   if(value===undefined) return `Il campo ${param.name} è obbligatorio`;
+                }else if(param.type==='DATE' || param.type==='DATETIME'){
+                  if(value===undefined || value===null) return `Il campo ${param.name} è obbligatorio`;
                 }
                 else if(!value || !value.length){
                   return `Il campo ${param.name} è obbligatorio`;
