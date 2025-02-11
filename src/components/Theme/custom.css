@@ -150,3 +150,7 @@ td{
 .k-editor{
   border-radius:var(--kendo-border-radius-md, 20px) !important
 }
+
+.k-form .k-form-legend{
+  display: none !important;
+}

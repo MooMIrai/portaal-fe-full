@@ -231,7 +231,9 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
   const expandChange = (event: GridExpandChangeEvent) => {
     if (data) {
       let newData = data.map((item: any, indexP) => {
-        if (indexP === event.dataIndex) {
+        const correctIndex = (pagination.currentPage-1)===0?0:((pagination.currentPage-1)*pagination.pageSize);
+        
+        if ((correctIndex +indexP) === event.dataIndex) {
           item.gridtable_expanded = !event.dataItem.gridtable_expanded;
           if (props.expand && props.expand.onExpandChange) {
             props.expand.onExpandChange(item, item.gridtable_expanded);
