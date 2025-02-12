@@ -75,7 +75,7 @@
     }
 }
 .statusColumn{
-    display: grid;
+    display: table-cell;
     align-items: center;
     grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
     gap:5px;
