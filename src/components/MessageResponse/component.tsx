@@ -12,8 +12,14 @@ export function MessageResponse(props:{id:number,responseType:any, onClose:()=>v
         if(formRef.current){
             formRef.current.onSubmit();
             if (formRef.current.isValid()) {
-
-               notificationServiceHttp.updateResponse(props.id,JSON.stringify(formRef.current.values)).then(()=>{
+                debugger
+                const data = formRef.current.values;
+                const mappedObj = {};
+                    Object.keys(data).forEach(key => {
+                        const v = data[key];
+                        mappedObj[key] = v.id ? v.id : v;
+                });
+               notificationServiceHttp.updateResponse(props.id,JSON.stringify(mappedObj)).then(()=>{
                     props.onClose();
                });
               

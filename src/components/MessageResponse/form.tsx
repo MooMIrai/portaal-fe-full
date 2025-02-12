@@ -46,12 +46,8 @@ export const MessageResponseForm = forwardRef<any,{fields:NotificationParameter,
                 fields={formFields}
                 formData={{}}
                 onSubmit={(data) => {
-                    const mappedObj = {};
-                    Object.keys(data).forEach(key => {
-                        const v = data[key];
-                        mappedObj[key] = v.id ? v.id : v;
-                    });
-                    return mappedObj;
+                   
+                    return data;
                 }}
                 addedFields={addedField}
             />
