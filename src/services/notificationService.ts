@@ -8,6 +8,10 @@ class NotificationServiceC extends BaseHttpService {
     return "notificationDetail";
   }
 
+  getDetail(id:number){
+    return client.get('/api/v1/notificationDetail/'+id+'?include=true&canceled=true').then(res=>res.data)
+  }
+
   getMy(pageSize:number,pageNum:number,idUser?:number){
 
     return client.get('/api/v1/notificationDetail/getMyNotify',{

@@ -24,7 +24,7 @@ export function MessageDetail(props:PropsWithRef<{
     const updateData = useCallback(()=>{
         if(props.id ){
             
-            notificationServiceHttp.fetchResource(props.id).then(res=>{
+            notificationServiceHttp.getDetail(props.id).then(res=>{
                 setData(res);
                 if(!props.isSent && res.NotificationStatus.notificationStatus==='SENT')
                     notificationServiceHttp.updateStatus(props.id,"VIEWED");
