@@ -10,6 +10,7 @@ import HtmlParser from 'common/HtmlParser';
 import { MessageResponse } from "../MessageResponse/component";
 import AvatarIcon from 'common/AvatarIcon';
 import { MessageResponseView } from "../MessageResponse/view";
+import NotificationProviderActions from "common/providers/NotificationProvider";
 
 export function MessageDetail(props:PropsWithRef<{
     id:number,
@@ -67,7 +68,18 @@ export function MessageDetail(props:PropsWithRef<{
                             }} className={styles.icon} flip="horizontal" size="xxlarge" themeColor="tertiary" icon={redoIcon} ></SvgIcon>
                         }
                     
-                        <SvgIcon className={styles.icon} size="xxlarge" themeColor="error" icon={trashIcon} ></SvgIcon>
+                        <SvgIcon
+                            onClick={()=>{
+                                NotificationProviderActions.openConfirm(
+                                    "Vuoi spostare la notifica nel cestino?",
+                                    ()=>{
+                                        notificationServiceHttp.moveToTrash(data.id);
+                                        props.onClose();
+                                    },
+                                    'Conferma operazione'
+                                )
+                            }}
+                         className={styles.icon} size="xxlarge" themeColor="error" icon={trashIcon} ></SvgIcon>
                     </div>
                     
                     

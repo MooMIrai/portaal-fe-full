@@ -59,6 +59,10 @@ class NotificationServiceC extends BaseHttpService {
     return client.get(`api/v1/crud/NotifyResponseType`).then(res => res.data);
   }
 
+  moveToTrash(id:number){
+    return client.patch(`/api/v1/notificationDetail/updateDelete/${id}`,{isDeleted:true}).then(res=>res.data);
+  }
+
 }
 
 export const notificationServiceHttp = new NotificationServiceC();
