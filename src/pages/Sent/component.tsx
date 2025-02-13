@@ -110,6 +110,7 @@ export function SentPage(){
                 render: (rowProps) => <MessageSentDetail onRowClick={(n)=>setNotification(n)} data={rowProps.dataItem.NotificationDetail}/>
             }}
             customToolBarComponent={() => (
+                <>
                 <div className={styles.switchContainer}>
                     <Typography.p>Visualizza il cestino</Typography.p>
                     <Switch
@@ -120,6 +121,21 @@ export function SentPage(){
                         themeColor="error"
                     />
                 </div>
+                {
+                    showTrash && <div className={styles.btnClean}>
+                    <Button onClick={()=>{
+                        NotificationProviderActions.openConfirm(
+                            "Vuoi eliminare definitivamente tutte le notifiche nel cestino?",
+                            ()=>{
+                                notificationServiceHttp.deleteAllSent().then(refreshTable)
+                            },
+                            'Conferma operazione'
+                        )
+                    }} themeColor='error' svgIcon={trashIcon} >Svuota tutto</Button>
+                </div>
+                
+                }
+                </>
             )}
             ref={tableRef}
             pageable={true}

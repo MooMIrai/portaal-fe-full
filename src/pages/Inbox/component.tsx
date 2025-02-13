@@ -11,6 +11,9 @@ import { useSocketConnected } from '../../hooks/useSocket';
 import { useParams } from "react-router-dom";
 import AvatarIcon from 'common/AvatarIcon';
 import Switch from 'common/Switch';
+import Button from 'common/Button';
+import { trashIcon } from 'common/icons';
+import NotificationProviderActions from "common/providers/NotificationProvider";
 
 export function InboxPage() {
     const [notification, setNotification] = useState<any>();
@@ -19,12 +22,17 @@ export function InboxPage() {
     const tableRef = useRef<any>();
     const { connected, notificationService } = useSocketConnected();
 
+
+    const refreshTable = ()=>{
+        if (tableRef.current) {
+            tableRef.current.refreshTable();
+        }
+    }
+
     useEffect(() => {
         if (connected && notificationService) {
             const offEvent = notificationService.onNewNotification(() => {
-                if (tableRef.current) {
-                    tableRef.current.refreshTable();
-                }
+                refreshTable();
             });
             return offEvent;
         }
@@ -72,6 +80,7 @@ export function InboxPage() {
                     })}
                     onRowClick={(n) => setNotification(n)}
                     customToolBarComponent={() => (
+                        <>
                         <div className={styles.switchContainer}>
                             <Typography.p>Visualizza il cestino</Typography.p>
                             <Switch
@@ -82,6 +91,21 @@ export function InboxPage() {
                                 themeColor="error"
                             />
                         </div>
+                        {
+                            showTrash && <div className={styles.btnClean}>
+                            <Button onClick={()=>{
+                                NotificationProviderActions.openConfirm(
+                                    "Vuoi eliminare definitivamente tutte le notifiche nel cestino?",
+                                    ()=>{
+                                        notificationServiceHttp.deleteAllInbox().then(refreshTable)
+                                    },
+                                    'Conferma operazione'
+                                )
+                            }} themeColor='error' svgIcon={trashIcon} >Svuota tutto</Button>
+                        </div>
+                        }
+                        
+                        </>
                     )}
                     ref={tableRef}
                     pageable={true}
@@ -106,9 +130,7 @@ export function InboxPage() {
                     window.close();
                 }
                 setNotification(undefined);
-                if (tableRef.current) {
-                    tableRef.current.refreshTable();
-                }
+                refreshTable();
             }} id={paramsPath.id || notification?.id} />
         </div>
     );

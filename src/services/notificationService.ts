@@ -103,6 +103,14 @@ class NotificationServiceC extends BaseHttpService {
     return client.delete(`/api/v1/notificationDetail/cancelNotification/${id}`).then(res=>res.data);
   }
 
+  deleteAllInbox(){
+    return client.delete(`/api/v1/notificationDetail/cleanBin`).then(res=>res.data)
+  }
+  
+  deleteAllSent(){
+    return client.delete(`/api/v1/notificationDetail/cleanBinManager`).then(res=>res.data)
+  }
+
 }
 
 export const notificationServiceHttp = new NotificationServiceC();
