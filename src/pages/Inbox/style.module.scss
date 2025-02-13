@@ -74,3 +74,14 @@
         border-radius: 50%;
     }
 }
+
+.switchContainer{
+    display: flex;
+    justify-self: flex-end;
+    align-self: flex-end;
+    order: 2;
+    flex: 1;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 5px;
+}

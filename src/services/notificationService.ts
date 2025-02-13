@@ -24,6 +24,30 @@ class NotificationServiceC extends BaseHttpService {
 
   }
 
+  getMyBin(pageSize:number,pageNum:number,idUser?:number){
+
+    return client.get('/api/v1/notificationDetail/getMyNotificationBin',{
+        params: { 
+          id_account: idUser,
+          pageSize:pageSize,
+          pageNum:pageNum
+        },
+    }).then(r=>r.data);
+
+  }
+
+  
+  getMySentBin(pageSize:number,pageNum:number,idUser?:number){
+    return client.get('/api/v1/notificationDetail/getMyNotificationBinManager',{
+      params: { 
+        id_account: idUser,
+        pageSize:pageSize,
+        pageNum:pageNum
+      },
+  }).then(r=>r.data);
+    
+  }
+
   getMySent(pageSize:number,pageNum:number,idUser?:number){
     return client.get('/api/v1/notificationDetail/getMyNotifyManager',{
       params: { 

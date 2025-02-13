@@ -11,7 +11,7 @@ import { MessageCreate } from "../../components/MessageCreate/component";
 import {useSocketConnected} from '../../hooks/useSocket';
 import { notificationService } from "../../services/notification";
 import { MessageSentDetail } from "../../components/MessageSentDetail/component";
-
+import Switch from 'common/Switch';
 
 export function SentPage(){
 
@@ -21,6 +21,7 @@ export function SentPage(){
     const tableRef = useRef<any>();
     const {connected} = useSocketConnected();
     const [expanded,setExpanded] = useState<number[]>([]);
+    const [showTrash, setShowTrash] = useState<boolean>(false);
 
     useEffect(()=>{
         if(connected && notificationService){
@@ -59,23 +60,14 @@ export function SentPage(){
     </td>} ,
     ];
 
-    const loadData = (
-        pagination: any,
-        filter: any,
-        sorting: any[],
-      ) => {
-    
-        return notificationServiceHttp.getMySent(pagination.pageSize,pagination.currentPage).then(res=>{
-            return {
-                data:res.data.map(r=>({...r,gridtable_expanded:expanded.some(e=>e===r.id)})),
-                meta:res.meta
-            }
-        })
-      }
+
+    const loadData = (pagination: any) => notificationServiceHttp.getMySent(pagination.pageSize, pagination.currentPage);
+    const loadDataBin = (pagination: any) => notificationServiceHttp.getMySentBin(pagination.pageSize, pagination.currentPage);
     
 
     return <div className={styles.container}>
         <GridTable
+            key={showTrash ? "trash" : "inbox"} // Forza il re-render
             expand={{
                 enabled: true,
                 onExpandChange:(data:any,isExpanded)=>{
@@ -87,11 +79,23 @@ export function SentPage(){
                 },
                 render: (rowProps) => <MessageSentDetail onRowClick={(n)=>setNotification(n)} data={rowProps.dataItem.NotificationDetail}/>
             }}
+            customToolBarComponent={() => (
+                <div className={styles.switchContainer}>
+                    <Typography.p>Visualizza il cestino</Typography.p>
+                    <Switch
+                        checked={showTrash}
+                        onChange={(e) => setShowTrash(e.value)}
+                        onLabel="Si"
+                        offLabel="No"
+                        themeColor="error"
+                    />
+                </div>
+            )}
             ref={tableRef}
             pageable={true}
             filterable={false}
             sortable={false}
-            getData={loadData}
+            getData={showTrash ? loadDataBin : loadData}
             columns={columns}
             resizableWindow={true}
             initialHeightWindow={800}
