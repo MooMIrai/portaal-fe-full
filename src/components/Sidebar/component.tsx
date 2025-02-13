@@ -98,7 +98,16 @@ const Sidebar = ({ children, items }: SidebarPros) => {
   const updateItems = (list: any[]): DrawerItemProps[] => {
     return list.map((item, index) => {
       const hasChild = list.some((el) => el.parentId === item.id);
-      const newItem = { ...item, selected: item.id === selectedItemId };
+
+      let selectedItemIdC= selectedItemId;
+      if(!selectedItemId){
+        const calculatedItem = list.find(i=>i.route===location.pathname);
+        if(calculatedItem)
+          selectedItemIdC=calculatedItem.id;
+      }
+      const selected = item.id===selectedItemIdC;
+
+      const newItem = { ...item, selected:selected  };
 
       // Gestire l'espansione
       if (hasChild) {
