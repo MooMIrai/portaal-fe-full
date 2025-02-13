@@ -4,7 +4,7 @@ import { candidatoService } from "../../services/candidatoService";
 import { CandidatiCrud } from "../../components/CandidatiCrud/component";
 import Modal from 'common/Modal';
 import SvgIcon from 'common/SvgIcon';
-import {fileIcon, tellAFriendIcon} from 'common/icons';
+import {fileIcon, myspaceIcon} from 'common/icons';
 import fileService from 'common/services/FileService'
 import Button from 'common/Button';
 import { RequestByCandidate } from "../../components/RequestByCandidate/component";
@@ -26,7 +26,7 @@ export default function CandidatePage() {
       return <td></td>
     }},
     { key: "id", label: "Richieste", type: "custom", sortable: false, filter: false, render:(rowData)=><td>
-                  <Button size="small" svgIcon={tellAFriendIcon}
+                  <Button size="small" svgIcon={myspaceIcon}
                   disabled = {!rowData.RecruitingAssignments || !rowData.RecruitingAssignments.length}
                    onClick={() => {
                       setRecruitingAssignments(rowData.RecruitingAssignments);

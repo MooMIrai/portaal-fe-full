@@ -3,7 +3,7 @@ import { richiestaService } from "../../services/richiestaService";
 import GridTable from "common/Table";
 import { RichiesteCrud } from "../../components/RichiesteCrud/component";
 import Button from 'common/Button'
-import {tellAFriendIcon} from 'common/icons';
+import {myspaceIcon} from 'common/icons';
 import Modal from 'common/Modal'; 
 import { CandidateForRequest } from "../../components/CandidateForRequest/component";
 import { useParams } from "react-router-dom";
@@ -19,7 +19,7 @@ export default function RequestPage(){
             { key: "Location.description", label: "Citta di competenza", type: "string", sortable: true, filter: "text" },
             { key: "RequestingEmployee.Person.firstName", label: "HR incaricaricata", type: "custom", render:(rowData)=><td>{rowData.RequestingEmployee.Person.firstName} {rowData.RequestingEmployee.Person.lastName}</td> },
             { key: "id", label: "Profilo", type: "custom", sortable: false, filter: false, render:(rowData)=><td>
-              <Button size="small" svgIcon={tellAFriendIcon} onClick={() => {
+              <Button size="small" svgIcon={myspaceIcon} onClick={() => {
                 setCurrentrequest(rowData)
                 setModalOpened(true);
                 setCurrentrequestSkills(rowData.Skills)
