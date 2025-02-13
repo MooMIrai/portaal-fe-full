@@ -1,4 +1,8 @@
 .container{
+
+    & :global(.k-table-row) td:last-of-type{
+        width: 30px;
+    }
     
     background-color: var(--kendo-color-surface);
     //padding:10px;
@@ -114,6 +118,3 @@
     gap: 5px;
 }
 
-:global(.k-table-row) td:last-of-type{
-    width: 30px;
-}
