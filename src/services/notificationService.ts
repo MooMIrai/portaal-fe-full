@@ -91,6 +91,18 @@ class NotificationServiceC extends BaseHttpService {
     return client.patch(`/api/v1/notificationDetail/updateDelete/${id}`,{isDeleted:true}).then(res=>res.data);
   }
 
+  moveSentToTrash(id:number){
+    return client.patch(`/api/v1/notificationDetail/updateDeleteManager/${id}`,{isDeleted:true}).then(res=>res.data);
+  }
+
+  deleteSent(id:number){
+    return client.delete(`/api/v1/notificationDetail/cancelNotificationManager/${id}`).then(res=>res.data);
+  }
+
+  deleteInbox(id:number){
+    return client.delete(`/api/v1/notificationDetail/cancelNotification/${id}`).then(res=>res.data);
+  }
+
 }
 
 export const notificationServiceHttp = new NotificationServiceC();

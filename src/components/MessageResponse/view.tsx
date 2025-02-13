@@ -44,7 +44,7 @@ export const MessageResponseView: React.FC<Props> = ({ parameters, valuesMap }) 
 };
 
 const renderValue = (param: NotificationParameter, value: any) => {
-    debugger;
+
   if (value === undefined || value === null) return "N/A";
 
   switch (param.type) {

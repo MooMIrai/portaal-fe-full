@@ -70,14 +70,26 @@ export function MessageDetail(props:PropsWithRef<{
                     
                         <SvgIcon
                             onClick={()=>{
-                                NotificationProviderActions.openConfirm(
-                                    "Vuoi spostare la notifica nel cestino?",
-                                    ()=>{
-                                        notificationServiceHttp.moveToTrash(data.id);
-                                        props.onClose();
-                                    },
-                                    'Conferma operazione'
-                                )
+                                if(data.isDeleted){
+                                    NotificationProviderActions.openConfirm(
+                                        "Vuoi eliminare definitivamente la notifica?",
+                                        ()=>{
+                                            notificationServiceHttp.deleteInbox(data.id);
+                                            props.onClose();
+                                        },
+                                        'Conferma operazione'
+                                    )
+                                }else{
+                                    NotificationProviderActions.openConfirm(
+                                        "Vuoi spostare la notifica nel cestino?",
+                                        ()=>{
+                                            notificationServiceHttp.moveToTrash(data.id);
+                                            props.onClose();
+                                        },
+                                        'Conferma operazione'
+                                    )
+                                }
+                                
                             }}
                          className={styles.icon} size="xxlarge" themeColor="error" icon={trashIcon} ></SvgIcon>
                     </div>

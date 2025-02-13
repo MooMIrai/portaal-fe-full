@@ -4,14 +4,15 @@ import styles from './style.module.scss';
 import Typography from 'common/Typography';
 import { notificationServiceHttp } from "../../services/notificationService";
 import { MessageDetail } from "../../components/MessageDetail/component";
-import { StarFlag } from "../../components/StarFlag/component";
+import Button from 'common/Button';
 import GridTable from "common/Table";
 import { MessageCreate } from "../../components/MessageCreate/component";
-
+import NotificationProviderActions from "common/providers/NotificationProvider";
 import {useSocketConnected} from '../../hooks/useSocket';
 import { notificationService } from "../../services/notification";
 import { MessageSentDetail } from "../../components/MessageSentDetail/component";
 import Switch from 'common/Switch';
+import {trashIcon} from 'common/icons';
 
 export function SentPage(){
 
@@ -23,12 +24,16 @@ export function SentPage(){
     const [expanded,setExpanded] = useState<number[]>([]);
     const [showTrash, setShowTrash] = useState<boolean>(false);
 
+    const refreshTable = ()=>{
+        if(tableRef.current){
+            tableRef.current.refreshTable();
+        }
+    }
+
     useEffect(()=>{
         if(connected && notificationService){
             const offEvent = notificationService.onNewNotification(()=>{
-                if(tableRef.current){
-                    tableRef.current.refreshTable();
-                }
+                refreshTable();
             });
             return offEvent;
         }
@@ -56,8 +61,33 @@ export function SentPage(){
         {
             n.isGlobal?'Tutti i dipendenti':
             n.NotificationDetail.map(nd=>nd.Account.Person.firstName + ' ' + nd.Account.Person.lastName).join(', ')
-        }
-    </td>} ,
+        },
+        
+        </td>} ,
+        { key: "id", label: "", type: "custom",  render:(n)=><td>
+            <Button svgIcon={trashIcon} themeColor={'error'} fillMode='link' onClick={()=>{
+
+                if(showTrash){
+                    NotificationProviderActions.openConfirm(
+                        "Vuoi eliminare la conversazione definitivamente?",
+                        ()=>{
+                            notificationServiceHttp.deleteSent(n.id).then(refreshTable)
+                        },
+                        'Conferma operazione'
+                    )
+                }else{
+
+                
+                    NotificationProviderActions.openConfirm(
+                        "Vuoi spostare la conversazione nel cestino?",
+                        ()=>{
+                            notificationServiceHttp.moveSentToTrash(n.id).then(refreshTable)
+                        },
+                        'Conferma operazione'
+                    )
+                }
+            }} />
+        </td>}
     ];
 
 
@@ -121,22 +151,5 @@ export function SentPage(){
                 }} id={notification?.id} 
             />
   </div>
-
-
-    /* return <div className={styles.container}>
-
-        {
-            notificationList?.map((n,ni)=><div onClick={()=>setNotification(n)} key={n.id} className={styles.list+ ' ' +  (n.NotificationStatus.notificationStatus==='SENT'?styles.unread:'')+ ' '+(ni===notificationList.length-1?styles.lastlist:'')}>
-                <StarFlag n={n} type={"LIST"} className={styles.starIcon} />
-                <Typography.p>{n.user_created}</Typography.p>
-                <Typography.p>{n.NotifyUser.content.title} - <span>{n.NotifyUser.content.sub_title}</span></Typography.p>
-                <Typography.p>{new Date(n.NotifyUser.date_start).toLocaleDateString()}</Typography.p>
-            </div>)
-        }
-        <MessageDetail onClose={()=>{
-            setNotification(undefined);
-            getList();
-            }} id={notification?.id} />
-    </div> */
 }
 

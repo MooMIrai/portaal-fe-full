@@ -12,7 +12,6 @@ export function MessageResponse(props:{id:number,responseType:any, onClose:()=>v
         if(formRef.current){
             formRef.current.onSubmit();
             if (formRef.current.isValid()) {
-                debugger
                 const data = formRef.current.values;
                 const mappedObj = {};
                     Object.keys(data).forEach(key => {
