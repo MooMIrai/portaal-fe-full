@@ -39,6 +39,7 @@ const mfeConfig = {
     "./SvgIcon":"./src/components/SvgIcon/component",
     "./Fields":"./src/components/DynamicForm/fieldComponents",
     "./UploadMultiple":"./src/components/UploadMultiple/component",
+    "./Switch":"./src/components/Switch/component",
 
     "./SignDocumentScanner" : "./src/components/SignDocument/component",
 
