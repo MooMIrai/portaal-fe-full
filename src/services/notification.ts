@@ -1,5 +1,6 @@
 import { io, Socket } from "socket.io-client";
 import AuthService from 'common/services/AuthService';
+import { notificationServiceHttp } from "./notificationService";
 class NotificationServiceC {
 
     // BE_URL_SOCKET = DISTRIBUTED: => automatic
@@ -61,11 +62,17 @@ class NotificationServiceC {
                 
             });
 
+            this.onCountNotification((args)=>{
+                notificationServiceHttp.getMyUnreadCount()
+            });
+
             this.client.on("error", (error) => {
                 
                 console.log(`Notification error: ${error}`);
                 return error;
             });
+        }).catch((error)=>{
+            console.error(error)
         })
 
     }
@@ -85,6 +92,15 @@ class NotificationServiceC {
 
     offNewNotification(callback:(...args: any[]) => void){
         this.client.off('newNotification',callback);
+    }
+
+    onCountNotification(callback:(...args: any[]) => void){
+        this.listen('updateCountNotification',callback);
+        return ()=>this.offNewNotification(callback);
+    }
+
+    offCountNotification(callback:(...args: any[]) => void){
+        this.client.off('updateCountNotification',callback);
     }
 
     listen(event:string,callback:(...args: any[]) => void){

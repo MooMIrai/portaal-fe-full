@@ -60,7 +60,15 @@ class NotificationServiceC extends BaseHttpService {
   }
 
   getMyUnreadCount(){
-    return client.patch(`/api/v1/notificationDetail/getSentNotifyCount`).then(res=>res.data)
+    return client.get(`/api/v1/notificationDetail/getSentNotifyCount`).then(res=>res.data).then(res=>{
+      const managerEvent = new CustomEvent("AddBadgeMenu", { detail: {id:122,value:res.managerList ||0}});
+      const inboxEvent = new CustomEvent("AddBadgeMenu", { detail: {id:121,value:res.myList ||0}});
+      const notificationEvent = new CustomEvent("AddBadgeMenu", { detail: {id:12,value:(res.myList ||0) + (res.managerList ||0)}});
+      window.dispatchEvent(managerEvent);
+      window.dispatchEvent(inboxEvent);
+      window.dispatchEvent(notificationEvent);
+      return res;
+    });
   }
 
   updateStatus(id:number,status:"RESPONDED" | "SENT" | "VIEWED" | "RESPONDED" | "COMPLETED"){
@@ -106,7 +114,7 @@ class NotificationServiceC extends BaseHttpService {
   deleteAllInbox(){
     return client.delete(`/api/v1/notificationDetail/cleanBin`).then(res=>res.data)
   }
-  
+
   deleteAllSent(){
     return client.delete(`/api/v1/notificationDetail/cleanBinManager`).then(res=>res.data)
   }

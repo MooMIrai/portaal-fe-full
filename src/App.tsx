@@ -4,6 +4,7 @@ import { InboxPage } from "./pages/Inbox/component";
 import { useSocketConnected } from "./hooks/useSocket";
 import { SentPage } from "./pages/Sent/component";
 import NotificationProviderActions from "common/providers/NotificationProvider";
+import { notificationServiceHttp } from "./services/notificationService";
 
 const App = () => {
 
@@ -22,6 +23,8 @@ const App = () => {
           }
       });
     }
+
+    notificationServiceHttp.getMyUnreadCount()
     
     return ()=>{
       //ondestroy
