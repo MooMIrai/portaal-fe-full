@@ -1,48 +1,52 @@
-.container{
+.container {
 
-    & :global(.k-table-row) td:last-of-type{
+    & :global(.k-table-row) td:last-of-type {
         width: 30px;
     }
-    
+
     background-color: var(--kendo-color-surface);
     //padding:10px;
     display: flex;
     flex-direction: column;
 
-    & thead, & :global(.k-grid-header){
+    & thead,
+    & :global(.k-grid-header) {
         display: none;
     }
 
-    & :global(.k-table-td), & td{
-        border:0 !important;
-        padding-top:5px;
-        padding-bottom:5px;
+    & :global(.k-table-td),
+    & td {
+        border: 0 !important;
+        padding-top: 5px;
+        padding-bottom: 5px;
         border-bottom: 0.5px solid #dedede !important;
     }
-    & :global(.k-table-row){
-        margin-top:10px;
+
+    & :global(.k-table-row) {
+        margin-top: 10px;
         cursor: pointer;
-        &:hover > td{
-            background:var(--kendo-color-base-active);
+
+        &:hover>td {
+            background: var(--kendo-color-base-active);
             //box-shadow: inset 1px 0 0 rgb(218, 220, 224), inset -1px 0 0 rgb(218, 220, 224), 0 1px 2px 0 rgba(60, 64, 67, .3), 0 1px 3px 1px rgba(60, 64, 67, .15);
             //border: 1px solid rgb(128, 128, 128);
-           
+
         }
     }
 
-    & .dateColumn{
+    & .dateColumn {
         text-align: right;
         padding-right: 20px;
     }
 }
 
-.list{
-    padding-left:10px;
+.list {
+    padding-left: 10px;
     padding-right: 10px;
     display: grid;
     grid-template-columns: 20px 200px auto 100px;
     align-items: center;
-    gap:15px;
+    gap: 15px;
     height: 40px;
     cursor: pointer;
     //justify-items: center;
@@ -50,54 +54,58 @@
 
 
 
-    &.unread{
+    &.unread {
         background-color: var(--kendo-color-app-surface);
     }
 
-    &:hover{
+    &:hover {
         box-shadow: inset 1px 0 0 rgb(218, 220, 224), inset -1px 0 0 rgb(218, 220, 224), 0 1px 2px 0 rgba(60, 64, 67, .3), 0 1px 3px 1px rgba(60, 64, 67, .15);
         //border: 1px solid rgb(128, 128, 128);
         z-index: 2;
     }
 
-    & span{
-        color:#777;
+    & span {
+        color: #777;
     }
 }
-.lastlist{
-    border: none ;
+
+.lastlist {
+    border: none;
 }
 
-.starIcon{
+.starIcon {
     cursor: pointer;
     padding: 5px;
     transition: all ease .5s;
     color: var(--kendo-color-warning, #ffa41f) !important;
-    &:hover{
+
+    &:hover {
         background: #dedede;
         border-radius: 50%;
     }
 }
-.statusColumn{
+
+.statusColumn {
     display: table-cell;
     align-items: center;
     grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-    gap:5px;
+    gap: 5px;
 
-    & > span{
-        border-radius:var(--kendo-border-radius-md);
+    &>span {
+        border-radius: var(--kendo-border-radius-md);
         background-color: var(--kendo-color-primary);
         inline-size: max-content;
         padding: 5px;
         display: flex;
         gap: 5px;
         align-items: center;
-        color:var(--kendo-color-app-surface);
+        color: var(--kendo-color-app-surface);
         justify-content: space-between;
     }
-    & .statusBadge{
+
+    & .statusBadge {
         background-color: var(--kendo-color-app-surface);
-        color:var(--kendo-color-primary);
+        color: var(--kendo-color-primary);
         width: 20px;
         height: 20px;
         border-radius: 50%;
@@ -105,9 +113,19 @@
         align-items: center;
         justify-content: center;
     }
+
+    & .emailType {
+        width: 25px;
+        justify-content: center;
+    }
+    
+
+}
+.buttonAction{
+    border: 1px solid;
 }
 
-.switchContainer{
+.switchContainer {
     display: flex;
     justify-self: flex-end;
     align-self: flex-end;
@@ -117,4 +135,3 @@
     justify-content: flex-end;
     gap: 5px;
 }
-
