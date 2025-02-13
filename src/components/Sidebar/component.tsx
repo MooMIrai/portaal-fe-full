@@ -10,7 +10,6 @@ import {
 } from "@progress/kendo-react-layout";
 import { Button } from "@progress/kendo-react-buttons";
 import {
-  menuIcon,
   chevronDownIcon,
   chevronRightIcon,
   logoutIcon,
@@ -23,6 +22,7 @@ import AuthService from "../../services/AuthService";
 import withAutocomplete from "../../hoc/AutoComplete";
 import { Popover } from '@progress/kendo-react-tooltip';
 import { ThemeSwitcher } from "../ThemeSwitcher/component";
+import { Badge, BadgeContainer } from "@progress/kendo-react-indicators";
 
 interface SidebarPros {
   items: DrawerItemProps[];
@@ -30,39 +30,39 @@ interface SidebarPros {
 }
 
 interface CustomItemProps extends DrawerItemProps {
-  iconKey?: string; // Stringa per il nome dell'icona
+  iconKey?: string;
 }
-
 
 const CustomItem = (props: CustomItemProps) => {
   const { visible, parentId, iconKey, svgIcon, ...others } = props;
   const arrowDir = props.dataExpanded ? chevronDownIcon : chevronRightIcon;
-  const resolvedIcon: SVGIcon | undefined = svgIcon  // uso o svgIcon direttamente con svgIcon oppure iconkey con il nome dell'icona  a stringa
+  const resolvedIcon: SVGIcon | undefined = svgIcon
     ? svgIcon
     : iconKey
       ? (svgIcons as any)[iconKey]
       : undefined;
 
+  const itemStyle = parentId ? { marginLeft: "2rem" } : {};
 
-  const itemStyle = parentId
-    ? { marginLeft: "2rem" }
-    : {};
-  
   return props.visible === false ? null : (<>
-  {
-    props.index ===0?
-      <div className="k-drawer-logo"><img
-        width={150}
-        height={30}
-        src="/image/logoTaal.png"
-        alt="Logo Taal"
-      />
-      </div>
-    :null
-  }
+    {
+      props.index === 0 ?
+        <div className="k-drawer-logo"><img
+          width={150}
+          height={30}
+          src="/image/logoTaal.png"
+          alt="Logo Taal"
+        />
+        </div>
+        : null
+    }
     <DrawerItem {...others} style={itemStyle}>
       {resolvedIcon && <SvgIcon icon={resolvedIcon} />}
-      <span className={"k-item-text"}>{props.text}</span>
+      <BadgeContainer style={{ display: "flex" }}>
+        <span className={"k-item-text"}>{props.text}</span>
+        {props.badge ? <Badge themeColor={'error'}>77</Badge> : null}
+      </BadgeContainer>
+
       {props.dataExpanded !== undefined && (
         <SvgIcon
           icon={arrowDir}
@@ -72,8 +72,7 @@ const CustomItem = (props: CustomItemProps) => {
         />
       )}
     </DrawerItem>
-    </>
-  );
+  </>);
 };
 
 const TenantsSelector = withAutocomplete((filter: string) =>
@@ -81,8 +80,9 @@ const TenantsSelector = withAutocomplete((filter: string) =>
 );
 
 const Sidebar = ({ children, items }: SidebarPros) => {
+  const [badgeList, setBadgeList] = useState<Record<number, number>>({});
   const navigate = useNavigate();
-  const [drawerExpanded, setDrawerExpanded] = React.useState(true);
+  const [drawerExpanded, setDrawerExpanded] = useState(true);
   const [list, setList] = useState<any[]>([]);
   const [selectedTenant, setSelectedTenant] = useState<{
     id: number;
@@ -90,17 +90,25 @@ const Sidebar = ({ children, items }: SidebarPros) => {
   } | null>(null);
   const [tenants, setTenants] = useState<any[]>([]);
 
-  const [popoverUser,setPopoverUser] = useState<boolean>(false);
+  // Stati per la selezione e l'espansione
+  const [expandedItems, setExpandedItems] = useState<Record<number, boolean>>({});
+  const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
+  const [popoverUser, setPopoverUser] = useState<boolean>(false);
 
   const updateItems = (list: any[]): DrawerItemProps[] => {
     return list.map((item, index) => {
       const hasChild = list.some((el) => el.parentId === item.id);
-      const newItem = { ...item, selected: index === 0 };
+      const newItem = { ...item, selected: item.id === selectedItemId };
 
+      // Gestire l'espansione
       if (hasChild) {
-        newItem.dataExpanded = false;
+        newItem.dataExpanded = expandedItems[item.id] ?? false;
       } else {
         delete newItem.dataExpanded;
+      }
+
+      if (badgeList[item.id]) {
+        newItem.badge = badgeList[item.id];
       }
 
       return newItem;
@@ -128,33 +136,53 @@ const Sidebar = ({ children, items }: SidebarPros) => {
         sessionStorage.setItem("tenant", defaultTenant.name);
       }
     });
+
+    const setBadge = (e: any) => {
+      if (e.detail) {
+        setBadgeList((prev) => ({
+          ...prev, 
+          [e.detail.id]: e.detail.value
+        }));
+      }
+    };
+    window.addEventListener('AddBadgeMenu', setBadge);
+    return () => window.removeEventListener('AddBadgeMenu', setBadge);
   }, []);
 
   useEffect(() => {
     if (items) {
       setList(updateItems(items));
     }
-  }, [items]);
+  }, [items, badgeList, expandedItems, selectedItemId]);
 
-  const handleClick = () => {
-    setDrawerExpanded(!drawerExpanded);
-  };
+
 
   const onSelect = (ev: DrawerSelectEvent) => {
     const currentItem = ev.itemTarget.props;
     const isParent = currentItem.dataExpanded !== undefined;
     const nextExpanded = !currentItem.dataExpanded;
+
+    // Mantenere la selezione dell'elemento
+    setSelectedItemId(currentItem.id);
+
+    // Gestire l'espansione
+    setExpandedItems((prev) => ({
+      ...prev,
+      [currentItem.id]: nextExpanded, // Cambia solo l'elemento selezionato
+    }));
+
     const newData = list.map((item) => {
       const { selected, dataExpanded: currentExpanded, id, ...others } = item;
       const isCurrentItem = currentItem.id === id;
+
       return {
         selected: isCurrentItem,
-        dataExpanded:
-          isCurrentItem && isParent ? nextExpanded : currentExpanded,
+        dataExpanded: isCurrentItem && isParent ? nextExpanded : currentExpanded,
         id,
         ...others,
       };
     });
+
     navigate(ev.itemTarget.props.route);
     setList(newData);
   };
@@ -185,7 +213,7 @@ const Sidebar = ({ children, items }: SidebarPros) => {
 
   const logout = () => {
     AuthService.logout();
-    window.location.href='/';
+    window.location.href = '/';
   };
 
   const anchor = useRef<any>();
@@ -194,13 +222,6 @@ const Sidebar = ({ children, items }: SidebarPros) => {
     <div className={styles.sidebarContainer}>
       <div className={styles.toolbarContainer + " custom-toolbar"}>
         <div className={styles.parentButtonHamburgerText}>
-         {/*  <img
-            width={150}
-            height={30}
-            src="/image/logoTaal.png"
-            alt="Logo Taal"
-          />
-          <Button svgIcon={menuIcon} fillMode={"flat"} onClick={handleClick} /> */}
           <span className="title">{""}</span>
         </div>
         <div className={styles.buttonToolBar}>
@@ -210,15 +231,13 @@ const Sidebar = ({ children, items }: SidebarPros) => {
                 value={selectedTenant}
                 onChange={handleTenantChange}
               />
-
             )}
-
           </div>
-          
-          <Button ref={anchor}  fillMode="solid"  themeColor="light" onClick={()=>setPopoverUser(!popoverUser)}>
-          {AuthService.getImage() && <Avatar rounded="full" type="image" style={{ marginRight: 5 }}>
-										<img src={AuthService.getImage()} alt="user avatar" />
-									</Avatar>}
+
+          <Button ref={anchor} fillMode="solid" themeColor="light" onClick={() => setPopoverUser(!popoverUser)}>
+            {AuthService.getImage() && <Avatar rounded="full" type="image" style={{ marginRight: 5 }}>
+              <img src={AuthService.getImage()} alt="user avatar" />
+            </Avatar>}
             {
               AuthService.getUserName()
             }
@@ -229,22 +248,20 @@ const Sidebar = ({ children, items }: SidebarPros) => {
             position={'bottom'}
             callout={true}
             collision={{
-              horizontal:'fit',
-              vertical:'fit'
+              horizontal: 'fit',
+              vertical: 'fit'
             }}
             title="Azioni per l'utente"
           >
             <div className={styles.popoverContainer}>
-              <Button svgIcon={userIcon} fillMode={'clear'} themeColor="primary" onClick={()=>navigate('/profile')}>Profilo</Button>
+              <Button svgIcon={userIcon} fillMode={'clear'} themeColor="primary" onClick={() => navigate('/profile')}>Profilo</Button>
               <Button svgIcon={logoutIcon} fillMode={'clear'} themeColor="error" onClick={logout}>Logout</Button>
             </div>
-            
           </Popover>
           <ThemeSwitcher />
         </div>
       </div>
 
-     
       <Drawer
         expanded={drawerExpanded}
         mode="push"
@@ -252,18 +269,14 @@ const Sidebar = ({ children, items }: SidebarPros) => {
         item={CustomItem}
         onSelect={onSelect}
         mini={true}
-
       >
-        
         <DrawerContent className={styles.drawerContent}>
-        
           <div className={styles.titleContainer}>
-            <Typography.h4 themeColor="primary">{location.pathname && location.pathname!='/'?location.pathname.replace('/','')[0].toUpperCase()+location.pathname.replace('/','').substring(1):'Homepage'}</Typography.h4>
+            <Typography.h4 themeColor="primary">{location.pathname && location.pathname != '/' ? location.pathname.replace('/', '')[0].toUpperCase() + location.pathname.replace('/', '').substring(1) : 'Homepage'}</Typography.h4>
           </div>
           <div className="page-container">
             {children}
           </div>
-         
         </DrawerContent>
       </Drawer>
     </div>
