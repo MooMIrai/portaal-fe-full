@@ -60,7 +60,7 @@ const CustomItem = (props: CustomItemProps) => {
       {resolvedIcon && <SvgIcon icon={resolvedIcon} />}
       <BadgeContainer style={{ display: "flex" }}>
         <span className={"k-item-text"}>{props.text}</span>
-        {props.badge ? <Badge themeColor={'error'}>77</Badge> : null}
+        {props.badge ? <Badge themeColor={'error'}>{props.badge}</Badge> : null}
       </BadgeContainer>
 
       {props.dataExpanded !== undefined && (
