@@ -71,6 +71,10 @@ class NotificationServiceC extends BaseHttpService {
     });
   }
 
+  updateResponseStatus(id:number,confirm:boolean){
+    return client.patch(`/api/v1/notificationDetail/processManagerResponse/${id}?confirm=${confirm}`, {"confirm":confirm} ).then(res=>res.data)
+  }
+
   updateStatus(id:number,status:"RESPONDED" | "SENT" | "VIEWED" | "RESPONDED" | "COMPLETED"){
     return client.patch(`/api/v1/notificationDetail/updateStatus/${id}`, {"notificationStatus_value":status} ).then(res=>res.data)
   }

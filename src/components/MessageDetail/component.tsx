@@ -1,7 +1,7 @@
 import React, { PropsWithRef, useCallback, useEffect, useState } from "react";
 import styles from './style.module.scss';
 import SvgIcon from 'common/SvgIcon';
-import {chevronLeftIcon, trashIcon, redoIcon} from 'common/icons';
+import {chevronLeftIcon, trashIcon, redoIcon, checkIcon, xIcon} from 'common/icons';
 import Typography from 'common/Typography';
 import Button from 'common/Button';
 import { StarFlag } from "../StarFlag/component";
@@ -37,6 +37,13 @@ export function MessageDetail(props:PropsWithRef<{
     useEffect(()=>{
        updateData();
     },[props.id]);
+
+    const updateStatus=(confirm:boolean)=>{
+        notificationServiceHttp.updateResponseStatus(props.id,confirm).then(()=>{
+            NotificationProviderActions.openModal({ icon: true, style: 'success' }, "Operazione avvenuta con successo");
+            updateData();
+        })
+    }   
 
     let dr;
     if(data && data.response){
@@ -121,6 +128,10 @@ export function MessageDetail(props:PropsWithRef<{
                     </div>
                     {formValidation && dr && <MessageResponseView parameters={formValidation} valuesMap={dr} />}
                 </div>
+                {props.isSent && <div className={styles.confirmContainer}>
+                    <Button onClick={()=>updateStatus(true)} themeColor="success" fillMode="link" svgIcon={checkIcon}> Conferma risposta</Button>
+                    <Button onClick={()=>updateStatus(false)} themeColor="error" fillMode="link" svgIcon={xIcon}> Cancella risposta</Button>
+                </div>}
                 </>
             }
             {data && <div className={styles.body +(dr?' '+styles.hasResponse:'')}>
@@ -139,6 +150,7 @@ export function MessageDetail(props:PropsWithRef<{
                 <Typography.h5>{data.NotifyUser.content.sub_title}</Typography.h5>
                 <HtmlParser html={data.NotifyUser.content.text} />
             </div>}
+            
             </div>
         </div>
         <MessageResponse onClose={() => { 
