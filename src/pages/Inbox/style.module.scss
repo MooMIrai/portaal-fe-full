@@ -130,3 +130,10 @@
     }
 
 }
+
+.mustReply{
+    display: flex;
+    align-items: center;
+    color:var(--kendo-color-error);
+    gap:10px;
+}

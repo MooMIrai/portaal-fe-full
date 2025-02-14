@@ -1,6 +1,6 @@
 .container {
 
-    & :global(.k-table-row) td:last-of-type {
+    & :global(.k-table-row) td.btnTrash {
         width: 30px;
     }
 
