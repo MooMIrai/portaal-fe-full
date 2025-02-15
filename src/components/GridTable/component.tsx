@@ -51,6 +51,7 @@ import CellAction from "./CellAction/component";
 import CustomFilter, { FilterField } from "../ExternalFilterKendoUI/component";
 import * as XLSX from 'xlsx';
 import ReactDOM from "react-dom";
+import { FiltersForm } from "./FiltersForm/component";
 
 interface CustomRowAction {
   icon: any;
@@ -497,19 +498,12 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
 
   return (
     <div className={styles.gridContainer}>
-      {props.externalFilter && props.filterFields && (
-        <CustomFilter
-          filter={filter}
-          onFilterExternalChange={onFilterChangeExternal}
-          fields={props.filterFields}
-        />
-      )}
       
       <Grid
         ref={gridRef}
         rowRender={rowRender}
         {...expandedProps}
-        filterable={props.filterable}
+        filterable={false}
         resizable={props.resizable}
         sortable={props.sortable}
         onSortChange={handleSortChange}
@@ -566,7 +560,9 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
             >
               Esporta
             </Button>
-          
+            {props.columns && (
+              <FiltersForm columns={props.columns} onSubmit={setFilter}/>
+            )}
         </GridToolbar> : null}
 
         {props.columns.map((column: TableColumn, idx: number) => {
