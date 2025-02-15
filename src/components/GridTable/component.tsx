@@ -560,7 +560,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
             >
               Esporta
             </Button>
-            {props.columns && (
+            {props.columns && props.filterable && (
               <FiltersForm columns={props.columns} onSubmit={setFilter}/>
             )}
         </GridToolbar> : null}
