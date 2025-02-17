@@ -27,5 +27,7 @@ declare module "common/hoc/Field"
 declare module "common/hoc/AutoComplete"
 declare module "common/hoc/SchedulerItem"
 
+declare module "common/*"
+
 declare module "common/SvgIcon"
 declare module "common/icons"

@@ -19,6 +19,9 @@ import {
 import Button from "common/Button";
 import NotificationProviderActions from "common/providers/NotificationProvider";
 import styles from "./style.modules.scss"
+import AvatarIcon from 'common/AvatarIcon';
+import Typography from 'common/Typography';
+
 // Column field mapping
 const columnFieldMap: { [key: string]: string } = {
   company: "Person.CurrentContract.Contract.Company.name",
@@ -48,26 +51,31 @@ const mapFilterFields = (filter: any | null): any => {
   return { ...filter, filters: mappedFilters };
 };
 const columns: any = [
+  
+  {
+    key: "id",
+    label: "Nominativo",
+    type: "custom",
+    sortable: true,
+    render:(n)=>{
+      return <td>
+                <div style={{ display: 'flex', justifyContent: 'flex-start', gap: 15, alignItems: 'center', paddingTop: 5, paddingBottom: 5 }}>
+                    <AvatarIcon name={`${n.firstName} ${n.lastName}`}
+                        initials={`${n.firstName[0].toUpperCase()}${n.lastName[0].toUpperCase()}`} />
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+                        <Typography.h6>{n.firstName} {n.lastName}</Typography.h6>
+                        <Typography.p>{n.email}</Typography.p>
+                    </div>
+                </div>
+            </td>
+    }
+    
+  },
   {
     key: "company",
     label: "Società",
     type: "string",
-    sortable: true,
-    filter: "text",
-  },
-  {
-    key: "lastName",
-    label: "Cognome",
-    type: "string",
-    sortable: true,
-    filter: "text",
-  },
-  {
-    key: "email",
-    label: "Email",
-    type: "string",
-    sortable: true,
-    filter: "text",
+    sortable: true
   },
   {
     key: "ContractType",
@@ -175,7 +183,6 @@ const PersonalPage = () => {
       resources.data,
       sede
     );
-    console.log("transfoermedData", transformedData)
     setData(transformedData);
 
     return {
@@ -235,6 +242,36 @@ const PersonalPage = () => {
   return (
     <div>
       <GridTable
+        addedFilters={[
+          {
+            name: "Person.firstName",
+            label: "Nome",
+            type: "text"
+          },
+          {
+            name: "Person.lastName",
+            label: "Cognome",
+            type: "text"
+          },
+          {
+            name: "email",
+            label: "Email",
+            type: "text"
+          },
+          {
+            name: "Person.CurrentContract.Contract.company_id",
+            label: "Società",
+            type: "filter-autocomplete",
+            options:{
+              getData:(term:string)=> Promise.resolve(companies).then(res=>{
+                return res.filter(p=>!term || !term.length || p.label.toLowerCase().indexOf(term.toLowerCase())>=0)
+                          .map(c=>({id:c.value,name:c.label}))
+              }),
+              getValue:(v:any)=>v?.id
+          },
+                  
+          }
+        ]}
         filterable={true}
         sortable={true}
         getData={loadData}
