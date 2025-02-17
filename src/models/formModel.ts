@@ -25,7 +25,7 @@ export interface FieldConfig {
   label: string;
   type: FieldType;
   validator?: (value: any) => string | undefined;
-  options?: string[];
+  options?: any;
   value: any;
   disabled?: boolean;
   required?: boolean;

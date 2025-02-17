@@ -21,7 +21,7 @@ import {
   GridRowProps,
 } from "@progress/kendo-react-grid";
 import { Button } from "@progress/kendo-react-buttons";
-import { FORM_TYPE } from "../../models/formModel";
+import { FieldConfig, FORM_TYPE } from "../../models/formModel";
 import { TableToFormTypeAdapter } from "../../adapters/tableToFormTypeAdapter";
 import { FilterChangeEvent, Pager, PagerProps } from "@progress/kendo-react-data-tools";
 import { PaginationModel } from "../../models/gridModel";
@@ -146,7 +146,9 @@ interface TablePaginatedProps extends GridProps {
 
   forceRefresh?: number;
 
-  rowStyle?: (row: any) => Record<string, any>
+  rowStyle?: (row: any) => Record<string, any>,
+
+  addedFilters?: FieldConfig[]
 }
 
 const MyPager = (props: PagerProps) => (
@@ -561,7 +563,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
               Esporta
             </Button>
             {props.columns && props.filterable && (
-              <FiltersForm columns={props.columns} onSubmit={setFilter}/>
+              <FiltersForm columns={props.columns} onSubmit={setFilter} addedFilters={props.addedFilters}/>
             )}
         </GridToolbar> : null}
 
