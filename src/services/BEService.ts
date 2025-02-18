@@ -1,26 +1,47 @@
 import axios from "axios";
+import { setupCache } from 'axios-cache-interceptor';
 import AuthService from "./AuthService";
 import NotificationProviderActions from "../components/Notification/provider";
 
-const client = axios.create({
-  //baseURL:'http://localhost:3001'
-  baseURL: process.env.BE_PATH,
-  //baseURL: "https://portaaldev2-h9ach7bscvcpg8a5.eastus-01.azurewebsites.net/",
+
+
+// Configura axios con la cache
+
+
+const client = setupCache(axios.create({
+  baseURL: process.env.BE_PATH
+}),{
+  ttl:1000 * 1,
+  methods:["get","post"],
+  generateKey:(cc)=>{
+    return cc.url?.split('?')[0]+'_'+cc.method;
+  },
+  cachePredicate:{
+    responseMatch:(res)=>{
+      return !!(res.config.method==='get' || (res.config.method==='post' && res.config.url && res.config.url.indexOf('pageNum')>=0))
+    }
+  }
 });
 
+
+
+
 client.interceptors.request.use((config) => {
+
   try {
-    if (config.url && config.url.indexOf("/ai/upload_cv_ts") <= 0)
+    if (config.url && config.url.indexOf("/ai/upload_cv_ts") <= 0) {
       NotificationProviderActions.openLoader();
+    }
     config.headers.Authorization = "Bearer " + AuthService.getToken();
     config.headers["x-tenant"] = sessionStorage.getItem("tenant");
-  } catch {}
-
+  } catch (err) {
+    console.error("Error in request interceptor:", err);
+  }
   return config;
 });
 
 const askConfirmation = (message: string) => {
-  return new Promise((ok, ko) => {
+  return new Promise((ok) => {
     NotificationProviderActions.openConfirm(
       message,
       () => ok(true),
@@ -32,6 +53,7 @@ const askConfirmation = (message: string) => {
 
 client.interceptors.response.use(
   (response) => {
+    console.log(response.id)
     NotificationProviderActions.closeLoader();
     return response;
   },
@@ -44,13 +66,13 @@ client.interceptors.response.use(
         const originalRequest = error.config;
         if (readBody.location === "query") {
           originalRequest.params = {
-            ...originalRequest.params, // Mantiene i parametri esistenti
-            [readBody.field]: val, // Aggiungi un parametro "retry" alla query string
+            ...originalRequest.params,
+            [readBody.field]: val,
           };
         } else if (readBody.location === "body") {
           originalRequest.data = {
-            ...originalRequest.data, // Mantiene i parametri esistenti
-            [readBody.field]: val, // Aggiungi un parametro "retry" alla query string
+            ...originalRequest.data,
+            [readBody.field]: val,
           };
         }
         return await client(originalRequest);
