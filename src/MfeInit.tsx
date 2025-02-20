@@ -9,8 +9,8 @@ export default function(){
           text:'Recruiting',
           level:0,
           route:'#',
-          iconKey:'myspaceIcon'
-          
+          iconKey:'myspaceIcon',
+          permissions:["hr_request_read","hr_candidate_read"]
       },
       {
         id:131,
@@ -18,6 +18,7 @@ export default function(){
         level:1,
         route:'/richieste',
         parentId: 13,
+        permissions:["hr_request_read"]
       },
       {
         id:132,
@@ -25,6 +26,7 @@ export default function(){
         level:1,
         route:'/candidati',
         parentId: 13,
+        permissions:["hr_candidate_read"]
       }
     ]
   }
