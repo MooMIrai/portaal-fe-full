@@ -44,6 +44,8 @@ const mfeConfig = {
     "./SignDocumentScanner" : "./src/components/SignDocument/component",
 
     "./AiBox":"./src/components/AiBox/component",
+    "./Route":"./src/components/ProtectedRoute/component",
+    "./Routes":"./src/components/ProtectedRoutes/component",
 
     "./Stepper" : "./src/components/Stepper/component",
     "./Timeline": "./src/components/Timeline/component",

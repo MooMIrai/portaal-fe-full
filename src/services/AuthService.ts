@@ -15,6 +15,11 @@ class AuthService {
     window.addEventListener("LOGOUT", this.removeToken, { once: true });
   }
 
+
+  hasPermission(permission:string){
+
+    return true;
+  }
   
   
   getImage(){
