@@ -17,8 +17,7 @@ class AuthService {
 
 
   hasPermission(permission:string){
-
-    return true;
+    return true;//TODO add logic 
   }
   
   

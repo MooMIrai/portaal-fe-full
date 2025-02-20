@@ -274,7 +274,9 @@ const Sidebar = ({ children, items }: SidebarPros) => {
       <Drawer
         expanded={drawerExpanded}
         mode="push"
-        items={data}
+        items={data.filter(d=>{
+          return !d.permissions || !d.permissions.length || d.permissions.some(AuthService.hasPermission)
+        })}
         item={CustomItem}
         onSelect={onSelect}
         mini={true}
