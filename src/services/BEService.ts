@@ -33,7 +33,7 @@ client.interceptors.request.use((config) => {
       NotificationProviderActions.openLoader();
     }
     config.headers.Authorization = "Bearer " + AuthService.getToken();
-    config.headers["x-tenant"] = sessionStorage.getItem("tenant");
+    config.headers["x-tenant"] = 'TAAL';
   } catch (err) {
     console.error("Error in request interceptor:", err);
   }

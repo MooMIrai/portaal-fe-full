@@ -1,10 +1,12 @@
 import CookieRepo from "../repositories/CookieRepo";
+import client from "./BEService";
 import tokenService from "./tokenService";
 
 class AuthService {
   protected removeToken() {
     CookieRepo.delete("accessToken");
   }
+
 
   protected setToken(token: string) {
     const tokenData = tokenService.decodeToken(token);
@@ -17,7 +19,7 @@ class AuthService {
 
 
   hasPermission(permission:string){
-    return true;//TODO add logic 
+    return CookieRepo.read('Roles').split(',').some(r=>r===permission);
   }
   
   
@@ -81,6 +83,14 @@ class AuthService {
     // Restituisco i tenant filtrati in una Promise
     return Promise.resolve(filteredTenants);
   }
+
+  getPermissions(){
+    return client.get('api/v1/permission/getMyPermissions').then(res=>{
+      const tokenData = tokenService.decodeToken(this.getToken());
+      CookieRepo.write('Roles',res.data.map((r:any)=>r.type_permission).join(','),tokenData?new Date(tokenData.exp * 1000):undefined)
+    })
+  }
 }
+
 
 export default new AuthService();
