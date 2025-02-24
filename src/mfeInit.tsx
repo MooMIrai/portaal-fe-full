@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { menuToImport, routesToImport, routesLoginToImport } from "./mfeConfig";
 import React from "react";
+import { Route, Routes } from "react-router-dom";
 
 export const mfeInitMenu=()=>{
     return Promise.allSettled(menuToImport).then(menuFunctions=>{
@@ -24,4 +25,8 @@ export const LoginRouting = ()=><Suspense>
 
 export const GlobalRouting = ()=><Suspense>
     {routesToImport.map((RoutingMfe,index)=><RoutingMfe key={'Routing_'+index} />)}
+    <Routes>
+        <Route path="/unauthorized" element={<div>Accesso negato</div>} />
+    </Routes>
+    
 </Suspense>
