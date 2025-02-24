@@ -10,7 +10,10 @@ useEffect(()=>{
  
      if (token) {
       authService.login(token);
-      window.location.href = "/";
+      authService.getPermissions().then(()=>{
+        window.location.href = "/";
+      })
+      
      } else {
        console.error('Token not found in the URL');
      }
