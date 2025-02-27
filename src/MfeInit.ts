@@ -7,7 +7,8 @@ export default function(){
           text:'Notifications',
           level:0,
           route:'#',
-          iconKey:'bellIcon'
+          iconKey:'bellIcon',
+          permissions:["READ_NOTIFICATION_INBOX","READ_NOTIFICATION_MANAGER"]
       },
       {
         id:121,
@@ -15,6 +16,7 @@ export default function(){
         level:1,
         route:'/notifications/inbox',
         parentId: 12,
+        permissions:["READ_NOTIFICATION_INBOX"]
       },
       {
         id:122,
@@ -22,6 +24,7 @@ export default function(){
         level:1,
         route:'/notifications/manager',
         parentId: 12,
+        permissions:["READ_NOTIFICATION_MANAGER"]
       }
     ]
   }
