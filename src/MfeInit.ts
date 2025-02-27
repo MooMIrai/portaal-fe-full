@@ -7,7 +7,8 @@ export default function(){
         text:'Report',
         level:0,
         route:'/reports',
-        iconKey:'fileReportIcon'
+        iconKey:'fileReportIcon',
+        permissions:["READ_REPORTS"]
       }
     ]
   }

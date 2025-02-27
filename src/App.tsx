@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
-import {  Route, Routes } from "react-router-dom";
+
 import Report from "./pages/Report/component";
 import { reportService } from "./services/ReportService";
+import Routes from 'common/Routes';
 
 const App = () => {
 
@@ -28,11 +29,24 @@ const App = () => {
     
   },[]);
 
-  return (<Routes >
+  /*return (<Routes >
           <Route path={"/reports"} element={<Report />} />
           <Route path={"/reports/:category"} element={<Report />} />
         </Routes>
-  );
+  );*/
+
+  return <Routes data={[
+    {
+      path:"/reports",
+      element:<Report />,
+      permissions:["READ_REPORTS"]
+    },
+    {
+      path:"/reports/:category",
+      element:<Report />,
+      permissions:["READ_REPORTS"]
+    }
+  ]}/>
 };
 
 
