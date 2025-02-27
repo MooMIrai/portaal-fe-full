@@ -1,11 +1,22 @@
 import React from "react";
-import {  Route, Routes } from "react-router-dom";
+
 import LookUps from "./pages/Main/component";
+import Routes from 'common/Routes';
 
 const App = () => {
-  return (<Routes >
+
+  {/*return <Routes >
           <Route path={"/lookups"} element={<LookUps />} />
-        </Routes>
+        </Routes> */}
+  return (
+    <Routes data={[
+      {
+        path:"/lookups",
+        element:<LookUps />,
+        permissions:["READ_LOOKUPS"]
+      }
+    ]} />
+  
   );
 };
 

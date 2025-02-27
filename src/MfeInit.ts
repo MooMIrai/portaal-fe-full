@@ -7,7 +7,8 @@ export default function(){
           text:'Lookups',
           level:0,
           route:'/lookups',
-          iconKey:"listUnorderedOutlineIcon"
+          iconKey:"listUnorderedOutlineIcon",
+          permissions:["READ_LOOKUPS"]
       }
     ]
   }
