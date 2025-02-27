@@ -8,17 +8,17 @@ export default function(){
       {
         path:"/richieste",
         element:<RequestPage />,
-        permissions:["hr_request_read"]
+        permissions:["READ_RECRUITING_REQUEST"]
       },
       {
         path:"/richieste/:id/:candidateId",
         element:<RequestPage />,
-        permissions:["hr_request_read"]
+        permissions:["READ_HR_REREAD_RECRUITING_REQUEST"]
       },
       {
         path:"/candidati",
         element:<CandidatePage />,
-        permissions:["hr_candidate_read"]
+        permissions:["READ_RECRUITING_CANDIDATE"]
       }
     ]}>
 

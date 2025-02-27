@@ -10,7 +10,7 @@ export default function(){
           level:0,
           route:'#',
           iconKey:'myspaceIcon',
-          permissions:["hr_request_read","hr_candidate_read"]
+          permissions:["READ_RECRUITING_CANDIDATE","READ_RECRUITING_REQUEST"]
       },
       {
         id:131,
@@ -18,7 +18,7 @@ export default function(){
         level:1,
         route:'/richieste',
         parentId: 13,
-        permissions:["hr_request_read"]
+        permissions:["READ_RECRUITING_REQUEST"]
       },
       {
         id:132,
@@ -26,7 +26,7 @@ export default function(){
         level:1,
         route:'/candidati',
         parentId: 13,
-        permissions:["hr_candidate_read"]
+        permissions:["READ_RECRUITING_CANDIDATE"]
       }
     ]
   }
