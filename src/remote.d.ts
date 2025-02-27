@@ -14,7 +14,7 @@ declare module "common/ListBox"
 declare module "common/AutoComplete"
 declare module "common/CountrySelector"
 declare module "common/SignDocumentScanner"
-
+declare module "common/Routes";
 declare module "common/providers/NotificationProvider";
 
 declare module "common/services/BEService";

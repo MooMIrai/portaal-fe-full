@@ -10,6 +10,7 @@ export default function(){
         level: 0,
         route: "/device",
         iconKey: "tablePropertiesIcon",
+        permissions:["READ_STOCK"]
       }
     ]
   }
