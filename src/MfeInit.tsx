@@ -9,6 +9,7 @@ export default function () {
         level: 0,
         route: "#",
         iconKey: "globeOutlineIcon",
+        permissions:["READ_HR_EMPLOYEE" ,"READ_HR_COMPANY", "READ_HR_TIMESHEET", "READ_HR_HOLIDAY" ]
       },
       {
         parentId: 5,
@@ -17,6 +18,7 @@ export default function () {
         text: "Personale",
         route: "/personale",
         iconKey: "accessibilityIcon",
+        permissions:["READ_HR_EMPLOYEE"]
       },
       {
         parentId: 5,
@@ -24,7 +26,8 @@ export default function () {
         level: 2,
         text: "Società",
         route: "/societa",
-        iconKey: "buildingBlocksIcon"
+        iconKey: "buildingBlocksIcon",
+        permissions:["READ_HR_COMPANY"]
       },
       {
         parentId: 5,
@@ -33,6 +36,7 @@ export default function () {
         text: "Rapportino",
         route: "/rapportino",
         iconKey: "calendarIcon",
+        permissions:["READ_HR_TIMESHEET"]
       },
       {
         parentId: 5,
@@ -41,6 +45,7 @@ export default function () {
         text: "Gestione Ferie Permessi",
         route: "/gestioneFeriePermessi",
         iconKey: "calendarIcon",
+        permissions:["READ_HR_HOLIDAY"]
       },
     ],
   };
