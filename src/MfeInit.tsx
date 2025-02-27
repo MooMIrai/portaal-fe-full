@@ -8,6 +8,7 @@ export default function () {
         level: 0,
         route: "#",
         iconKey: "cartIcon",
+        permissions:["READ_SALES_CUSTOMER","READ_SALES_OFFER","READ_SALES_PROJECT","READ_SALES_SAL"]
       },
       {
         parentId: 6,
@@ -16,6 +17,7 @@ export default function () {
         text: "Clienti",
         route: "/clienti",
         iconKey: "myspaceIcon",
+        permissions:["READ_SALES_CUSTOMER"]
       },
       {
         parentId: 6,
@@ -24,6 +26,7 @@ export default function () {
         text: "Offerte",
         route: "/offerte",
         iconKey: "fileFooterIcon",
+        permissions:["READ_SALES_OFFER"]
       },
       {
         parentId: 6,
@@ -32,6 +35,7 @@ export default function () {
         text: "Commessa",
         route: "/progetti",
         iconKey: "inboxIcon",
+        permissions:["READ_SALES_PROJECT"]
       },
       {
         parentId: 6,
@@ -40,6 +44,7 @@ export default function () {
         text: "Sal",
         route: "/sal",
         iconKey: "dollarIcon",
+        permissions:["READ_SALES_SAL"]
       },
     ],
   };
