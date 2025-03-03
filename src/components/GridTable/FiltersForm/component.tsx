@@ -17,7 +17,7 @@ export function FiltersForm(props: {
 
     const mapColumnToField = (columns: TableColumn[]): FieldConfig[] => {
         return columns
-            .filter(col => col.filter !== undefined || col.type !== TABLE_COLUMN_TYPE.custom)
+            .filter(col => col.filter !== undefined && col.type !== TABLE_COLUMN_TYPE.custom)
             .map(col => ({
                 name: col.key,
                 label: col.label,
@@ -77,14 +77,15 @@ export function FiltersForm(props: {
         return "eq";
     };
 
-    let fields = mapColumnToField(props.columns);
+    let fields:any[] = mapColumnToField(props.columns);
 
     if (props.addedFilters) {
-        fields = [...fields, ...props.addedFilters];
+        fields = [...fields, ...props.addedFilters.map(f=>({...f,type:f.type+'_'+f.name}))];
     }
 
     const addedField = useMemo(() => {
         return props.addedFilters ? getAddedFields(props.addedFilters) : {};
+        
     }, [props.addedFilters]);
 
     return (

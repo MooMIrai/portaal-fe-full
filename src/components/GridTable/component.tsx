@@ -540,7 +540,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
           )}
         </GridNoRecords>
 
-        {props.customToolBarComponent || hasActionCreate() ? <GridToolbar className={styles.toolBarContainer}>
+        {props.customToolBarComponent || hasActionCreate() || props.filterable ? <GridToolbar className={styles.toolBarContainer}>
           {props.customToolBarComponent?.(refreshTable)}
 
           {hasActionCreate() && (
