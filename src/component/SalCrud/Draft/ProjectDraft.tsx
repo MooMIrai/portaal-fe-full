@@ -1,7 +1,6 @@
-import React, { PropsWithChildren, useCallback, useContext, useRef } from "react";
+import React, { PropsWithChildren, useCallback, useContext, useEffect, useRef } from "react";
 import { salService } from "../../../services/salService";
 import GridTable from "common/Table";
-import { SalActivitiesDraft } from "./ActivityDraft";
 import { SalDraftItem } from "./SalDraftItem";
 import { SalContext } from "../../../pages/Sal/provider";
 
@@ -15,7 +14,7 @@ const columns = [
 export const SalProjectDraft = React.memo((props: PropsWithChildren<{ customer: any, refreshParent:()=>void }>) => {
 
   const tableRef= useRef<any>();
-  const { addOpen, removeOpen, draft } = useContext(SalContext);
+  const { addOpen, removeOpen, draft, filters } = useContext(SalContext);
 
   const loadData = useCallback(async (pagination, filter, sorting) => {
     const include = true;
@@ -23,7 +22,7 @@ export const SalProjectDraft = React.memo((props: PropsWithChildren<{ customer: 
       props.customer.id,
       pagination.currentPage,
       pagination.pageSize,
-      filter,
+      filters,
       sorting,
       include,
     );
@@ -35,7 +34,9 @@ export const SalProjectDraft = React.memo((props: PropsWithChildren<{ customer: 
       })),
       meta: { total: tableResponse.meta.model },
     };
-  }, [props.customer.id,draft.projects]);
+  }, [props.customer.id,draft.projects,filters]);
+
+
 
   const renderExpand = useCallback((rowProps) => (
     <SalDraftItem project={rowProps.dataItem} refreshParent={props.refreshParent} />
@@ -59,7 +60,7 @@ export const SalProjectDraft = React.memo((props: PropsWithChildren<{ customer: 
       rowStyle={(rowData) => ({
         background: rowData.oldSal ? 'rgba(255,0,0,0.2)' : rowData.missingSal ? 'rgba(255,209,0,0.2)' : 'rgba(0,255,0,0.2)',
       })}
-      filterable={true}
+      filterable={false}
       pageable={true}
       sortable={true}
       getData={loadData}

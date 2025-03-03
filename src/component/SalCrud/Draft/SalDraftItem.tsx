@@ -1,13 +1,15 @@
-import React, { PropsWithChildren, useCallback, useRef, useState } from "react";
+import React, { PropsWithChildren, useCallback, useContext, useRef, useState } from "react";
 import { salService } from "../../../services/salService";
 import GridTable from "common/Table";
 import { SalCrud } from "../component";
 import Button from 'common/Button';
 import NotificationActions from 'common/providers/NotificationProvider';
 import {fileAddIcon} from 'common/icons';
+import { SalContext } from "../../../pages/Sal/provider";
 
 export const SalDraftItem = React.memo((props: PropsWithChildren<{ project: any, refreshParent:()=>void }>) => {
 
+  const { filters } = useContext(SalContext);
   const columns = [
     {
       key: "SalState", label: "Stato", type: "custom", render: (rowData) => <td>
@@ -53,7 +55,7 @@ export const SalDraftItem = React.memo((props: PropsWithChildren<{ project: any,
       props.project.id,
       pagination.currentPage,
       pagination.pageSize,
-      filter,
+      filters,
       sorting,
       include,
     );
@@ -62,8 +64,7 @@ export const SalDraftItem = React.memo((props: PropsWithChildren<{ project: any,
       data: tableResponse.data,
       meta: { total: tableResponse.meta.model },
     };
-  }, [props.project.id]);
-
+  }, [props.project.id,filters]);
 
 
   return (
@@ -71,7 +72,7 @@ export const SalDraftItem = React.memo((props: PropsWithChildren<{ project: any,
       <p>Sal di {props.project.Offer.name}</p>
 
       <GridTable
-        filterable={true}
+        filterable={false}
         sortable={true}
         getData={loadData}
         columns={columns}

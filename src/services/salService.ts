@@ -113,7 +113,7 @@ class SalService extends BaseHttpService {
 
       const response = await client.post(
         `api/v1/sal/getSalFromProject/${projectId}`,
-        { filtering, sorting },
+        { filtering:this.transformFilters(filtering), sorting },
         { params }
       );
       return response.data;
@@ -159,7 +159,7 @@ class SalService extends BaseHttpService {
 
       return  client.post(
         `/api/v1/sal/draftsByCustomer`,
-        { filtering, sorting },
+        { filtering:this.transformFilters(filtering), sorting },
         { params }
       ).then(response=>response.data);
     }
@@ -179,7 +179,7 @@ class SalService extends BaseHttpService {
   
         return  client.post(
           `/api/v1/sal/draftsByProject/${customerID}`,
-          { filtering, sorting },
+          { filtering:this.transformFilters(filtering), sorting },
           { params }
         ).then(response=>response.data);
     }
@@ -373,6 +373,22 @@ class SalService extends BaseHttpService {
         ).then(res=>res.data)
     }
 
+    searchCustomer (text:string) {
+      return client.get(`api/v1/crud/Customer?term=${text}`).then(res => res.data.data)
+   };
+
+   transformFilters(obj: any): Record<string, any> | null {
+    if (!obj || !obj.filters || !Array.isArray(obj.filters)) {
+      return null;
+    }
+  
+    return obj.filters.reduce((acc, filter) => {
+      if (filter.field && filter.value !== undefined) {
+        acc[filter.field] = filter.value;
+      }
+      return acc;
+    }, {} as Record<string, any>);
+  }
 }
 
 export const salService = new SalService();

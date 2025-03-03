@@ -9,8 +9,10 @@ type OpenedSalTable = {
 const SalContext = createContext<{
   draft:OpenedSalTable,
   billing:OpenedSalTable,
+  filters:any,
   addOpen:(type:'draft' | 'billing', tableType: 'customers'| 'projects',value:number) => void,
-  removeOpen:(type:'draft' | 'billing', tableType: 'customers'| 'projects',value:number) => void
+  removeOpen:(type:'draft' | 'billing', tableType: 'customers'| 'projects',value:number) => void,
+  setFilters:(filters:any)=>void
 }>({
   draft:{
     customers:[],
@@ -20,8 +22,10 @@ const SalContext = createContext<{
     customers:[],
     projects:[]
   },
-  addOpen:(type:'draft' | 'billing', tableType: 'customers'| 'projects',value:number) => {},
-  removeOpen:(type:'draft' | 'billing', tableType: 'customers'| 'projects',value:number) => {}
+  filters:{},
+  addOpen:() => {},
+  removeOpen:() => {},
+  setFilters:()=>{}
 });
  
 
@@ -36,6 +40,8 @@ const SalContext = createContext<{
         customers:[],
         projects:[]
     });
+
+    const [filters,setFilters] = useState<any>({})
 
     const handleAdd = (type:'draft' | 'billing', tableType: 'customers'| 'projects',value:number) => {
        
@@ -73,7 +79,9 @@ const SalContext = createContext<{
         addOpen:handleAdd,
         removeOpen:handleRemove,
         billing,
-        draft
+        draft,
+        filters,
+        setFilters
         
         }}>
         {props.children}     
