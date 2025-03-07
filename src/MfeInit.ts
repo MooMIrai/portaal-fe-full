@@ -8,6 +8,13 @@ export default function () {
         route: "/profile",
         iconKey:"userOutlineIcon"
       },
+      {
+        id: 11,
+        text: "Gestione Ruoli",
+        level: 0,
+        route: "/role",
+        iconKey:"lockIcon"
+      },
     ],
   };
 }

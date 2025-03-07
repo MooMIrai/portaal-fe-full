@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ProfileService } from "../services/profileService";
+import { ProfileService } from "../../services/profileService";
 import { ProfileModel } from "../../components/profileDashboard/model";
 import { fromProfileBEModelToProfileModel } from "../../adapters/profileAdapters";
 import ProfileDashboard from "../../components/profileDashboard/component";

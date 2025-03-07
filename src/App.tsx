@@ -1,7 +1,8 @@
 import React, { Suspense } from "react";
-import { Route, Routes } from "react-router-dom";
+import Routes from 'common/Routes';
 import LoginComponent from "./pages/LoginGoogle/component";
 import SuccessPage from "./pages/SuccessPage/component";
+import { RolePage } from "./pages/Role/component";
 
 /*
 import DrawerService, {DrawerEventService as DrawerEventServiceType,DRAWER_EVENT_TYPE as DRAWER_EVENT_TYPE_enum} from "../@mf-types/common/DrawerService";
@@ -31,10 +32,23 @@ DrawerEventService.fire(DRAWER_EVENT_TYPE.ADD_ITEMS,{detail:{list:[
 console.log('lookups init')
 */
 const App = () => {
-  return (<Routes >     
-        <Route  path="/login" element={<LoginComponent/>}></Route>
-        <Route path="/auth-success" element={<SuccessPage />}></Route>
-        </Routes>
+  return (<Routes data={[
+    {
+      path:"/login",
+      element:<LoginComponent />,
+      permissions:[]
+    },
+    {
+      path:"/auth-success",
+      element:<SuccessPage />,
+      permissions:[]
+    },
+    {
+      path:"/role",
+      element:<RolePage />,
+      permissions:["READ_ROLE"]
+    }
+  ]}></Routes>
   );
 };
 
