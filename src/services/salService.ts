@@ -384,7 +384,12 @@ class SalService extends BaseHttpService {
   
     return obj.filters.reduce((acc, filter) => {
       if (filter.field && filter.value !== undefined) {
-        acc[filter.field] = filter.value;
+        if(filter.id==='year' && typeof filter.value === 'string'){
+          acc[filter.field] = parseInt(filter.value);
+        }else{
+          acc[filter.field] = filter.value;
+        }
+        
       }
       return acc;
     }, {} as Record<string, any>);
