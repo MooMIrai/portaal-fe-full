@@ -98,7 +98,7 @@ module.exports = (_, argv) => {
         build: (compiler, compilation, matchedFiles) => {
           const filePath = path.resolve(__dirname, 'src/mfeConfig.ts');
           const menuToImportString = Object.keys(mfeConfig(process.env.REMOTE_PATH, argv.mode).remotes)
-          .filter(k=>k!='common' && k!='auth')
+          .filter(k=>k!='common' /*&& k!='auth'*/)
           .map(k=>'import("' +k+'/Index")');
           const routesToImport = Object.keys(mfeConfig(process.env.REMOTE_PATH, argv.mode).remotes)
           .filter(k=>k!='common' && k!='auth')

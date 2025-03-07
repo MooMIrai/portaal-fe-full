@@ -24,3 +24,6 @@ declare module 'recruiting/Index';
 declare module 'notification/Routes';
 declare module 'notification/Index';
 
+declare module 'reports/Routes';
+declare module 'reports/Index';
+

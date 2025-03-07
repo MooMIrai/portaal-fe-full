@@ -2,7 +2,8 @@
           import React from 'react';
 
           export const menuToImport = [
-            import("lookups/Index"),
+            import("auth/Index"),
+			import("lookups/Index"),
 			import("sales/Index"),
 			import("hr/Index"),
 			import("recruiting/Index"),
