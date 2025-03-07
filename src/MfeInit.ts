@@ -1,15 +1,15 @@
 export default function () {
   return {
     menuItems: [
-      {
+      /*{
         id: 10,
         text: "Profile",
         level: 0,
         route: "/profile",
         iconKey:"userOutlineIcon"
-      },
+      },*/
       {
-        id: 11,
+        id: 10,
         text: "Gestione Ruoli",
         level: 0,
         route: "/role",

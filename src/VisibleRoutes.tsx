@@ -1,11 +1,19 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import Routes from "common/Routes";
 import Profile from "./pages/ProfilePage/component";
+import { RolePage } from "./pages/Role/component";
 
 export default function VisibleRoutes() {
-  return (
-    <Routes>
-      <Route path="/profile" element={<Profile />}></Route>
-    </Routes>
-  );
+  return (<Routes data={[
+    {
+      path:"profile",
+      element:<Profile />,
+      permissions:[]
+    },
+    {
+      path:"/role",
+      element:<RolePage />,
+      permissions:["READ_ROLE"]
+    }
+  ]}></Routes>);
 }
