@@ -86,7 +86,7 @@ class AuthService {
   }
 
   getPermissions(){
-    return client.get('auth/getMyPermissions').then(res=>{
+    return client.get('api/v1/accounts/getMyPermissions').then(res=>{
       const tokenData = tokenService.decodeToken(this.getToken());
       CookieRepo.write('Roles',res.data.map((r:any)=>r.type_permission).join(','),tokenData?new Date(tokenData.exp * 1000):undefined)
     })
