@@ -2,7 +2,7 @@ import { PropsWithRef, useCallback, useEffect, useState } from "react";
 import Modal from 'common/Modal';
 import React from "react";
 import { RoleService } from "../../services/roleservice";
-import { Button } from "@progress/kendo-react-buttons";
+import Button from 'common/Button';
 import NotificationProviderActions from "common/providers/NotificationProvider";
 
 import styles from './styles.module.scss';
