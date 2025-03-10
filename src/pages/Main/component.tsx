@@ -185,6 +185,7 @@ const LookUps = () => {
         getData={loadData}
         columns={columns}
         resizable={true}
+        writePermissions={["WRITE_LOOKUPS"]}
         actions={() => ["create", "delete", "edit", "show"]}
         formCrud={(row, type, closeModalCallback, refreshTable) => {
           const crudCondition = type === "view";
