@@ -242,6 +242,7 @@ const PersonalPage = () => {
   return (
     <div>
       <GridTable
+        writePermissions={["WRITE_HR_EMPLOYEE"]}
         addedFilters={[
           {
             name: "Person.firstName",

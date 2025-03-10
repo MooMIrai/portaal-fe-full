@@ -11,6 +11,7 @@ import SvgIcon from 'common/SvgIcon'
 import Button from 'common/Button'
 import Modal from 'common/Modal'
 import { AutoCompletePerson } from "./customFields";
+import authService from "common/services/AuthService";
 
 const RapportinoItemView = (props: any) => {
 
@@ -276,7 +277,7 @@ export default function RapportinoCalendar(props: RapportinoCalendarProps) {
             fetchTimesheet()
           }}
           holidaysData={holidaysData}
-          editLocked={!!props.forcePerson || isFinalized}
+          editLocked={!!props.forcePerson || isFinalized || !authService.hasPermission('WRITE_HR_TIMESHEET')}
         //onClose={closeModalCallback}
         //onActivitiesAdded={onActivitiesAdded}
         />
@@ -394,15 +395,15 @@ export default function RapportinoCalendar(props: RapportinoCalendarProps) {
       {!props.forcePerson ? <div style={{ display: 'flex', flexDirection: size.width && size.width >= 768 ? 'row' : 'column', justifyContent: "space-between", marginBottom: 10 }}>
         <p>Tocca una data per inserire le ore di attività o trascina per selezionare più date</p>
         <div style={{ display: 'flex', justifyContent: "space-between", alignItems: 'flex-end', gap: 15 }}>
-          <div style={{ width: 300 }}>Utente Selezionato <AutoCompletePerson label="" value={userSelected} onChange={(e) => {
+          { authService.hasPermission('READ_HR_DEAUTH') && <div style={{ width: 300 }}>Utente Selezionato <AutoCompletePerson label="" value={userSelected} onChange={(e) => {
             if (!e.value) {
               setUserSelected(defaultPerson)
             } else {
               setUserSelected(e.value)
             }
           }} />
-          </div>
-          {isFinalized != undefined && <Button style={{ maxHeight: 'min-content' }} themeColor="success" onClick={() => setShowConsolidaConfirmModal(true)}>{isFinalized ? "Deconsolida" : "Consolida"}</Button>}
+          </div>}
+          {isFinalized != undefined && authService.hasPermission('WRITE_HR_TIMESHEET') && <Button style={{ maxHeight: 'min-content' }} themeColor="success" onClick={() => setShowConsolidaConfirmModal(true)}>{isFinalized ? "Deconsolida" : "Consolida"}</Button>}
         </div>
 
       </div> : null}

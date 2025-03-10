@@ -64,6 +64,7 @@ function Societa() {
   }
 
   return <GridTable
+    writePermissions={["WRITE_HR_COMPANY"]}
     filterable={true}
     pageable={true}
     sortable={true}

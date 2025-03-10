@@ -1,13 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import Button from "common/Button";
-import CustomListView from "common/CustomListView";
 import Tab from "common/Tab";
 import GenericGrid from "common/Table";
 import styles from "./styles.module.scss";
-import { PFMData } from "./pfmDataModel";
 import { PFMService } from "../../services/pfmService";
 import { checkOutlineIcon, xOutlineIcon, cancelOutlineIcon } from "@progress/kendo-svg-icons";
 import HoursDaysFilterCell from "common/HoursDaysFilterCell"
+import authService from "common/services/AuthService";
 
 const FeriePermessiSection = () => {
   const [refreshRequests, setRefreshRequests] = useState<number>(0);
@@ -15,18 +14,7 @@ const FeriePermessiSection = () => {
   const requestsTableRef = useRef(null);
   const archiveTableRef = useRef(null);
   const [selectedTab, setSelectedTab] = useState<number>(0);
-  const [newRequests, setNewRequests] = useState<{ data: PFMData[], meta: any }>();
-  const [archived, setArchived] = useState<{ data: PFMData[], meta: any }>();
-  const [requestsPage, setRequestsPage] = useState({
-    skip: 0,
-    take: 10,
-    total: 0,
-  });
-  const [archivePage, setArchivePage] = useState({
-    skip: 0,
-    take: 10,
-    total: 0,
-  });
+
 
   const getColumns = (isArchive: boolean) => {
     let ret = [
@@ -158,94 +146,6 @@ const FeriePermessiSection = () => {
     });
   }
 
-  const calculateWorkingTimeDifference = (startIso: string, endIso: string): string => {
-    const WORK_START_HOUR = 9;
-    const WORK_END_HOUR = 18;
-    const HOURS_IN_WORKDAY = WORK_END_HOUR - WORK_START_HOUR;
-    const MS_PER_HOUR = 1000 * 60 * 60;
-
-    const startDate = new Date(startIso);
-    const endDate = new Date(endIso);
-
-    // Ensure start date is before end date
-    /* if (startDate > endDate) {
-      throw new Error("Start date must be before end date");
-    } */
-
-    let totalHours = 0;
-
-    // Calculate hours on the first day
-    if (startDate.getDay() >= 1 && startDate.getDay() <= 5) {
-      const workStart = new Date(startDate);
-      workStart.setHours(WORK_START_HOUR, 0, 0, 0);
-
-      const workEnd = new Date(startDate);
-      workEnd.setHours(WORK_END_HOUR, 0, 0, 0);
-
-      const actualWorkStart = startDate > workStart ? startDate : workStart;
-      const hoursOnFirstDay = (workEnd.getTime() - actualWorkStart.getTime()) / MS_PER_HOUR;
-
-      totalHours += Math.max(0, hoursOnFirstDay); // Add only positive working hours
-    }
-
-    // Calculate hours on the last day
-    if (endDate.getDay() >= 1 && endDate.getDay() <= 5) {
-      const workStart = new Date(endDate);
-      workStart.setHours(WORK_START_HOUR, 0, 0, 0);
-
-      const workEnd = new Date(endDate);
-      workEnd.setHours(WORK_END_HOUR, 0, 0, 0);
-
-      const actualWorkEnd = endDate < workEnd ? endDate : workEnd;
-      const hoursOnLastDay = (actualWorkEnd.getTime() - workStart.getTime()) / MS_PER_HOUR;
-
-      totalHours += Math.max(0, hoursOnLastDay); // Add only positive working hours
-    }
-
-    // Calculate full working days in between
-    let fullDaysCount = 0;
-    let currentDay = new Date(startDate);
-    currentDay.setDate(currentDay.getDate() + 1); // Start from the day after the start date
-
-    while (currentDay < endDate) {
-      const dayOfWeek = currentDay.getDay();
-
-      // Check if it's a working day (Monday to Friday)
-      if (dayOfWeek >= 1 && dayOfWeek <= 5) {
-        fullDaysCount++;
-      }
-
-      currentDay.setDate(currentDay.getDate() + 1);
-    }
-
-    totalHours += fullDaysCount * HOURS_IN_WORKDAY;
-
-    const days = Math.floor(totalHours / HOURS_IN_WORKDAY);
-    const hours = totalHours % HOURS_IN_WORKDAY;
-
-    if (days && hours) {
-      return days + " giorni e " + hours + " ore";
-    }
-
-    if (days && !hours) {
-      return days + " giorni"
-    }
-
-    return hours + " ore";
-  }
-
-  const formatDate = (isoString: string): string => {
-    const date = new Date(isoString);
-
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
-    const year = date.getFullYear();
-
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-
-    return `${day}/${month}/${year} - ${hours}:${minutes}`;
-  }
 
   const getTabs = () => {
     return [
@@ -253,6 +153,7 @@ const FeriePermessiSection = () => {
         title: "Richieste",
         children: <div>
           <GenericGrid
+            writePermissions={["WRITE_HR_HOLIDAY"]}
             ref={requestsTableRef}
             dropListLookup={false}
             filterable={true}
@@ -268,8 +169,10 @@ const FeriePermessiSection = () => {
                 themeColor: 'success',
                 tooltip: "Approva",
                 modalContent: (dataItem, closeModal, refreshTable) => {
-                  console.log(dataItem);
+                  
+                  if(authService.hasPermission("WRITE_HR_HOLIDAY")){
                   return (
+
                     <div>
                       Confermando, approverai la richiesta.
                       <div className={styles.actionButtonsContainer}>
@@ -280,6 +183,8 @@ const FeriePermessiSection = () => {
                       </div>
                     </div>
                   );
+                  }
+                  return <></>
                 },
               },
               {
@@ -287,18 +192,20 @@ const FeriePermessiSection = () => {
                 tooltip: "Rifiuta",
                 themeColor: 'error',
                 modalContent: (dataItem, closeModal, refreshTable) => {
-                  console.log(dataItem);
-                  return (
-                    <div>
-                      Confermando, rifiuterai la richiesta.
-                      <div className={styles.actionButtonsContainer}>
-                        <Button onClick={closeModal}>Chiudi</Button>
-                        <Button themeColor="primary" onClick={() => {
-                          handleAction(dataItem.id, false, closeModal)
-                        }}>Conferma</Button>
+                  if(authService.hasPermission("WRITE_HR_HOLIDAY")){
+                    return (
+                      <div>
+                        Confermando, rifiuterai la richiesta.
+                        <div className={styles.actionButtonsContainer}>
+                          <Button onClick={closeModal}>Chiudi</Button>
+                          <Button themeColor="primary" onClick={() => {
+                            handleAction(dataItem.id, false, closeModal)
+                          }}>Conferma</Button>
+                        </div>
                       </div>
-                    </div>
-                  );
+                    );
+                  }
+                  return <></>
                 },
               },
             ]}
@@ -325,18 +232,20 @@ const FeriePermessiSection = () => {
                 themeColor: 'warning',
                 tooltip: "Annulla approvazione",
                 modalContent: (dataItem, closeModal, refreshTable) => {
-                  console.log(dataItem);
+                  if(authService.hasPermission("WRITE_HR_HOLIDAY")){
                   return (
-                    <div>
-                      Confermando, annullerai l'approvazione della richiesta.
-                      <div className={styles.actionButtonsContainer}>
-                        <Button onClick={closeModal}>Chiudi</Button>
-                        <Button themeColor="primary" onClick={() => {
-                          handleUndo(dataItem.id, closeModal)
-                        }}>Conferma</Button>
+                      <div>
+                        Confermando, annullerai l'approvazione della richiesta.
+                        <div className={styles.actionButtonsContainer}>
+                          <Button onClick={closeModal}>Chiudi</Button>
+                          <Button themeColor="primary" onClick={() => {
+                            handleUndo(dataItem.id, closeModal)
+                          }}>Conferma</Button>
+                        </div>
                       </div>
-                    </div>
-                  );
+                    );
+                  }
+                  return <></>
                 },
               },
             ]}
