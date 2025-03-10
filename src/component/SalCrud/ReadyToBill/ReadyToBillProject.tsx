@@ -47,6 +47,7 @@ export const SalRTBProject=React.memo((props: PropsWithChildren<{customer:any, r
 
 
     return <GridTable
+                writePermissions={["WRITE_SALES_SAL"]}
                 expand={{
                     enabled: true,
                     render: (rowProps) => <SalRTBItem project={rowProps.dataItem} refreshParent={props.refreshParent}  />,

@@ -45,6 +45,7 @@ export function SalReadyToBill(){
 
 
     return <GridTable
+              writePermissions={["WRITE_SALES_SAL"]}
                 expand={{
                     enabled: true,
                     render: (rowProps) => <SalRTBProject customer={rowProps.dataItem} refreshParent={tableRef.current?.refreshTable} />,

@@ -18,6 +18,7 @@ export default function ProgettiPage() {
 
   return (
     <GridTable
+      writePermissions={["WRITE_SALES_PROJECT"]}
       expand={{
         enabled: true,
         render: (rowProps) => <ProjectTable customer={rowProps.dataItem.id} />,

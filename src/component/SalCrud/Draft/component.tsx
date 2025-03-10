@@ -50,6 +50,7 @@ export const SalDraft = React.memo(() => {
 
   return (
     <GridTable
+      writePermissions={["WRITE_SALES_SAL"]}
       expand={{
         enabled: true,
         render: renderExpand,

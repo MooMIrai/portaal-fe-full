@@ -18,6 +18,7 @@ declare module "common/providers/NotificationProvider";
 declare module "common/SvgIcon"
 declare module "common/services/BEService";
 declare module "common/services/BaseHTTPService";
+declare module "common/services/AuthService";
 declare module "common/Routes";
 declare module "hr/RapportinoCalendar";
 

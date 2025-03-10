@@ -74,6 +74,7 @@ function Clienti() {
        handleInputSearch: handleInputSearch,
        debouncedSearchTerm: termValue,
      }} */
+    writePermissions={["WRITE_SALES_CUSTOMER"]}
     filterable={true}
     pageable={true}
     sortable={true}

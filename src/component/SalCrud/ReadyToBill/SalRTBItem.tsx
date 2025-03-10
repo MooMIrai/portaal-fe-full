@@ -5,6 +5,7 @@ import { SalCrud } from "../component";
 import NotificationActions from 'common/providers/NotificationProvider';
 import {stampIcon} from 'common/icons';
 import Button from 'common/Button';
+import authService from 'common/services/AuthService';
 
 export const SalRTBItem = React.memo((props: PropsWithChildren<{ project: any, refreshParent:()=>void }>) => {
   
@@ -13,7 +14,7 @@ export const SalRTBItem = React.memo((props: PropsWithChildren<{ project: any, r
   const columns = [
     { key: "SalState", label: "Stato", type: "custom", render:(rowData)=><td>
       Ok a fatturare
-      { rowData.Bill ? 
+      { rowData.Bill && authService.hasPermission("WRITE_SALES_SAL") ? 
       <Button size="small" svgIcon={stampIcon} onClick={() => {
         updateToBilled(rowData.id)
       }}>Conferma Fattura Fattura</Button>
@@ -68,6 +69,7 @@ export const SalRTBItem = React.memo((props: PropsWithChildren<{ project: any, r
     <p>Sal di {props.project.Offer.name}</p>
     
     <GridTable
+        writePermissions={["WRITE_SALES_SAL"]}
         filterable={true}
         sortable={true}
         getData={loadData}

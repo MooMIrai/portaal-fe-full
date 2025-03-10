@@ -6,6 +6,7 @@ import Button from 'common/Button';
 import NotificationActions from 'common/providers/NotificationProvider';
 import {fileAddIcon} from 'common/icons';
 import { SalContext } from "../../../pages/Sal/provider";
+import authService from 'common/services/AuthService';
 
 export const SalDraftItem = React.memo((props: PropsWithChildren<{ project: any, refreshParent:()=>void }>) => {
 
@@ -14,9 +15,9 @@ export const SalDraftItem = React.memo((props: PropsWithChildren<{ project: any,
     {
       key: "SalState", label: "Stato", type: "custom", render: (rowData) => <td>
         Sal creato in attesa di ok a fatturare
-        <Button size="small" svgIcon={fileAddIcon} onClick={() => {
+        {authService.hasPermission("WRITE_SALES_SAL") && <Button size="small" svgIcon={fileAddIcon} onClick={() => {
           updateToBilling(rowData.id).then(props.refreshParent)
-        }}>Ok a fatturare</Button>
+        }}>Ok a fatturare</Button>}
       </td>
     },
     { key: "actualDays", label: "Giorni Lavorati", type: "number" },
@@ -72,6 +73,7 @@ export const SalDraftItem = React.memo((props: PropsWithChildren<{ project: any,
       <p>Sal di {props.project.Offer.name}</p>
 
       <GridTable
+        writePermissions={["WRITE_SALES_SAL"]}
         filterable={false}
         sortable={true}
         getData={loadData}

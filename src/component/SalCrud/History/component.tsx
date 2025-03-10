@@ -34,6 +34,7 @@ export const SalHistoryCustomer = React.memo(() => {
 
   return (
     <GridTable
+    writePermissions={["WRITE_SALES_SAL"]}
       expand={{
         enabled: true,
         render: renderExpand,
