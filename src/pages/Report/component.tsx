@@ -4,9 +4,9 @@ import { ReportsSelector } from "../../components/reportSelector/component";
 import { ReportForm } from "../../components/reportForm/component";
 import { reportService } from "../../services/ReportService";
 import Stepper from 'common/Stepper';
-import styles from './style.module.scss';
 import { ReportPreview } from "../../components/reportpreview/component";
 
+import styles from './style.module.scss';
 export default function(){
 
     const {category } = useParams();
