@@ -6,6 +6,7 @@ import NotificationProviderActions from "common/providers/NotificationProvider";
 import Modal from 'common/Modal';
 import Button from 'common/Button'
 import { RelateDevice } from "../RelateDevice/component";
+import authService from 'common/services/AuthService';
 
 export  function DeviceNotAssigned(){
 
@@ -65,8 +66,12 @@ export  function DeviceNotAssigned(){
     return <>
     <GridTable
       customToolBarComponent={()=>{
+        if(!authService.hasPermission("WRITE_STOCK")){
+          return <></>
+        }
         return <Button themeColor={"success"} disabled={!selectedRows.length} onClick={()=>{setShowRelate(true)}}>Associa dispositivi selezionati</Button>
       }}
+     writePermissions={["WRITE_STOCK"]}
      forceRefresh={refreshCount}
      filterable={true}
      sortable={true}

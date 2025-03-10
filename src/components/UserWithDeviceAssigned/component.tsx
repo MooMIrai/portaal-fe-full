@@ -4,6 +4,7 @@ import GridTable from 'common/Table';
 import { DeviceAssigned } from '../DeviceAssigned/component';
 import { DeviceAssignedProvider } from './context';
 import { UnassignDevices } from '../UnassignDevice/component';
+import authService from 'common/services/AuthService';
 
 export function UserWithDeviceAssigned(){
 
@@ -27,6 +28,9 @@ export function UserWithDeviceAssigned(){
       
         <GridTable
         customToolBarComponent={(refresh)=>{
+            if(!authService.hasPermission("WRITE_STOCK")){
+                return <></>
+            }
             return   <UnassignDevices handleRefresh={refresh} />
         }}
         expand={{
