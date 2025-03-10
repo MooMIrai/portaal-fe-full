@@ -6,6 +6,7 @@ import React, {
   useState,
   useRef,
   useImperativeHandle,
+  useCallback,
 } from "react";
 import {
   Grid,
@@ -52,6 +53,7 @@ import CustomFilter, { FilterField } from "../ExternalFilterKendoUI/component";
 import * as XLSX from 'xlsx';
 import ReactDOM from "react-dom";
 import { FiltersForm } from "./FiltersForm/component";
+import AuthService from "../../services/AuthService";
 
 interface CustomRowAction {
   icon: any;
@@ -148,7 +150,8 @@ interface TablePaginatedProps extends GridProps {
 
   rowStyle?: (row: any) => Record<string, any>,
 
-  addedFilters?: FieldConfig[]
+  addedFilters?: FieldConfig[],
+  writePermissions?:string[]
 }
 
 const MyPager = (props: PagerProps) => (
@@ -228,6 +231,9 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
   const [filter, setFilter] = useState<any>({ logic: "or", filters: [] });
   const [sorting, setSorting] = useState<any[]>(props.sorting || []);
   const [loading, setLoading] = useState(false);
+
+  const [actions,setActions] = useState<TABLE_ACTION_TYPE[]>([]);
+
   const debouncedFilterColumn = useDebounce(filter, 650);
   const actionMode = props.actionMode ?? "row";
 
@@ -287,11 +293,24 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
     grid: gridRef.current,
   }));
 
-  const hasActionInColumn = () =>
-    props.actions?.()?.some((p: string) => p !== TABLE_ACTION_TYPE.create);
+  useEffect(()=>{
+    let actionsToSet:TABLE_ACTION_TYPE[]=[];
+    if(props.actions){
+      actionsToSet=props.actions();
+        actionsToSet= actionsToSet.filter(a=>{
+          return a===TABLE_ACTION_TYPE.show || !props.writePermissions || props.writePermissions.some(AuthService.hasPermission)
+        })
+    }
+    setActions(actionsToSet)
+  },[props.actions,props.writePermissions])
 
-  const hasActionCreate = () =>
-    props.actions?.()?.some((p: string) => p === TABLE_ACTION_TYPE.create);
+  const hasActionInColumn = useCallback(() =>
+    actions.some((p: string) => p !== TABLE_ACTION_TYPE.create)
+  ,[actions]);
+
+  const hasActionCreate = useCallback(() =>
+    actions.some((p: string) => p === TABLE_ACTION_TYPE.create)
+  ,[actions]);
 
   const openModal = (
     type: TABLE_ACTION_TYPE,
@@ -645,8 +664,8 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
             locked={true}
             
             cell={(cellGrid: GridCellProps) => {
-              const actions = props.actions?.(cellGrid.dataItem);
-
+              
+              
               return (
                 <td 
                 style={{
