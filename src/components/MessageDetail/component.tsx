@@ -1,5 +1,4 @@
 import React, { PropsWithRef, useCallback, useEffect, useState } from "react";
-import styles from './style.module.scss';
 import SvgIcon from 'common/SvgIcon';
 import {chevronLeftIcon, trashIcon, redoIcon, checkIcon, xIcon} from 'common/icons';
 import Typography from 'common/Typography';
@@ -11,6 +10,9 @@ import { MessageResponse } from "../MessageResponse/component";
 import AvatarIcon from 'common/AvatarIcon';
 import { MessageResponseView } from "../MessageResponse/view";
 import NotificationProviderActions from "common/providers/NotificationProvider";
+import authService from 'common/services/AuthService';
+
+import styles from './style.module.scss';
 
 export function MessageDetail(props:PropsWithRef<{
     id:number,
@@ -64,7 +66,12 @@ export function MessageDetail(props:PropsWithRef<{
                     <Button size="large" themeColor="tertiary" fillMode="link" svgIcon={chevronLeftIcon} onClick={props.onClose} >
                         Indietro
                     </Button>
-                    <div>
+                    {
+                        (
+                            !props.isSent && authService.hasPermission('WRITE_NOTIFICATION_INBOX') || 
+                            props.isSent && authService.hasPermission('WRITE_NOTIFICATION_MANAGER')
+                        )  && <div>
+                        
                         <StarFlag n={data} type="DETAIL" className={styles.icon} />
                     
                         {
@@ -100,6 +107,8 @@ export function MessageDetail(props:PropsWithRef<{
                             }}
                          className={styles.icon} size="xxlarge" themeColor="error" icon={trashIcon} ></SvgIcon>
                     </div>
+                    }
+                    
                     
                     
                     </>

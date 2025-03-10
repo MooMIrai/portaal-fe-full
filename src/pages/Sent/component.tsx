@@ -97,6 +97,7 @@ export function SentPage(){
 
     return <div className={styles.container}>
         <GridTable
+            writePermissions={["WRITE_NOTIFICATION_MANAGER"]}
             key={showTrash ? "trash" : "inbox"} // Forza il re-render
             expand={{
                 enabled: true,

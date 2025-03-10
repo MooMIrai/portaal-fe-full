@@ -86,6 +86,7 @@ export function InboxPage() {
         <div className={styles.container}>
             {paramsPath.id ? null : (
                 <GridTable
+                    writePermissions={["WRITE_NOTIFICATION_INBOX"]}
                     key={showTrash ? "trash" : "inbox"} // Forza il re-render
                     rowStyle={(rowData) => ({
                         background: rowData.NotificationStatus.notificationStatus === 'SENT' ?
