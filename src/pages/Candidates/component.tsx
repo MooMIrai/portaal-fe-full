@@ -117,7 +117,7 @@ export default function CandidatePage() {
   return (
     <>
       <GridTable
-
+        writePermissions={["WRITE_RECRUITING_CANDIDATE"]}
         /*customToolBarComponent={() => {
           return <Button themeColor={"info"} disabled={false} onClick={() => { setShowModal(true) }}>Prova Modale</Button>
         }}*/
