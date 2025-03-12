@@ -158,6 +158,12 @@ class CrudGenericServiceC {
       .then((res) => res.data);
   };
 
+  searchRoles = () => {
+    return client
+      .get(`api/v1/crud/Role`)
+      .then((res) => res.data);
+  };
+
   async getFilesByIds(uniqueIdentifiers: string) {
     const response = await client.get(`api/v1/files/get/${uniqueIdentifiers}`);
     return response.data;

@@ -289,6 +289,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
 
 
 
+
 export const getFormTrattamentoEconomicoFields = (
     formData: TrattamentoEconomicoData | null,
     company: companyOption[],
@@ -628,6 +629,24 @@ export const getFormRuoliFields = (formData: RuoliData, roles: RoleOption[], typ
 
     return fields;
 };
+
+export const getFormRuoliFieldsFromRole = (roleList:any[],formData: RuoliData, roles: RoleOption[], type: any, isViewOnly: boolean, valueOnChange: (name: string, value: any) => void) => {
+
+    return roleList.map((r)=>{
+        return {
+            name:r.role,
+            label:r.description,
+            type: "checkbox",
+            showLabel: false,
+            valueOnChange: valueOnChange,
+            disabled: (type === "view" || isViewOnly),
+            value: formData[r.role] || false
+        }
+    });
+
+    
+};
+
 export const getFormPermessiFields = (formData: PermessiData, permessiOptions: ActivityTypeOption[], type: any, isViewOnly: boolean, valueOnChange: (name: string, value: any) => void) => {
     const fields = {
         HMA: {

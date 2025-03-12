@@ -9,6 +9,7 @@ import {
   getFormTrattamentoEconomicoFields,
   getFormRuoliFields,
   getFormPermessiFields,
+  getFormRuoliFieldsFromRole,
 } from "./FormFields";
 import { AnagraficaData, TrattamentoEconomicoData, RuoliData, PermessiData } from "./modelForms";
 import { ActivityTypeOption, anagraficaAiButtonAdapter, cityTypeOption, companyOption, dataAdapter, genderOption, MappedSkill, reverseAdapter, reverseAdapterUpdate, RoleOption } from "../../adapters/personaleAdapters";
@@ -169,6 +170,15 @@ const PersonaleSection: React.FC<PersonaleSectionProps & {
       }));
     }
   };
+
+
+  const [roleList,setRoleList] = useState<any[]>();
+
+  useEffect(()=>{
+      CrudGenericService.searchRoles().then(res=>{
+        setRoleList(res.data);
+      })
+  },[])
   /*   useEffect(() => {
       const fetchCountryData = async () => {
         try {
@@ -688,7 +698,7 @@ const dataInizioTrattamentoValidator = useMemo(() => {
         <div className={styles.checkboxContainer}>
           <Form
             ref={formRuoli}
-            fields={Object.values(getFormRuoliFields(formRuoliData, roles, type, isViewOnly, handleFieldChange))}
+            fields={getFormRuoliFieldsFromRole(roleList||[],formRuoliData, roles, type, isViewOnly, handleFieldChange)}
             formData={formRuoliData}
             onSubmit={(data: RuoliData) => setFormRuoliData(data)}
             description="PR"
