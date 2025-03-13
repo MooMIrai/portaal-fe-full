@@ -9,8 +9,8 @@ export function MessageResponseTypeSelector(props:{onChange:(value:any)=>void}){
   useEffect(()=>{
     notificationServiceHttp.getResponseTypeList().then(res=>{
       setResponseTypeList([...res.data]);
-      props.onChange(res.data.find(n=>n.responseType==='NONE') || {id:0} );
-      setSelected(res.data.find(n=>n.responseType==='NONE') || {id:0} );
+      props.onChange(res.data.find(n=> n ==='NONE') || {id:0} );
+      setSelected(res.data.find(n=> n ==='NONE') || {id:0} );
     })
   },[])
   
@@ -21,12 +21,12 @@ export function MessageResponseTypeSelector(props:{onChange:(value:any)=>void}){
   return <>
   
       {
-        responseTypeList.map(ri=><div key={ri.id} onClick={()=>{
+        responseTypeList.map(ri=><div key={ri} onClick={()=>{
             setSelected(ri);
             props.onChange(ri)
-          }} className={styles.listItem + ' '+(ri.id===selected.id?styles.active:'')}>
-           <input title="Seleziona riga" type="radio" checked={ri.id===selected.id} style={{width:20,height:20}} />
-           <Typography.p className={styles.typographyLabel}>{ri.description || ri.responseType}</Typography.p>
+          }} className={styles.listItem + ' '+(ri === selected ? styles.active : '')}>
+           <input title="Seleziona riga" type="radio" checked={ri === selected} style={{width:20,height:20}} />
+           <Typography.p className={styles.typographyLabel}>{ri}</Typography.p>
         </div>)
       }
 
