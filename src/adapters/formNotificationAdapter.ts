@@ -44,7 +44,7 @@ class FormNotificationAdaper extends BaseAdapter<InputEmailStructure, OutputEmai
       manager_account_id: AuthService.getData().sub, // Cambia se necessario
       detailsUsersNotifications,
       emailToSend: source.isEmail || false,
-      notify_response_type_id: source.responseType.id,
+      responseType: source.responseType,
       content: {
         title: source.title || "",
         sub_title: source.sub_title || "",
@@ -74,13 +74,7 @@ class FormNotificationAdaper extends BaseAdapter<InputEmailStructure, OutputEmai
     const bcc = source.detailsUsersNotifications.filter(user => user.emailSendType === 'bcc');
 
     return {
-      responseType: {
-        id: source.notify_response_type_id,
-        responseType: "LINK",
-        description: null,
-        validations: null,
-        tenant_code: "TAAL"
-      },
+      responseType: source.responseType,
       isAll: source.detailsGlobal.isGlobal ? 'cc' : null,
       to: to.map(user => ({
         account_id: user.id,
