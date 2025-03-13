@@ -96,7 +96,7 @@ class NotificationServiceC extends BaseHttpService {
   }
 
   getResponseTypeList(){
-    return client.get(`api/v1/crud/NotifyResponseType`).then(res => res.data);
+    return client.get(`api/v1/notificationDetail/getResponseTypes`).then(res => res.data);
   }
 
   moveToTrash(id:number){
