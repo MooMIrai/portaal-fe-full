@@ -1,11 +1,5 @@
 export interface InputEmailStructure {
-    responseType: {
-      id: number;
-      responseType: string;
-      description: string | null;
-      validations: string | null;
-      tenant_code: string;
-    };
+    responseType: string;
     isAll: string | null;
     to: User[];
     cc: User[];
@@ -44,7 +38,7 @@ export interface InputEmailStructure {
     manager_account_id: number;
     detailsUsersNotifications: UserNotification[];
     emailToSend: boolean;
-    notify_response_type_id: number;
+    responseType: string;
     content: Content;
     detailsGlobal: DetailsGlobal;
     isFlagged: boolean;
