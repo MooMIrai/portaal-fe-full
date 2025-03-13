@@ -59,7 +59,7 @@ export function InboxPage() {
             </td>;
         } },
         { key: "NotifyUser.content.title", width:'200px', label: "Titolo", type: "custom", render: (n) =>{
-            if(n.NotifyUser.NotifyResponseType.responseType!=='NONE' && 
+            if(n.NotifyUser.responseType !== 'NONE' && 
                 (n.notificationStatus!=='RESPONDED' || n.notificationStatus!=='COMPLETED')){
                     return <td>
                         <div className={styles.mustReply}>
