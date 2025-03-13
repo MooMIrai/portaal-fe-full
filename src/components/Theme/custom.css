@@ -62,6 +62,10 @@ td{
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
 }
 
+.k-table{
+  width: 100%!important;
+}
+
 .k-drawer > .k-drawer-wrapper{
   width: 100% !important;
 }
