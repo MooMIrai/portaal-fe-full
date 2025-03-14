@@ -62,6 +62,7 @@ export function RolePage() {
   }
 
   return <><GridTable
+    writePermissions={["WRITE_ROLES"]}
     filterable={true}
     pageable={true}
     sortable={true}

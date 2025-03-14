@@ -13,7 +13,8 @@ export default function () {
         text: "Gestione Ruoli",
         level: 0,
         route: "/role",
-        iconKey:"lockIcon"
+        iconKey:"lockIcon",
+        permissions:["READ_ROLES"]
       },
     ],
   };

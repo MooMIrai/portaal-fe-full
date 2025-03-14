@@ -13,7 +13,7 @@ export default function VisibleRoutes() {
     {
       path:"/role",
       element:<RolePage />,
-      permissions:["READ_ROLE"]
+      permissions:["READ_ROLES"]
     }
   ]}></Routes>);
 }
