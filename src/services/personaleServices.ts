@@ -172,6 +172,43 @@ class CrudGenericServiceC {
     console.error("Error fetching resources:", error);
     throw error;
   }
+
+  getResourceAlignment=(
+    pageNum: number,
+    pageSize: number,
+    filtering: any,
+    sorting: any,
+    include?: boolean
+  ) => {
+
+    const params = {
+      pageNum,
+      pageSize,
+      include,
+    };
+
+    return client.post(
+      `api/v1/resourceAlignment/getAll`,
+      { filtering, sorting },
+      { params }
+    ).then(res=>res.data);
+      
+  }
+
+  upadateResourceAlignment=(
+    id:number,
+    data:any
+  ) => {
+
+    
+
+    return client.patch(
+      `api/v1/resourceAlignment/update/${id}`,
+      data
+    ).then(res=>res.data);
+      
+  }
+ 
 }
 
 export const CrudGenericService = new CrudGenericServiceC();
