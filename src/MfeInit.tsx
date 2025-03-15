@@ -46,7 +46,16 @@ export default function () {
         route: "/gestioneFeriePermessi",
         iconKey: "calendarIcon",
         permissions:["READ_HR_HOLIDAY"]
-      },
+      },//attesaprogetto
+      {
+        parentId: 5,
+        id: 55,
+        level: 2,
+        text: "Attesa progetto",
+        route: "/attesaprogetto",
+        iconKey: "clockIcon",
+        permissions:["READ_RESOURCE_ALIGNMENT"]
+      }
     ],
   };
 }
