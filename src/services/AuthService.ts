@@ -84,6 +84,10 @@ class AuthService {
     return Promise.resolve(filteredTenants);
   }
 
+  getTenant(index:number){
+    return this.getData().tenants[index];
+  }
+
   getPermissions(){
     return client.get('api/v1/accounts/getMyPermissions').then(res=>{
       const tokenData = tokenService.decodeToken(this.getToken());
