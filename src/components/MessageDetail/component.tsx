@@ -28,7 +28,7 @@ export function MessageDetail(props:PropsWithRef<{
             
             notificationServiceHttp.getDetail(props.id).then(res=>{
                 setData(res);
-                if(!props.isSent && res.NotificationStatus.notificationStatus==='SENT')
+                if(!props.isSent && res.notificationStatus ==='SENT')
                     notificationServiceHttp.updateStatus(props.id,"VIEWED");
             });
         }else{
