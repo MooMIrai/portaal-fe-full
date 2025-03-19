@@ -75,10 +75,10 @@ export function MessageDetail(props:PropsWithRef<{
                         <StarFlag n={data} type="DETAIL" className={styles.icon} />
                     
                         {
-                            !props.isSent && data?.NotifyUser?.NotifyResponseType?.responseType!='NONE' &&
-                            (data?.NotificationStatus?.notificationStatus==='SENT' ||data?.NotificationStatus?.notificationStatus==='VIEWED') &&
+                            !props.isSent && data?.NotifyUser?.responseType !='NONE' &&
+                            (data?.notificationStatus ==='SENT' ||data?.notificationStatus==='VIEWED') &&
                             <SvgIcon onClick={()=>{
-                                setModalData(data.NotifyUser.NotifyResponseType);
+                                setModalData(data?.NotifyUser?.responseType);
                             }} className={styles.icon} flip="horizontal" size="xxlarge" themeColor="tertiary" icon={redoIcon} ></SvgIcon>
                         }
                     
@@ -146,13 +146,13 @@ export function MessageDetail(props:PropsWithRef<{
             {data && <div className={styles.body +(dr?' '+styles.hasResponse:'')}>
                 
                 <div className={styles.nameContainer}>
-                    <AvatarIcon name={data.NotifyUser.ManagerAccount.Person.firstName + ' ' + data.NotifyUser.ManagerAccount.Person.lastName} initials={
-                                        data.NotifyUser.ManagerAccount.Person.firstName[0].toUpperCase()
-                                        +data.NotifyUser.ManagerAccount.Person.lastName[0].toUpperCase()
+                    <AvatarIcon name={data.NotifyUser.ManagerAccount?.Person.firstName || '' + ' ' + data.NotifyUser.ManagerAccount?.Person.lastName || ''} initials={
+                                        data.NotifyUser.ManagerAccount?.Person.firstName[0].toUpperCase() || ''
+                                        +data.NotifyUser.ManagerAccount?.Person.lastName[0].toUpperCase() || ''
                     } />
                     <div>
-                        <Typography.h5>{data.NotifyUser.ManagerAccount.Person.firstName + ' ' + data.NotifyUser.ManagerAccount.Person.lastName}</Typography.h5>
-                        <Typography.p>{data.NotifyUser.ManagerAccount.email}</Typography.p>
+                        <Typography.h5>{data.NotifyUser.ManagerAccount?.Person.firstName || '' + ' ' + data.NotifyUser.ManagerAccount?.Person.lastName || ''}</Typography.h5>
+                        <Typography.p>{data.NotifyUser.ManagerAccount?.email || ''}</Typography.p>
                     </div>
                 </div>
                 <Typography.h4>{data.NotifyUser.content.title}</Typography.h4>
