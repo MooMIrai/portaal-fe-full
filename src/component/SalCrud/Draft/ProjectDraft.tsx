@@ -7,6 +7,7 @@ import { SalContext } from "../../../pages/Sal/provider";
 const columns = [
   { key: "Offer.name", label: "Offerta", type: "string",sortable: true, filter: "text"  },
   { key: "Offer.ProjectType.description", label: "Tipo progetto", type: "string", sortable: true, filter: "text"  },
+  { key: "lastSal", label: "Data Ultimo Sal", type: "date", sortable: true, filter: "date" },
   { key: "start_date", label: "Data Inizio Progetto", type: "date", sortable: true, filter: "date" },
   { key: "end_date", label: "Data Fine Progetto", type: "date", sortable: true, filter: "date" },
 ];

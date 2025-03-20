@@ -103,9 +103,18 @@ export function SalCrud(props:PropsWithRef<SalCrudProps>){
       billing_date: formSalData.Bill?.billing_date
     }
 
-    if(!mappedData.monthyear && mappedData.year && mappedData.month){
-      mappedData.monthyear=getDateFromData(mappedData.year,mappedData.month);
-    } 
+
+    if(!mappedData.monthyear){
+      if( mappedData.year && mappedData.month){
+        mappedData.monthyear=getDateFromData(mappedData.year,mappedData.month);
+      } else if(props.project.lastSal){
+        const d=  new Date(props.project.lastSal);
+
+        mappedData.monthyear =getDateFromData(d.getFullYear(),d.getMonth()+2);
+      }
+    }
+
+    
 
     return <>{
       props.type!='delete'?<><Form
