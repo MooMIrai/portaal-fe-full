@@ -13,7 +13,7 @@ export default function(){
       {
         path:"/richieste/:id/:candidateId",
         element:<RequestPage />,
-        permissions:["READ_HR_REREAD_RECRUITING_REQUEST"]
+        permissions:["READ_RECRUITING_REQUEST"]
       },
       {
         path:"/candidati",
