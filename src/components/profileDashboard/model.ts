@@ -1,7 +1,7 @@
 export interface ProfileBEModel {
   AccountStatus: any;
   Offers: any;
-  Person: {
+  
     Activity: any;
     ActivityType: any;
     CityBirth: {
@@ -39,7 +39,7 @@ export interface ProfileBEModel {
     employee_id: any;
     firstName: string;
     gender_id: number;
-    id: number;
+    
     lastName: string;
     location_id: number;
     note: any;
@@ -51,7 +51,7 @@ export interface ProfileBEModel {
     user_modified: string;
     vatNumber: any;
     zipCode: string;
-  };
+  
   Roles: Array<{
     date_created: string;
     date_modified: string;
