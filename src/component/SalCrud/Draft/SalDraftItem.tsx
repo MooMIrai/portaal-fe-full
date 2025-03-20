@@ -8,7 +8,7 @@ import {fileAddIcon} from 'common/icons';
 import { SalContext } from "../../../pages/Sal/provider";
 import authService from 'common/services/AuthService';
 
-export const SalDraftItem = React.memo((props: PropsWithChildren<{ project: any, refreshParent:()=>void }>) => {
+export const SalDraftItem = React.memo((props: PropsWithChildren<{ project: any, refreshParent:()=>void, person:any }>) => {
 
   const { filters } = useContext(SalContext);
   const columns = [

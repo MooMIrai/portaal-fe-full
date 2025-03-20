@@ -1,7 +1,8 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useContext } from "react";
 import { salService } from "../../../services/salService";
 import GridTable from "common/Table";
 import { SalHistoryProject } from "./HistoryProject";
+import { SalContext } from "../../../pages/Sal/provider";
 
 const columns = [
   { key: "customer_code", label: "Codice", type: "string", sortable: true, filter: "text" },
@@ -12,21 +13,24 @@ const columns = [
 ];
 
 export const SalHistoryCustomer = React.memo(() => {
+
+  const { filters } = useContext(SalContext);
+
   const loadData = useCallback(async (pagination, filter, sorting) => {
     const include = true;
     const tableResponse = await salService.getHistoryBillCustomer(
       pagination.currentPage,
       pagination.pageSize,
-      filter,
+      filters,
       sorting,
       include,
     );
 
     return {
       data: tableResponse.data,
-      meta: { total: tableResponse.meta.model },
+      meta: tableResponse.meta
     };
-  }, []);
+  }, [filters]);
 
   const renderExpand = useCallback((rowProps) => (
     <SalHistoryProject customer={rowProps.dataItem} />

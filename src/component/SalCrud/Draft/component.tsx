@@ -40,7 +40,7 @@ export const SalDraft = React.memo(() => {
         ...td,
         gridtable_expanded:draft.customers.some(d=>d===td.id)
       })),
-      meta: { total: tableResponse.meta.model },
+      meta: { total: tableResponse.meta.total },
     };
   }, [draft.customers]);
 

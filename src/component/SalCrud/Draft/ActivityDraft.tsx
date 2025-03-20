@@ -25,7 +25,7 @@ export const SalActivitiesDraft = React.memo((props: PropsWithChildren<{ project
 
     return {
       data: tableResponse.data,
-      meta: { total: tableResponse.meta.model },
+      meta: { total: tableResponse.meta.total },
     };
   }, [props.project.id]);
 

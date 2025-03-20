@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from "react";
+import React, { useCallback, useContext, useRef } from "react";
 import { salService } from "../../../services/salService";
 import GridTable from "common/Table";
 import { SalRTBProject } from "./ReadyToBillProject";
@@ -13,9 +13,9 @@ const columns = [
   ];  
 export function SalReadyToBill(){
   const tableRef= useRef<any>();
-  const { addOpen, removeOpen, billing } = useContext(SalContext);
+  const { addOpen, removeOpen, billing, filters } = useContext(SalContext);
   
-    const loadData = async (
+    const loadData = useCallback(async (
         pagination: any,
         filter: any,
         sorting: any[],
@@ -25,7 +25,7 @@ export function SalReadyToBill(){
         const tableResponse = await salService.getReadyToBillByCustomer(
           pagination.currentPage,
           pagination.pageSize,
-          filter,
+          filters,
           sorting,
           include,
         );
@@ -37,11 +37,11 @@ export function SalReadyToBill(){
             gridtable_expanded:billing.customers.some(d=>d===td.id)
           })),
           meta: {
-            total: tableResponse.meta.model
+            total: tableResponse.meta.total
           }
         }
     
-      };
+      },[filters]);
 
 
     return <GridTable

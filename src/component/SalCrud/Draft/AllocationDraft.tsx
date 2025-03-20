@@ -23,12 +23,14 @@ export const SalAllocationsDraft = React.memo((props: PropsWithChildren<{ activi
 
     return {
       data: tableResponse.data,
-      meta: { total: tableResponse.meta.model },
+      meta: { total: tableResponse.meta.total },
     };
   }, [props.activity.id]);
 
   const renderExpand = useCallback((rowProps) => (
-    <SalDraftItem person={rowProps.dataItem} />
+    <SalDraftItem person={rowProps.dataItem} project={undefined} refreshParent={function (): void {
+     
+    } } />
   ), []);
 
   return (

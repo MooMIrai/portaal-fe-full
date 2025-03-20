@@ -1,6 +1,7 @@
-import React, { PropsWithChildren, useCallback } from "react";
+import React, { PropsWithChildren, useCallback, useContext } from "react";
 import { salService } from "../../../services/salService";
 import GridTable from "common/Table";
+import { SalContext } from "../../../pages/Sal/provider";
 
 const columns = [
   { key: "SalState", label: "Stato", type: "custom", render:(rowData)=><td>Sal Fatturato</td> },
@@ -18,22 +19,25 @@ const columns = [
 ];
 
 export const SalHistoryItem = React.memo((props: PropsWithChildren<{ project: any }>) => {
+
+  const { filters } = useContext(SalContext);
+
   const loadData = useCallback(async (pagination: any, filter: any, sorting: any[]) => {
     const include = true;
     const tableResponse = await salService.getHistoryBillFromProject(
       props.project.id,
       pagination.currentPage,
       pagination.pageSize,
-      filter,
+      filters,
       sorting,
       include,
     );
 
     return {
       data: tableResponse.data,
-      meta: { total: tableResponse.meta.model },
+      meta: tableResponse.meta
     };
-  }, [props.project.id]);
+  }, [props.project.id,filters]);
 
 
 

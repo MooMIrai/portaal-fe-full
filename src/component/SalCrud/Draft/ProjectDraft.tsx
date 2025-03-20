@@ -32,14 +32,14 @@ export const SalProjectDraft = React.memo((props: PropsWithChildren<{ customer: 
         ...td,
         gridtable_expanded:draft.projects.some(d=>d===td.id)
       })),
-      meta: { total: tableResponse.meta.model },
+      meta: { total: tableResponse.meta.total },
     };
   }, [props.customer.id,draft.projects,filters]);
 
 
 
   const renderExpand = useCallback((rowProps) => (
-    <SalDraftItem project={rowProps.dataItem} refreshParent={props.refreshParent} />
+    <SalDraftItem project={rowProps.dataItem} refreshParent={props.refreshParent} person={undefined} />
   ), []);
 
   return (

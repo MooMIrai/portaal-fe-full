@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useCallback, useState } from "react";
+import React, { PropsWithChildren, useCallback, useContext, useState } from "react";
 import { salService } from "../../../services/salService";
 import GridTable from "common/Table";
 import { SalCrud } from "../component";
@@ -6,10 +6,12 @@ import NotificationActions from 'common/providers/NotificationProvider';
 import {stampIcon} from 'common/icons';
 import Button from 'common/Button';
 import authService from 'common/services/AuthService';
+import { SalContext } from "../../../pages/Sal/provider";
 
 export const SalRTBItem = React.memo((props: PropsWithChildren<{ project: any, refreshParent:()=>void }>) => {
   
   const [rows, setRows] = useState<Array<any>>();
+  const { filters } = useContext(SalContext);
 
   const columns = [
     { key: "SalState", label: "Stato", type: "custom", render:(rowData)=><td>
@@ -39,16 +41,16 @@ export const SalRTBItem = React.memo((props: PropsWithChildren<{ project: any, r
       props.project.id,
       pagination.currentPage,
       pagination.pageSize,
-      filter,
+      filters,
       sorting,
       include,
     );
     setRows(tableResponse.data)
     return {
       data: tableResponse.data,
-      meta: { total: tableResponse.meta.model },
+      meta: { total: tableResponse.meta.total },
     };
-  }, [props.project.id]);
+  }, [props.project.id,filters]);
 
   const updateToBilled = (id)=>{
     return new Promise((ok,ko)=>{

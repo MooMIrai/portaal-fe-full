@@ -1,7 +1,8 @@
-import React, { PropsWithChildren, useCallback } from "react";
+import React, { PropsWithChildren, useCallback, useContext } from "react";
 import { salService } from "../../../services/salService";
 import GridTable from "common/Table";
 import { SalHistoryItem } from "./SalHistoryItem";
+import { SalContext } from "../../../pages/Sal/provider";
 
 
 const columns = [
@@ -13,7 +14,9 @@ const columns = [
 ];
 export const SalHistoryProject = React.memo((props: PropsWithChildren<{ customer: any }>) => {
 
-  const loadData = async (
+  const { filters } = useContext(SalContext);
+
+  const loadData = useCallback(async (
     pagination: any,
     filter: any,
     sorting: any[],
@@ -24,7 +27,7 @@ export const SalHistoryProject = React.memo((props: PropsWithChildren<{ customer
       props.customer.id,
       pagination.currentPage,
       pagination.pageSize,
-      filter,
+      filters,
       sorting,
       include,
     );
@@ -32,12 +35,11 @@ export const SalHistoryProject = React.memo((props: PropsWithChildren<{ customer
 
     return {
       data: tableResponse.data,
-      meta: {
-        total: tableResponse.meta.model
-      }
+      meta:tableResponse.meta
+      
     }
 
-  };
+  },[filters]);
 
   const renderExpand = useCallback((rowProps) => (
     <SalHistoryItem project={rowProps.dataItem} />

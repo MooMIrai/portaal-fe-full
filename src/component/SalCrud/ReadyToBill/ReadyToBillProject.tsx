@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useContext, useRef } from "react";
+import React, { PropsWithChildren, useCallback, useContext, useRef } from "react";
 import { salService } from "../../../services/salService";
 import GridTable from "common/Table";
 import { SalRTBItem } from "./SalRTBItem";
@@ -14,9 +14,9 @@ const columns = [
 export const SalRTBProject=React.memo((props: PropsWithChildren<{customer:any, refreshParent:()=>void}>)=>{
 
   
-  const { addOpen, removeOpen, billing } = useContext(SalContext);
+  const { addOpen, removeOpen, billing, filters } = useContext(SalContext);
 
-    const loadData = async (
+    const loadData = useCallback(async (
         pagination: any,
         filter: any,
         sorting: any[],
@@ -27,7 +27,7 @@ export const SalRTBProject=React.memo((props: PropsWithChildren<{customer:any, r
             props.customer.id,
           pagination.currentPage,
           pagination.pageSize,
-          filter,
+          filters,
           sorting,
           include,
         );
@@ -39,11 +39,11 @@ export const SalRTBProject=React.memo((props: PropsWithChildren<{customer:any, r
             gridtable_expanded:billing.projects.some(d=>d===td.id)
           })),
           meta: {
-            total: tableResponse.meta.model
+            total: tableResponse.meta.total
           }
         }
     
-      };
+      },[filters]);
 
 
     return <GridTable
