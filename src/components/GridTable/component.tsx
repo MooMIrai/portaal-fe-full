@@ -151,7 +151,9 @@ interface TablePaginatedProps extends GridProps {
   rowStyle?: (row: any) => Record<string, any>,
 
   addedFilters?: FieldConfig[],
-  writePermissions?:string[]
+  writePermissions?:string[],
+
+  actionFilters?:(type:TABLE_ACTION_TYPE,row:any) => boolean
 }
 
 const MyPager = (props: PagerProps) => (
@@ -232,7 +234,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
   const [sorting, setSorting] = useState<any[]>(props.sorting || []);
   const [loading, setLoading] = useState(false);
 
-  const [actions,setActions] = useState<TABLE_ACTION_TYPE[]>([]);
+ // const [actions,setActions] = useState<TABLE_ACTION_TYPE[]>([]);
 
   const debouncedFilterColumn = useDebounce(filter, 650);
   const actionMode = props.actionMode ?? "row";
@@ -293,7 +295,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
     grid: gridRef.current,
   }));
 
-  useEffect(()=>{
+/*   useEffect(()=>{
     let actionsToSet:TABLE_ACTION_TYPE[]=[];
     if(props.actions){
       actionsToSet=props.actions();
@@ -302,15 +304,28 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
         })
     }
     setActions(actionsToSet)
+  },[props.actions,props.writePermissions]) */
+
+  const getActions = useCallback((row?:any)=>{
+    let actionsToSet:TABLE_ACTION_TYPE[]=[];
+    if(props.actions){
+      actionsToSet=props.actions(row);
+        actionsToSet= actionsToSet.filter(a=>{
+          return a===TABLE_ACTION_TYPE.show || !props.writePermissions || props.writePermissions.some(AuthService.hasPermission)
+        })
+    }
+    return actionsToSet;
   },[props.actions,props.writePermissions])
 
+
   const hasActionInColumn = useCallback(() =>
-    actions.some((p: string) => p !== TABLE_ACTION_TYPE.create)
-  ,[actions]);
+    getActions().some((p: string) => p !== TABLE_ACTION_TYPE.create)
+  ,[getActions]);
 
   const hasActionCreate = useCallback(() =>
-    actions.some((p: string) => p === TABLE_ACTION_TYPE.create)
-  ,[actions]);
+    getActions().some((p: string) => p === TABLE_ACTION_TYPE.create)
+  ,[getActions]);
+
 
   const openModal = (
     type: TABLE_ACTION_TYPE,
@@ -582,7 +597,15 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
               Esporta
             </Button>
             {props.columns && props.filterable && (
-              <FiltersForm columns={props.columns} onSubmit={setFilter} addedFilters={props.addedFilters}/>
+              <FiltersForm columns={props.columns} onSubmit={(filterss)=>{
+                
+                const newPagination = {
+                  ...pagination,
+                  currentPage: 1
+                };
+                setPagination(newPagination);
+                setFilter(filterss)
+              }} addedFilters={props.addedFilters}/>
             )}
         </GridToolbar> : null}
 
@@ -665,6 +688,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
             
             cell={(cellGrid: GridCellProps) => {
               
+              const actions = getActions(cellGrid.dataItem);
               
               return (
                 <td 
@@ -686,7 +710,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
                         }
                       ></Button>
                     )}
-                    {actions?.includes(TABLE_ACTION_TYPE.edit) && (
+                    {actions?.includes(TABLE_ACTION_TYPE.edit) && (!props.actionFilters || props.actionFilters(TABLE_ACTION_TYPE.edit,row)) && (
                       <Button
                         svgIcon={pencilIcon}
                         fillMode={"link"}
@@ -696,7 +720,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
                         }
                       ></Button>
                     )}
-                    {actions?.includes(TABLE_ACTION_TYPE.delete) && (
+                    {actions?.includes(TABLE_ACTION_TYPE.delete) &&  (!props.actionFilters || props.actionFilters(TABLE_ACTION_TYPE.delete,row)) &&(
                       <Button
                         svgIcon={trashIcon}
                         fillMode={"link"}

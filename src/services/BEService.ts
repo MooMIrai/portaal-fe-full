@@ -84,22 +84,34 @@ client.interceptors.response.use(
       window.dispatchEvent(new CustomEvent("LOGOUT"));
       window.location.href = "/";
     } else if (error.response && error.response.status === 409) {
+      
       const errorResponse = error.response?.data;
-      const modelName = errorResponse?.message?.modelName;
-      const targetFields = errorResponse?.message?.target?.length
-        ? errorResponse?.message?.target.join(", ")
-        : "Nessun campo specificato";
-      console.log("error.response?.data;", error.response?.data);
-      const errorMessage = `Errore durante l'operazione sul modello "${modelName}". Problemi con i campi: ${targetFields}.`;
+      if(errorResponse){
+      if(errorResponse.message?.modelName){
+        const modelName = errorResponse?.message?.modelName;
+        const targetFields = errorResponse?.message?.target?.length
+          ? errorResponse?.message?.target.join(", ")
+          : "Nessun campo specificato";
+        console.log("error.response?.data;", error.response?.data);
+        const errorMessage = `Errore durante l'operazione sul modello "${modelName}". Problemi con i campi: ${targetFields}.`;
 
-      NotificationProviderActions.openModal(
-        { icon: true, style: "error" },
-        errorMessage
-      );
+        NotificationProviderActions.openModal(
+          { icon: true, style: "error" },
+          errorMessage
+        );
 
-      const customError = new Error(errorMessage);
-      (customError as any).details = error.response.data;
-      return Promise.reject(customError);
+        const customError = new Error(errorMessage);
+        (customError as any).details = error.response.data;
+        return Promise.reject(customError);
+      }else if(errorResponse.message){
+        NotificationProviderActions.openModal(
+          { icon: true, style: "error" },
+          errorResponse.message
+        );
+        return Promise.reject(errorResponse.message);
+      }
+    }
+      
     } else {
       NotificationProviderActions.openModal(
         { icon: true, style: "error" },

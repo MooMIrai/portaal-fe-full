@@ -60,10 +60,17 @@ export function FiltersForm(props: {
                 processField(`${key}.${subKey}`, subValue)
             );
         }
+
+        let v = value;
+        if(field){
+            if(field.type==='number' && v){
+                v=parseFloat(v);
+            }
+        }
         
         return [{
             field: key,
-            value: field?.type==='filter-autocomplete'?field.options.getValue(value):value,
+            value: field?.type==='filter-autocomplete'?field.options.getValue(value):v,
             operator: getOperator(value),
         }];
     };
