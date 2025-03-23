@@ -103,7 +103,6 @@ export function SalCrud(props:PropsWithRef<SalCrudProps>){
       billing_date: formSalData.Bill?.billing_date
     }
 
-
     if(!mappedData.monthyear){
       if( mappedData.year && mappedData.month){
         mappedData.monthyear=getDateFromData(mappedData.year,mappedData.month);

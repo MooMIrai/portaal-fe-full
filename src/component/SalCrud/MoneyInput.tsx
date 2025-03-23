@@ -15,7 +15,7 @@ export function MoneyInputSal(props:MoneyInputSalProps)
     const [person,setPerson] = useState<Array<any>>();
     const [effectiveDays,setEffectiveDays] = useState<number | undefined>(props.value?.actualDays);
     const [effectiveDaysPristine,setEffectiveDaysPristine] = useState<boolean>(!!props.value?.actualDays);
-    const [finalAmount,setFinalAmount] = useState<number>(props.value?.amount);
+    const [finalAmount,setFinalAmount] = useState<number | undefined>(props.value?.amount);
     
     const [isFirstloading,setIsFirstloading] = useState<boolean>(true);
     
@@ -132,7 +132,7 @@ export function MoneyInputSal(props:MoneyInputSalProps)
                 <InputText label="Giorni Lavorati Sal"  type="number" value={workingDays} disabled /> 
                 <InputText label="Giorni Effettivi Sal" onChange={(e)=>{
                     setEffectiveDaysPristine(true);
-                    let v = e.target.value && e.target.value.length?parseInt(e.target.value):0;
+                    let v = e.target.value && e.target.value.length?parseInt(e.target.value):undefined;
                     setEffectiveDays(v);
                    
                 }} required type="number" value={effectiveDays} disabled={props.disabled} />
@@ -142,7 +142,7 @@ export function MoneyInputSal(props:MoneyInputSalProps)
         }
         
         <InputText required label="Importo Sal" type="number" value={finalAmount} onChange={(e)=>{
-            let v = e.target.value && e.target.value.length?parseInt(e.target.value):0;
+            let v = e.target.value && e.target.value.length?parseInt(e.target.value):undefined;
             setFinalAmount(v);
         }} disabled={props.disabled} />
         
