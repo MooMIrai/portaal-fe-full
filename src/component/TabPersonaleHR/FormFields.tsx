@@ -60,8 +60,10 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             required: true,
             disabled: (type === "view" || isViewOnly),
             valueOnChange: valueOnChange,
-            validator: createValidator(type === "view" || isViewOnly, (value: any) =>
-                value ? "" : "Il campo sede è obbligatorio"
+            validator: createValidator(type === "view" || isViewOnly, (value: any) =>{
+                return !value ? "Il campo sede è obbligatorio":"";
+            }
+               
             ),
         },
         nome: {
@@ -631,7 +633,6 @@ export const getFormRuoliFields = (formData: RuoliData, roles: RoleOption[], typ
 };
 
 export const getFormRuoliFieldsFromRole = (roleList:any[],formData: RuoliData, roles: RoleOption[], type: any, isViewOnly: boolean, valueOnChange: (name: string, value: any) => void) => {
-
     return roleList.map((r)=>{
         return {
             name:r.role,

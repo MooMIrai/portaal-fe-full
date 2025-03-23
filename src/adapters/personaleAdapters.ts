@@ -378,19 +378,8 @@ export const dataAdapter = (row: Record<string, any>) => {
     note: row.trattamentoEconomico.note || "",
   };
 
-  const ruoliData: RuoliData = {
-    ADM: row.ruoli.ADM || false,
-    AMMI: row.ruoli.AMMI || false,
-    COM: row.ruoli.COM || false,
-    DIP: row.ruoli.DIP || false,
-    LEA: row.ruoli.LEA || false,
-    REC: row.ruoli.REC || false,
-    RP: row.ruoli.RP || false,
-    SEG: row.ruoli.SEG || false,
-    RISEXT: row.ruoli.RISEXT || false,
-    ADD_CENS: row.ruoli.ADD_CENS || false,
-    TESTROLE2: row.ruoli.TESTROLE2 || false,
-  };
+
+  const ruoliData: RuoliData = row.ruoli || {};
 
   const permessiData: PermessiData = {
     HMA: row.permessi.HMA || false,

@@ -242,6 +242,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps & {
       }
     }
     if (formRuoli.current) {
+      debugger;
       setFormRuoliData(formRuoli.current.values);
     }
     if (formPermessi.current) {
@@ -300,6 +301,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps & {
       if (formRuoli.current) {
         formRuoli.current.onSubmit();
         if (formRuoli.current.isValid()) {
+          debugger;
           setFormRuoliData(formRuoli.current.values);
         } else {
           hasError = true;
