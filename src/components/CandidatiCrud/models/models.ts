@@ -69,7 +69,7 @@ export interface CandidateServer {
   notes: string;
   candidateProfile_id: number;
   CandidateProfile: CandidateProfile;
-  currentContractType_id: number;
+  currentContractType_id: number |undefined;
   currentContractType: CurrentContractType;
   profileType: string;
   willingToTransfer: boolean;

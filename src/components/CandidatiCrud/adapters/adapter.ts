@@ -35,9 +35,9 @@ class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, Candidat
             minRequiredRAL: source.ralMin ? parseInt(source.ralMin.toString()) : 0,
             maxRequiredRAL: source.ralMax ? parseInt(source.ralMax.toString()) : 0,
             notice: source.notice ? parseInt(source.notice.toString()) : 0,
-            currentContractType_id: source.contract_type?.id ? parseInt(source.contract_type.id.toString()) : 0,
+            currentContractType_id: source.contract_type?.id ? parseInt(source.contract_type.id.toString()) : undefined,
             notes: source.note || '',
-
+            
             CandidateProfile: {
                 id: source.profile_autocomplete?.id ? parseInt(source.profile_autocomplete.id.toString()) : 0,
                 code: '', // Da aggiungere se necessario

@@ -121,6 +121,8 @@ export const getFormCandidate = (
             type: "location-selector",
             disabled: (type === "view"),
             value: formData?.sede,
+            required:true,
+            validator: (value: any) => !value || !value.id ? "Il campo Sede è obbligatorio" : ''
         },
         ral: {
             name: "ral",
