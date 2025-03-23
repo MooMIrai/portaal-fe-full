@@ -111,6 +111,10 @@ export function SalCrud(props:PropsWithRef<SalCrudProps>){
         const d=  new Date(props.project.lastSal);
 
         mappedData.monthyear =getDateFromData(d.getFullYear(),d.getMonth()+2);
+      }else if(props.project.start_date){
+        const d=  new Date(props.project.start_date);
+
+        mappedData.monthyear =getDateFromData(d.getFullYear(),d.getMonth()+2);
       }
     }
 

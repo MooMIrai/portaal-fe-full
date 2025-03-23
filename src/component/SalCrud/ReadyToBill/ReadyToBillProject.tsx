@@ -8,6 +8,7 @@ const columns = [
     { key: "Offer.name", label: "Offerta", type: "string"},
     { key: "Offer.Customer.name", label: "Cliente", type: "string"},
     { key: "Offer.ProjectType.description", label: "Tipo progetto", type: "string"},
+    { key: "lastSal", label: "Data Ultimo Sal", type: "date", sortable: true, filter: "date" },
     { key: "start_date", label: "Data Inizio", type: "date", sortable: true, filter: "date" },
     { key: "end_date", label: "Data Fine", type: "date", sortable: true, filter: "date" },
   ]; 
