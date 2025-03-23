@@ -40,7 +40,7 @@ export function CandidateForRequest(props: PropsWithChildren<{ requestId: number
                     }} ><SvgIcon  icon={fileIcon} /></td>
                   }
             }else{
-                if(rowData.Person.files && rowData.Person.files.length){
+                if(rowData.Person?.files && rowData.Person.files.length){
                     return <td style={{cursor:'pointer'}} title="Vedi il cv" onClick={()=>{
                       fileService.openFromBE(rowData.Person.files[0])
                     }} ><SvgIcon  icon={fileIcon} /></td>
@@ -52,6 +52,8 @@ export function CandidateForRequest(props: PropsWithChildren<{ requestId: number
         }},
         { key: "id", label: "Nominativo", type: "custom", render:(rowData)=>{
             const personData = rowData.Candidate?.Person || rowData.Person;
+            if(!personData)
+                return <td></td>
         return <td>
             <div style={{ display: 'flex', justifyContent:'flex-start', gap:15, alignItems:'center', paddingTop:5,paddingBottom:5 }}>
                 <AvatarIcon name={personData.firstName + ' ' + personData.lastName} initials={
@@ -195,7 +197,7 @@ export function CandidateForRequest(props: PropsWithChildren<{ requestId: number
         } },
         { key: "id", label: "CV", type: "custom", width:45, render:(rowData)=>{
         
-            if(rowData.Person.files && rowData.Person.files.length){
+            if(rowData.Person?.files && rowData.Person.files.length){
               return <td style={{cursor:'pointer'}} title="Vedi il cv" onClick={()=>{
                 fileService.openFromBE(rowData.Person.files[0])
               }} ><SvgIcon  icon={fileIcon} /></td>
@@ -411,7 +413,7 @@ export function CandidateForRequest(props: PropsWithChildren<{ requestId: number
     ) => {
         return richiestaService.getDetails(props.requestId).then(res => {
             const dataR = res[0].RecruitingAssignment.filter(p=>{
-                return !props.preselectedId || p.Candidate.id===parseInt(props.preselectedId);
+                return !props.preselectedId || (p.Candidate && p.Candidate.id===parseInt(props.preselectedId));
             })
             return {
                 data:dataR,

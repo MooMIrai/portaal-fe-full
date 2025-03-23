@@ -81,6 +81,29 @@ export function RichiesteCrud(props: RichiesteCrudProps) {
         }
     }
 
+    useEffect(() => {
+        if (props.type === 'delete') {
+          NotificationActions.openConfirm('Sei sicuro di rimuovere la richiesta ?',
+            () => {
+              richiestaService.deleteResource(props.row.id).then(() => {
+                NotificationActions.openModal(
+                  { icon: true, style: "success" },
+                  "Operazione avvenuta con successo "
+                );
+                props.closeModalCallback();
+                props.refreshTable();
+              })
+    
+            },
+            'Cancella Candidato'
+          )
+        }
+      }, [props.type])
+    
+      if (props.type === "delete") {
+        return <div></div>
+      }
+
     return <>
         <AiBox
             onCommandExecute={handleCommandExecuted}

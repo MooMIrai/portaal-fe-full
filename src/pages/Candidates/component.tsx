@@ -18,7 +18,7 @@ export default function CandidatePage() {
   const columns = [
     { key: "Person.files", label: "CV", type: "custom", width:50, render:(rowData)=>{
 
-      if(rowData.Person.files && rowData.Person.files.length){
+      if(rowData.Person?.files && rowData.Person.files.length){
         return <td style={{cursor:'pointer'}} title="Vedi il cv" onClick={()=>{
           fileService.openFromBE(rowData.Person.files[0])
         }} ><SvgIcon  icon={fileIcon} /></td>
