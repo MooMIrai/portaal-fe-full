@@ -2,20 +2,21 @@ import React, { PropsWithChildren, useCallback, useContext } from "react";
 import { salService } from "../../../services/salService";
 import GridTable from "common/Table";
 import { SalContext } from "../../../pages/Sal/provider";
+import { SalCrud } from "../component";
 
 const columns = [
   { key: "SalState", label: "Stato", type: "custom", render:(rowData)=><td>Sal Fatturato</td> },
-  { key: "actualDays", label: "Giorni Lavorati", type: "number" },
+  { key: "Sal.actualDays", label: "Giorni Lavorati", type: "number" },
   { key: "amount", label: "Importo", type: "number" },
   { key:"billing_date", label:"Data fatturazione",type:'date',sortable:true,filter:'date'},
-  { key: "notes", label: "Note", type: "text", sortable: true, filter: "text" },
+  { key: "Sal.notes", label: "Note", type: "text", sortable: true, filter: "text" },
   { key: "month", label: "Mese", type: "custom", sortable: true, filter: "number", render:(row)=>{
-    const date = new Date(new Date().getFullYear(), row.month - 1, 1);  
+    const date = new Date(new Date().getFullYear(), row.Sal.month - 1, 1);  
     let monthStr = date.toLocaleString('it-IT', { month: 'long' }).toString();
     monthStr = monthStr.charAt(0).toUpperCase() + monthStr.slice(1).toLowerCase();
   return <td>{monthStr}</td>;
   } },
-  { key: "year", label: "Anno", type: "number", sortable: true, filter: "number" }
+  { key: "Sal.year", label: "Anno", type: "number", sortable: true, filter: "number" }
 ];
 
 export const SalHistoryItem = React.memo((props: PropsWithChildren<{ project: any }>) => {
@@ -56,6 +57,18 @@ export const SalHistoryItem = React.memo((props: PropsWithChildren<{ project: an
         initialWidthWindow={900}
         resizable={true}
         actions={() => ['show']}
+        formCrud={(row: any, type: string, closeModalCallback: any, refreshTable: any)=>{
+          
+          return <SalCrud
+                          //otherSal={otherSal}
+                          project={props.project}
+                          row={row.Sal}
+                          type={type}
+                          closeModalCallback={closeModalCallback}
+                          refreshTable={()=>{}}
+                          onNext={() => Promise.resolve()}
+                        />
+        }}
     />
     </>
   );

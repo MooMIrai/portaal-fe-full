@@ -63,7 +63,7 @@ export const SalHistoryProject = React.memo((props: PropsWithChildren<{ customer
     initialWidthWindow={900}
     resizable={true}
     actions={() => [
-      'show'
+     // 'show'
     ]}
 
   />

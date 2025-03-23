@@ -155,7 +155,7 @@ const ProjectTable = (props: { customer: number }) => {
             />
           },
         },
-        {
+       /*  {
           icon: dollarIcon,
           tooltip: "SAL",
           modalContent: (dataItem, closeModal, refreshTable) => {
@@ -166,7 +166,7 @@ const ProjectTable = (props: { customer: number }) => {
               handleFormSubmit={handleFormSubmit}
             />
           },
-        },
+        }, */
         {
           icon: rowsIcon,
           tooltip: "Attività",

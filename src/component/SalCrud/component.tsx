@@ -27,7 +27,6 @@ export function SalCrud(props:PropsWithRef<SalCrudProps>){
     const formSal = useRef<any>();
     const [formSalData,setFormSalData] = useState<any>(props.row);
 
-
     const onChange = (fieldName:string,val:any)=>{
       setFormSalData((prev)=>{
         return {...prev,[fieldName]:val}
@@ -113,7 +112,7 @@ export function SalCrud(props:PropsWithRef<SalCrudProps>){
       }else if(props.project.start_date){
         const d=  new Date(props.project.start_date);
 
-        mappedData.monthyear =getDateFromData(d.getFullYear(),d.getMonth()+2);
+        mappedData.monthyear =getDateFromData(d.getFullYear(),d.getMonth()+1);
       }
     }
 
@@ -133,7 +132,7 @@ export function SalCrud(props:PropsWithRef<SalCrudProps>){
               showSubmit={props.type!='show'}
           />
           {
-            <div style={{display:'flex',justifyContent:'flex-end',marginTop:10}}>
+            props.type!=='create' && props.type!='delete' &&  <div style={{display:'flex',justifyContent:'flex-end',marginTop:10}}>
               <Button disabled={props.row.SalState==='BILLED'} svgIcon={
                 props.row.SalState==='PENDING'?fileAddIcon:stampIcon
               } onClick={()=>{
