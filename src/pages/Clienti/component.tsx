@@ -37,9 +37,8 @@ function Clienti() {
 
     return {
       data: tableResponse.data.map(adaptToCustomerModel),
-      meta: {
-        total: tableResponse.meta.model
-      }
+      meta:tableResponse.meta
+
     }
 
   };
