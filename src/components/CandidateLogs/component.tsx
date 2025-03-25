@@ -59,7 +59,7 @@ const extractTimelineData=(data)=> {
 
     [data].forEach((entry) => {
         const candidateName = entry.Candidate? `${entry.Candidate.Person.firstName} ${entry.Candidate.Person.lastName}`:
-                              entry.Person?`${entry.Candidate.Person.firstName} ${entry.Candidate.Person.lastName}`:'';
+                              entry.Person?`${entry.Person.firstName} ${entry.Person.lastName}`:'';
 
         // Aggiungi gli eventi RecruitingContact
         if (entry.RecruitingContact) {
