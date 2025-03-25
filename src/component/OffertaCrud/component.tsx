@@ -160,6 +160,7 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
 
  
   const valueOnChange = (name: string, value: any) => {
+
     if (name === "project_type") {
       if (value.name === "Consulenza") {
         const updatedBillingType = { id: "Daily", name: "Fatturazione a giornata" };
@@ -369,6 +370,10 @@ const endDateValidator = useMemo(() => {
 }, []); 
 const approvalDateValidator = useMemo(() => {
   return (value: any, valueGetter: (name: string) => any) => {
+
+    if(formCustomer.current && formCustomer.current.values.outcome_type && formCustomer.current.values.outcome_type.id==='P'){
+     
+
       if (!value) return "La data di approvazione è obbligatoria";
 
       const selectedApprovalDate = new Date(value);
@@ -378,10 +383,11 @@ const approvalDateValidator = useMemo(() => {
       if (endDate && selectedApprovalDate >= endDate) {
           return "La data di approvazione non può essere uguale o successiva alla data di scadenza";
       }
+    }
 
       return "";
   };
-}, []); 
+}, [formCustomer.current]); 
 
 
   /*   const saveOfferData = (dataToSave) => {

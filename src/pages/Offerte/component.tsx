@@ -180,7 +180,7 @@ export default function OffertePage() {
       resizable={true}
       actions={(row) => {
         const actions: string[] = ["create"];
-        debugger;
+
         if (row?.outcome_type?.id === "P") {
           if (row?.thereisProject) {
             actions.push("show");
