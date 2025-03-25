@@ -133,7 +133,7 @@ export function InboxPage() {
                     draggableWindow={true}
                     initialWidthWindow={900}
                     resizable={true}
-                    actions={() => ["create"]}
+                    actions={() => []}
                     formCrud={(row: any, type: string, closeModalCallback: any) => (
                         <MessageCreate closeModal={closeModalCallback} />
                     )}
