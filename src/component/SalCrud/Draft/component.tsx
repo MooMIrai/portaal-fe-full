@@ -8,11 +8,10 @@ import { CrudGenericService } from "../../../services/personaleServices";
 
 
 const columns = [
-  { key: "customer_code", label: "Codice", type: "string", sortable: true  },
+ 
   { key: "name", label: "Ragione sociale", type: "string", sortable: true },
-  { key: "vatNumber", label: "P.IVA", type: "string", sortable: true },
- /*  { key: "lastSal", label: "Ultimo SAL", type: "date", sortable: true }, */
-  { key: "totalSal", label: "Totale SAL", type: "number", sortable: true },
+  { key: "totalAmount", label: "Totale Importo Progetti", type: "number", sortable: true },
+  { key: "totalBill", label: "Totale SAL Fatturato", type: "number", sortable: true }
 ];
 
 

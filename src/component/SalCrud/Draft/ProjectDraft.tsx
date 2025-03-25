@@ -7,9 +7,12 @@ import { SalContext } from "../../../pages/Sal/provider";
 const columns = [
   { key: "Offer.name", label: "Offerta", type: "string",sortable: true, filter: "text"  },
   { key: "Offer.ProjectType.description", label: "Tipo progetto", type: "string", sortable: true, filter: "text"  },
+  { key: "Offer.Location.description", label: "Sede", type: "string",sortable: true },
+  { key: "amount", label: "Importo", type: "number", sortable: true},
+  { key: "totalBill", label: "Totale Sal Fatturato", type: "number", sortable: true},
   { key: "lastSal", label: "Data Ultimo Sal", type: "date", sortable: true, filter: "date" },
   { key: "start_date", label: "Data Inizio Progetto", type: "date", sortable: true, filter: "date" },
-  { key: "end_date", label: "Data Fine Progetto", type: "date", sortable: true, filter: "date" },
+  { key: "end_date", label: "Data Fine Progetto", type: "date", sortable: true, filter: "date" }
 ];
 
 export const SalProjectDraft = React.memo((props: PropsWithChildren<{ customer: any, refreshParent:()=>void }>) => {

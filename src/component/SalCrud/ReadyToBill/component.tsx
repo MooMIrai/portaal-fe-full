@@ -5,11 +5,9 @@ import { SalRTBProject } from "./ReadyToBillProject";
 import { SalContext } from "../../../pages/Sal/provider";
 
 const columns = [
-    { key: "customer_code", label: "Codice", type: "string", sortable: true, filter: "text" },
-    { key: "name", label: "Ragione sociale", type: "string", sortable: true, filter: "text" },
-    { key: "vatNumber", label: "P.IVA", type: "string", sortable: true, filter: "numeric" },
-    { key: "lastSal", label: "Ultimo SAL", type: "date", sortable: true, filter: "date" },
-    { key: "totalSal", label: "Totale SAL", type: "number", sortable: true, filter: "number" },
+  { key: "name", label: "Ragione sociale", type: "string", sortable: true },
+  { key: "totalAmount", label: "Totale Importo Progetti", type: "number", sortable: true },
+  { key: "totalBill", label: "Totale SAL Fatturato", type: "number", sortable: true }
   ];  
 export function SalReadyToBill(){
   const tableRef= useRef<any>();
