@@ -20,7 +20,7 @@ export default function(){
       },
       {
         id:122,
-        text:'Manager',
+        text:'Inviate',
         level:1,
         route:'/notifications/manager',
         parentId: 12,
