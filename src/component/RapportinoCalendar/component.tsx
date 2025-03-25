@@ -91,6 +91,9 @@ export default function RapportinoCalendar(props: RapportinoCalendarProps) {
 
   const [userSelected, setUserSelected] = useState<{ id: number, name: string }>(defaultPerson);
 
+  const [error,setError] = useState<boolean>(false);
+  const [previousDate, setPreviousDate] = useState<Date>();
+
   const size = useWindowSize();
 
   const convertToISODateString = (year, month, day, hour, minute) => {
@@ -149,7 +152,7 @@ export default function RapportinoCalendar(props: RapportinoCalendarProps) {
   const fetchTimesheet = () => {
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
-
+    
     TimesheetsService.findOrCreate(year, month, "", userSelected.id > 0 ? userSelected.id : undefined)
       .then((response) => {
         setTimeSheetsId(response.id);
@@ -157,12 +160,14 @@ export default function RapportinoCalendar(props: RapportinoCalendarProps) {
         TimesheetsService.getSingleTimesheets(response.id, true).then((res) => {
 
           setIsFinalized(!!res?.finalized);
+          setPreviousDate(date);
 
           let activities: any = [];
 
           res?.TimesheetDetail.forEach((el) => {
 
             if (el) {
+              setError(false);
               activities.push({
                 request: el.LeaveRequest,
                 activity: el.PersonActivity.Activity,
@@ -185,6 +190,7 @@ export default function RapportinoCalendar(props: RapportinoCalendarProps) {
       })
       .catch((error) => {
         console.error("Errore:", error);
+        setError(true)
       });
   };
 
@@ -202,6 +208,24 @@ export default function RapportinoCalendar(props: RapportinoCalendarProps) {
     }
   }, [date, userSelected]);
 
+  useEffect(()=>{
+    if(error){
+      NotificationActions.openConfirm(
+        "Data non valida verrà ripristinata la data precedente",
+        ()=>{
+          setError(false);
+          if(previousDate)
+            setDate(previousDate)
+        },
+        ()=>{
+          setError(false);
+          if(previousDate)
+            setDate(previousDate)
+        },
+      )
+    }
+    
+  },[error])
 
 
   const renderContent = (slot, closeModalCallback) => {
@@ -438,57 +462,60 @@ export default function RapportinoCalendar(props: RapportinoCalendarProps) {
         L'operazione è irreversibile.
       </Modal>
 
-      {size.width && size.width >= 768 ? (
-        <Calendar
-          date={date}
-          model={{
-            timeSheetsId: timeSheetsId,
-          }}
-          //timezone="UTC"
-          handleDateChange={handleDateChange}
-          defaultView="month"
-          handleDataChange={() => { }}
-          data={data}
-          contentModal={renderContent}
-          item={RapportinoItem}
-          holidays={holidays}
-          disableDrag={!!props.forcePerson}
-          isFinalized={!props.forcePerson && isFinalized}
-        />
-      ) : (<>
-        <CalendarMobile
-          topView="month"
-          navigation={true}
-          focusedDate={date}
-          data={data}
-          cellProps={renderContentMobile}
+{
+  error ? <div>Data selezionata non valida</div>:size.width && size.width >= 768 ? (
+    <Calendar
+      date={date}
+      model={{
+        timeSheetsId: timeSheetsId,
+      }}
+      //timezone="UTC"
+      handleDateChange={handleDateChange}
+      defaultView="month"
+      handleDataChange={() => { }}
+      data={data}
+      contentModal={renderContent}
+      item={RapportinoItem}
+      holidays={holidays}
+      disableDrag={!!props.forcePerson}
+      isFinalized={!props.forcePerson && isFinalized}
+    />
+  ) : (<>
+    <CalendarMobile
+      topView="month"
+      navigation={true}
+      focusedDate={date}
+      data={data}
+      cellProps={renderContentMobile}
 
-          header={(p) => {
+      header={(p) => {
 
-            return <>
-              <p style={{ marginLeft: 10 }}>{p.headerTitleProps.value}</p>
-              <div style={{ display: 'flex', gap: 10, marginRight: 10 }}>
-                <Button onClick={() => {
-                  setDate(new Date(date.getFullYear(), date.getMonth() - 1, date.getDate()));
-                }}><SvgIcon icon={chevronLeftIcon} /></Button>
-                <Button onClick={() => {
-                  setDate(new Date(date.getFullYear(), date.getMonth() + 1, date.getDate()));
-                }}><SvgIcon icon={chevronRightIcon} /></Button>
-              </div>
-            </>
-          }}
-          min={new Date(date.getFullYear(), date.getMonth(), 1)}
-          max={new Date(date.getFullYear(), date.getMonth() + 1, 0)}
-          onChange={(ev) => {
-            setMobileSelectedDate(ev.value);
-          }}
-          isFinalized={!props.forcePerson && isFinalized}
-        />
-        {
-          mobileSelectedDate && getCrudMobile()
-        }
-      </>
-      )}
+        return <>
+          <p style={{ marginLeft: 10 }}>{p.headerTitleProps.value}</p>
+          <div style={{ display: 'flex', gap: 10, marginRight: 10 }}>
+            <Button onClick={() => {
+              setDate(new Date(date.getFullYear(), date.getMonth() - 1, date.getDate()));
+            }}><SvgIcon icon={chevronLeftIcon} /></Button>
+            <Button onClick={() => {
+              setDate(new Date(date.getFullYear(), date.getMonth() + 1, date.getDate()));
+            }}><SvgIcon icon={chevronRightIcon} /></Button>
+          </div>
+        </>
+      }}
+      min={new Date(date.getFullYear(), date.getMonth(), 1)}
+      max={new Date(date.getFullYear(), date.getMonth() + 1, 0)}
+      onChange={(ev) => {
+        setMobileSelectedDate(ev.value);
+      }}
+      isFinalized={!props.forcePerson && isFinalized}
+    />
+    {
+      mobileSelectedDate && getCrudMobile()
+    }
+  </>
+  )
+}
+      
     </>
   );
 }
