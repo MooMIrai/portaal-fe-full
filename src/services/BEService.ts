@@ -61,6 +61,7 @@ client.interceptors.response.use(
   async (error) => {
     NotificationProviderActions.closeLoader();
     if (error.response && error.response.status === 452) {
+
       if (error.response.data && error.response.data.message) {
         const readBody = JSON.parse(error.response.data.message);
         const val = await askConfirmation(readBody.message);
@@ -71,10 +72,10 @@ client.interceptors.response.use(
             [readBody.field]: val,
           };
         } else if (readBody.location === "body") {
-          originalRequest.data = {
-            ...originalRequest.data,
+          originalRequest.data = JSON.stringify({
+            ...JSON.parse(originalRequest.data),
             [readBody.field]: val,
-          };
+          });
         }
         return await client(originalRequest);
       }
