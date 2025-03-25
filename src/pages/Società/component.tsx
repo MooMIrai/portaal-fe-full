@@ -32,9 +32,8 @@ function Societa() {
 
     return {
       data: tableResponse.data.map(fromBeToModel),
-      meta: {
-        total: tableResponse.meta.model
-      }
+      meta:tableResponse.meta
+      
     }
 
   };
