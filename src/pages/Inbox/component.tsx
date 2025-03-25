@@ -59,8 +59,8 @@ export function InboxPage() {
             </td>;
         } },
         { key: "NotifyUser.content.title", width:'200px', label: "Titolo", type: "custom", render: (n) =>{
-            if(n.NotifyUser.NotifyResponseType.responseType!=='NONE' && 
-                (n.NotificationStatus.notificationStatus!=='RESPONDED' || n.NotificationStatus.notificationStatus!=='COMPLETED')){
+            if(n.NotifyUser.responseType !== 'NONE' && 
+                (n.notificationStatus!=='RESPONDED' || n.notificationStatus!=='COMPLETED')){
                     return <td>
                         <div className={styles.mustReply}>
                             <SvgIcon icon={warningTriangleIcon} themeColor="error" /> 
@@ -89,7 +89,7 @@ export function InboxPage() {
                     writePermissions={["WRITE_NOTIFICATION_INBOX"]}
                     key={showTrash ? "trash" : "inbox"} // Forza il re-render
                     rowStyle={(rowData) => ({
-                        background: rowData.NotificationStatus.notificationStatus === 'SENT' ?
+                        background: rowData.notificationStatus === 'SENT' ?
                             'var(--kendo-color-app-surface)' :
                             'var(--kendo-color-base)',
                     })}
