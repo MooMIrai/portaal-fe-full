@@ -116,7 +116,8 @@ const AssigningTable = (props: { activity_id: number }) => {
         formData.activity_id,
         formData.start_date.toISOString ? formData.start_date.toISOString() : formData.start_date,
         formData.end_date.toISOString ? formData.end_date.toISOString() : formData.end_date,
-        parseInt(formData.expectedDays)
+        parseInt(formData.expectedDays),
+        formData.id
       );
     } else {
       promise = attivitaService.addEmployee(
@@ -203,7 +204,7 @@ const AssigningTable = (props: { activity_id: number }) => {
               <div className={styles.buttonsContainer}>
                 <Button onClick={() => closeModal()}>Annulla</Button>
                 <Button themeColor={"error"} onClick={async () => {
-                  await attivitaService.removeEmployee(dataItem.person_id, dataItem.activity_id);
+                  await attivitaService.removeEmployee(dataItem.person_id, dataItem.activity_id,dataItem.id);
                   refreshTable();
                   closeModal();
                 }}>

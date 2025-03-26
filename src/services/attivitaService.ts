@@ -169,6 +169,7 @@ class AttivitaService extends BaseHttpService {
     start_date: string,
     end_date: string,
     expectedDays: number,
+    person_activity_id:number
   ) => {
     const resourceData = {
       person_id,
@@ -176,6 +177,7 @@ class AttivitaService extends BaseHttpService {
       start_date,
       end_date,
       expectedDays,
+      person_activity_id
     }
     try {
       const response = await client.patch(
@@ -192,17 +194,19 @@ class AttivitaService extends BaseHttpService {
   removeEmployee = async (
     person_id: number,
     activity_id: number,
+    person_activity_id: number,
   ) => {
 
     const params = {
       person_id,
       activity_id,
+      person_activity_id
     }
 
     try {
       const response = await client.delete(
         `api/v1/activities/removeEmployee`,
-        { params }
+        { data:params }
       );
       return response.data;
     } catch (error) {
