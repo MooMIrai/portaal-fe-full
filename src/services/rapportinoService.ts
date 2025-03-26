@@ -163,6 +163,41 @@ class TimesheetsServiceC {
       throw error;
     }
   };
+   getGestioneRapportino =  (
+        pageNum: number,
+        pageSize: number,
+        filtering:any,
+        sorting: any,
+        year:number,
+        month:number
+      ) => {
+        
+          const params = {
+            pageNum,
+            pageSize,
+            include:true,
+          };
+    
+          return client.post(
+            `api/v1/timesheets/manager/${year}/${month}`,
+            { filtering, sorting },
+            { params }
+          ).then(res=>res.data);
+         
+      };
+
+    getDettaglioGestioneRapportino =  (
+      timesheetid:number
+    ) => {
+      
+       
+  
+        return client.get(
+          `/api/v1/timesheets/analyze/${timesheetid}`,
+         
+        ).then(res=>res.data);
+        
+    };
 }
 
 export const TimesheetsService = new TimesheetsServiceC();

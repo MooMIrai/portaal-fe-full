@@ -75,7 +75,8 @@ const RapportinoItem = withScheduler(RapportinoItemView)
 
 export interface RapportinoCalendarProps {
   forcePerson?: { id: number, name: string };
-  forceDate?:Date
+  forceDate?:Date,
+  forceTimeSheet?:number
 }
 
 export default function RapportinoCalendar(props: RapportinoCalendarProps) {
@@ -155,9 +156,9 @@ export default function RapportinoCalendar(props: RapportinoCalendarProps) {
     
     TimesheetsService.findOrCreate(year, month, "", userSelected.id > 0 ? userSelected.id : undefined)
       .then((response) => {
-        setTimeSheetsId(response.id);
+        setTimeSheetsId(props.forceTimeSheet || response.id);
         setHolidays(response.holidays);
-        TimesheetsService.getSingleTimesheets(response.id, true).then((res) => {
+        TimesheetsService.getSingleTimesheets(props.forceTimeSheet || response.id, true).then((res) => {
 
           setIsFinalized(!!res?.finalized);
           setPreviousDate(date);
@@ -419,7 +420,7 @@ export default function RapportinoCalendar(props: RapportinoCalendarProps) {
       {!props.forcePerson ? <div style={{ display: 'flex', flexDirection: size.width && size.width >= 768 ? 'row' : 'column', justifyContent: "space-between", marginBottom: 10 }}>
         <p>Tocca una data per inserire le ore di attività o trascina per selezionare più date</p>
         <div style={{ display: 'flex', justifyContent: "space-between", alignItems: 'flex-end', gap: 15 }}>
-          { authService.hasPermission('READ_HR_TIMESHEET_DEAUTH') && <div style={{ width: 300 }}>Utente Selezionato <AutoCompletePerson label="" value={userSelected} onChange={(e) => {
+          { authService.hasPermission('READ_HR_TIMESHEET_DEAUTH') && !props.forcePerson && !props.forceTimeSheet && <div style={{ width: 300 }}>Utente Selezionato <AutoCompletePerson label="" value={userSelected} onChange={(e) => {
             if (!e.value) {
               setUserSelected(defaultPerson)
             } else {

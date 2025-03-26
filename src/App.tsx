@@ -6,6 +6,7 @@ import GestioneFeriePermessi from "./pages/GestioneFeriePermessi/component";
 import Societa from "./pages/Società/component";
 import Routes from 'common/Routes';
 import { WaitingProject } from "./pages/Waitingproject/component";
+import { GestioneRapportinoPage } from "./pages/GestioneRapportino/component";
 
 
 const App = () => {
@@ -32,9 +33,9 @@ const App = () => {
         permissions:["READ_HR_COMPANY"]
       },
       {
-        path:"/attesaprogetto",
-        element:<WaitingProject />,
-        permissions:["READ_RESOURCE_ALIGNMENT"]
+        path:"/gestionerapportino",
+        element:<GestioneRapportinoPage />,
+        permissions:["READ_HR_TIMESHEET_DEAUTH"]
       }
     ]} />
     /*<Routes>
