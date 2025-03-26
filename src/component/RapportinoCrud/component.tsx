@@ -75,6 +75,7 @@ export default function RapportinoCrud(props: RapportinoCrudProps) {
 
     const [data, setData] = useState<Record<string, any>>();
     const [values, setValues] = useState<Record<number, number>>({});
+    const [personActivityvalues, setPersonActivityValues] = useState<Record<number, number>>({});
     const [errors, setErrors] = useState<string>();
     const [disableExcept, setDisableExcept] = useState();
 
@@ -120,10 +121,14 @@ export default function RapportinoCrud(props: RapportinoCrudProps) {
 
 
 
-    const onInputChange = (activityId: number, hours: number) => {
+    const onInputChange = (activityId: number, hours: number, personActivityId:number) => {
+
         const newValues = JSON.parse(JSON.stringify(values));
         newValues[activityId] = hours;
         setValues(newValues);
+        const newValuesPA = JSON.parse(JSON.stringify(personActivityvalues));
+        newValuesPA[activityId] = personActivityId;
+        setPersonActivityValues(newValuesPA);
     }
 
     const validateMaxHours = () => {
@@ -148,7 +153,9 @@ export default function RapportinoCrud(props: RapportinoCrudProps) {
             Object.keys(values).filter(key => {
                 return !disableExcept || key == disableExcept
             }).map((key) => {
+
                 return {
+                    person_activity_id:personActivityvalues[key],
                     activity_id: parseInt(key),
                     hours: values[key],
                     minutes: 0
@@ -221,7 +228,7 @@ export default function RapportinoCrud(props: RapportinoCrudProps) {
                                     id={res.Activity.id}
                                     description={res.Activity.description}
                                     onChange={(value) => {
-                                        onInputChange(res.Activity.id, value)
+                                        onInputChange(res.Activity.id, value,res.id)
                                     }}
                                 />
                             })}
@@ -241,7 +248,7 @@ export default function RapportinoCrud(props: RapportinoCrudProps) {
                                     id={res.Activity.id}
                                     description={res.Activity.description}
                                     onChange={(value) => {
-                                        onInputChange(res.Activity.id, value)
+                                        onInputChange(res.Activity.id, value,res.id)
                                     }}
                                 />
                             })}
@@ -269,7 +276,7 @@ export default function RapportinoCrud(props: RapportinoCrudProps) {
                                                 else
                                                     setDisableExcept(undefined);
                                             }
-                                            onInputChange(res.Activity.id, value)
+                                            onInputChange(res.Activity.id, value,res.id)
                                         }}
 
                                     />
