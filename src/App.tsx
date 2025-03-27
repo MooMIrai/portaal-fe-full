@@ -3,11 +3,13 @@ import React, { useEffect } from "react";
 import Report from "./pages/Report/component";
 import { reportService } from "./services/ReportService";
 import Routes from 'common/Routes';
+import authService from 'common/services/AuthService';
 
 const App = () => {
 
   useEffect(()=>{
 
+    if(authService.hasPermission('READ_REPORTS')){
     reportService.getAllCategories().then(data=>{
 
       if(data && data.length){
@@ -26,6 +28,7 @@ const App = () => {
         window.dispatchEvent(event);
       }
     })
+  }
     
   },[]);
 
