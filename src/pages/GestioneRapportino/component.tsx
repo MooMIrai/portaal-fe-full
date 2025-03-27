@@ -47,14 +47,14 @@ export function GestioneRapportinoPage() {
         let f = JSON.parse(JSON.stringify(filter));
 
         let year = currentYear;
-        let month = currentMonth + 1;
+        let month = currentMonth;
         
         if (filter && filter.filters) {
             
             f.filters = filter.filters.filter(f => f.field != 'year' && f.field != 'month');
             const monthFilter = filter.filters.find(f => f.field === 'month');
             if (monthFilter) {
-                month = monthFilter.value;
+                month = monthFilter.value ;
                 setCurrentMonth(monthFilter.value);
             }
             const yearFilter = filter.filters.find(f => f.field === 'year');
@@ -69,7 +69,7 @@ export function GestioneRapportinoPage() {
             f,
             sorting,
             year,
-            month
+            month+1
         );
 
 
@@ -111,18 +111,18 @@ export function GestioneRapportinoPage() {
                     type: "filter-autocomplete",
                     options: {
                         getData: (term: string) => Promise.resolve([
-                            { id: 1, name: "Gennaio" },
-                            { id: 2, name: "Febbraio" },
-                            { id: 3, name: "Marzo" },
-                            { id: 4, name: "Aprile" },
-                            { id: 5, name: "Maggio" },
-                            { id: 6, name: "Giugno" },
-                            { id: 7, name: "Luglio" },
-                            { id: 8, name: "Agosto" },
-                            { id: 9, name: "Settembre" },
-                            { id: 10, name: "Ottobre" },
-                            { id: 11, name: "Novembre" },
-                            { id: 12, name: "Dicembre" }
+                            { id: 0, name: "Gennaio" },
+                            { id: 1, name: "Febbraio" },
+                            { id: 2, name: "Marzo" },
+                            { id: 3, name: "Aprile" },
+                            { id: 4, name: "Maggio" },
+                            { id: 5, name: "Giugno" },
+                            { id: 6, name: "Luglio" },
+                            { id: 7, name: "Agosto" },
+                            { id: 8, name: "Settembre" },
+                            { id: 9, name: "Ottobre" },
+                            { id: 10, name: "Novembre" },
+                            { id: 11, name: "Dicembre" }
                         ].filter(p => !term || p.name.toLowerCase().indexOf(term.toLowerCase()) >= 0)),
                         getValue: (v: any) => v?.id
                     }
