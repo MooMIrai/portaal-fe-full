@@ -33,6 +33,11 @@ const App = () => {
         permissions:["READ_HR_COMPANY"]
       },
       {
+        path:"/attesaprogetto",
+        element:<WaitingProject />,
+        permissions:["READ_RESOURCE_ALIGNMENT"]
+      },
+      {
         path:"/gestionerapportino",
         element:<GestioneRapportinoPage />,
         permissions:["READ_HR_TIMESHEET_DEAUTH"]
