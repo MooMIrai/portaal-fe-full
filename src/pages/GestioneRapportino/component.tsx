@@ -44,12 +44,13 @@ export function GestioneRapportinoPage() {
         sorting: any[],
     ) => {
 
-        let f = filter;
+        let f = JSON.parse(JSON.stringify(filter));
 
         let year = currentYear;
         let month = currentMonth + 1;
-
+        
         if (filter && filter.filters) {
+            
             f.filters = filter.filters.filter(f => f.field != 'year' && f.field != 'month');
             const monthFilter = filter.filters.find(f => f.field === 'month');
             if (monthFilter) {
