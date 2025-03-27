@@ -44,7 +44,7 @@ const App = () => {
         permissions:["READ_NOTIFICATION_INBOX"]
       },
       {
-        path:"/notifications/manager",
+        path:"/notifications/inviate",
         element:<SentPage />,
         permissions:["READ_NOTIFICATION_MANAGER"]
       }

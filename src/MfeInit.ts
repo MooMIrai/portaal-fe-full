@@ -22,7 +22,7 @@ export default function(){
         id:122,
         text:'Inviate',
         level:1,
-        route:'/notifications/manager',
+        route:'/notifications/inviate',
         parentId: 12,
         permissions:["READ_NOTIFICATION_MANAGER"]
       }
