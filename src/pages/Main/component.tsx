@@ -67,7 +67,7 @@ const determineFieldType = (
 };
 
 const LookUps = () => {
-  const [selectedData, setSelectedData] = useState<string>("Role");
+  const [selectedData, setSelectedData] = useState<string>("ProjectType");
   const [columns, setColumns] = useState<any[]>([]);
   const [fields, setFields] = useState<any>({});
   const [termValue, setTermValue] = useState<string>();
