@@ -9,7 +9,7 @@ const columns = [
   { key: "Offer.ProjectType.description", label: "Tipo progetto", type: "string", sortable: true, filter: "text"  },
   { key: "Offer.Location.description", label: "Sede", type: "string",sortable: true },
   { key: "Offer.billing_type", label: "Tipo Fatturazione", sortable: true,type: "custom",render:(data)=><td>{
-    data.Offer.billing_type==='Daily'?'A corpo':'Time material'
+    data.Offer.billing_type!=='Daily'?'A corpo':'Time material'
     }</td> },
   { key: "amount", label: "Importo", type: "number", sortable: true},
   { key: "totalBill", label: "Totale Sal Fatturato", type: "number", sortable: true},
