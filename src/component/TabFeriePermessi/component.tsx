@@ -16,11 +16,10 @@ const FeriePermessiSection = () => {
   const [selectedTab, setSelectedTab] = useState<number>(0);
 
 
-  const getColumns = (isArchive: boolean) => {
-    let ret = [
+  const columns=[
       {
         key: 'user_created',
-        label: isArchive ? 'Approvatore' : 'Richiedente',
+        label: selectedTab===1?'Approvatore' : 'Richiedente',
         sortable: false,
         type: 'string',
         filter: 'text',
@@ -29,7 +28,7 @@ const FeriePermessiSection = () => {
         key: 'ActivityType.description',
         label: 'Tipo richiesta',
         sortable: true,
-        type: 'number',
+        type: 'string',
         filter: 'text',
       },
       {
@@ -46,19 +45,22 @@ const FeriePermessiSection = () => {
         filter:"numeric",
         type: 'number',
         filterCell: (props) => <HoursDaysFilterCell {...props} />
-      },
+      }
+      
     ]
-    if (isArchive) {
-      ret.push({
+    
+    if(selectedTab===1){
+      columns.push({
+        
         key: 'approved',
         label: 'Approvata',
         sortable: true,
         type: 'boolean',
         filter: 'boolean'
-      })
+      
+  })
     }
-    return ret;
-  }
+
 
   const handleSelect = (e: any) => {
     setSelectedTab(e.selected);
@@ -68,7 +70,7 @@ const FeriePermessiSection = () => {
     if (typeof pagination.pageNum !== "number") {
       pagination.pageNum = 0;
     }
-  
+
     return PFMService.getRequests(
       selectedTab === 0 ? "new" : "archived",
       pagination.currentPage,
@@ -159,7 +161,7 @@ const FeriePermessiSection = () => {
             filterable={true}
             sortable={true}
             getData={getData}
-            columns={getColumns(false)}
+            columns={columns}
             resizable={true}
             forceRefresh={refreshRequests}
             pageable
@@ -222,7 +224,7 @@ const FeriePermessiSection = () => {
             filterable={true}
             sortable={true}
             getData={getData}
-            columns={getColumns(true)}
+            columns={columns}
             resizable={true}
             forceRefresh={refreshArchive}
             pageable

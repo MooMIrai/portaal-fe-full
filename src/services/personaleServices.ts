@@ -164,6 +164,33 @@ class CrudGenericServiceC {
       .then((res) => res.data);
   };
 
+  getPermissions = async (
+    pageNum: number,
+    pageSize: number,
+    filtering: any,
+    sorting: any,
+    include?: boolean
+  ) => {
+    try {
+      const params = {
+        pageNum,
+        pageSize,
+        include,
+      };
+
+      const response = await client.post(
+        `api/v1/crud/activitytype`,
+        { filtering, sorting },
+        { params }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching resources:", error);
+      throw error;
+    }
+  };
+
+
   async getFilesByIds(uniqueIdentifiers: string) {
     const response = await client.get(`api/v1/files/get/${uniqueIdentifiers}`);
     return response.data;

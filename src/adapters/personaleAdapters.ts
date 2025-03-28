@@ -271,6 +271,7 @@ export const transformUserData = (data: any[], sede: locationOption[]) => {
 
 // adapter per le row per le modali
 export const dataAdapter = (row: Record<string, any>) => {
+  
   const employmentContracts = row.trattamentoEconomicoArray || [];
 
   const anagraficaData: AnagraficaData = {
@@ -381,16 +382,14 @@ export const dataAdapter = (row: Record<string, any>) => {
 
   const ruoliData: RuoliData = row.ruoli || {};
 
-  const permessiData: PermessiData = {
-    HMA: row.permessi.HMA || false,
-    HPE: row.permessi.HPE || false,
-    HFE: row.permessi.HFE || false,
-    HPE_104: row.permessi.HPE_104 || false,
-    HCPT: row.permessi.HCPT || false,
-    MAT: row.permessi.MAT || false,
-    LUT: row.permessi.LUT || false,
-    CMATR: row.permessi.CMATR || false,
-  };
+  const permessiData: any ={};
+
+  if(row.permessiId){
+    row.permessiId.forEach(r=>{
+      permessiData[r]=true;
+    })
+  }
+
   return {
     id: row.id || "",
     anagrafica: anagraficaData,
@@ -658,8 +657,9 @@ export const reverseAdapter = (combinedData: {
         skillArea_id: skillId,
       };
     }) || [];
-  const permessiIDs =
-    mapPermessiNamesToIDs(combinedData.permessi, combinedData.idPermessi) || [];
+  const permessiIDs =combinedData.permessi? Object.keys(combinedData.permessi).filter(k=>combinedData.permessi[k]).map(k=>parseInt(k)):[];
+
+    //mapPermessiNamesToIDs(combinedData.permessi, combinedData.idPermessi) || [];
 
   let attachmentFiles = attachments;
   if (attachments && attachmentFiles?.create) {
@@ -1077,8 +1077,7 @@ export const reverseAdapterUpdate = (combinedData: {
     }
   }
 
-  result.Person.activityType_ids =
-    permessiIDs.length > 0 ? permessiIDs : [2, 3];
+  result.Person.activityType_ids = combinedData.permessi? Object.keys(combinedData.permessi).filter(k=>combinedData.permessi[k]).map(k=>parseInt(k)):[];
 
   result.role_ids =
     mapRoleNamesToIDs(combinedData.ruoli, combinedData.idRuoli) || [];

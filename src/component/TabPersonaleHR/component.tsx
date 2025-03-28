@@ -10,6 +10,7 @@ import {
   getFormRuoliFields,
   getFormPermessiFields,
   getFormRuoliFieldsFromRole,
+  getFormPermissionFieldsFromPermission,
 } from "./FormFields";
 import { AnagraficaData, TrattamentoEconomicoData, RuoliData, PermessiData } from "./modelForms";
 import { ActivityTypeOption, anagraficaAiButtonAdapter, cityTypeOption, companyOption, dataAdapter, genderOption, MappedSkill, reverseAdapter, reverseAdapterUpdate, RoleOption } from "../../adapters/personaleAdapters";
@@ -173,10 +174,27 @@ const PersonaleSection: React.FC<PersonaleSectionProps & {
 
 
   const [roleList,setRoleList] = useState<any[]>();
+  const [permissionList,setPermissionList] = useState<any[]>();
 
   useEffect(()=>{
       CrudGenericService.searchRoles().then(res=>{
         setRoleList(res.data);
+      })
+      CrudGenericService.getPermissions(1,100,
+        {
+          "logic": "and",
+          "filters": [
+            {
+              "field": "isHoliday",
+              "operator": "eq",
+              "value": true
+            }
+          ]
+        
+      },undefined,true).then(res=>{
+        return res.data.map(r=>({id:r.id.toString(),name:r.description}))
+      }).then(res=>{
+        setPermissionList(res);
       })
   },[])
   /*   useEffect(() => {
@@ -242,10 +260,10 @@ const PersonaleSection: React.FC<PersonaleSectionProps & {
       }
     }
     if (formRuoli.current) {
-      debugger;
       setFormRuoliData(formRuoli.current.values);
     }
     if (formPermessi.current) {
+
       setFormPermessiData(formPermessi.current.values);
 
     }
@@ -301,7 +319,6 @@ const PersonaleSection: React.FC<PersonaleSectionProps & {
       if (formRuoli.current) {
         formRuoli.current.onSubmit();
         if (formRuoli.current.isValid()) {
-          debugger;
           setFormRuoliData(formRuoli.current.values);
         } else {
           hasError = true;
@@ -714,7 +731,7 @@ const dataInizioTrattamentoValidator = useMemo(() => {
         <div className={styles.checkboxContainer}>
           <Form
             ref={formPermessi}
-            fields={Object.values(getFormPermessiFields(formPermessiData, localActivity, type, isViewOnly, handleFieldChange))}
+            fields={Object.values(getFormPermissionFieldsFromPermission(permissionList || [],formPermessiData, localActivity, type, isViewOnly, handleFieldChange))}
             formData={formPermessiData}
             onSubmit={(data: PermessiData) => setFormPermessiData(data)}
             description="per"
