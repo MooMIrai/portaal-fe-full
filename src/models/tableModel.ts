@@ -23,7 +23,9 @@ export enum TABLE_COLUMN_TYPE {
   "string" = "string",
   "date" = "date",
   "custom" = "custom",
-  "datetime" = "datetime"
+  "datetime" = "datetime",
+  "number" = "number",
+  "boolean" = "boolean"
 }
 
 export enum TABLE_ACTION_TYPE {

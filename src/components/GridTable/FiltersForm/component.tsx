@@ -24,7 +24,7 @@ export function FiltersForm(props: {
                 type: mapColumnTypeToFieldType(col.type),
                 value: "",
                 required: false,
-                showLabel: true,
+                showLabel: col.type != TABLE_COLUMN_TYPE.boolean,
             }));
     };
 
@@ -35,6 +35,10 @@ export function FiltersForm(props: {
                 return "date";
             case TABLE_COLUMN_TYPE.custom:
                 return "text";
+            case TABLE_COLUMN_TYPE.number:
+                return "number"
+            case TABLE_COLUMN_TYPE.boolean:
+                return "checkbox"
             default:
                 return "text";
         }
@@ -52,6 +56,7 @@ export function FiltersForm(props: {
     };
 
     const processField = (key: string, value: any): FilterDescriptor[] => {
+        
         let field:any = props.columns.find(p=>p.key===key) || props.addedFilters?.find(a=>a.name===key);
         
         let stop= !!field;
@@ -66,18 +71,20 @@ export function FiltersForm(props: {
             if(field.type==='number' && v){
                 v=parseFloat(v);
             }
+            
         }
         
         return [{
             field: key,
             value: field?.type==='filter-autocomplete'?field.options.getValue(value):v,
-            operator: getOperator(value),
+            operator: getOperator(value,field.type)
         }];
     };
 
-    const getOperator = (value: any): string => {
+    const getOperator = (value: any,type:string): string => {
+        
+        if (typeof value === "number" || type===TABLE_COLUMN_TYPE.number) return "eq";
         if (typeof value === "string") return "contains";
-        if (typeof value === "number") return "eq";
         if (typeof value === "boolean") return "eq";
         if (value instanceof Date || !isNaN(Date.parse(value))) return "eq";
         if (Array.isArray(value)) return "in";

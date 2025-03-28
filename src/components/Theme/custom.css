@@ -163,3 +163,8 @@ td{
 .k-form .k-form-legend{
   display: none !important;
 }
+
+.k-form-fieldset{
+  align-items: center;
+}
+
