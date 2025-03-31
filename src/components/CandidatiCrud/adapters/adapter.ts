@@ -23,7 +23,7 @@ class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, Candidat
         let location_id = source.sede?.id == "0" ? null : source.sede?.id;
 
         const files = source.files;
-        if(files && files.create)
+        if(files)
             files.create= files.create.map(p=>({...p,property:'Person.files'}));
 
         return {
