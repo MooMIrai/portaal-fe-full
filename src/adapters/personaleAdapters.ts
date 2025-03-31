@@ -673,7 +673,7 @@ export const reverseAdapter = (combinedData: {
     email: combinedData.anagrafica.email,
     accountStatus_id: combinedData.anagrafica.accountStatus_id,
     roles_id: mapRoleNamesToIDs(combinedData.ruoli, combinedData.idRuoli) || [],
-    roles_ids: mapRoleNamesToIDs(combinedData.ruoli, combinedData.idRuoli) || [],
+    role_ids: mapRoleNamesToIDs(combinedData.ruoli, combinedData.idRuoli) || [],
     Person: {
       firstName: combinedData.anagrafica.nome,
       lastName: combinedData.anagrafica.cognome,
