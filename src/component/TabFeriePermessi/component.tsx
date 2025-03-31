@@ -18,6 +18,18 @@ const FeriePermessiSection = () => {
 
   const columns=[
       {
+        name: "Person.firstName",
+        label: "Nome",
+         type: 'string',
+         filter:'text'
+      },
+      {
+        name: "Person.lastName",
+        label: "Cognome",
+        type:'string',
+        filter: 'text'
+      },
+      {
         key: 'user_created',
         label: selectedTab===1?'Approvatore' : 'Richiedente',
         sortable: false,

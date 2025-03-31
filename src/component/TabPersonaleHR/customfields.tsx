@@ -6,7 +6,7 @@ const getData = () => {
     return CrudGenericService.fetchResources("location").then((res) => {
         if (res && res.data && Array.isArray(res.data)) {
             // Mappa sui dati correttamente
-            return res.data.filter(r => r.tenant_code === "TAAL").map(r => ({ id: r.id, name: r.description }));
+            return res.data.map(r => ({ id: r.id, name: r.description }));
         } else {
             console.warn("Formato della risposta non previsto:", res);
             return []; // Ritorna un array vuoto se il formato non è quello atteso
@@ -22,7 +22,7 @@ const getDataWorkScope = () => {
     return CrudGenericService.fetchResources("WorkScope").then((res) => {
         if (res && res.data && Array.isArray(res.data)) {
             // Mappa sui dati correttamente
-            return res.data.filter(r => r.tenant_code === "TAAL").map(r => ({ id: r.id, name: r.description }));
+            return res.data.map(r => ({ id: r.id, name: r.description }));
         } else {
             console.warn("Formato della risposta non previsto:", res);
             return []; // Ritorna un array vuoto se il formato non è quello atteso
@@ -36,7 +36,7 @@ const getDataContrykScope = () => {
     return CrudGenericService.fetchResources("country").then((res) => {
         if (res && res.data && Array.isArray(res.data)) {
             // Mappa sui dati correttamente
-            return res.data.filter(r => r.tenant_code === "TAAL").map(r => ({ id: r.id, name: r.description }));
+            return res.data.map(r => ({ id: r.id, name: r.description }));
         } else {
             console.warn("Formato della risposta non previsto:", res);
             return []; // Ritorna un array vuoto se il formato non è quello atteso
@@ -51,7 +51,7 @@ const getDataContractType = () => {
     return CrudGenericService.fetchResources("ContractType").then((res) => {
         if (res && res.data && Array.isArray(res.data)) {
             // Mappa sui dati correttamente
-            return res.data.filter(r => r.tenant_code === "TAAL").map(r => ({ id: r.id, name: r.description }));
+            return res.data.map(r => ({ id: r.id, name: r.description }));
         } else {
             console.warn("Formato della risposta non previsto:", res);
             return []; // Ritorna un array vuoto se il formato non è quello atteso
