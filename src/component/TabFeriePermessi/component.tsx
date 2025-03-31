@@ -2,11 +2,14 @@ import React, { useEffect, useRef, useState } from "react";
 import Button from "common/Button";
 import Tab from "common/Tab";
 import GenericGrid from "common/Table";
-import styles from "./styles.module.scss";
 import { PFMService } from "../../services/pfmService";
 import { checkOutlineIcon, xOutlineIcon, cancelOutlineIcon } from "@progress/kendo-svg-icons";
 import HoursDaysFilterCell from "common/HoursDaysFilterCell"
 import authService from "common/services/AuthService";
+import AvatarIcon from 'common/AvatarIcon';
+import Typography from 'common/Typography';
+
+import styles from "./styles.module.scss";
 
 const FeriePermessiSection = () => {
   const [refreshRequests, setRefreshRequests] = useState<number>(0);
@@ -17,18 +20,25 @@ const FeriePermessiSection = () => {
 
 
   const columns=[
-      {
-        name: "Person.firstName",
-        label: "Nome",
-         type: 'string',
-         filter:'text'
-      },
-      {
-        name: "Person.lastName",
-        label: "Cognome",
-        type:'string',
-        filter: 'text'
-      },
+    {
+      key: "id",
+      label: "Nominativo",
+      type: "custom",
+      sortable: true,
+      render:(row)=>{
+        const n = row.Person;
+        return <td>
+                  <div style={{ display: 'flex', justifyContent: 'flex-start', gap: 15, alignItems: 'center', paddingTop: 5, paddingBottom: 5 }}>
+                      <AvatarIcon name={`${n.firstName} ${n.lastName}`}
+                          initials={`${n.firstName[0].toUpperCase()}${n.lastName[0].toUpperCase()}`} />
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+                          <Typography.h6>{n.firstName} {n.lastName}</Typography.h6>
+                          <Typography.p>{row.user_created}</Typography.p>
+                      </div>
+                  </div>
+              </td>
+        }
+    },
       {
         key: 'user_created',
         label: selectedTab===1?'Approvatore' : 'Richiedente',
@@ -167,6 +177,18 @@ const FeriePermessiSection = () => {
         title: "Richieste",
         children: <div>
           <GenericGrid
+            addedFilters={[
+              {
+                name: "Person.firstName",
+                label: "Nome",
+                type: "text"
+              },
+              {
+                name: "Person.lastName",
+                label: "Cognome",
+                type: "text"
+              }]
+            }
             writePermissions={["WRITE_HR_HOLIDAY"]}
             ref={requestsTableRef}
             dropListLookup={false}
@@ -231,6 +253,18 @@ const FeriePermessiSection = () => {
         title: "Storico",
         children: <div>
           <GenericGrid
+            addedFilters={[
+              {
+                name: "Person.firstName",
+                label: "Nome",
+                type: "text"
+              },
+              {
+                name: "Person.lastName",
+                label: "Cognome",
+                type: "text"
+              }]
+            }
             ref={archiveTableRef}
             dropListLookup={false}
             filterable={true}
