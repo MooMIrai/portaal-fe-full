@@ -41,7 +41,6 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
   const [isLumpSum, setIsLumpSum] = useState(false)
   const [showNewTaskModal, setShowNewTaskModal] = useState(false);
   const [rowLocation, setRowLocation] = useState<{ id: number, name: string }>({ id: 0, name: '' });
-  const [deleteFiles, setDeleteFiles] = useState<boolean>(false);
 
   const [customerForProtocol,setCustomerForProtocol] = useState<string>();
 
