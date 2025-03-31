@@ -721,7 +721,7 @@ export const reverseAdapter = (combinedData: {
       data: "{}",
       gender_id:
         mapGenderToID(combinedData.anagrafica.sesso, combinedData.gender) || 1,
-      activityType_ids: permessiIDs.length > 0 ? permessiIDs : [2, 3],
+      activityType_ids: permessiIDs.length > 0 ? permessiIDs : undefined,
       EmploymentContract: [
         {
           id: combinedData.trattamentoEconomico.id,
