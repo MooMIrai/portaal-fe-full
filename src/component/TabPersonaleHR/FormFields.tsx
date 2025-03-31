@@ -138,9 +138,13 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             type: "select",
             showLabel: false,
             value: formData.seniority,
+            required:true,
             options: ["Junior","Junior Advance", "Middle","Middle Advance", "Senior","Senior Advance"],
             valueOnChange: valueOnChange,
             disabled: (type === "view" || isViewOnly),
+            validator: createValidator(type === "view" || isViewOnly, (value: any) =>{
+                return !value ? "Il campo seniority è obbligatorio":"";
+            })
         },
 
         attachment: {
