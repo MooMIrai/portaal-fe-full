@@ -31,8 +31,8 @@ export function WaitingProject(){
 
           return {
             data: tableResponse.data || tableResponse,
-            meta: {
-              total: tableResponse.meta || tableResponse.length
+            meta: tableResponse.meta?tableResponse.meta:{
+              total: tableResponse.length
             }
           }
       
