@@ -53,7 +53,7 @@ const mapFilterFields = (filter: any | null): any => {
 const columns: any = [
   
   {
-    key: "id",
+    key: "lastName",
     label: "Nominativo",
     type: "custom",
     sortable: true,

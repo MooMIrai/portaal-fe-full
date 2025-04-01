@@ -21,7 +21,7 @@ const FeriePermessiSection = () => {
 
   const columns=[
     {
-      key: "id",
+      key: "Person.lastName",
       label: "Nominativo",
       type: "custom",
       sortable: true,
