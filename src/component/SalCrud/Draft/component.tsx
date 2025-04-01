@@ -7,11 +7,19 @@ import { offertaService } from "../../../services/offertaService";
 import { CrudGenericService } from "../../../services/personaleServices";
 
 
+function formatNumber(num) {
+  if(typeof num != 'number') return num;
+  return num.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
 const columns = [
  
   { key: "name", label: "Ragione sociale", type: "string", sortable: true },
-  { key: "totalAmount", label: "Totale Importo Progetti", type: "number", sortable: true },
-  { key: "totalBill", label: "Totale SAL Fatturato", type: "number", sortable: true }
+  { key: "totalAmount", label: "Totale Importo Progetti", type: "custom", render:(dataItem)=>{
+    return <td>{formatNumber(dataItem.totalAmount)}</td>
+  }, sortable: true },
+  { key: "totalBill", label: "Totale SAL Fatturato", type: "custom", render:(dataItem)=>{
+    return <td>{formatNumber(dataItem.totalBill)}</td>
+  }, sortable: true }
 ];
 
 

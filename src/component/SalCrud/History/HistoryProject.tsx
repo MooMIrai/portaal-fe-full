@@ -4,7 +4,10 @@ import GridTable from "common/Table";
 import { SalHistoryItem } from "./SalHistoryItem";
 import { SalContext } from "../../../pages/Sal/provider";
 
-
+function formatNumber(num) {
+  if(typeof num != 'number') return num;
+  return num.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
 const columns = [
   { key: "Offer.name", label: "Offerta", type: "string",sortable: true, filter: "text"  },
   { key: "Offer.ProjectType.description", label: "Tipo progetto", type: "string", sortable: true, filter: "text"  },
@@ -12,8 +15,12 @@ const columns = [
   { key: "Offer.billing_type", label: "Tipo Fatturazione", sortable: true,type: "custom",render:(data)=><td>{
     data.Offer.billing_type!=='Daily'?'A corpo':'Time material'
     }</td> },
-  { key: "amount", label: "Importo", type: "number", sortable: true},
-  { key: "totalBill", label: "Totale Sal Fatturato", type: "number", sortable: true},
+  { key: "amount", label: "Importo", type: "custom", render:(dataItem)=>{
+    return <td>{formatNumber(dataItem.amount)}</td>
+  }, sortable: true},
+  { key: "totalBill", label: "Totale Sal Fatturato", type: "custom", render:(dataItem)=>{
+    return <td>{formatNumber(dataItem.totalBill)}</td>
+  }, sortable: true},
   { key: "lastSal", label: "Data Ultimo Sal", type: "date", sortable: true, filter: "date" },
   { key: "start_date", label: "Data Inizio Progetto", type: "date", sortable: true, filter: "date" },
   { key: "end_date", label: "Data Fine Progetto", type: "date", sortable: true, filter: "date" },

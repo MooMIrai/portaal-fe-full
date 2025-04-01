@@ -4,10 +4,17 @@ import GridTable from "common/Table";
 import { SalContext } from "../../../pages/Sal/provider";
 import { SalCrud } from "../component";
 
+function formatNumber(num) {
+  if(typeof num != 'number') return num;
+  return num.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
 const columns = [
   { key: "SalState", label: "Stato", type: "custom", render:(rowData)=><td>Sal Fatturato</td> },
   { key: "Sal.actualDays", label: "Giorni Lavorati", type: "number" },
-  { key: "amount", label: "Importo", type: "number" },
+  { key: "amount", label: "Importo",  type: "custom", render:(dataItem)=>{
+    return <td>{formatNumber(dataItem.amount)}</td>
+  } },
   { key:"billing_date", label:"Data fatturazione",type:'date',sortable:true,filter:'date'},
   { key: "Sal.notes", label: "Note", type: "text", sortable: true, filter: "text" },
   { key: "month", label: "Mese", type: "custom", sortable: true, filter: "number", render:(row)=>{

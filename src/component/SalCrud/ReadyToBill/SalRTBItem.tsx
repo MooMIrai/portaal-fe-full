@@ -8,10 +8,16 @@ import Button from 'common/Button';
 import authService from 'common/services/AuthService';
 import { SalContext } from "../../../pages/Sal/provider";
 
+
+function formatNumber(num) {
+  if(typeof num != 'number') return num;
+  return num.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
 export const SalRTBItem = React.memo((props: PropsWithChildren<{ project: any, refreshParent:()=>void }>) => {
   
   const [rows, setRows] = useState<Array<any>>();
   const { filters } = useContext(SalContext);
+
 
   const columns = [
     { key: "SalState", label: "Stato", type: "custom", render:(rowData)=><td>
@@ -24,7 +30,9 @@ export const SalRTBItem = React.memo((props: PropsWithChildren<{ project: any, r
       
       </td> },
     { key: "actualDays", label: "Giorni Lavorati", type: "number" },
-    { key: "amount", label: "Importo", type: "number" },
+    { key: "amount", label: "Importo",type: "custom", render:(dataItem)=>{
+      return <td>{formatNumber(dataItem.amount)}</td>
+    } },
     { key: "notes", label: "Note", type: "text", sortable: true, filter: "text" },
     { key: "month", label: "Mese", type: "custom", sortable: true, filter: "number", render:(row)=>{
       const date = new Date(new Date().getFullYear(), row.month - 1, 1);  

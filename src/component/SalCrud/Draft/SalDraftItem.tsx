@@ -8,6 +8,10 @@ import {fileAddIcon} from 'common/icons';
 import { SalContext } from "../../../pages/Sal/provider";
 import authService from 'common/services/AuthService';
 
+function formatNumber(num) {
+  if(typeof num != 'number') return num;
+  return num.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
 export const SalDraftItem = React.memo((props: PropsWithChildren<{ project: any, refreshParent:()=>void, person:any }>) => {
 
   const { filters } = useContext(SalContext);
@@ -21,7 +25,9 @@ export const SalDraftItem = React.memo((props: PropsWithChildren<{ project: any,
       </td>
     },
     { key: "actualDays", label: "Giorni Lavorati", type: "number" },
-    { key: "amount", label: "Importo", type: "number" },
+    { key: "amount", label: "Importo",type: "custom", render:(dataItem)=>{
+      return <td>{formatNumber(dataItem.amount)}</td>
+    } },
     { key: "notes", label: "Note", type: "text", sortable: true, filter: "text" },
     {
       key: "month", label: "Mese", type: "custom", sortable: true, filter: "number", render: (row) => {

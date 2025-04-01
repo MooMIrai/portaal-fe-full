@@ -4,7 +4,7 @@ import GridTable from "common/Table";
 import { SalDraftItem } from "./SalDraftItem";
 
 const columns = [
-    { key: "Person", label: "Nominativo", type: "custom", render:(dataItem)=><td>{dataItem.Person.firstName} {dataItem.Person.lastName}</td> },
+    { key: "Person.lastName", label: "Nominativo", type: "custom", render:(dataItem)=><td>{dataItem.Person.firstName} {dataItem.Person.lastName}</td> },
   { key: "start_date", label: "Data Inizio Progetto", type: "date", sortable: true, filter: "date" },
   { key: "end_date", label: "Data Fine Progetto", type: "date", sortable: true, filter: "date" },
 ];

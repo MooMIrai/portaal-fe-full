@@ -3,32 +3,42 @@ import { salService } from "../../../services/salService";
 import GridTable from "common/Table";
 import { SalHistoryProject } from "./HistoryProject";
 import { SalContext } from "../../../pages/Sal/provider";
+import { CrudGenericService } from "../../../services/personaleServices";
+import { offertaService } from "../../../services/offertaService";
 
+function formatNumber(num) {
+  if(typeof num != 'number') return num;
+  return num.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
 const columns = [
   { key: "name", label: "Ragione sociale", type: "string", sortable: true },
-  { key: "totalAmount", label: "Totale Importo Progetti", type: "number", sortable: true },
-  { key: "totalBill", label: "Totale SAL Fatturato", type: "number", sortable: true }
+  { key: "totalAmount", label: "Totale Importo Progetti", type: "custom", render:(dataItem)=>{
+    return <td>{formatNumber(dataItem.totalAmount)}</td>
+  }, sortable: true },
+  { key: "totalBill", label: "Totale SAL Fatturato", type: "custom", render:(dataItem)=>{
+    return <td>{formatNumber(dataItem.totalBill)}</td>
+  }, sortable: true }
 ];
 
 export const SalHistoryCustomer = React.memo(() => {
 
-  const { filters } = useContext(SalContext);
+  const { setFilters } = useContext(SalContext);
 
   const loadData = useCallback(async (pagination, filter, sorting) => {
     const include = true;
     const tableResponse = await salService.getHistoryBillCustomer(
       pagination.currentPage,
       pagination.pageSize,
-      filters,
+      filter,
       sorting,
       include,
     );
-
+    setFilters(filter);
     return {
       data: tableResponse.data,
       meta: tableResponse.meta
     };
-  }, [filters]);
+  }, []);
 
   const renderExpand = useCallback((rowProps) => (
     <SalHistoryProject customer={rowProps.dataItem} />
@@ -51,6 +61,62 @@ export const SalHistoryCustomer = React.memo(() => {
       draggableWindow={true}
       initialWidthWindow={900}
       resizable={true}
+      addedFilters={[
+              {
+                name: "month",
+                label: "Mese",
+                type: "filter-autocomplete",
+                options:{
+                  getData:(term:string)=> Promise.resolve([
+                    { id: 1, name: "Gennaio" },
+                    { id: 2, name: "Febbraio" },
+                    { id: 3, name: "Marzo" },
+                    { id: 4, name: "Aprile" },
+                    { id: 5, name: "Maggio" },
+                    { id: 6, name: "Giugno" },
+                    { id: 7, name: "Luglio" },
+                    { id: 8, name: "Agosto" },
+                    { id: 9, name: "Settembre" },
+                    { id: 10, name: "Ottobre" },
+                    { id: 11, name: "Novembre" },
+                    { id: 12, name: "Dicembre" }
+                  ].filter(p=>!term || p.name.toLowerCase().indexOf(term.toLowerCase())>=0)),
+                  getValue:(v:any)=>v?.id
+                }
+              },
+              {
+                name: "year",
+                label: "Anno",
+                type: "number"
+              },
+              {
+                name: "offer_id",
+                label: "Offerta",
+                type: "filter-autocomplete",
+                options:{
+                  getData:(term:string)=> offertaService.searchOfferte(term).then(res=>res.data),
+                  getValue:(v:any)=>v?.id
+                }
+              },
+              {
+                name: "customer_id",
+                label: "Cliente",
+                type: "filter-autocomplete",
+                options:{
+                  getData:(term:string)=> salService.searchCustomer(term),
+                  getValue:(v:any)=>v?.id
+              }   
+              },
+              {
+                name: "person_id",
+                label: "Dipendente(digita un carattere per la ricerca)",
+                type: "filter-autocomplete",
+                options:{
+                  getData:(term:string)=> CrudGenericService.searchAccount(term).then(res=> res?res.map(r=>({id:r.person_id,name:r.firstName+ ' '+r.lastName})):[]),
+                  getValue:(v:any)=>v?.id
+                },    
+              }
+            ]}
     />
   );
 });

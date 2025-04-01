@@ -137,7 +137,7 @@ class SalService extends BaseHttpService {
 
       const response = await client.post(
         `api/v1/bills/getReadyToBillFromProject/${projectId}`,
-        { filtering, sorting },
+        { filtering:this.transformFilters(filtering), sorting },
         { params }
       );
       return response.data;
@@ -219,7 +219,7 @@ class SalService extends BaseHttpService {
   
         return  client.post(
           `/api/v1/sal/draftsByPersonActivity/${activity}`,
-          { filtering, sorting },
+          { filtering:this.transformFilters(filtering), sorting },
           { params }
         ).then(response=>response.data);
     }
@@ -257,7 +257,8 @@ class SalService extends BaseHttpService {
 
       return  client.post(
         `/api/v1/bills/getReadyToBillByCustomer`,
-        { filtering, sorting },
+        { filtering:this.transformFilters(filtering),
+           sorting },
         { params }
       ).then(response=>response.data);
     }
@@ -275,7 +276,7 @@ class SalService extends BaseHttpService {
   
         return  client.post(
           `/api/v1/bills/getReadyToBillByProject/${customerId}`,
-          { filtering, sorting },
+          { filtering:this.transformFilters(filtering), sorting },
           { params }
         ).then(response=>response.data);
     }
@@ -296,7 +297,7 @@ class SalService extends BaseHttpService {
   
         const response = await client.post(
           `/api/v1/bills/getBillByCustomer`,
-          { filtering, sorting },
+          { filtering:this.transformFilters(filtering), sorting },
           { params }
         );
         return response.data;
@@ -320,7 +321,7 @@ class SalService extends BaseHttpService {
   
         const response = await client.post(
           `/api/v1/bills/getBillByProject/${customer_id}`,
-          { filtering, sorting },
+          { filtering:this.transformFilters(filtering), sorting },
           { params }
         );
         return response.data;
@@ -344,7 +345,7 @@ class SalService extends BaseHttpService {
   
         const response = await client.post(
           `/api/v1/bills/getBillFromProject/${project_id}`,
-          { filtering, sorting },
+          { filtering:this.transformFilters(filtering), sorting },
           { params }
         );
         return response.data;
