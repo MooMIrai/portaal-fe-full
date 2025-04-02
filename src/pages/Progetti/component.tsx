@@ -9,9 +9,9 @@ export default function ProgettiPage() {
     const tableResponse = await customerService.getHasProject(pagination.currentPage,pagination.pageSize,filter,sorting,undefined,true);
     
     return {
-      data: tableResponse?.data?.data,
+      data: tableResponse?.data,
       meta: {
-        total: tableResponse?.data?.meta?.total,
+        total: tableResponse?.meta?.total,
       },
     };
   };
