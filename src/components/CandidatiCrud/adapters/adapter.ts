@@ -29,7 +29,7 @@ class CandidateFieldsServerAdapter extends BaseAdapter<CandidateFields, Candidat
         if(files && files.delete && files.delete.deletedFiles){
             files.delete={
                 ...files.delete,
-                deletedFiles:files.deletedFiles.map(df=>({...df,property:'Person.files'}))
+                deletedFiles:files.delete.deletedFiles.map(df=>({...df,property:'Person.files'}))
             }
         }
 
