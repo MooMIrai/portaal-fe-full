@@ -32,7 +32,7 @@ export const ThemeSwitcher = () => {
     <DarkModeToggle
       onChange={toggleTheme}
       checked={isDarkMode}
-      size={130}
+      size={70}
     />
   );
 };

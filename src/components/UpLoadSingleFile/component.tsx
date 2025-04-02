@@ -112,13 +112,34 @@ function UploadSingleFileComponent(props: CustomUploadProps) {
       .then((text) => {
         // Verifica che il testo sia un link di Google Drive
         const googleDriveRegex = /^https:\/\/(drive|docs)\.google\.com\/(?:file\/d\/|open\?id=)[\w-]+/;
-        if (googleDriveRegex.test(text)) {
-          
+          if (googleDriveRegex.test(text)) {
+            
           FileService.convertLinkToBE(text).then(res=>{
-            props.onFileChange([res]);
-            setSelectedFileName(text);
-            setSelectedFile(null);
-            setSelectedLink(text);
+              if(deleteDrive===undefined && props.existingFile && props.existingFile.length){
+                NotificationProviderActions.openConfirm(
+                  "Vuoi eliminare il file anche su drive?",
+                  ()=>{
+                    setDeleteDrive(true);
+                    props.onFileChange(FileService.combineLinksToBE([res],props.existingFile?.map(p=>p.id),props.name,true));
+                    setSelectedFileName(text);
+                    setSelectedFile(null);
+                    setSelectedLink(text);
+                  },
+                  'Conferma operazione',
+                  ()=>{
+                    setDeleteDrive(false);
+                    props.onFileChange(FileService.combineLinksToBE([res],props.existingFile?.map(p=>p.id),props.name,false));
+                    setSelectedFileName(text);
+                    setSelectedFile(null);
+                    setSelectedLink(text);
+                  }
+                )
+            }else{
+              props.onFileChange(FileService.combineLinksToBE([res],props.existingFile?.map(p=>p.id),props.name,deleteDrive));
+              setSelectedFileName(text);
+              setSelectedFile(null);
+              setSelectedLink(text);
+            }
           });
          
         } else {

@@ -57,6 +57,29 @@ class FileService{
         return ret;
     }
 
+    combineLinksToBE(data:{
+        direct_link: string;
+        provider: "DRIVE" | "DATABASE";
+    }[],toDelete?:string[],property?:string,deleteOnDrive?:boolean){
+        const ret:any = {
+            create:data
+        }
+        if(toDelete && toDelete.length){
+            ret.delete={
+                deletedFiles:[{
+                    uniqueIdentifiers:toDelete,
+                    property:property
+                }
+                ],
+                deleteFilesFromProvider: deleteOnDrive === undefined?false:deleteOnDrive
+            }
+        }
+        if(property){
+            ret.create = ret.create.map((d:any)=>({...d,property}));
+        }
+        return ret;
+    }
+
     convertBlobToBE(file:Blob,filename?:'string'){
         return file.arrayBuffer().then(arrayBuffer=>{
             return {
