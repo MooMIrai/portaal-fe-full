@@ -6,7 +6,7 @@ import { columnsCustomer } from "./config";
 
 export default function ProgettiPage() {
   const loadData = async (pagination: any, filter: any, sorting: any[]) => {
-    const tableResponse = await customerService.getHasProject();
+    const tableResponse = await customerService.getHasProject(pagination.currentPage,pagination.pageSize,filter,sorting,undefined,true);
     
     return {
       data: tableResponse?.data?.data,
