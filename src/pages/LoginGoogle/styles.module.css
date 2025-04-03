@@ -1,5 +1,7 @@
 /* styles.module.css */
-
+body::before{
+  content:none !important;
+}
 .loginContainer {
   display: flex;
   justify-content: center;
