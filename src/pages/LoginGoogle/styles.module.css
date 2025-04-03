@@ -21,18 +21,21 @@
 
 .loginContent {
   padding: 50px;
-  text-align: center;
+ 
   background: #f1f1f1;
   border-radius: 15px;
   box-shadow: 20px 20px 25px rgba(0, 0, 0, 0.1);
+  width: 500px;
 }
 
 .logo {
-  width: 150px;
+  width: 300px;
   margin-bottom: 20px;
 }
 .header{
-  margin-top:3rem;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
 }
 h1 {
 
@@ -48,7 +51,7 @@ p {
 }
 
 .kButton {
-  margin-top: 3rem;
+
   /* background-color: #4CAF50; */ /* Primary button color */
   background-color: #3e6eb6;
   border: none;
@@ -58,8 +61,21 @@ p {
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  margin-top:15px;
 }
 
 .kButton:hover {
   background-color: #325486;
+}
+
+.formLogin{
+  margin-top:15px;
+  padding-top:15px;
+  border-top: 1px solid #dedede;
+}
+
+.boxSSO{
+  margin-top:15px;
+  padding-top:15px;
+  border-top: 1px solid #dedede;
 }

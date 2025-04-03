@@ -3,8 +3,8 @@ import { ProfileService } from "../../services/profileService";
 import { ProfileModel } from "../../components/profileDashboard/model";
 import { fromProfileBEModelToProfileModel } from "../../adapters/profileAdapters";
 import ProfileDashboard from "../../components/profileDashboard/component";
+import { ChangePassword } from "../../components/ChangePassword/component";
 import styles from "./style.module.scss"
-
 export default function Profile() {
   const [data, setData] = useState<ProfileModel>();
 
@@ -14,5 +14,9 @@ export default function Profile() {
     });
   }, []);
 
-  return <div className={styles.container}>{data && <ProfileDashboard data={data} />}</div>;
+  return <div className={styles.container}>{data && 
+  <><ProfileDashboard data={data} />
+  <ChangePassword />
+  </>
+  }</div>;
 }

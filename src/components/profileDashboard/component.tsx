@@ -29,7 +29,7 @@ export default function ProfileDashboard(props: ProfileProps) {
     telephone,
     workPhone,
   } = props.data;
-  console.log(props.data);
+
 
   const displayInfo = (info: string | undefined | null) => {
     return info || "Missing info";
