@@ -685,7 +685,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
             field="action"
             title="Azioni"
             locked={true}
-            
+            width={150}
             cell={(cellGrid: GridCellProps) => {
               
               const actions = getActions(cellGrid.dataItem);
@@ -694,7 +694,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
                 <td 
                 style={{
                   position: "sticky",
-                  right: 0,
+                  right: 0
                   //background: "white", // Evita sovrapposizioni visive
                   //zIndex: 1, // Assicura che sia sopra le altre celle
                 }}

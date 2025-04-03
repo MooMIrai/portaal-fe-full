@@ -39,11 +39,17 @@ const NotificationProvider = (props:PropsWithChildren) => {
     const [urlFile,setUrlFile] = useState<string>();
 
     const [showLoader, setShowLoader] = useState<boolean>(false);
+    const [timeout,setTimeoutI] = useState<any>()
    
     const handleShow = (type:{ icon?: boolean; style?: "none" | "info" | "success" | "warning" | "error"; },message:string) =>{
-      
+      if(timeout){
+        clearTimeout(timeout);
+      }
       setModal({type,message});
       setShow(true);
+      setTimeoutI(setTimeout(()=>{
+        setShow(false);
+      },5000))
       
     }
 
@@ -80,7 +86,6 @@ const NotificationProvider = (props:PropsWithChildren) => {
           }}>
         {props.children}
         <NotificationGroup
-            
             style={{
               top: 20,
               right: 20,

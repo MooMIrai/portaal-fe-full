@@ -57,6 +57,7 @@ const EmailInputC = (
 ) => {
   const { validationMessage, visited, disabled, required, value, ...others } =
     fieldRenderProps;
+
   return (
 
     <Input
@@ -65,6 +66,8 @@ const EmailInputC = (
       value={value ?? ""}
       required={required}
       disabled={disabled}
+      placeholder=" "
+      label={undefined}
     />
 
   );
@@ -76,12 +79,15 @@ const PasswordInputC = (
   const { validationMessage, visited, disabled, required, value, ...others } =
     fieldRenderProps;
   return (
+   
     <Input
       type="password"
       {...others}
       value={value ?? ""}
       required={required}
       disabled={disabled}
+      placeholder=" "
+      label={undefined}
     />
   );
 };
