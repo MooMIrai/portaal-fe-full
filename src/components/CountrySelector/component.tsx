@@ -222,7 +222,10 @@ export default function CountrySelector(props:any){
         })
     }
 
-    return <fieldset className={styles.container} >
+    return <div>
+        <Label>{others.label}</Label>
+        <fieldset className={styles.container} >
+        
         <legend className="k-form-legend">{others.label}</legend>
         
         <div className={"k-form-field"} onFocus={onFocus} onBlur={onBlur}>
@@ -339,4 +342,5 @@ export default function CountrySelector(props:any){
         </Dialog>
       )}
     </fieldset>
+    </div>
 }
