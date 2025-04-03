@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import GridTable from "common/Table";
 import PersonaleSection from "./../../component/TabPersonaleHR/component";
-import { CrudGenericService } from "../../services/personaleServices";
+import { accountsService, CrudGenericService } from "../../services/personaleServices";
 import {
   ActivityTypeOption,
   companyAdapter,
@@ -18,10 +18,11 @@ import {
 } from "../../adapters/personaleAdapters";
 import Button from "common/Button";
 import NotificationProviderActions from "common/providers/NotificationProvider";
-import styles from "./style.modules.scss"
 import AvatarIcon from 'common/AvatarIcon';
 import Typography from 'common/Typography';
+import {passwordIcon} from 'common/icons';
 
+import styles from "./style.modules.scss"
 // Column field mapping
 const columnFieldMap: { [key: string]: string } = {
   company: "Person.CurrentContract.Contract.Company.name",
@@ -98,6 +99,31 @@ const columns: any = [
     sortable: false,
     filter: "numeric",
   },
+  {
+    key:"id",
+    label:" ",
+    type:"custom",
+    width:150,
+    render:(n:any)=><td><Button 
+      svgIcon={passwordIcon} 
+      title="Imposta Password" 
+      fillMode="secondary"
+      themeColor="warning"
+      type="button"
+      onClick={()=>{
+        NotificationProviderActions.openConfirm(
+          `Vuoi abilitare/resettare la password per l'utente: ${n.firstName} ${n.lastName}`,
+          ()=>{
+            accountsService.createPassword(n.id).then(()=>{
+              NotificationProviderActions.openModal({ icon: true, style: 'success' }, "Operazione avvenuta con successo");
+            })
+          },
+          'Imposta/Reset password'
+        )
+      }}
+    >Imposta Password</Button></td>,
+    sortable:false
+  }
 ];
 
 const PersonalPage = () => {

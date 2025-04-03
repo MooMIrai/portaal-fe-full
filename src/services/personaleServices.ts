@@ -246,6 +246,11 @@ class CS extends BaseHttpService {
   getTableName() {
     return 'accounts';
   }
+
+  createPassword(id:number){
+    return client.post(`/api/v1/accounts/createPassword/${id}`).then(res=>res.data)
+  }
+
 }
 
 export const accountsService = new CS();
