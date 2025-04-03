@@ -81,7 +81,7 @@ export const App = () => {
  }
 
 if (!token) {
-  return <LoginRouting />;
+  return <Theme><LoginRouting /></Theme>;
 }
 
 
