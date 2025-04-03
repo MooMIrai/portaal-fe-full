@@ -42,3 +42,8 @@
          }
      }
     
+.parentForm{
+  & :global(.sede-input){
+    grid-column: span 3;
+  }
+}
