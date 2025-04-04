@@ -81,7 +81,7 @@ client.interceptors.response.use(
       }
     }
 
-    if (error.response && error.response.status === 401) {
+    if (error.response && error.response.status === 401 && error.config.url!="/auth/basic") {
       window.dispatchEvent(new CustomEvent("LOGOUT"));
       window.location.href = "/";
     } else if (error.response && error.response.status === 409) {
