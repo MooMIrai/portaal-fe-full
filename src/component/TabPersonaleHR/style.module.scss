@@ -270,3 +270,10 @@
     background-color: darken(#f44336, 10%) !important;
   }
 }
+
+.parentForm{
+  & div[class*="residenza-input"], & div[class*="nascita-input"]{
+    grid-column-start: 1;
+    grid-column-end: 4;
+  }
+}
