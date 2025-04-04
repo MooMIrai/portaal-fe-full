@@ -60,7 +60,7 @@ export function InboxPage() {
         } },
         { key: "NotifyUser.content.title", width:'200px', label: "Titolo", type: "custom", render: (n) =>{
             if(n.NotifyUser.responseType !== 'NONE' && 
-                (n.notificationStatus!=='RESPONDED' || n.notificationStatus!=='COMPLETED')){
+                (n.notificationStatus!=='RESPONDED' && n.notificationStatus!=='COMPLETED')){
                     return <td>
                         <div className={styles.mustReply}>
                             <SvgIcon icon={warningTriangleIcon} themeColor="error" /> 
