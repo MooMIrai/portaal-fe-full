@@ -6,6 +6,7 @@ import Button from "common/Button";
 import {googleIcon} from 'common/icons';
 import { ProfileService } from "../../services/profileService";
 import Typography from 'common/Typography';
+import NotificationActions from 'common/providers/NotificationProvider';
 import styles from "./styles.module.css";
 
 const LoginGoogleComponent = () => {
@@ -39,7 +40,12 @@ const LoginGoogleComponent = () => {
               fields={LoginForm}
               formData={{}}
               onSubmit={(values:any)=>{
-                ProfileService.login(values.email,values.password);
+                ProfileService.login(values.email,values.password).catch(()=>{
+                  NotificationActions.openModal(
+                    { icon: true, style: "error" },
+                    "Credenziali errate"
+                  );
+                });
               }}
               showSubmit
               submitText={'Login'}

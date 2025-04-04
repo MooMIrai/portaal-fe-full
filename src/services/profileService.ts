@@ -12,8 +12,11 @@ class ProfileServiceC {
   };
 
   login = (email:string,password:string)=>{
+    debugger;
     return  client.post(`/auth/basic`,{email,password}).then((res:any)=>{
+      debugger;
       if(res.data){
+        debugger;
         window.location.href='/auth-success?token='+res.data.token;
       }
     });
