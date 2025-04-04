@@ -54,7 +54,7 @@ export function MessageDetail(props:PropsWithRef<{
 
     let formValidation;
     if(data && data.NotifyUser.NotifyResponseType?.validations){
-        formValidation = JSON.parse(data.NotifyUser.NotifyResponseType?.validations)
+        formValidation = data.NotifyUser.NotifyResponseType.validations;
     }
 
   return <><div className={styles.container+ ' ' + (data?styles.opened:'')}>
