@@ -78,7 +78,7 @@ export function MessageDetail(props:PropsWithRef<{
                             !props.isSent && data?.NotifyUser?.responseType !='NONE' &&
                             (data?.notificationStatus ==='SENT' ||data?.notificationStatus==='VIEWED') &&
                             <SvgIcon onClick={()=>{
-                                setModalData(data?.NotifyUser?.responseType);
+                                setModalData(data.NotifyUser.NotifyResponseType);
                             }} className={styles.icon} flip="horizontal" size="xxlarge" themeColor="tertiary" icon={redoIcon} ></SvgIcon>
                         }
                     
