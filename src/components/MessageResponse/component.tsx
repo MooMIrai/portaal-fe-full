@@ -37,7 +37,7 @@ export function MessageResponse(props:{id:number,responseType:any, onClose:()=>v
 
                 <MessageResponseForm 
                     ref={formRef} 
-                    fields={props.responseType?.validations ? JSON.parse(props.responseType.validations) : null} 
+                    fields={props.responseType?.validations ? props.responseType.validations : null} 
                     onSubmit={handleSubmit}
                 />
             </Modal>
