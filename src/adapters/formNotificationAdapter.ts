@@ -44,7 +44,7 @@ class FormNotificationAdaper extends BaseAdapter<InputEmailStructure, OutputEmai
       manager_account_id: AuthService.getData().sub, // Cambia se necessario
       detailsUsersNotifications,
       emailToSend: source.isEmail || false,
-      responseType: source.responseType,
+      responseType: source.responseType.responseType,
       content: {
         title: source.title || "",
         sub_title: source.sub_title || "",
