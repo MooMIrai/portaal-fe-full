@@ -9,7 +9,8 @@
 			import("recruiting/Index"),
 			import("stock/Index"),
 			import("notification/Index"),
-			import("reports/Index")
+			import("reports/Index"),
+			import("chatbot/Index")
           ];
           
           export const routesToImport = [
@@ -20,7 +21,8 @@
 			React.lazy(() => import("recruiting/Routes")),
 			React.lazy(() => import("stock/Routes")),
 			React.lazy(() => import("notification/Routes")),
-			React.lazy(() => import("reports/Routes"))
+			React.lazy(() => import("reports/Routes")),
+			React.lazy(() => import("chatbot/Routes"))
           ];
 
           export const routesLoginToImport = [
