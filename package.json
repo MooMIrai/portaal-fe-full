@@ -38,12 +38,6 @@
     "webpack-dev-server": "^4.3.1"
   },
   "dependencies": {
-    "@progress/kendo-react-buttons": "^8.1.1",
-    "@progress/kendo-react-common": "^8.1.1",
-    "@progress/kendo-react-indicators": "^8.1.1",
-    "@progress/kendo-react-layout": "^8.1.1",
-    "@progress/kendo-react-scheduler": "^8.1.1",
-    "@progress/kendo-svg-icons": "^3.0.0",
     "@uidotdev/usehooks": "^2.4.1",
     "axios": "^1.7.2",
     "lodash": "^4.17.21",
