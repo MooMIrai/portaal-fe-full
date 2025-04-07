@@ -18,6 +18,8 @@ function mapReportParameterTypeToFieldType(type: NotificationParameterType,name:
         return 'custom-autocomplete__'+type+'__'+name;
       case 'DECIMAL':
         return 'number';
+      case 'TEXT':
+        return 'textarea';
       default:
         return 'text';
     }

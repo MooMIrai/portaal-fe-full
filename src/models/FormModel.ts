@@ -6,6 +6,7 @@ export type NotificationParameterType =
   | 'BOOLEAN'
   | 'STATIC_LIST'
   | 'DYNAMIC_LIST'
+  | 'TEXT'
   | 'DECIMAL';
 
   export interface NotificationParameter {
