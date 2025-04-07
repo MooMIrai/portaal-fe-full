@@ -20,6 +20,7 @@ const mfeConfig = (path, mode) => {
     stock:"stock@http://localhost:3012/remoteEntry.js",
     notification:"notification@http://localhost:3013/remoteEntry.js",
     reports:"reports@http://localhost:3015/remoteEntry.js",
+    chatbot:"chatbot@http://localhost:3018/remoteEntry.js",
   };
   if (mode === "production") {
     remotes = {
@@ -31,7 +32,8 @@ const mfeConfig = (path, mode) => {
       recruiting: "recruiting@recruiting/remoteEntry.js",
       stock:"stock@stock/remoteEntry.js",
       notification:"notification@notification/remoteEntry.js",
-      reports:"reports@reports/remoteEntry.js"
+      reports:"reports@reports/remoteEntry.js",
+      chatbot:"chatbot@chatbot/remoteEntry.js"
     };
   }
   return {
