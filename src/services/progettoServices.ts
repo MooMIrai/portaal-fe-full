@@ -10,7 +10,9 @@ class ProgettoService extends BaseHttpService {
     customerId: number,
     pageNum?: number,
     pageSize?: number,
-    include?: boolean
+    include?: boolean,
+    filtering?:any,
+    sorting?:any
   ) => {
     try {
       const params = {
@@ -21,7 +23,7 @@ class ProgettoService extends BaseHttpService {
 
       const response = await client.post(
         `api/v1/projects/findByCustomer/${customerId}`,
-        {},
+        {filtering,sorting},
         { params }
       );
       return response.data;

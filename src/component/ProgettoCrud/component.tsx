@@ -41,11 +41,14 @@ const ProjectTable = (props: { customer: number }) => {
       correctFilters.logic = "and";
       correctFilters.filters.push(customerFilter);
     }
+
     const tableResponse = await progettoService.getProjectByCustomer(
       props.customer,
       pagination.currentPage,
       pagination.pageSize,
-      include
+      include,
+      filter,
+      sorting
     );
 
 
