@@ -8,6 +8,7 @@ export default function(){
   if(!element){
     element = document.createElement('div');
     element.id= "chatbot-root";
+    document.body.appendChild(element);
   }
 
   const root = createRoot(document.getElementById("chatbot-root")!);
