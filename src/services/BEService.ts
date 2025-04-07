@@ -29,7 +29,8 @@ const client = setupCache(axios.create({
 client.interceptors.request.use((config) => {
 
   try {
-    if (config.url && config.url.indexOf("/ai/upload_cv_ts") <= 0) {
+
+    if (config.url && config.url.indexOf("/ai/upload_cv_ts") < 0 && config.url.indexOf('/chat')<0) {
       NotificationProviderActions.openLoader();
     }
     config.headers.Authorization = "Bearer " + AuthService.getToken();
