@@ -1,0 +1,16 @@
+import client from "common/services/BEService";
+class ChatService {
+    sendMessage(text:string){
+        return client.post(process.env.CHAT_API_URL+'/chat',{
+            session_id:localStorage.getItem("chat_session")||"1",
+            message:text
+        }).then(res=>{
+            if(res.data){
+                localStorage.setItem("chat_session",res.data.session_id)
+            }
+            return res.data;
+        });
+    }
+}
+
+export const chatService = new ChatService();

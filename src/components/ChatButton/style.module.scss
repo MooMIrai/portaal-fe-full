@@ -1,0 +1,63 @@
+.container{
+    position: fixed;
+    bottom:20px;
+    right:20px;
+
+    & > button{
+        aspect-ratio: 1;
+    }
+    
+    & > button > span{
+        height: 40px;
+    }
+}
+
+.chatbotContainer{
+    position: fixed;
+    bottom:20px;
+    right:20px;
+    width: 500px;
+    background-color:var(--kendo-color-app-surface, #ffffff);
+
+    border:1px solid var(--kendo-color-border, #cacaca);
+}
+
+.chatbotHeader{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+
+
+.chatbot{
+    border:none;
+    border-width: 0 !important;
+    margin:0px !important;
+    height: 65vh !important;
+}
+
+.avatarContainer{
+    width: 150px;
+    height: 150px;
+    overflow: hidden; /* Nasconde la parte dell'immagine che esce dal div */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    overflow: hidden;
+    border-radius: 50%;
+    margin-left:auto;
+    margin-right: auto;
+    
+    & > img {
+        object-fit: cover;
+        height: 165px;
+       
+    }
+}
+
+.statusContainer{
+    margin-left:auto;
+    margin-right: auto;
+    text-align: center;
+}
