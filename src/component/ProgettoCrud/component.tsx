@@ -51,10 +51,9 @@ const ProjectTable = (props: { customer: number }) => {
       sorting
     );
 
-
     return {
       data: tableResponse?.data,
-      meta: { total: tableResponse?.meta?.total },
+      meta: tableResponse?.meta,
     };
   };
 
@@ -104,7 +103,7 @@ const ProjectTable = (props: { customer: number }) => {
   return (
     <GridTable
       filterable={true}
-      pageable={false}
+      pageable={true}
       sortable={true}
       getData={loadData}
       columns={columns}
