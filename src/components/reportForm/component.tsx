@@ -6,6 +6,8 @@ import { FormField } from "../../models/FormModel";
 import { formAdapter } from "../../adapters/FormAdapter";
 import withField from "common/hoc/Field";
 import withAutoComplete from "common/hoc/AutoComplete";
+import Typography from "common/Typography";
+import Button from "common/Button";
 
 export function ReportForm(props: {
   report: string | undefined;
@@ -63,6 +65,19 @@ export function ReportForm(props: {
         })
       );
     });
+
+    if(!formFields.length){
+      return <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+        <Typography.p>Nessun parametro richiesto</Typography.p>
+        <Button
+              themeColor={"primary"}
+              onClick={()=>props.onSubmit({})}
+              type="Button"
+            >
+              Genera Report
+          </Button>
+      </div>
+    }
 
     return (
       <Form
