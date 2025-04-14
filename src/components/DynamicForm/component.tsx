@@ -262,9 +262,10 @@ const DynamicForm = React.forwardRef<any, DynamicFormProps>((props, ref) => {
             <Button
               themeColor={"primary"}
               disabled={
-                children !== undefined || customDisabled === true
+                customDisabled ?? !formRenderProps.allowSubmit
+                /* children !== undefined || customDisabled === true
                   ? false
-                  : !formRenderProps.allowSubmit
+                  : !formRenderProps.allowSubmit */
               }
             >
               {submitText}
