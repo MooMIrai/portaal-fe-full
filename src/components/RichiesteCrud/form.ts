@@ -5,8 +5,8 @@ export const getFormRichiesta = (
     primarySkillSelected: number[],
     setPrimarySkill: any,
     secondarySkillSelected: number[],
-    setSecondarySkill: any
-
+    setSecondarySkill: any,
+    languageCat:number
 ) => {
 
 
@@ -134,7 +134,7 @@ export const getFormRichiesta = (
             options: {
                 field: "skillCategory_id",
                 operator: "neq", // diverso da
-                value: 116,
+                value: languageCat,
                 disabledArray: secondarySkillSelected
             }
         },
@@ -150,7 +150,7 @@ export const getFormRichiesta = (
             options: {
                 field: "skillCategory_id",
                 operator: "neq", // diverso da
-                value: 116,
+                value: languageCat,
                 disabledArray: primarySkillSelected
             }
         },
@@ -164,7 +164,7 @@ export const getFormRichiesta = (
             options: {
                 field: "skillCategory_id",
                 operator: "equals",
-                value: 116
+                value: languageCat
             }
         },
         saleRate: {

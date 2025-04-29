@@ -8,6 +8,39 @@ class RichiestaServiceC extends BaseHttpService{
         return "recruitingRequest";
     }
 
+    getLanguageCat  =  (
+      pageNum: number,
+      pageSize: number,
+    ) => {
+      
+        const params:any = {
+          pageNum,
+          pageSize
+        };
+       
+
+        const queryParams:any = {};
+       
+        queryParams.filtering=
+        {
+          
+            "logic": "and",
+            "filters": [
+              {field: "category", operator: "eq", value: "Lingue parlate"}
+            ]
+          
+        };
+        
+    
+        return client.post(
+          `api/v1/crud/skillCategory`,
+          queryParams, 
+          { params }
+        ).then(res => res.data.data[0]);
+        
+      }
+
+
     searchAccount (text: string) {
       return client.get(`api/v1/accounts/findByName?search=${text}`).then(res => res.data);
     }
