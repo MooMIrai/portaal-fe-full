@@ -30,7 +30,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
         return "";
     };
 
-
+    const emailValidator = (value: any) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? "" : "Il campo deve contenere un indirizzo email";
 
 
     const optionalCapValidator = (value: any) => {
@@ -99,7 +99,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             disabled: (type === "view" || isViewOnly),
             valueOnChange: valueOnChange,
             validator: createValidator(type === "view" || isViewOnly, (value: any) =>
-                value ? "" : "Il campo Email Aziendale è obbligatorio"
+                value ? emailValidator(value) : "Il campo Email Aziendale è obbligatorio"
             ),
         },
         matricola: {
