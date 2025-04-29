@@ -49,7 +49,6 @@ const CustomItem = (props: CustomItemProps) => {
       props.index === 0 ?
         <div className="k-drawer-logo"><img
           width={150}
-          height={30}
           src="/image/logoTaal.png"
           alt="Logo Taal"
         />
