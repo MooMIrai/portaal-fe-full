@@ -19,6 +19,8 @@ class AuthService {
 
 
   hasPermission(permission:string){
+    if(!CookieRepo.read('Roles'))
+      return false;
     return CookieRepo.read('Roles').split(',').some(r=>r===permission);
   }
   
