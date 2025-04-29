@@ -9,7 +9,7 @@ import { CrudGenericService } from "../../../services/personaleServices";
 
 function formatNumber(num) {
   if(typeof num != 'number') return num;
-  return num.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  return new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR" }).format(num);
 }
 const columns = [
  

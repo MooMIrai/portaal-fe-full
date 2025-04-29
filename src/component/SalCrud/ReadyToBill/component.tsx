@@ -8,7 +8,7 @@ import { offertaService } from "../../../services/offertaService";
 
 function formatNumber(num) {
   if(typeof num != 'number') return num;
-  return num.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  return new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR" }).format(num);
 }
 const columns = [
   { key: "name", label: "Ragione sociale", type: "string", sortable: true },
