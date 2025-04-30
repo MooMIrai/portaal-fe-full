@@ -11,7 +11,7 @@ import { SalContext } from "../../../pages/Sal/provider";
 
 function formatNumber(num) {
   if(typeof num != 'number') return num;
-  return num.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  return new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR" }).format(num);
 }
 export const SalRTBItem = React.memo((props: PropsWithChildren<{ project: any, refreshParent:()=>void }>) => {
   

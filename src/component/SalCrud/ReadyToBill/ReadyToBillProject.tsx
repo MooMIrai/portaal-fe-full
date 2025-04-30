@@ -6,7 +6,7 @@ import { SalContext } from "../../../pages/Sal/provider";
 
 function formatNumber(num) {
   if(typeof num != 'number') return num;
-  return num.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  return new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR" }).format(num);
 }
 const columns = [
   { key: "Offer.name", label: "Offerta", type: "string",sortable: true, filter: "text"  },

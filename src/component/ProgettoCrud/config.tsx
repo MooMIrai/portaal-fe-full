@@ -1,3 +1,10 @@
+import * as React from "react";
+
+function formatNumber(num) {
+  if(typeof num != 'number') return num;
+  return new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR" }).format(num);
+}
+
 export const columns = [
   {
     key: "AccountManager",
@@ -30,23 +37,32 @@ export const columns = [
   {
     key: "amount",
     label: "Importo",
-    type: "string",
+    type: "custom",
     sortable: true,
     filter: "text",
+    render:(dataItem)=>{
+      return <td>{formatNumber(dataItem.amount)}</td>
+    }
   },
   {
     key: "sal_total",
     label: "Sal",
-    type: "string",
+    type: "custom",
     sortable: true,
     filter: "text",
+    render:(dataItem)=>{
+      return <td>{formatNumber(dataItem.sal_total)}</td>
+    }
   },
   {
     key: "bill_total",
     label: "Sal Fatturato",
-    type: "string",
+    type: "custom",
     sortable: true,
     filter: "text",
+    render:(dataItem)=>{
+      return <td>{formatNumber(dataItem.bill_total)}</td>
+    }
   },
 ];
 
