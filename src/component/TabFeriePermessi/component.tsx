@@ -3,7 +3,7 @@ import Button from "common/Button";
 import Tab from "common/Tab";
 import GenericGrid from "common/Table";
 import { PFMService } from "../../services/pfmService";
-import { checkOutlineIcon, xOutlineIcon, cancelOutlineIcon } from "@progress/kendo-svg-icons";
+import { checkOutlineIcon, xOutlineIcon, cancelOutlineIcon } from "common/icons";
 import HoursDaysFilterCell from "common/HoursDaysFilterCell"
 import authService from "common/services/AuthService";
 import AvatarIcon from 'common/AvatarIcon';

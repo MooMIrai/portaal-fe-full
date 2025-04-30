@@ -5,9 +5,7 @@ import InputText from 'common/InputText';
 import Button from 'common/Button';
 import CustomChip from 'common/CustomChip';
 import NotificationActions from 'common/providers/NotificationProvider';
-import {
-    checkCircleIcon
-} from "@progress/kendo-svg-icons";
+import { checkCircleIcon } from "common/icons";
 
 
 import styles from './styles.module.scss';
