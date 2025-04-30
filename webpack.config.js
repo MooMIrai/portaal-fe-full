@@ -27,7 +27,7 @@ const mfeConfig = (path, mode) => {
       common: "common@common/remoteEntry.js",
       auth: "auth@auth/remoteEntry.js",
       lookups: "lookups@lookups/remoteEntry.js",
-      sales: "sales@sales/remoteEntry.js",
+      //sales: "sales@sales/remoteEntry.js",
       hr: "hr@hr/remoteEntry.js",
       recruiting: "recruiting@recruiting/remoteEntry.js",
       stock:"stock@stock/remoteEntry.js",
