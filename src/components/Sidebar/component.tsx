@@ -222,7 +222,8 @@ const Sidebar = ({ children, items }: SidebarPros) => {
   return <div className={styles.page}><AppBar themeColor="light" className={styles.navbar}>
     <AppBarSection className="title">
         <div className="k-drawer-logo"><img
-          width={170}
+          width={140}
+          style={{marginLeft:30}}
           src="/image/logoTaal.png"
           alt="Logo Taal"
         />
@@ -266,6 +267,7 @@ const Sidebar = ({ children, items }: SidebarPros) => {
         item={CustomItem}
         onSelect={onSelect}
         mini={true}
+        width={260}
       >
         <DrawerContent className={styles.drawerContent}>
           <div className={styles.titleContainer}>

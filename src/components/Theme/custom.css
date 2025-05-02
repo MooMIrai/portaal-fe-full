@@ -75,6 +75,10 @@ td{
   padding-top:30px
 }
 
+.k-drawer .k-drawer-logo{
+  margin-left:30px
+}
+
 /*.k-drawer .k-drawer-items{
   gap:10px !important;
 }
