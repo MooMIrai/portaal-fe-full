@@ -2,6 +2,7 @@ import * as React from 'react';
 import { TabStrip, TabStripProps, TabStripTab, TabStripTabProps } from '@progress/kendo-react-layout';
 import { Button } from '@progress/kendo-react-buttons';
 import styles from "./style.module.scss"
+import { saveIcon } from '@progress/kendo-svg-icons';
 
 
 interface TabComponentProps extends TabStripProps {
@@ -31,6 +32,9 @@ const TabComponent = (props: TabComponentProps) => {
           className={styles.button}
           onClick={props.button.onClick}
           onSubmit={props.button.onSubmit}
+          themeColor={"primary"}
+          size={"medium"}
+          svgIcon={saveIcon}
         >
           {props.button.label}
         </Button>

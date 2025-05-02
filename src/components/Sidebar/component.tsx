@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
+  AppBar,
+  AppBarSection,
+  AppBarSpacer,
   Avatar,
   Drawer,
   DrawerContent,
@@ -44,17 +47,7 @@ const CustomItem = (props: CustomItemProps) => {
 
   const itemStyle = parentId ? { marginLeft: "2rem" } : {};
 
-  return props.visible === false ? null : (<>
-    {
-      props.index === 0 ?
-        <div className="k-drawer-logo"><img
-          width={150}
-          src="/image/logoTaal.png"
-          alt="Logo Taal"
-        />
-        </div>
-        : null
-    }
+  return props.visible === false ? null : 
     <DrawerItem {...others} style={itemStyle}>
       {resolvedIcon && <SvgIcon icon={resolvedIcon} />}
       <BadgeContainer style={{ display: "flex" }}>
@@ -71,7 +64,7 @@ const CustomItem = (props: CustomItemProps) => {
         />
       )}
     </DrawerItem>
-  </>);
+  ;
 };
 
 const TenantsSelector = withAutocomplete((filter: string) =>
@@ -225,6 +218,68 @@ const Sidebar = ({ children, items }: SidebarPros) => {
   };
 
   const anchor = useRef<any>();
+
+  return <div className={styles.page}><AppBar themeColor="light" className={styles.navbar}>
+    <AppBarSection className="title">
+        <div className="k-drawer-logo"><img
+          width={170}
+          src="/image/logoTaal.png"
+          alt="Logo Taal"
+        />
+        </div>
+    </AppBarSection>
+    <AppBarSpacer />
+      <AppBarSection>
+      <Button ref={anchor} fillMode="solid" themeColor="light" onClick={() => setPopoverUser(!popoverUser)}>
+            {AuthService.getImage() && <Avatar rounded="full" type="image" style={{ marginRight: 5 }}>
+              <img src={AuthService.getImage()} alt="user avatar" />
+            </Avatar>}
+            {
+              AuthService.getUserName()
+            }
+          </Button>
+          <Popover
+            show={popoverUser}
+            anchor={anchor.current && anchor.current.element}
+            position={'bottom'}
+            callout={true}
+            collision={{
+              horizontal: 'fit',
+              vertical: 'fit'
+            }}
+            title="Azioni per l'utente"
+          >
+            <div className={styles.popoverContainer}>
+              <Button svgIcon={userIcon} fillMode={'clear'} themeColor="primary" onClick={() => navigate('/profile')}>Profilo</Button>
+              <Button svgIcon={logoutIcon} fillMode={'clear'} themeColor="error" onClick={logout}>Logout</Button>
+            </div>
+          </Popover>
+      </AppBarSection>
+  </AppBar>
+  <div className={styles.drawerContainer}>
+  <Drawer
+        expanded={drawerExpanded}
+        mode="push"
+        items={data.filter(d=>{
+          return !d.permissions || !d.permissions.length || d.permissions.some(AuthService.hasPermission)
+        })}
+        item={CustomItem}
+        onSelect={onSelect}
+        mini={true}
+      >
+        <DrawerContent className={styles.drawerContent}>
+          <div className={styles.titleContainer}>
+            <Typography.h4 themeColor="primary">{location.pathname && location.pathname != '/' ? location.pathname.replace('/', '')[0].toUpperCase() + location.pathname.replace('/', '').substring(1) : 'Homepage'}</Typography.h4>
+          </div>
+          <div className="page-container">
+            {children}
+          </div>
+        </DrawerContent>
+      </Drawer>
+  </div>
+
+  
+  </div>
 
   return (
     <div className={styles.sidebarContainer}>

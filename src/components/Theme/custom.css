@@ -1,3 +1,8 @@
+*{
+  margin:0;
+  padding: 0;
+}
+
 .k-dialog-wrapper.k-scheduler-edit-dialog {
     position: absolute !important;
   }
@@ -6,14 +11,14 @@
   body{
     margin:0 !important;
     overflow: hidden !important;
-    background: var(--kendo-color-app-surface) !important;
+    background: #f7f8fd !important;
   }
 
 
 
   
 
-body::before{
+/* body::before{
   content:'' ;
   position: absolute !important;
   top:0 !important;
@@ -23,7 +28,7 @@ body::before{
   background: linear-gradient(87deg, var(--kendo-color-primary) 40%, var(--kendo-color-tertiary) 100%)  !important;
   -webkit-box-shadow: inset -2px -50px 41px -9px var(--kendo-color-app-surface); 
   box-shadow: inset -2px -50px 41px -9px var(--kendo-color-app-surface);
-}
+} */
 
 td{
   border:none !important;
@@ -53,24 +58,24 @@ td{
   right: 0px !important;
 }
 
-.k-drawer{
+/* .k-drawer{
   margin:20px !important;
   margin-top:0 !important;
   border-radius:20px !important;
   padding:30px 15px !important;
   border:none !important;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
-}
+} */
 
 .k-table{
   width: 100%!important;
 }
 
 .k-drawer > .k-drawer-wrapper{
-  width: 100% !important;
+  padding-top:30px
 }
 
-.k-drawer .k-drawer-items{
+/*.k-drawer .k-drawer-items{
   gap:10px !important;
 }
 
@@ -93,21 +98,22 @@ td{
   padding-top:50px !important;
   
 }
-
+ */
 .page-container{
-  padding-top: 20px !important;
-  background-color: var(--kendo-color-app-surface) !important;
-  border-radius: 20px !important;
-  margin:0 !important;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
   
-  position: absolute;
+  background-color: var(--kendo-color-app-surface) !important; 
+ 
+  margin:40px !important;
+  padding:16px 12px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
+  border-radius: 5px;
+ /* position: absolute;
   left: 0;
   right: 0;
   bottom: 55px;
-  top: 0;
+  top: 0;*/
   overflow: auto;
-
+  margin-top:0px !important;
 }
 .k-grid, .k-pager,.k-grid-toolbar{
   border:none !important;
