@@ -118,6 +118,7 @@ td{
   top: 0;*/
   overflow: auto;
   margin-top:0px !important;
+  max-height: calc( 100vh - 200px );
 }
 .k-grid, .k-pager,.k-grid-toolbar{
   border:none !important;
