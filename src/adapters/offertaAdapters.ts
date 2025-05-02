@@ -237,6 +237,8 @@ export const mapOutcomeTypeName = (name: string) => {
       return "Rimandato";
     case "W":
       return "In Attesa";
+    case "C":
+      return "Chiuso";
   }
   return "Nessun esito";
 };
