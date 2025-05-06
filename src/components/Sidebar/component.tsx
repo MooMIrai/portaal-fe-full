@@ -231,7 +231,7 @@ const Sidebar = ({ children, items }: SidebarPros) => {
     </AppBarSection>
     <AppBarSpacer />
       <AppBarSection>
-      <Button ref={anchor} fillMode="solid" themeColor="light" onClick={() => setPopoverUser(!popoverUser)}>
+      <Button ref={anchor} className={styles.btnAvatar} fillMode="solid" themeColor="light" onClick={() => setPopoverUser(!popoverUser)}>
             {AuthService.getImage() && <Avatar rounded="full" type="image" style={{ marginRight: 5 }}>
               <img src={AuthService.getImage()} alt="user avatar" />
             </Avatar>}

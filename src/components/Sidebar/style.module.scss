@@ -110,10 +110,15 @@
 .navbar{
   position: relative !important;
   z-index: 2;
+  background-color: #fff !important;
 }
 
 .drawerContainer{
   position: relative;
   z-index: 1;
   height: 100%;
+}
+
+.btnAvatar{
+  background-color: #fff !important;
 }
