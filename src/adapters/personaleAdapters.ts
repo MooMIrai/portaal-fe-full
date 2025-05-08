@@ -128,7 +128,7 @@ const mapToAnagraficaData = (
   seniority: getSeniorAbbrevation(Person?.Seniority) || "",
   indirizzoResidenza: Person?.address || "",
   dataNascita: Person?.dateBirth ? new Date(Person.dateBirth) : null,
-  cap: Person?.zipCode ? parseInt(Person.zipCode, 10) : 0,
+  cap: Person?.zipCode,
   cellulare: Person?.phoneNumber ? parseInt(Person.phoneNumber, 10) : 0,
   telefonoCasa: Person?.phoneNumber2 ? parseInt(Person.phoneNumber2, 10) : 0,
   emailPrivata: Person?.privateEmail || "",
@@ -296,7 +296,7 @@ export const dataAdapter = (row: Record<string, any>) => {
     dataNascita: row.anagrafica.dataNascita
       ? new Date(row.anagrafica.dataNascita)
       : null,
-    cap: row.anagrafica.cap ? parseInt(row.anagrafica.cap, 10) : 0,
+    cap: row.anagrafica.cap,
     cellulare: row.anagrafica.cellulare
       ? parseInt(row.anagrafica.cellulare, 10)
       : 0,
