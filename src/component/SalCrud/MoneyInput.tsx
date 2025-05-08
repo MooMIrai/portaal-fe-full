@@ -13,6 +13,7 @@ export function MoneyInputSal(props:MoneyInputSalProps)
 {
     const [workingDays,setWorkingDays] = useState<number>();
     const [person,setPerson] = useState<Array<any>>();
+    const [acronyms, setAcronyms] = useState<string[]>();
     const [effectiveDays,setEffectiveDays] = useState<number | undefined>(props.value?.actualDays);
     const [effectiveDaysPristine,setEffectiveDaysPristine] = useState<boolean>(!!props.value?.actualDays);
     const [finalAmount,setFinalAmount] = useState<number | undefined>(props.value?.amount);
@@ -50,6 +51,8 @@ export function MoneyInputSal(props:MoneyInputSalProps)
                     const allPersonSum = person.reduce((accumulator, currentValue) => {
                         return accumulator + currentValue.total
                       },0);
+                    const allAcronyms = person.map(singlePerson => singlePerson.billAcronym);
+                    setAcronyms(allAcronyms);
                     setWorkingDays(allPersonSum);
                     setPerson(person);
                 }
@@ -80,6 +83,12 @@ export function MoneyInputSal(props:MoneyInputSalProps)
         }})
     },[finalAmount]);
 
+    useEffect(()=>{
+        props.onChange({value:{
+            acronyms
+        }})
+    },[acronyms]);
+
     if(!props.options.project || !props.options.sal || !props.options.sal.monthyear){
         return <span>Seleziona anno mese</span>
     }
@@ -92,6 +101,7 @@ export function MoneyInputSal(props:MoneyInputSalProps)
                         <thead className="k-table-thead">
                             <tr className="k-table-row">
                                 <th className="k-table-th k-header">Nominativo</th>
+                                <th className="k-table-th k-header">Acronimo</th>
                                 <th className="k-table-th k-header">Giorni</th>
                                 <th className="k-table-th k-header">Rapportino</th>
                             </tr>
@@ -99,6 +109,7 @@ export function MoneyInputSal(props:MoneyInputSalProps)
                         <tbody className="k-table-tbody">
                             {person.map(p=><tr className="k-table-row" key={p.id}>
                                 <td className="k-table-td">{p.first_name} {p.last_name}</td>
+                                <td className="k-table-td">{p.billAcronym}</td>
                                 <td className="k-table-td">{p.total} Giorni</td>
                                 <td className="k-table-td"><div>
                                 <Button
@@ -132,7 +143,7 @@ export function MoneyInputSal(props:MoneyInputSalProps)
                 <InputText label="Giorni Lavorati Sal"  type="number" value={workingDays} disabled /> 
                 <InputText label="Giorni Effettivi Sal" onChange={(e)=>{
                     setEffectiveDaysPristine(true);
-                    let v = e.target.value && e.target.value.length?parseInt(e.target.value):undefined;
+                    let v = e.target.value && e.target.value.length?parseFloat(e.target.value):undefined;
                     setEffectiveDays(v);
                    
                 }} required type="number" value={effectiveDays} disabled={props.disabled} />
@@ -142,7 +153,7 @@ export function MoneyInputSal(props:MoneyInputSalProps)
         }
         
         <InputText required label="Importo Sal" type="number" value={finalAmount} onChange={(e)=>{
-            let v = e.target.value && e.target.value.length?parseInt(e.target.value):undefined;
+            let v = e.target.value && e.target.value.length?parseFloat(e.target.value):undefined;
             setFinalAmount(v);
         }} disabled={props.disabled} />
         

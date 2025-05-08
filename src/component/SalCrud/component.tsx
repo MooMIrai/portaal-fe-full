@@ -34,7 +34,9 @@ export function SalCrud(props:PropsWithRef<SalCrudProps>){
     }
 
     const handleSubmit = () => {
-        let action= Promise.resolve()
+
+        let action= Promise.resolve();
+
         const mappedObj = {
           year:formSal.current.values.monthyear.getFullYear(),
           month:formSal.current.values.monthyear.getMonth()+1,
@@ -49,10 +51,12 @@ export function SalCrud(props:PropsWithRef<SalCrudProps>){
         } else if(props.type==='edit'){
           if(formSalData.SalState==='BILLING_OK'){
             const billData={
-              amount: formSal.current.values.amountBill?parseFloat(formSal.current.values.amountBill):undefined,
+              amount: formSal.current.values.amount ? parseFloat(formSal.current.values.amount) : undefined,
               billing_date: formSal.current.values.billing_date,
               billing_number: formSal.current.values.billing_number,
               advancePayment: formSal.current.values.advancePayment,
+              acronyms: formSal.current.values.money.acronyms,
+              baf_number: formSal.current.values.baf_number,
               sal_id:formSalData.id
             }
             if(!formSalData.Bill){
@@ -96,10 +100,12 @@ export function SalCrud(props:PropsWithRef<SalCrudProps>){
     const mappedData = {
       ...formSalData,
       money:formSalData,
-      amountBill:formSalData.Bill?formSalData.Bill.amount:formSalData.amount,
+      amountBill: formSalData.Bill?.amount,
+      billToPerson: formSalData.Bill?.BillToPerson?.map(billToPerson => billToPerson.Person.billAcronym).join(", "),
       advancePayment: formSalData.Bill?.advancePayment,
       billing_number: formSalData.Bill?.billing_number,
-      billing_date: formSalData.Bill?.billing_date
+      billing_date: formSalData.Bill?.billing_date,
+      baf_number: formSalData.Bill?.baf_number
     }
 
     if(!mappedData.monthyear){

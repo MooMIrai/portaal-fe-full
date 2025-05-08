@@ -108,6 +108,11 @@ export const SalHistoryCustomer = React.memo(() => {
               }   
               },
               {
+                name: "billing_number",
+                label: "Numero fattura",
+                type: "string"
+              },
+              {
                 name: "person_id",
                 label: "Dipendente(digita un carattere per la ricerca)",
                 type: "filter-autocomplete",

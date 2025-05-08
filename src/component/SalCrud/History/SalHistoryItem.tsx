@@ -3,6 +3,7 @@ import { salService } from "../../../services/salService";
 import GridTable from "common/Table";
 import { SalContext } from "../../../pages/Sal/provider";
 import { SalCrud } from "../component";
+import { omit } from "lodash";
 
 function formatNumber(num) {
   if(typeof num != 'number') return num;
@@ -16,7 +17,7 @@ const columns = [
     return <td>{formatNumber(dataItem.amount)}</td>
   } },
   { key:"billing_date", label:"Data fatturazione",type:'date',sortable:true,filter:'date'},
-  { key: "Sal.notes", label: "Note", type: "text", sortable: true, filter: "text" },
+  { key: "billing_number", label: "Numero fattura", type: "text", sortable: true, filter: "text" },
   { key: "month", label: "Mese", type: "custom", sortable: true, filter: "number", render:(row)=>{
     const date = new Date(new Date().getFullYear(), row.Sal.month - 1, 1);  
     let monthStr = date.toLocaleString('it-IT', { month: 'long' }).toString();
@@ -69,7 +70,7 @@ export const SalHistoryItem = React.memo((props: PropsWithChildren<{ project: an
           return <SalCrud
                           //otherSal={otherSal}
                           project={props.project}
-                          row={row.Sal}
+                          row={{...row.Sal, Bill: omit(row, ["Sal"])}}
                           type={type}
                           closeModalCallback={closeModalCallback}
                           refreshTable={()=>{}}

@@ -14,6 +14,12 @@ export const customFieldsSal = {
 }
 
 
+function requiredValidator (name: string, value: any, validator?: (value: any) => string) {
+    if (!value && value !== 0) return `Il campo ${name} è obbligatorio.`;
+    else if (validator) validator(value);
+}
+
+
 export const getFormFields=(values,onChange,type,project,otherSal?)=>{
 
     return [
@@ -43,44 +49,66 @@ export const getFormFields=(values,onChange,type,project,otherSal?)=>{
         }
     },
     {
+        name: "amount",
+        label: "Importo Fattura",
+        type: "number",
+        value: values.SalState ==='BILLING_OK' ? values.amount : values.amountBill,
+        required: true,
+        disabled:type === "view",
+        conditions:(formData)=>formData.SalState==='BILLING_OK' || formData.SalState === 'BILLED',
+        validator: (value: any) => requiredValidator("Importo Fattura", value)
+    },
+    {
         name: "billing_date",
         label: "Data Fattura",
         type: "date",
-        value: values.Bill?.billing_date,
+        value: values.billing_date,
         required: true,
         disabled:type === "view",
-        conditions:(formData)=>formData.SalState==='BILLING_OK',
+        conditions:(formData)=>formData.SalState==='BILLING_OK' || formData.SalState === 'BILLED',
+        validator: (value: any) => requiredValidator("Data Fattura", value)
     },
     {
         name: "billing_number",
         label: "Numero Fattura",
         type: "text",
-        value: values.Bill?.billing_number,
+        value: values.billing_number,
         required: true,
         disabled:type === "view",
-        conditions:(formData)=>formData.SalState==='BILLING_OK',
+        conditions:(formData)=>formData.SalState==='BILLING_OK' || formData.SalState === 'BILLED',
+        validator: (value: any) => requiredValidator("Numero Fattura", value)
+    },
+    {
+        name: "baf_number",
+        label: "Numero BAF",
+        type: "text",
+        value: values.baf_number,
+        required: true,
+        disabled:type === "view",
+        conditions:(formData)=>formData.SalState==='BILLING_OK' || formData.SalState === 'BILLED',
+        validator: (value: any) => requiredValidator("Numero BAF", value)
+    },
+    {
+        name: "billToPerson",
+        label: "Acronimi",
+        type: "text",
+        value: values.billToPerson,
+        required: false,
+        disabled: true,
+        conditions:(formData)=> formData.SalState === 'BILLED'
     },
     {
         name: "advancePayment",
         label: "Anticipata",
-        type: "number",
-        value: values.Bill?.advancePayment,
-        required: true,
+        type: "text",
+        value: values.advancePayment,
+        required: false,
         disabled:type === "view",
-        conditions:(formData)=>formData.SalState==='BILLING_OK',
-    },
-    {
-        name: "amountBill",
-        label: "Importo Fattura",
-        type: "number",
-        value: values.Bill?.amount || values.amount,
-        required: true,
-        disabled:type === "view",
-        conditions:(formData)=>formData.SalState==='BILLING_OK',
+        conditions:(formData)=>formData.SalState==='BILLING_OK' || formData.SalState === 'BILLED',
     },
     {
         name: "notes",
-        label: "note",
+        label: "Note",
         type: "textarea",
         value: values.notes || "",
         disabled:type === "view"
