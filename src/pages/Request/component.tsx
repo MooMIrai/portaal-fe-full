@@ -97,7 +97,7 @@ export default function RequestPage(){
             )}
           />
         }
-        <Modal title={"Cerca candidati per la richiesta "+ (currentrequest?'id:'+currentrequest.id_code + ' ref:'+ currentrequest.ref_code:'')}
+        <Modal title={"Cerca candidati per la richiesta "+ (currentrequest?'id:'+ (currentrequest.id_code || " -, ") + 'ref: '+ currentrequest.ref_code:'')}
           width="100%"
           height="100%"
             isOpen={modalOpened}

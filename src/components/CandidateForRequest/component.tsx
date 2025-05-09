@@ -409,15 +409,19 @@ export function CandidateForRequest(props: PropsWithChildren<{ requestId: number
     }
 
     const loadDataAssociated = (
-        
+        pagination: any,
+        filter: any
     ) => {
-        return richiestaService.getDetails(props.requestId).then(res => {
-            const dataR = res[0].RecruitingAssignment.filter(p=>{
+
+        return richiestaService.getDetails(props.requestId, pagination.currentPage, pagination.pageSize, filter).then(res => {
+            
+            const dataR = res.data.filter(p=>{
                 return !props.preselectedId || (p.Candidate && p.Candidate.id===parseInt(props.preselectedId));
-            })
+            });
+            
             return {
                 data:dataR,
-                meta: { total: dataR.length }
+                meta: { total: res.meta.total }
             }
         })
     }
@@ -438,6 +442,18 @@ export function CandidateForRequest(props: PropsWithChildren<{ requestId: number
         draggableWindow={true}
         initialWidthWindow={900}
         resizable={true}
+        addedFilters={[
+            {
+                name: "Person.firstName",
+                label: "Nome",
+                type: "text"
+            },
+            {
+                name: "Person.lastName",
+                label: "Cognome",
+                type: "text"
+            }
+        ]}
         actions={() => [
 
 

@@ -116,7 +116,10 @@ class RichiestaServiceC extends BaseHttpService{
       })
       .then((res) => res.data);
 
-    getDetails = (requestId:number)=>client.get('/api/v1/recruitingRequest/getAssignmentsDetails/'+requestId).then(res=>res.data)
+    getDetails = (requestId:number, pageNum:number, pageSize:number, filter: any)=>client.post('/api/v1/recruitingRequest/getAssignmentsDetails/'+requestId, 
+      { filtering: filter }, 
+      { params: {pageNum, pageSize} }
+    ).then(res=>res.data);
 
     associateCandidate = (candidateId:number,requestid:number) => client.post('/api/v1/recruitingAssignment/create',{
       candidate_id:candidateId,
