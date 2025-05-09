@@ -55,6 +55,13 @@ const CostiCommessamodal = (props: CostiCommessamodalProps) => {
       }
 
       const newModel: any = {};
+      const labelMap = new Map([
+        ["description", "Descrizione"],
+        ["amount", "Importo"],
+        ["payment_date", "Data pagamento"],
+        ["projectExpensesType_id", "Tipologia spesa"],
+        ["Attachment", "Allegato"]
+      ]);
       resources
         /* .filter((item: any) => !excludedKeys.includes(item.name)) */
         .forEach((item: any) => {
@@ -72,9 +79,7 @@ const CostiCommessamodal = (props: CostiCommessamodalProps) => {
               : item.name === "Attachment"
                 ? "uploadSingleFile"
                 : determineFieldType(item.type),
-            label: item.name === "projectExpensesType_id"
-              ? "Tipologia spesa"
-              : item.name.charAt(0).toUpperCase() + item.name.slice(1),
+            label: labelMap.get(item.name),
             value: "",
             disabled: item.readOnly,
             required: item.required,
