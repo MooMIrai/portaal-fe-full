@@ -89,7 +89,7 @@ export const SalDraftItem = React.memo((props: PropsWithChildren<{ project: any,
         draggableWindow={true}
         initialWidthWindow={900}
         resizable={true}
-        actions={() => ["edit", "delete", "create"]}
+        actions={() => ["show", "edit", "delete", "create"]}
         formCrud={(row: any, type: string, closeModalCallback: any, refreshTable: any) => {
           let otherSal = rows;
           if (rows && row) {

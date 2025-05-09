@@ -89,7 +89,7 @@ export const SalRTBItem = React.memo((props: PropsWithChildren<{ project: any, r
         draggableWindow={true}
         initialWidthWindow={900}
         resizable={true}
-        actions={() => [ "edit", "delete"]}
+        actions={() => ["show", "edit", "delete"]}
         formCrud={(row: any, type: string, closeModalCallback: any, refreshTable: any) => {
           let otherSal = rows;
           if (rows && row) {

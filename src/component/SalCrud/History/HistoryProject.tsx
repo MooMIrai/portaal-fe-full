@@ -25,7 +25,7 @@ const columns = [
   { key: "start_date", label: "Data Inizio Progetto", type: "date", sortable: true, filter: "date" },
   { key: "end_date", label: "Data Fine Progetto", type: "date", sortable: true, filter: "date" },
 ];
-export const SalHistoryProject = React.memo((props: PropsWithChildren<{ customer: any }>) => {
+export const SalHistoryProject = React.memo((props: PropsWithChildren<{ customer: any, refreshParent:()=>void }>) => {
 
   const { filters } = useContext(SalContext);
 
@@ -55,7 +55,7 @@ export const SalHistoryProject = React.memo((props: PropsWithChildren<{ customer
   },[filters]);
 
   const renderExpand = useCallback((rowProps) => (
-    <SalHistoryItem project={rowProps.dataItem} />
+    <SalHistoryItem project={rowProps.dataItem} refreshParent={props.refreshParent} />
   ), []);
 
 

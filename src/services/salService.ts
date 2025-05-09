@@ -372,7 +372,15 @@ class SalService extends BaseHttpService {
           `/api/v1/bills/update/${id}`,
           resourceData
         ).then(res=>res.data)
-    }
+    };
+
+    deleteBill = async (
+      id: number
+    ) => {
+      return client.delete(
+          `/api/v1/bills/delete/${id}`,
+        ).then(res=>res.data)
+    };
 
     searchCustomer (text:string) {
       return client.get(`api/v1/crud/Customer?term=${text}`).then(res => res.data.data)

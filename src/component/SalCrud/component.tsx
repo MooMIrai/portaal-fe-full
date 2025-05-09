@@ -49,23 +49,24 @@ export function SalCrud(props:PropsWithRef<SalCrudProps>){
         if(props.type==='create'){
           action =salService.createResource(mappedObj);
         } else if(props.type==='edit'){
+          const billData={
+            amount: formSal.current.values.amount ? parseFloat(formSal.current.values.amount) : undefined,
+            billing_date: formSal.current.values.billing_date,
+            billing_number: formSal.current.values.billing_number,
+            advancePayment: formSal.current.values.advancePayment,
+            acronyms: formSal.current.values.money.acronyms,
+            baf_number: formSal.current.values.baf_number,
+            sal_id:formSalData.id
+          };
           if(formSalData.SalState==='BILLING_OK'){
-            const billData={
-              amount: formSal.current.values.amount ? parseFloat(formSal.current.values.amount) : undefined,
-              billing_date: formSal.current.values.billing_date,
-              billing_number: formSal.current.values.billing_number,
-              advancePayment: formSal.current.values.advancePayment,
-              acronyms: formSal.current.values.money.acronyms,
-              baf_number: formSal.current.values.baf_number,
-              sal_id:formSalData.id
-            }
             if(!formSalData.Bill){
               action = salService.createBill(billData);
             }else{
               action = salService.updateBill(formSalData.Bill.id,billData);
             }
-          }else{
-            action=salService.updateResource(props.row.id,mappedObj);
+          }else if (formSalData.SalState === "BILLED") {
+            billData.amount = formSal.current.values.amountBill ? parseFloat(formSal.current.values.amountBill) : undefined;
+            action=salService.updateBill(formSalData.Bill.id, billData);
           }
           
         }
@@ -80,20 +81,38 @@ export function SalCrud(props:PropsWithRef<SalCrudProps>){
 
     useEffect(()=>{
       if(props.type==='delete'){
-        NotificationActions.openConfirm('Sei sicuro di rimuovere il SAL?',
-        () => {
-         salService.deleteResource(props.row.id).then(()=>{
-            NotificationActions.openModal(
-              { icon: true, style: "success" },
-              "Operazione avvenuta con successo "
-            );
-            props.closeModalCallback();
-            props.refreshTable();
-          })
-  
-        },
-        'Cancella SAL'
-      )
+        if (formSalData.SalState === "BILLED") {
+          NotificationActions.openConfirm('Sei sicuro di rimuovere la fattura?',
+            () => {
+             salService.deleteBill(props.row.Bill.id).then(()=>{
+                NotificationActions.openModal(
+                  { icon: true, style: "success" },
+                  "Operazione avvenuta con successo "
+                );
+                props.closeModalCallback();
+                props.refreshTable();
+              })
+      
+            },
+            'Cancella fattura'
+          );
+        }
+        else {
+          NotificationActions.openConfirm('Sei sicuro di rimuovere il SAL?',
+            () => {
+             salService.deleteResource(props.row.id).then(()=>{
+                NotificationActions.openModal(
+                  { icon: true, style: "success" },
+                  "Operazione avvenuta con successo "
+                );
+                props.closeModalCallback();
+                props.refreshTable();
+              })
+      
+            },
+            'Cancella SAL'
+          );
+        }
       }
     },[props.type])
 
@@ -135,10 +154,10 @@ export function SalCrud(props:PropsWithRef<SalCrudProps>){
                 props.closeModalCallback();
               })}
               submitText="Salva"
-              showSubmit={props.type!='show'}
+              showSubmit={props.type!='view'}
           />
           {
-            props.type!=='create' && props.type!='delete' &&  <div style={{display:'flex',justifyContent:'flex-end',marginTop:10}}>
+            props.type!=='create' && props.type!='delete' && props.type!='view' && <div style={{display:'flex',justifyContent:'flex-end',marginTop:10}}>
               <Button disabled={props.row.SalState==='BILLED'} svgIcon={
                 props.row.SalState==='PENDING'?fileAddIcon:stampIcon
               } onClick={()=>{
@@ -151,6 +170,5 @@ export function SalCrud(props:PropsWithRef<SalCrudProps>){
           }
           </>
           :<div>delete</div>}
-         
           </>
 }

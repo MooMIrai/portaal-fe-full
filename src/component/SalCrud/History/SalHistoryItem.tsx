@@ -27,7 +27,7 @@ const columns = [
   { key: "Sal.year", label: "Anno", type: "number", sortable: true, filter: "number" }
 ];
 
-export const SalHistoryItem = React.memo((props: PropsWithChildren<{ project: any }>) => {
+export const SalHistoryItem = React.memo((props: PropsWithChildren<{ project: any, refreshParent:()=>void }>) => {
 
   const { filters } = useContext(SalContext);
 
@@ -64,7 +64,7 @@ export const SalHistoryItem = React.memo((props: PropsWithChildren<{ project: an
         draggableWindow={true}
         initialWidthWindow={900}
         resizable={true}
-        actions={() => ['show']}
+        actions={() => ['show', 'edit', 'delete']}
         formCrud={(row: any, type: string, closeModalCallback: any, refreshTable: any)=>{
           
           return <SalCrud
@@ -73,7 +73,7 @@ export const SalHistoryItem = React.memo((props: PropsWithChildren<{ project: an
                           row={{...row.Sal, Bill: omit(row, ["Sal"])}}
                           type={type}
                           closeModalCallback={closeModalCallback}
-                          refreshTable={()=>{}}
+                          refreshTable={props.refreshParent}
                           onNext={() => Promise.resolve()}
                         />
         }}

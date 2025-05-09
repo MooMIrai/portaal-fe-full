@@ -30,7 +30,7 @@ export const getFormFields=(values,onChange,type,project,otherSal?)=>{
         //value: getDateFromData(values.year,values.month),
         valueOnChange:onChange,
         required: true,
-        disabled:type === "view" || values.SalState==='BILLING_OK',
+        disabled:type === "view" || values.SalState==='BILLING_OK' || values.SalState==='BILLED',
         options:{
             disabled:otherSal?otherSal.map(os=>({...os,month:os.month-1})):[]
         }
@@ -42,14 +42,14 @@ export const getFormFields=(values,onChange,type,project,otherSal?)=>{
         value: values,
         required: true,
         showLabel:false,
-        disabled:type === "view" || values.SalState==='BILLING_OK',
+        disabled:type === "view" || values.SalState==='BILLING_OK' || values.SalState==='BILLED',
         options:{
             project,
             sal:values
         }
     },
     {
-        name: "amount",
+        name:  values.SalState ==='BILLING_OK' ? "amount" : "amountBill",
         label: "Importo Fattura",
         type: "number",
         value: values.SalState ==='BILLING_OK' ? values.amount : values.amountBill,
