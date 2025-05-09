@@ -38,7 +38,7 @@ export const getFormCandidate = (
 
     };
 
-    const id_spoken_category_skill =  process.env.SPOKEN_LANGUAGES ? process.env.SPOKEN_LANGUAGES:"116";
+    const spoken_category_skill =  process.env.SPOKEN_LANGUAGES ? process.env.SPOKEN_LANGUAGES : "";
     // Colonne tabella
     const fields = {
         files: {
@@ -228,9 +228,9 @@ export const getFormCandidate = (
             validator: (value: any) =>  value ? "" : "Il campo Skill è obbligatorio",
             disabled: (type === "view" || skillLoading),
             options: {
-                field: "skillCategory_id",
+                field: "skillCategory.category",
                 operator: "neq", // diverso da
-                value: parseInt(id_spoken_category_skill)
+                value: spoken_category_skill
             }
         },
         languageSkills: {
@@ -241,9 +241,9 @@ export const getFormCandidate = (
             required: false,
             disabled: (type === "view" || skillLoading),
             options: {
-                field: "skillCategory_id",
+                field: "skillCategory.category",
                 operator: "equals",
-                value: parseInt(id_spoken_category_skill) 
+                value: spoken_category_skill
             }
         },
     };

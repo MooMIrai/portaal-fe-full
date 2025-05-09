@@ -37,8 +37,6 @@ export function RichiesteCrud(props: RichiesteCrudProps) {
     const [aiModalText, setAiModalText] = useState<string>();
     const [aiModalLoading, setAiModalLoading] = useState<boolean>(false);
 
-    const [languageCat,setLanguageCat] = useState<number>();
-
     const adaptAiData = useCallback((aiData) => {//cristian
         let upd = adaptSkillsAi(formRichiestaData, aiData.jsonData.data) as RequestFields;
 
@@ -47,13 +45,6 @@ export function RichiesteCrud(props: RichiesteCrudProps) {
         })
 
     }, []);
-
-
-    useEffect(()=>{
-        richiestaService.getLanguageCat(1,1).then(res=>{
-            setLanguageCat(res.id)
-        })
-    },[])
 
     useEffect(() => {
         if (aiModalText) {
@@ -70,7 +61,7 @@ export function RichiesteCrud(props: RichiesteCrudProps) {
     }, [aiModalText, adaptAiData]);
 
     const formFields = useMemo(() => Object.values(getFormRichiesta({}, props.type, selectedPrimarySkill, setSelectedPrimarySkill,
-        selectedSecondarySkill, setSelectedSecondarySkill,languageCat ||0)), [props.type, selectedPrimarySkill, selectedSecondarySkill,languageCat]);
+        selectedSecondarySkill, setSelectedSecondarySkill)), [props.type, selectedPrimarySkill, selectedSecondarySkill]);
 
     const handleCommandExecuted = (command, closeAiPopup) => {
         if (command.id === '1') {
@@ -111,10 +102,6 @@ export function RichiesteCrud(props: RichiesteCrudProps) {
     
       if (props.type === "delete") {
         return <div></div>
-      }
-
-      if(!languageCat){
-        return <>Loading...</>
       }
 
     return <>

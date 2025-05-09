@@ -5,8 +5,7 @@ export const getFormRichiesta = (
     primarySkillSelected: number[],
     setPrimarySkill: any,
     secondarySkillSelected: number[],
-    setSecondarySkill: any,
-    languageCat:number
+    setSecondarySkill: any
 ) => {
 
 
@@ -15,6 +14,8 @@ export const getFormRichiesta = (
         return /^(\+?\d{1,4}\s?\d{7,15}|00\d{1,4}\s?\d{7,15})$/.test(value);
 
     };
+
+    const spoken_category_skill =  process.env.SPOKEN_LANGUAGES ? process.env.SPOKEN_LANGUAGES : "";
 
     const fields = {
         ReferrerHr: {
@@ -132,9 +133,9 @@ export const getFormRichiesta = (
             validator: (value: any) => value ? "" : "Il campo Skill primarie è obbligatorio",
             disabled: type === "view",
             options: {
-                field: "skillCategory_id",
+                field: "skillCategory.category",
                 operator: "neq", // diverso da
-                value: languageCat,
+                value: spoken_category_skill,
                 disabledArray: secondarySkillSelected
             }
         },
@@ -148,9 +149,9 @@ export const getFormRichiesta = (
             required: false,
             disabled: type === "view",
             options: {
-                field: "skillCategory_id",
+                field: "skillCategory.category",
                 operator: "neq", // diverso da
-                value: languageCat,
+                value: spoken_category_skill,
                 disabledArray: primarySkillSelected
             }
         },
@@ -162,9 +163,9 @@ export const getFormRichiesta = (
             required: false,
             disabled: type === "view",
             options: {
-                field: "skillCategory_id",
+                field: "skillCategory.category",
                 operator: "equals",
-                value: languageCat
+                value: spoken_category_skill
             }
         },
         saleRate: {
