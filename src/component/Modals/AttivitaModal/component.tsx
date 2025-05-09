@@ -151,6 +151,7 @@ const AttivitaModal = (props: AttivitaModalProps) => {
     }}
     filterable={true}
     sortable={true}
+    createLabel={"Nuova attività"}
     getData={loadData}
     columns={attivitaColumns}
     resizableWindow={true}

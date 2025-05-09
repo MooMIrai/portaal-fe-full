@@ -148,6 +148,7 @@ const AssigningTable = (props: { activity_id: number }) => {
       sortable={true}
       getData={loadData}
       columns={attivitaAssegnazioneColumns}
+      createLabel={"Nuova assegnazione"}
       resizableWindow={true}
       initialHeightWindow={800}
       draggableWindow={true}
