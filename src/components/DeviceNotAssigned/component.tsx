@@ -15,7 +15,7 @@ export  function DeviceNotAssigned(){
   const [refreshCount,setRefreshCount] = useState<number>(0);
 
     const columns = [
-        { key: "model", label: " ", type: "custom", sortable: false, width:'35px', render:(row)=> <td >
+        { key: "model", label: " ", type: "custom", sortable: false, width:'35px', format: "noExcel", render:(row)=> <td >
           {!row.isCurrentlyAssigned && <input title="Seleziona riga" type="checkbox" style={{width:15,height:15}} 
           checked={selectedRows?.some(s=>s.serial_number===row.serial_number)} 
           onChange={()=>{
