@@ -14,9 +14,9 @@ export function RolePage() {
     const [selectedRole,setSelectedRole] = useState<number>()
 
     const columns = [
-        { key: "role", label: "Nome", type: "string", sortable: true, filter: "text" },
-        { key: "description", label: "Description", type: "string", sortable: true, filter: "text" },
-        { key: "id", label: "", type: "custom", sortable: false, render:(rowdata:any)=><Button fillMode={"link"}
+        { key: "role", label: "Ruolo", type: "string", sortable: true, filter: "text" },
+        { key: "description", label: "Descrizione", type: "string", sortable: true, filter: "text" },
+        { key: "id", label: "Permessi", type: "custom", sortable: false, render:(rowdata:any)=><Button fillMode={"link"}
         themeColor={"info"}
         onClick={() =>
           setSelectedRole(rowdata.id)
