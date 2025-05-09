@@ -504,6 +504,8 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
       const newArr = data.map((row,rowIndex)=>{
         let objRow:any={};
         props.columns.forEach(column=>{
+
+          if (column.format === "noExcel") return;
           
           try{
             if(column.render){
