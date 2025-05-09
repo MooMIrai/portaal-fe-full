@@ -150,10 +150,13 @@ interface TablePaginatedProps extends GridProps {
 
   rowStyle?: (row: any) => Record<string, any>,
 
-  addedFilters?: FieldConfig[],
-  writePermissions?:string[],
+  addedFilters?: FieldConfig[];
+  writePermissions?:string[];
 
-  actionFilters?:(type:TABLE_ACTION_TYPE,row:any) => boolean
+  actionFilters?:(type:TABLE_ACTION_TYPE,row:any) => boolean;
+
+  //custom labels for actions
+  createLabel?: string;
 }
 
 const MyPager = (props: PagerProps) => (
@@ -586,7 +589,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
                 themeColor={"primary"}
                 onClick={() => openModal(TABLE_ACTION_TYPE.create)}
               >
-                Nuovo
+                {props.createLabel || "Nuovo"}
               </Button>
             </div>
           )}
