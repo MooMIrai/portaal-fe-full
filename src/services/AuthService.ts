@@ -23,6 +23,12 @@ class AuthService {
       return false;
     return CookieRepo.read('Roles').split(',').some(r=>r===permission);
   }
+
+  readPermissions(){
+    if(!CookieRepo.read('Roles'))
+      return [];
+    return CookieRepo.read('Roles').split(',');
+  }
   
   
   getImage(){
