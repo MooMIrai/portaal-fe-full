@@ -94,7 +94,7 @@ function ModalComponent(props:{onSubmit:()=>void}) {
                 }}
             />
             {uploadedFile || signedFile ?<Button type="button" themeColor="success" onClick={handleUnassign}>
-            Conferma Assegnazione
+            Restituisci dispositivo
         </Button>:null}
         </div>
         <div style={{ flex: 1 }}>
