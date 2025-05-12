@@ -98,7 +98,11 @@ export function SalCrud(props:PropsWithRef<SalCrudProps>){
           );
         }
         else {
-          NotificationActions.openConfirm('Sei sicuro di rimuovere il SAL?',
+          const message = formSalData.SalState === "BILLING_OK" 
+            ? "Sei sicuro di voler revocare l'ok a fatturare?"
+            : 'Sei sicuro di rimuovere il SAL?'
+          ;
+          NotificationActions.openConfirm(message,
             () => {
              salService.deleteResource(props.row.id).then(()=>{
                 NotificationActions.openModal(
@@ -154,7 +158,7 @@ export function SalCrud(props:PropsWithRef<SalCrudProps>){
                 props.closeModalCallback();
               })}
               submitText="Salva"
-              showSubmit={props.type!='view'}
+              showSubmit={props.type!='view' && formSalData.SalState !== "BILLING_OK"}
           />
           {
             props.type!=='create' && props.type!='delete' && props.type!='view' && <div style={{display:'flex',justifyContent:'flex-end',marginTop:10}}>
