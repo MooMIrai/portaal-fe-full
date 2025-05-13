@@ -17,7 +17,7 @@ export default function RequestPage(){
             //{ key: "date", label: "Data Richiesta", type: "date", sortable: true, filter: "date" },
             { key: "Customer.name", label: "Cliente", type: "string", sortable: true, filter: "text" },
             { key: "Location.description", label: "Citta di competenza", type: "string", sortable: true, filter: "text" },
-            { key: "RequestingEmployee.Person.firstName", label: "HR incaricaricata", type: "custom", render:(rowData)=><td>{rowData.RequestingEmployee.Person.firstName} {rowData.RequestingEmployee.Person.lastName}</td> },
+            { key: "RequestingEmployee.Person.firstName", label: "HR incaricata", type: "custom", render:(rowData)=><td>{rowData.RequestingEmployee.Person.firstName} {rowData.RequestingEmployee.Person.lastName}</td> },
             { key: "id", label: "Profilo", type: "custom", sortable: false, filter: false, render:(rowData)=><td>
               <Button size="small" svgIcon={myspaceIcon} onClick={() => {
                 setCurrentrequest(rowData)
@@ -25,7 +25,7 @@ export default function RequestPage(){
                 setCurrentrequestSkills(rowData.Skills)
               }}>{rowData.RecruitingAssignment?rowData.RecruitingAssignment.length:0} - Candidati Associati</Button>
             </td>} ,
-            { key: "date_created", label: "Data creazione", type: "date", sortable: true, filter: "text" },
+            { key: "date_created", label: "Data Richiesta", type: "date", sortable: true, filter: "text" },
             {
                 key: "SkillArea.name", label: "Skills", type: "custom", sortable: false, filter: "text", width: 250, render: (row) => {
           

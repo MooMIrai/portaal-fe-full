@@ -30,9 +30,9 @@ export function RequestByCandidate(props:{idCandidate:number,requests:Array<any>
                     //{ key: "date", label: "Data Richiesta", type: "date", sortable: true, filter: "date" },
                     { key: "Customer.name", label: "Cliente", type: "string", sortable: true, filter: "text" },
                     { key: "Location.description", label: "Citta di competenza", type: "string", sortable: true, filter: "text" },
-                    { key: "RequestingEmployee.Person.firstName", label: "HR incaricaricata", type: "custom", render:(rowData)=><td>{rowData.RequestingEmployee.Person.firstName} {rowData.RequestingEmployee.Person.lastName}</td> },
+                    { key: "RequestingEmployee.Person.firstName", label: "HR incaricata", type: "custom", render:(rowData)=><td>{rowData.RequestingEmployee.Person.firstName} {rowData.RequestingEmployee.Person.lastName}</td> },
                     { key: "CandidateProfile.description", label: "Profilo", type: "string", sortable: true, filter: "text" },
-                    { key: "date_created", label: "Data creazione", type: "date", sortable: true, filter: "text" },
+                    { key: "date_created", label: "Data Richiesta", type: "date", sortable: true, filter: "text" },
                     {
                         key: "SkillArea.name", label: "Skills", type: "custom", sortable: false, filter: "text", width: 250, render: (row) => {
                   
