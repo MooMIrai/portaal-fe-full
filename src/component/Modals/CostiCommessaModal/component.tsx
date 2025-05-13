@@ -79,7 +79,7 @@ const CostiCommessamodal = (props: CostiCommessamodalProps) => {
               : item.name === "Attachment"
                 ? "uploadSingleFile"
                 : determineFieldType(item.type),
-            label: labelMap.get(item.name),
+            label: labelMap.get(item.name) || item.name,
             value: "",
             disabled: item.readOnly,
             required: item.required,
