@@ -50,6 +50,15 @@ class AuthService {
     return tokenData.username;
   }
 
+  getFullName(){
+    const token = this.getToken();
+    const tokenData = tokenService.decodeToken(token);
+    if (!tokenData) {
+      throw new Error("Token not valid");
+    }
+    return tokenData.fullname;
+  }
+
   login(token: string) {
     this.setToken(token);
   }

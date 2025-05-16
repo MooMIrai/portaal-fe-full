@@ -31,7 +31,7 @@ export default function AvatarIcon(props: AvatarProps & AvatarIconProps & {name?
 
   return (
     <BadgeContainer>
-      <Avatar size={props.size || 'medium'} type="initials" style={props.name?{background:stringToColor(props.name)}:undefined}>
+      <Avatar size={props.size || 'medium'} type="initials" style={{...props.style, ...(props.name ? {background:stringToColor(props.name)} : undefined)}}>
         <Label className="k-item-text" style={props.size==='large'?{fontSize:20}:undefined}>{props.initials}</Label>
       </Avatar>
     </BadgeContainer>

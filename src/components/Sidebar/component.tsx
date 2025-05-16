@@ -26,6 +26,7 @@ import withAutocomplete from "../../hoc/AutoComplete";
 import { Popover } from '@progress/kendo-react-tooltip';
 import { ThemeSwitcher } from "../ThemeSwitcher/component";
 import { Badge, BadgeContainer } from "@progress/kendo-react-indicators";
+import AvatarIcon from "../AvatarIcon/component";
 
 interface SidebarPros {
   items: DrawerItemProps[];
@@ -232,9 +233,7 @@ const Sidebar = ({ children, items }: SidebarPros) => {
     <AppBarSpacer />
       <AppBarSection>
       <Button ref={anchor} className={styles.btnAvatar} fillMode="solid" themeColor="light" onClick={() => setPopoverUser(!popoverUser)}>
-            {AuthService.getImage() && <Avatar rounded="full" type="image" style={{ marginRight: 5 }}>
-              <img src={AuthService.getImage()} alt="user avatar" />
-            </Avatar>}
+            {AuthService.getFullName() && <AvatarIcon initials={AuthService.getFullName()[0].toUpperCase()} style={{ marginRight: 5 }} />}
             {
               AuthService.getUserName()
             }
