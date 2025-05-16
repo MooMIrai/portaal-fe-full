@@ -49,7 +49,7 @@ export const SalRTBItem = React.memo((props: PropsWithChildren<{ project: any, r
       props.project.id,
       pagination.currentPage,
       pagination.pageSize,
-      filters,
+      filter,
       sorting,
       include,
     );

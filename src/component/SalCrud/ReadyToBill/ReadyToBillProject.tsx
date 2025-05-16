@@ -38,10 +38,10 @@ export const SalRTBProject=React.memo((props: PropsWithChildren<{customer:any, r
         const include = true;
     
         const tableResponse = await salService.getReadyToBillByProject(
-            props.customer.id,
+          props.customer.id,
           pagination.currentPage,
           pagination.pageSize,
-          filters,
+          filter,
           sorting,
           include,
         );

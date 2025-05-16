@@ -38,7 +38,7 @@ export const SalProjectDraft = React.memo((props: PropsWithChildren<{ customer: 
       props.customer.id,
       pagination.currentPage,
       pagination.pageSize,
-      filters,
+      filter,
       sorting,
       include,
     );
@@ -76,7 +76,7 @@ export const SalProjectDraft = React.memo((props: PropsWithChildren<{ customer: 
       rowStyle={(rowData) => ({
         background: rowData.oldSal ? 'rgba(255,0,0,0.2)' : rowData.missingSal ? 'rgba(255,209,0,0.2)' : 'rgba(0,255,0,0.2)',
       })}
-      filterable={false}
+      filterable={true}
       pageable={true}
       sortable={true}
       getData={loadData}

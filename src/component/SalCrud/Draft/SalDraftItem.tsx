@@ -62,7 +62,7 @@ export const SalDraftItem = React.memo((props: PropsWithChildren<{ project: any,
       props.project.id,
       pagination.currentPage,
       pagination.pageSize,
-      filters,
+      filter,
       sorting,
       include,
     );
@@ -80,7 +80,7 @@ export const SalDraftItem = React.memo((props: PropsWithChildren<{ project: any,
 
       <GridTable
         writePermissions={["WRITE_SALES_SAL"]}
-        filterable={false}
+        filterable={true}
         sortable={true}
         getData={loadData}
         columns={columns}

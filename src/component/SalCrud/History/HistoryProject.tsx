@@ -21,7 +21,7 @@ const columns = [
   { key: "totalBill", label: "Totale Sal Fatturato", type: "custom", render:(dataItem)=>{
     return <td>{formatNumber(dataItem.totalBill)}</td>
   }, sortable: true},
-  { key: "lastSal", label: "Data Ultimo Sal", type: "date", sortable: true, filter: "date" },
+  { key: "lastBill", label: "Data Ultima Fattura", type: "date", sortable: true, filter: "date" },
   { key: "start_date", label: "Data Inizio Progetto", type: "date", sortable: true, filter: "date" },
   { key: "end_date", label: "Data Fine Progetto", type: "date", sortable: true, filter: "date" },
 ];
@@ -34,13 +34,14 @@ export const SalHistoryProject = React.memo((props: PropsWithChildren<{ customer
     filter: any,
     sorting: any[],
   ) => {
+    
     const include = true;
 
     const tableResponse = await salService.getHistoryBillFromCustomer(
       props.customer.id,
       pagination.currentPage,
       pagination.pageSize,
-      filters,
+      filter,
       sorting,
       include,
     );

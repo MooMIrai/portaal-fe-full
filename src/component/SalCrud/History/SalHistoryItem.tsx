@@ -37,7 +37,7 @@ export const SalHistoryItem = React.memo((props: PropsWithChildren<{ project: an
       props.project.id,
       pagination.currentPage,
       pagination.pageSize,
-      filters,
+      filter,
       sorting,
       include,
     );
