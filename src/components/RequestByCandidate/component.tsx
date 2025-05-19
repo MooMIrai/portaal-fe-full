@@ -6,23 +6,24 @@ import {hyperlinkOpenIcon} from 'common/icons';
 
 export function RequestByCandidate(props:{idCandidate:number,requests:Array<any>}){
 
-    const loadData = (
-        pagination: any,
-        filter: any,
-        sorting: any[],
-    ) => {
-        /* return richiestaService.getByCandidate(props.idCandidate, pagination.currentPage, pagination.pageSize).then(res => {
-            return {
-                data: res.candidates,
-                meta: { total: res.total }
-            }
-        }) */
-        return richiestaService.search(pagination.currentPage,pagination.pageSize,
-            {
-                logic: "or",
-                filters: props.requests.map(r=>( { field: "id", operator: "eq", value: r.request_id }))
-            }
-            ,sorting,undefined,true)
+    const loadData = (pagination: any, filter: any, sorting: any[]) => {
+
+      /* return richiestaService.getByCandidate(props.idCandidate, pagination.currentPage, pagination.pageSize).then(res => {
+          return {
+              data: res.candidates,
+              meta: { total: res.total }
+          }
+      }) */
+
+      const byCandidateFilter = {
+        logic: "or",
+        filters: props.requests.map(r=>( { field: "id", operator: "eq", value: r.request_id }))
+      };
+
+      const allFilters = {logic: filter?.logic || "and", filters: [...(filter?.filters || []), byCandidateFilter]};
+
+      return richiestaService.search(pagination.currentPage,pagination.pageSize,allFilters,sorting,undefined,true);
+      
     }
 //Request.RequestingEmployee.Person
         const columns = [
@@ -72,6 +73,17 @@ export function RequestByCandidate(props:{idCandidate:number,requests:Array<any>
                 initialWidthWindow={900}
                 resizable={true}
                 actions={() => []}
+                addedFilters={[
+                  {
+                    name: "requestingEmployee_id",
+                    label: "HR incaricata",
+                    type: "filter-autocomplete",
+                    options:{
+                      getData:(search: string)=> richiestaService.getCurrentHR(search).then(res=> res?.map(r=>({id:r.account_id, name: r.firstName + ' ' + r.lastName}))),
+                      getValue:(v:any)=>v?.id
+                    }
+                  }
+                ]}
             />
 
 }

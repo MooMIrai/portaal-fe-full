@@ -91,6 +91,17 @@ export default function RequestPage(){
               "delete",
               
             ]}
+            addedFilters={[
+              {
+                name: "requestingEmployee_id",
+                label: "HR incaricata",
+                type: "filter-autocomplete",
+                options:{
+                  getData:(search: string)=> richiestaService.getCurrentHR(search).then(res=> res?.map(r=>({id:r.account_id, name: r.firstName + ' ' + r.lastName}))),
+                  getValue:(v:any)=>v?.id
+                }
+              }
+            ]}
         
             formCrud={(row: any, type: string, closeModalCallback: any, refreshTable: any) => (
               <RichiesteCrud row={row}  closeModalCallback={closeModalCallback} refreshTable={refreshTable} type={type} />

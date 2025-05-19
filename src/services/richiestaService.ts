@@ -12,6 +12,10 @@ class RichiestaServiceC extends BaseHttpService{
       return client.get(`api/v1/accounts/findByName?search=${text}`).then(res => res.data);
     }
 
+    getCurrentHR(search: string) {
+      return client.get(`api/v1/recruitingRequest/getCurrentHR?search=${search}`).then(res => res.data);
+    }
+
     searchCustomer  =  (
       pageNum: number,
       pageSize: number,
