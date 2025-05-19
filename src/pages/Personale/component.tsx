@@ -103,6 +103,7 @@ const columns: any = [
     key:"id",
     label:" ",
     type:"custom",
+    format: "noExcel",
     width:150,
     render:(n:any)=><td><Button 
       svgIcon={passwordIcon} 
