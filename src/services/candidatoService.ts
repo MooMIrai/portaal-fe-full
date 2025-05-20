@@ -7,6 +7,10 @@ class CandidatoServiceC extends BaseHttpService {
     return "recruitingCandidate";
   }
 
+  createAccount(resource: {person_id: number, email: string}) {
+    return client.post("/api/v1/accounts/createFromCandidate", resource).then(res => res.data);
+  }
+
   searchDip = async (
     pageNum: number,
     pageSize: number,

@@ -5,6 +5,8 @@ import { CandidateContact } from "../CandidateContact/component";
 import { CandidateOffer } from "../CandidateOffer/component";
 import { CandidateSendCv } from "../CandidateSendCv/component";
 import { CandidateSendContract } from "../CandidateSendContract/component";
+import CandidateCreateAccount from "../CandidateCreateAccount/component";
+import { isEmpty, cloneDeep } from "lodash";
 
 export function CandidateStepper(props) {
 
@@ -21,7 +23,8 @@ export function CandidateStepper(props) {
                     { label: 'Proposta economica', isValid: data.RecruitingOffer },
                     //{ label: 'Valutazione finale', isValid: data.RecruitingFinalEvaluation },
                     { label: 'Invio CV', isValid: data.RecruitingSendCv },
-                    { label: 'Contratto', isValid: data.RecruitingSendContract }
+                    { label: 'Contratto', isValid: data.RecruitingSendContract },
+                    { label: "Creazione account", isValid: !isEmpty(data.Candidate.Person.Accounts)}
                 ])
             } else {
                 setSteps([
@@ -68,8 +71,21 @@ export function CandidateStepper(props) {
         })
     }
 
+    const handleCreateAccountChange = (account) => {
+        setData((prevData) => ({
+            ...prevData, 
+            Candidate: {
+                ...prevData.Candidate, 
+                Person: {
+                    ...prevData.Candidate.Person, 
+                    Accounts: [...(prevData.Candidate.Person?.Accounts || []), account]
+                }
+            }
+        }));
+    };
+
     return <>
-        <Stepper items={steps} value={step} onChange={handleChange} />
+        <Stepper items={steps} value={step} onChange={handleChange}/>
         <div>
             {
                 data.Candidate ? <>
@@ -87,6 +103,9 @@ export function CandidateStepper(props) {
                     }
                     {
                         step === 4 && <CandidateSendContract onChange={handleSendContractChange} currentData={data.RecruitingSendContract} assignmentId={props.data.id} />
+                    }
+                    {
+                        step === 5 && <CandidateCreateAccount onChange={handleCreateAccountChange} currentData={data.Candidate.Person?.Accounts?.[0]} person_id={data.Candidate.person_id}/>
                     }
                 </> : <>
                     {
