@@ -27,11 +27,21 @@ export function MessageSentDetail(props:{data,onRowClick}){
                     </div>
             </div>
         </td>},
+        { key: "id", label: "Cancellazione Notifica", type: "custom", render: (n) => {
+            return (n.isDeleted
+            ? <td className={styles.statusColumn}>
+                    <span style={{background: 'red'}}>
+                        {"Notifica cancellata dall'utente."}
+                    </span>
+                </td>
+            : <td></td>
+            );
+        }},
       { key: "id", label: "Stato Notifica", type: "custom", render: (n) => {
         const statusDescription = n.NotificationStatus.description || n.NotificationStatus.notificationStatus;
         return (
             <td className={styles.statusColumn}>
-                <span style={statusDescription ? { background: 'var(--kendo-color-secondary)'} : undefined}>
+                <span style={statusDescription ? { background: 'blue'} : undefined}>
                     {statusDescription}
                 </span>
             </td>
