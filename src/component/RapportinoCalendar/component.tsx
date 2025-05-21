@@ -59,9 +59,13 @@ const RapportinoItemView = (props: any) => {
     top: 0,
     bottom: 0,
     textAlign: "center",
+    /*
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center',*/
+    overflow: "hidden",
+    whiteSpace: "nowrap",
+    textOverflow: "ellipsis",
     fontSize: 14
   }}>{!props.request ? `${props.hours} ore - ` : null} {props.title} {status}  {/* {props.request && props.request.approved === null ?
     <button style={{ background: 'transparent', border: 'none', cursor: 'pointer' }} title={"Cancella richiesta " + props.title} onClick={(e) => {
