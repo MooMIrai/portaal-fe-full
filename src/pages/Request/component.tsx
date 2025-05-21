@@ -97,7 +97,7 @@ export default function RequestPage(){
                 label: "HR incaricata",
                 type: "filter-autocomplete",
                 options:{
-                  getData:(search: string)=> richiestaService.getCurrentHR(search).then(res=> res?.map(r=>({id:r.account_id, name: r.firstName + ' ' + r.lastName}))),
+                  getData:(search: string)=> richiestaService.getCurrentHR(search).then(res=> res?.map(r => ({id: r.account_id, name: `${r.firstName} ${r.lastName} (${r.email})`}))),
                   getValue:(v:any)=>v?.id
                 }
               }
