@@ -89,6 +89,7 @@ export default function RapportinoCalendar(props: RapportinoCalendarProps) {
   const [date, setDate] = useState<Date>(props.forceDate || new Date());
   const [data, setData] = useState<any>([]);
   const [holidays, setHolidays] = useState<Array<number>>();
+  const [unavailableDays, setUnavailableDays] = useState<Array<number>>();
   const [timeSheetsId, setTimeSheetsId] = useState<number>();
   const [mobileSelectedDate, setMobileSelectedDate] = useState<Date>();
   const [showConsolidaConfirmModal, setShowConsolidaConfirmModal] = useState<boolean>(false);
@@ -162,6 +163,7 @@ export default function RapportinoCalendar(props: RapportinoCalendarProps) {
       .then((response) => {
         setTimeSheetsId(props.forceTimeSheet || response.id);
         setHolidays(response.holidays);
+        setUnavailableDays(response.unavailable_days);
         TimesheetsService.getSingleTimesheets(props.forceTimeSheet || response.id, true).then((res) => {
 
           setIsFinalized(!!res?.finalized);
@@ -482,6 +484,7 @@ export default function RapportinoCalendar(props: RapportinoCalendarProps) {
       contentModal={renderContent}
       item={RapportinoItem}
       holidays={holidays}
+      unavailableDays={unavailableDays}
       disableDrag={!!props.forcePerson}
       isFinalized={!props.forcePerson && isFinalized}
     />
