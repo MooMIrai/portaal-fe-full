@@ -52,7 +52,7 @@ const CustomViewSlot = (props: ViewItemProps) => {
 
   
   const notInMounth = props.start.getMonth() != date.getMonth() /* || props.isFinalized */;
-  const notInContract = unavailableDays.includes(props.start.getDate());
+  const notInContract = unavailableDays?.includes(props.start.getDate());
 
   const isHoliday = holidays.some((h) => h === props.start.getDate()) && date.getMonth() === props.start.getMonth();
   let bg = {};
