@@ -107,6 +107,7 @@ export interface FieldConfig {
   conditions?: (values: any) => boolean;
   showLabel?: boolean
   valueOnChange?: (name: string, value: any) => void;
+  onChange: (value: any) => void;
   onDownload?: () => void
   onFileUpload?: (file: File) => void;
   multiple?: boolean
@@ -150,7 +151,7 @@ const DynamicField = ({
 
 
 
-  const { name, type, label, validator, options, disabled, required, showLabel = true, onDownload, multiple, existingFile, onFileUpload, onClick, loader, existingLink, onFileDrop,isDroppable } = field;
+  const { name, type, label, validator, options, disabled, required, showLabel = true, onDownload, multiple, existingFile, onFileUpload, onClick, loader, existingLink, onFileDrop,isDroppable, onChange: fieldOnChange } = field;
   let Component: any = getFieldComponent(type);
 
   if (addedFields && Object.keys(addedFields).some(s => s === type)) {
@@ -196,7 +197,9 @@ const DynamicField = ({
         // Funzione custom per prendere i valori del value 
         if (valueOnChange) {
           valueOnChange(name, value);
-        } 
+        }
+
+        fieldOnChange?.(value);
       }}
     />
   );

@@ -11,6 +11,7 @@ import CustomViewSlot from "./SlotViewItem/component";
 import "@progress/kendo-date-math/tz/Europe/Rome";
 import CustomWindow from "../Window/component";
 import { CalendarContext } from "./provider";
+import styles from "./styles.module.scss";
 
 interface CustomCalendarProps {
   defaultModalTitle: string;
@@ -116,6 +117,7 @@ export default function CustomCalendar(props: Readonly<CustomCalendarProps>) {
       onDateChange={props.handleDateChange}
       viewSlot={(sched) => CustomViewSlot({ ...sched, disableDrag: props.disableDrag, isFinalized: props.isFinalized })}
       item={props.item}
+      className={styles.MonthScheduler}
       editable={{
         add: false,
         remove: false,
