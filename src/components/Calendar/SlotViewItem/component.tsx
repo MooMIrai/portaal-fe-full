@@ -16,7 +16,7 @@ interface ViewItemProps extends SchedulerViewSlotProps {
 
 const CustomViewSlot = (props: ViewItemProps) => {
 
-  const { setStart, setEnd, setDrag, drag, selectedStart, selectedEnd, holidays, date } = useContext(CalendarContext);
+  const { setStart, setEnd, setDrag, drag, selectedStart, selectedEnd, holidays, unavailableDays, date } = useContext(CalendarContext);
 
 
   const attrs = useLongPress(() => {
@@ -50,31 +50,33 @@ const CustomViewSlot = (props: ViewItemProps) => {
   }, [drag, selectedEnd])
 
 
+  
+  const notInMounth = props.start.getMonth() != date.getMonth() /* || props.isFinalized */;
+  const notInContract = unavailableDays.includes(props.start.getDate());
+
   const isHoliday = holidays.some((h) => h === props.start.getDate()) && date.getMonth() === props.start.getMonth();
   let bg = {};
-  if (isHoliday) {
+  if (isHoliday && !notInContract) {
     bg = { background: 'rgba(255,0,0,0.2)' }
   } else if (props.isFinalized) {
     bg = { background: '#e9ecef' }
   }
-
-  const notInMounth = props.start.getMonth() != date.getMonth() /* || props.isFinalized */;
-
 
 
 
   return <div style={{
     flex: 1,
     ...(active ? { background: '#f0f0f0' } : {}),
-    ...(notInMounth ? { cursor: 'not-allowed' } : {})
+    ...((notInMounth || notInContract) ? { cursor: 'not-allowed' } : {}),
+    ...(notInContract ? {background: "var(--kendo-color-base-subtle, #f5f5f6)"} : {})
   }}
 
     {
-    ...(notInMounth ? {} : attrs)
+    ...((notInMounth || notInContract) ? {} : attrs)
     }
 
     onMouseEnter={!!props.disableDrag ? undefined : (e) => {
-      if (notInMounth) {
+      if (notInMounth || notInContract) {
         e.preventDefault()
       } else if (drag && selectedStart) {
 

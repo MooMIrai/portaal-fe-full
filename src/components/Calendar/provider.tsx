@@ -10,6 +10,8 @@ const CalendarContext = createContext<{
   setDrag:Dispatch<SetStateAction<boolean >>,
   holidays:Array<number>,
   setHolidays:Dispatch<Array<number >>,
+  unavailableDays: Array<number>,
+  setUnavailableDays: Dispatch<Array<number>>,
   date:Date,
   setDate:Dispatch<Date>
 }>({
@@ -21,6 +23,8 @@ const CalendarContext = createContext<{
   setDrag:()=>{},
   holidays:[],
   setHolidays:()=>{},
+  unavailableDays: [],
+  setUnavailableDays: () => {},
   date:new Date(),
   setDate:()=>{}
 });
@@ -31,6 +35,7 @@ const CalendarContext = createContext<{
     const [end, setEnd] = useState<Date>();
     const [drag,setDrag] = useState<boolean>(false);
     const [holidays,setHolidays] = useState<Array<number>>([]);
+    const [unavailableDays, setUnavailableDays] = useState<Array<number>>([]);
     const [date,setDate] = useState<Date>(new Date());
     return (
       <CalendarContext.Provider value={{ 
@@ -45,6 +50,9 @@ const CalendarContext = createContext<{
         
         holidays,
         setHolidays,
+
+        unavailableDays,
+        setUnavailableDays,
         
         date,
         setDate

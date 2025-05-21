@@ -38,6 +38,7 @@ interface CustomCalendarProps {
   date?: Date;
 
   holidays?: Array<number>,
+  unavailableDays?: Array<number>,
   item?: ComponentType<SchedulerItemProps> | undefined;
 
   disableDrag?: boolean;
@@ -61,7 +62,7 @@ export default function CustomCalendar(props: Readonly<CustomCalendarProps>) {
 
 
 
-  const { selectedEnd, selectedStart, setEnd, setStart, drag, setHolidays, setDate } = useContext(CalendarContext);
+  const { selectedEnd, selectedStart, setEnd, setStart, drag, setHolidays, setUnavailableDays, setDate } = useContext(CalendarContext);
 
 
 
@@ -91,7 +92,11 @@ export default function CustomCalendar(props: Readonly<CustomCalendarProps>) {
 
   useEffect(() => {
     setHolidays(props.holidays || []);
-  }, [props.holidays])
+  }, [props.holidays]);
+
+  useEffect(() => {
+    setUnavailableDays(props.unavailableDays || []);
+  }, [props.unavailableDays]);
 
   useEffect(() => {
     setDate(props.date || new Date());
