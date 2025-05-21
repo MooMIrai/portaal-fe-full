@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Form from 'common/Form';
 import NotificationProviderActions from "common/providers/NotificationProvider";
-import { sendContractForm } from "./form";
+import { getSendContractForm } from "./form";
 
 import { sendContractAddedFields } from "./customFields";
 import { sendContractService } from "../../services/sendContractService";
@@ -10,20 +10,27 @@ import { sendContractService } from "../../services/sendContractService";
 export function CandidateSendContract(props: { currentData: any, assignmentId: number, onChange: (data: any[]) => void }) {
 
     const [formData, setFormData] = useState<any>();
+    const [fixedTermContract, setFixedTermContract] = useState<boolean>();
 
     useEffect(()=>{
         setFormData(props.currentData?{
             ...props.currentData,
             date_log:props.currentData.date_log?new Date(props.currentData.date_log):undefined,
             date_start_contract: props.currentData.date_start_contract?new Date(props.currentData.date_start_contract):undefined,
+            date_end_contract: props.currentData.date_end_contract ? new Date(props.currentData.date_end_contract) : undefined,
             ContractType:props.currentData.contractType_id?{
                 id:props.currentData.contractType_id,
                 name:props.currentData.ContractType.description
             }:undefined
         }:{});
-    },[props.currentData])
+
+        if (props.currentData.date_end_contract) setFixedTermContract(true);
+
+    },[props.currentData]);
 
     const handleSubmit = (data) => {
+
+        if (!fixedTermContract) data.date_end_contract = null;
 
         const mappedData={
             ...data,
@@ -54,7 +61,7 @@ export function CandidateSendContract(props: { currentData: any, assignmentId: n
             submitText={formData.id ? 'Modifica' : 'Aggiungi'}
             showSubmit
             //ref={formInterview}
-            fields={sendContractForm}
+            fields={getSendContractForm(!!fixedTermContract, setFixedTermContract)}
             formData={formData}
             onSubmit={handleSubmit}
             description="Dati contratto"
