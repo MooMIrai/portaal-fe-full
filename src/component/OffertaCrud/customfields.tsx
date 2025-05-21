@@ -40,11 +40,9 @@ const getDataLocation = () => {
     });
 };
 const getDataCommerciale= (filterP:string)=>{
-    return CrudGenericService.searchCommerciale(filterP).then((res)=>{
-        if(res ){
-            return res.map(r=>({id:r.id,name:r.Person.firstName+ ' '+r.Person.lastName}));
-        }
-        return []
+    return CrudGenericService.searchCommerciale(filterP).then((res) => {
+        if(res) return res.map(r => ({id: r.id, name: `${r.Person.firstName} ${r.Person.lastName} (${r.email})`}));
+        else return [];
     });
 }
 

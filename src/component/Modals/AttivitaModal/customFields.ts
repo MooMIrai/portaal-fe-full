@@ -6,10 +6,8 @@ import { attivitaService } from "../../../services/attivitaService";
 
 const getManager = (filterP: string) => {
     return CrudGenericService.searchCommerciale(filterP).then((res) => {
-        if (res) {
-            return res.map(r => ({ id: r.id, name: r.Person.firstName + ' ' + r.Person.lastName }));
-        }
-        return []
+        if (res) return res.map(r => ({id: r.id, name: `${r.Person.firstName} ${r.Person.lastName} (${r.email})`}));
+        else return [];
     });
 }
 
