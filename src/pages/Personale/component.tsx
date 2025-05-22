@@ -304,6 +304,7 @@ const PersonalPage = () => {
         sortable={true}
         getData={loadData}
         columns={columns}
+        extraExcelColumns={[{label: "Ruoli", path: "roleList"}]}
         resizable={true}
         pageable={true}
         stageWindow={"FULLSCREEN"}

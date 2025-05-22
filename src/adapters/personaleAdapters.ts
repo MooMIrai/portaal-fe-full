@@ -262,6 +262,7 @@ export const transformUserData = (data: any[], sede: locationOption[]) => {
       ),
       sede: sede,
       ruoli: mapToRuoliData(user.Roles || []),
+      roleList: user.Roles?.map(role => role.description),
       roleIds: getRoleIds(user.Roles || []),
       permessi: mapToPermessiData(user.Person?.ActivityType || []),
       permessiId: getPermessiIds(user.Person?.ActivityType || []),

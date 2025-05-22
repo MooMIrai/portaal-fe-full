@@ -216,7 +216,7 @@ export default function RapportinoCrud(props: RapportinoCrudProps) {
             <Accordion title="Produttive" defaultOpened={true}>
                 {
                     !data.productive || !data.productive.length ? <p>Nessun attività produttiva assegnata per il range di date selezionate</p>
-                        : <>
+                        : <div style={{display: "flex", flexDirection: "column", gap: "10px"}}>
                             {data.productive.map((res) => {
                                 return <RapportinoInput
                                     type='H'
@@ -230,13 +230,13 @@ export default function RapportinoCrud(props: RapportinoCrudProps) {
                                     }}
                                 />
                             })}
-                        </>
+                        </div>
                 }
             </Accordion>
             <Accordion title="Non Produttive" defaultOpened={true}>
                 {
                     !data.unproductive || !data.unproductive.length ? <p>Nessun attività non produttiva assegnata per il range di date selezionate</p>
-                        : <>
+                        : <div style={{display: "flex", flexDirection: "column", gap: "10px"}}>
                             {data.unproductive.map((res) => {
                                 return <RapportinoInput
                                     type='H'
@@ -250,7 +250,7 @@ export default function RapportinoCrud(props: RapportinoCrudProps) {
                                     }}
                                 />
                             })}
-                        </>
+                        </div>
                 }
             </Accordion>
             <Accordion title="Richiedi P-F-M" defaultOpened={true}>
@@ -258,7 +258,7 @@ export default function RapportinoCrud(props: RapportinoCrudProps) {
                     !data.holidays || !data.holidays.length ? <p>Non puoi richiedere ferie o permessi nel range date selezionato</p>
                         : <>
                             {getApprovedPills()}
-                            <div>
+                            <div style={{display: "flex", flexDirection: "column", gap: "10px"}}>
                                 {data.holidays.map((res) => {
                                     return <RapportinoInput
                                         disabled={!!props.editLocked || (!!disableExcept && disableExcept !== res.Activity.id) || (data.holidays.some(res => res.Activity.ActivityType.time_unit === 'D' && isHolidayApproved(res.Activity.id)))}
