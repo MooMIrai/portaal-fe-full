@@ -155,6 +155,9 @@ interface TablePaginatedProps extends GridProps {
 
   actionFilters?:(type:TABLE_ACTION_TYPE,row:any) => boolean;
 
+  //extra columns/values to be exported in the excel file
+  extraExcelColumns?: Array<{label: string, path: string}>;
+
   //custom labels for actions
   createLabel?: string;
 }
@@ -501,29 +504,49 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
   }
 
   const excelExport = () => {
+
     if(data){
+
       const workbook = XLSX.utils.book_new();
       
-      const newArr = data.map((row,rowIndex)=>{
-        let objRow:any={};
-        props.columns.forEach(column=>{
+      const newArr = data.map((row,rowIndex) => {
+
+        let objRow: any = {};
+
+        props.columns.forEach(column => {
 
           if (column.format === "noExcel") return;
           
           try{
+
             if(column.render){
               objRow[column.label]=readInnerTextFromElement(column.render(row));
-            }else{
+            }
+            
+            else {
               objRow[column.label]=getProperty(column.key,row)
             }
             
-          }catch(ex){
+          }
+
+          catch(ex) {
             console.log('excel error on row ' + rowIndex+ ' column '+ column.label )
           }
             
           
         });
+
+        if (props.extraExcelColumns) {
+
+          props.extraExcelColumns.forEach(extracolumn => {
+            const columnValue = row[extracolumn.path];
+            objRow[extracolumn.label] = Array.isArray(columnValue) ? columnValue.join(", ") : columnValue;
+          });
+
+        }
+
         return objRow;
+
       });
       // Convert JSON data to a worksheet
       const worksheet = XLSX.utils.json_to_sheet(newArr);
@@ -536,6 +559,12 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
     }
     
   };
+  
+  const styleClasses = (props.className?.split(" ") || [])
+  .filter(styleClass => styleClass !== "")
+  .map(styleClass => styles[styleClass])
+  .filter(styleClass => styleClass)
+  .join(" ");
 
   return (
     <div className={styles.gridContainer}>
@@ -545,6 +574,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
         rowRender={rowRender}
         {...expandedProps}
         filterable={false}
+        className={styleClasses}
         resizable={props.resizable}
         sortable={props.sortable}
         onSortChange={handleSortChange}
