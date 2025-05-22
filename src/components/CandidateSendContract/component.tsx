@@ -24,7 +24,7 @@ export function CandidateSendContract(props: { currentData: any, assignmentId: n
             }:undefined
         }:{});
 
-        if (props.currentData.date_end_contract) setFixedTermContract(true);
+        if (props.currentData?.date_end_contract) setFixedTermContract(true);
 
     },[props.currentData]);
 
