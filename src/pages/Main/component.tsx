@@ -167,6 +167,7 @@ const LookUps = () => {
     <div>
       <GenericGrid
         ref={gridRef}
+        className={"text-align-center"}
         dropListLookup={true}
         customToolBarComponent={() => (
           <>
