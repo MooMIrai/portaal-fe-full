@@ -6,14 +6,15 @@ import {xIcon} from 'common/icons';
 /* import imgIdle from '../../icons/idle.png'
 import imgThink from '../../icons/think.png'
 import imgError from '../../icons/wrong.png' */
-import humi from '../../icons/humi.png'
+import humi from '../../icons/nexabot.png'
+import humiAvatar from '../../icons/nexabot_avatar.png'
 import styles from "./style.module.scss";
 import { chatService } from "../../services/chatService";
 
 export function ChatButton(){
     const bot = {
         id: 0,
-        //avatarUrl:humi,
+        avatarUrl:humiAvatar,
         name:"Humi AI"
     };
     
@@ -48,7 +49,7 @@ Scrivimi pure la tua domanda, sono qui per aiutarti!
     return <>
         <div className={styles.container}>
             
-            <Button  rounded="full"  type="button" themeColor="primary" onClick={()=>setIsOpen(!isOpen)}>
+            <Button   rounded="full"  type="button" themeColor="light" onClick={()=>setIsOpen(!isOpen)}>
                 <img src={humi} />
             </Button>
             
