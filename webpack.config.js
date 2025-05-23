@@ -1,5 +1,6 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const Dotenv = require("dotenv-webpack");
 const deps = require("./package.json").dependencies;
 
@@ -73,6 +74,13 @@ module.exports = (_, argv) => {
           type: 'asset/resource',
         }
       ],
+    },
+     optimization: {
+      minimizer: [
+        '...',
+        new CssMinimizerPlugin()
+      ],
+      minimize: true
     },
     plugins: [
       new ModuleFederationPlugin(mfeConfig(process.env.REMOTE_PATH, argv.mode)),
