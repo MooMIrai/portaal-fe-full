@@ -4,6 +4,7 @@ import Theme from "common/Theme";
 import authService from "common/services/AuthService";
 import { GlobalRouting, LoginRouting, mfeInitMenu } from "./mfeInit";
 import { Route, Routes } from "react-router-dom";
+import { Spinner } from "./components/Spinner/component";
 
 //import "./index.css";
 
@@ -11,18 +12,29 @@ export const App = () => {
   const [routes, setRoutes] = useState<Array<any>>([]);
   const [loaded, setLoaded] = useState<boolean>(false);
   const [token, setToken] = useState<string>();
+  const [showLoader, setShowLoader] = useState(true);
 
   const [addedRoutes,setAddedRoutes] = useState<Array<any>>([]);
 
   useEffect(() => {
+
     try {
+
+      setTimeout(() => {
+        setShowLoader(false);
+      }, 3 * 1000);
+
       if (!loaded) {
         setToken(authService.getToken());
       }
 
-    }catch(e){
+    }
+
+    catch(e) {
       
-    }finally{
+    }
+    
+    finally {
       setLoaded(true);
     }
   }, []);
@@ -77,33 +89,43 @@ export const App = () => {
 
 
  if(!loaded){
-  return <div>Loading Auth data...</div>
+  return <Spinner />
  }
 
 if (!token) {
-  return <Theme><LoginRouting /></Theme>;
+  return(
+    <>
+      <Theme>
+        <LoginRouting />
+      </Theme>
+      {showLoader && <Spinner />}
+    </>
+  );
 }
 
 
 
 return (
-  <Theme>
-    {
-      window.opener?<>
-        <GlobalRouting />
-        {
-          addedRoutes && addedRoutes.length ?<Routes>{addedRoutes.map((ar,index)=><Fragment key={'addedR_'+index}>{ar.route}</Fragment>)}</Routes> :null
-        }
-      </>:
-      <Drawer items={routes}>
-        <GlobalRouting />
-        {
-          addedRoutes && addedRoutes.length ?<Routes>{addedRoutes.map((ar,index)=><Fragment key={'addedR_'+index}>{ar.route}</Fragment>)}</Routes> :null
-        }
-      </Drawer>
-    }
-    
-  </Theme>
+  <>
+    <Theme>
+      {
+        window.opener?<>
+          <GlobalRouting />
+          {
+            addedRoutes && addedRoutes.length ?<Routes>{addedRoutes.map((ar,index)=><Fragment key={'addedR_'+index}>{ar.route}</Fragment>)}</Routes> :null
+          }
+        </>:
+        <Drawer items={routes}>
+          <GlobalRouting />
+          {
+            addedRoutes && addedRoutes.length ?<Routes>{addedRoutes.map((ar,index)=><Fragment key={'addedR_'+index}>{ar.route}</Fragment>)}</Routes> :null
+          }
+        </Drawer>
+      }
+      
+    </Theme>
+    {showLoader && <Spinner />}
+  </>
 );
 
   

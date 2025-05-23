@@ -1,6 +1,7 @@
 declare module "common/Drawer"
 declare module "common/Theme"
 declare module "common/services/AuthService"
+declare module "common/Loader"
 
 declare module 'auth/Routes'
 declare module 'auth/VisibleRoutes';
