@@ -88,7 +88,7 @@ function ModalComponent(props:{onSubmit:()=>void}) {
 
                     NotificationActions.openModal(
                         { icon: true, style: "error" },
-                        "Errore di collegamento con il tablet"
+                        "Errore di collegamento con il tablet.\nControlla di aver installato il driver."
                     );
 
                 }}

@@ -81,7 +81,7 @@ export function RelateDevice(props: RelateDeviceProps) {
                        
                         NotificationActions.openModal(
                             { icon: true, style: "error" },
-                            "Errore di collegamento con il tablet"
+                            "Errore di collegamento con il tablet.\nControlla di aver installato il driver."
                         );
 
                     }}
