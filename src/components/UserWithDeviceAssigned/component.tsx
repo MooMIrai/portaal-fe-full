@@ -12,7 +12,7 @@ export function UserWithDeviceAssigned(){
        
         { key: "firstName", label: "Nome", type: "string", sortable: true, filter: "text" },
         { key: "lastName", label: "Cognome", type: "string", sortable: true, filter: "text" },
-        { key: "id", label: "email", type: "custom", sortable: false, render:(row)=><td>{row.Accounts[0].email}</td> }
+        { key: "id", label: "Email", type: "custom", sortable: false, render:(row)=><td>{row.Accounts[0].email}</td> }
     ];
 
     const loadData = (
@@ -23,10 +23,15 @@ export function UserWithDeviceAssigned(){
        return deviceService.searchUserWithAllocation(pagination.currentPage,pagination.pageSize,filter,sorting,undefined,true)
     }
 
+    const getExcelFunction = (value: {StockAllocation: Array<{Stock: {model: string}}>}) => {
+        return value.StockAllocation.map(allocation => allocation.Stock.model);
+    };
+
 
     return <DeviceAssignedProvider>
       
         <GridTable
+        extraExcelColumns={[{label: "Assegnazioni", getFunction: getExcelFunction}]}
         customToolBarComponent={(refresh)=>{
             if(!authService.hasPermission("WRITE_STOCK")){
                 return <></>
