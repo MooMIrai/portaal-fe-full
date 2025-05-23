@@ -49,7 +49,7 @@ function RapportinoInput(props: PropsWithChildren<{
 
     return <div className={styles.rapportinoContainer}>
         <p>{props.description}</p>
-        {props.type === 'H' ? <InputText disabled={props.disabled} value={props.value} clearable onChange={(e) => {
+        {props.type === 'H' ? <InputText style={{width: "65px"}} disabled={props.disabled} value={props.value} clearable onChange={(e) => {
             if (e.value.length)
                 props.onChange(parseInt(e.value))
             else
