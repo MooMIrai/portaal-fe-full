@@ -137,7 +137,7 @@ export default function CustomCalendar(props: Readonly<CustomCalendarProps>) {
     </Scheduler>
 
 
-    {modal && <CustomWindow style={{ width: '80%', left: '50%', top: '50%', transform: 'translate(-50%,-50%)' }} show={true} onClose={closeModal} title={modal.title || ''} showModalFooter={false}>
+    {modal && <CustomWindow style={{ width: '50%', left: '50%', top: '50%', transform: 'translate(-50%,-50%)' }} show={true} onClose={closeModal} title={modal.title || ''} showModalFooter={false}>
       {
         modal.component
       }
