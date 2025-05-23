@@ -7,7 +7,7 @@
     "build:start": "cd dist && npx serve -l 3003",
     "start": "webpack serve --open --mode development",
     "start:live": "webpack serve --open --mode development --live-reload --hot",
-    "activate":"kendo-ui-license activate"
+    "activate": "kendo-ui-license activate"
   },
   "license": "MIT",
   "author": {
@@ -26,6 +26,7 @@
     "babel-loader": "^8.2.2",
     "copy-webpack-plugin": "^12.0.2",
     "css-loader": "^6.3.0",
+    "css-minimizer-webpack-plugin": "^7.0.2",
     "dotenv": "^16.4.5",
     "dotenv-webpack": "^8.0.1",
     "file-loader": "^6.2.0",
@@ -110,5 +111,6 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.25.0",
     "react-transition-group": "^4.4.5"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
