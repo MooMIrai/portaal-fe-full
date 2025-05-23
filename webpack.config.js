@@ -1,5 +1,6 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const Dotenv = require("dotenv-webpack");
 const deps = require("./package.json").dependencies;
 const { FederatedTypesPlugin } = require("@module-federation/typescript");
@@ -94,6 +95,13 @@ module.exports = (_, argv) => {
           },
         },
       ],
+    },
+    optimization: {
+      minimizer: [
+        '...',
+        new CssMinimizerPlugin()
+      ],
+      minimize: true
     },
     plugins: [
       new PrebuildPlugin({
