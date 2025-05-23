@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, {useContext} from "react";
 import { Button } from "@progress/kendo-react-buttons";
 import {
   Form,
@@ -26,6 +26,7 @@ import CountrySelector from "../CountrySelector/component";
 import styles from "./styles.module.scss";
 import SkillMultiSelect from "../SkillsSelector/component";
 import { MultiSelectFilterChangeEvent } from "@progress/kendo-react-dropdowns";
+import { FormRefContext } from "../Tab/form.ref.provider";
 
 const getFieldComponent = (type: FieldType) => {
   switch (type) {
@@ -221,6 +222,8 @@ const DynamicForm = React.forwardRef<any, DynamicFormProps>((props, ref) => {
     addedFields
   } = props;
 
+  const formRefContext = useContext(FormRefContext);
+  const isTouched = (ref: any) => ref?.current ? Object.values(ref.current.touched).length > 0 : false;
 
   return <Form
     initialValues={formData}
@@ -232,6 +235,7 @@ const DynamicForm = React.forwardRef<any, DynamicFormProps>((props, ref) => {
           <fieldset className={"k-form-fieldset"}  style={props.style}>
             <legend className={"k-form-legend"}>{description}</legend>
             {fields.filter((field) => {
+              if (formRefContext?.setDisabled) formRefContext.setDisabled(isTouched(ref));
               const formRef: any = ref;
               return !field.conditions || (formRef && formRef.current && field.conditions(formRef.current.values))
             }).map((field, index) => {

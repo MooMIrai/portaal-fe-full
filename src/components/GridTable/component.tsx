@@ -156,7 +156,7 @@ interface TablePaginatedProps extends GridProps {
   actionFilters?:(type:TABLE_ACTION_TYPE,row:any) => boolean;
 
   //extra columns/values to be exported in the excel file
-  extraExcelColumns?: Array<{label: string, path: string}>;
+  extraExcelColumns?: Array<{label: string, path?: string, getFunction?: <T>(value: T) => string | string[]}>;
 
   //custom labels for actions
   createLabel?: string;
@@ -539,8 +539,15 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
         if (props.extraExcelColumns) {
 
           props.extraExcelColumns.forEach(extracolumn => {
-            const columnValue = row[extracolumn.path];
+
+            let columnValue: string | string[];
+
+            if (extracolumn.path) columnValue = row[extracolumn.path];
+            else if (extracolumn.getFunction) columnValue = extracolumn.getFunction(row);
+            else return;
+
             objRow[extracolumn.label] = Array.isArray(columnValue) ? columnValue.join(", ") : columnValue;
+            
           });
 
         }
