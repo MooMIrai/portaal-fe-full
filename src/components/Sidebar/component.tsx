@@ -231,12 +231,16 @@ const Sidebar = ({ children, items }: SidebarPros) => {
         </div>
     </AppBarSection>
     <AppBarSpacer />
-      <AppBarSection>
+      <AppBarSection style={{paddingRight: "20px"}}>
       <Button ref={anchor} className={styles.btnAvatar} fillMode="solid" themeColor="light" onClick={() => setPopoverUser(!popoverUser)}>
             {AuthService.getFullName() && <AvatarIcon initials={AuthService.getFullName()[0].toUpperCase()} style={{ marginRight: 5 }} />}
-            {
-              AuthService.getUserName()
-            }
+            {AuthService.getUserName()}
+            <a onClick={(e) => {
+              e.stopPropagation();
+              navigate("/notifications/inbox");
+            }}>
+              <Badge themeColor={"error"} size={"large"} style={{fontSize: "11px"}}>{badgeList["12"]}</Badge>
+            </a>
           </Button>
           <Popover
             show={popoverUser}
