@@ -7,29 +7,33 @@ import { notificationServiceHttp } from "./services/notificationService";
 import Routes from 'common/Routes';
 const App = () => {
 
-  useSocketConnected();
+  const {connected} = useSocketConnected();
 
   useEffect(()=>{//on init
     
-    if(Notification.permission!=='granted'){
-      Notification.requestPermission().then((result) => {
-          if(result==='denied'){
-            NotificationProviderActions.openModal(
-              { icon: true, style: "warning" },
-              "Attenzione hai disabilitato le notifiche del browser, se vuoi essere al corrente dei messaggi in arrivo riattivale dalle impostazioni del browser."
-          );
-            
-          }
-      });
+    if (connected) {
+
+      if(Notification.permission!=='granted'){
+        Notification.requestPermission().then((result) => {
+            if(result==='denied'){
+              NotificationProviderActions.openModal(
+                { icon: true, style: "warning" },
+                "Attenzione hai disabilitato le notifiche del browser, se vuoi essere al corrente dei messaggi in arrivo riattivale dalle impostazioni del browser."
+            );
+              
+            }
+        });
+      }
+  
+      notificationServiceHttp.getMyUnreadCount();
+      
+      return ()=>{
+        //ondestroy
+      }
+
     }
 
-    notificationServiceHttp.getMyUnreadCount()
-    
-    return ()=>{
-      //ondestroy
-    }
-    
-  },[]); 
+  },[connected]);
 
   return (
     <Routes data={[
