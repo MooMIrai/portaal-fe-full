@@ -6,6 +6,9 @@ import Button from "common/Button";
 import { useDebounce } from "@uidotdev/usehooks";
 import { LookupsService } from "../../services/LookupService";
 import { LookUpsSelector } from "../../components/lookupsSelector/component";
+import styles from './style.module.scss';
+
+
 // Utility function to filter out unwanted keys from an object
 const filterOutObjectKeys = (obj: any, keysToRemove: Array<string>) => {
   return Object.keys(obj)
@@ -168,6 +171,8 @@ const LookUps = () => {
       <GenericGrid
         ref={gridRef}
         className={"text-align-center"}
+        initialHeightWindow={800}
+        initialWidthWindow={900}
         dropListLookup={true}
         customToolBarComponent={() => (
           <>
@@ -203,9 +208,9 @@ const LookUps = () => {
           return (
             <>
               {type === "delete" ? (
-                 <div  style={{ padding: "20px" }}>
+                 <div className={styles.formDelete}>
                   <span>{"Sei sicuro di voler eliminare il record?"}</span>
-                  <div style={{ paddingTop: "20px", paddingLeft:"30px" }} className="k-form-buttons">
+                  <div>
                     <Button onClick={closeModalCallback}>Cancel</Button>
                     <Button
                       themeColor={"error"}
