@@ -1,5 +1,5 @@
 import { Error, Label } from '@progress/kendo-react-labels';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Autocomplete from '../components/AutoComplete/component';
 import { useDebounce } from '@uidotdev/usehooks'
 import { ComboBoxProps } from '@progress/kendo-react-dropdowns';
@@ -16,8 +16,9 @@ const withAutocomplete = (fetchData:(filter:string)=>Promise<Array<{id:any,name:
     const [data, setData] = useState<Array<any>>([]);
     const [value, setValue] = useState<any>();
     const [filter, setFilter] = React.useState("");
+    const comboBoxRef = useRef<any>(null);
     const debouncedSearchTerm = useDebounce(filter, 300);
-    
+
 
     const onChange = ( event: any)=>{
         const value = event.target.value;
@@ -41,22 +42,32 @@ const withAutocomplete = (fetchData:(filter:string)=>Promise<Array<{id:any,name:
     },[debouncedSearchTerm]);
 
     useEffect(() => {
+
         if (props.value) {
+
             if (props.value.name === " ") {
                 setValue(""); 
-            } else {
+            } 
+            
+            else {
                 setValue({
                     id: props.value?.id,
                     name: props.value?.name
                 });
             }
-        } else {
+        } 
+        
+        else {
             setValue(""); 
         }
+
+        if (comboBoxRef?.current?.element) comboBoxRef.current.element.setAttribute("spellcheck", "false");
+
     }, [props.value]);
 
 
-    return <Autocomplete 
+    return <Autocomplete
+            comboBoxRef={comboBoxRef}
             data={data}
             value={value}
             filterable={true}
