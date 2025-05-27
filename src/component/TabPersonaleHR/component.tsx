@@ -565,7 +565,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps & {
 
 const dataAssunzioneValidator = useMemo(() => {
   return (value: any, valueGetter: (name: string) => any) => {
-        if (!value) return "";
+        if (!value) return "Il campo Data Assunzione è obbligatorio";
         const inizioTrattamento= valueGetter("dataInizioTrattamento")
         if (formTrattamentoEconomicoData?.dataInizioTrattamento ||inizioTrattamento ) {
             const assunzioneDate = new Date(value);

@@ -35,9 +35,9 @@ const mapToAnagraficaData = (
 ): AnagraficaData => ({
   person_id: Person?.id,
   accountStatus_id: Person?.accountStatus_id,
-  nome: Person?.firstName || "",
-  cognome: Person?.lastName || "",
-  matricola: Person?.employee_id || "",
+  nome: Person?.firstName,
+  cognome: Person?.lastName,
+  matricola: Person?.employee_id,
   sesso: Person?.Gender?.code,
 
   residenza: {
@@ -125,19 +125,19 @@ const mapToAnagraficaData = (
         seniority: skillArea?.Seniority,
       }))
     : [],
-  seniority: getSeniorAbbrevation(Person?.Seniority) || "",
-  indirizzoResidenza: Person?.address || "",
+  seniority: getSeniorAbbrevation(Person?.Seniority),
+  indirizzoResidenza: Person?.address,
   dataNascita: Person?.dateBirth ? new Date(Person.dateBirth) : null,
   cap: Person?.zipCode,
-  cellulare: Person?.phoneNumber ? parseInt(Person.phoneNumber, 10) : 0,
-  telefonoCasa: Person?.phoneNumber2 ? parseInt(Person.phoneNumber2, 10) : 0,
-  emailPrivata: Person?.privateEmail || "",
-  iban: Person?.bankAddress || "",
-  partitaIva: Person?.vatNumber || 0,
+  cellulare: Person?.phoneNumber ? parseInt(Person.phoneNumber, 10) : undefined,
+  telefonoCasa: Person?.phoneNumber2 ? parseInt(Person.phoneNumber2, 10) : undefined,
+  emailPrivata: Person?.privateEmail,
+  iban: Person?.bankAddress,
+  partitaIva: Person?.vatNumber,
   sede: sedeLabel,
   sede_autocomplete_id: Person?.location_id,
   sede_autocomplete: { id: Person?.location_id, name: sedeLabel },
-  codiceFiscale: Person?.taxCode || "",
+  codiceFiscale: Person?.taxCode,
 });
 
 const mapToTrattamentoEconomicoData = (
@@ -145,7 +145,7 @@ const mapToTrattamentoEconomicoData = (
 ): TrattamentoEconomicoData => {
   return {
     id: employmentContract?.id,
-    tipologiaContratto: employmentContract?.ContractType?.description || "",
+    tipologiaContratto: employmentContract?.ContractType?.description,
     tipologiaContratto_autocomplete: {
       id: employmentContract?.ContractTypr?.id,
       name: employmentContract?.ContractType?.description,
@@ -155,12 +155,12 @@ const mapToTrattamentoEconomicoData = (
       name: employmentContract?.WorkScope?.description,
     },
     tipoAmbitoLavorativo_autocomplete_id: employmentContract?.WorkScope?.id,
-    societa: employmentContract?.Company?.name || "",
-    tipoAmbitoLavorativo: employmentContract?.WorkScope?.description || "",
+    societa: employmentContract?.Company?.name,
+    tipoAmbitoLavorativo: employmentContract?.WorkScope?.description,
     dataInizioTrattamento: employmentContract?.startDate
       ? new Date(employmentContract.startDate)
       : null,
-    costoGiornaliero: employmentContract?.dailyCost || 0,
+    costoGiornaliero: employmentContract?.dailyCost,
     dataAssunzione: employmentContract?.hireDate
       ? new Date(employmentContract.hireDate)
       : null,
@@ -170,16 +170,16 @@ const mapToTrattamentoEconomicoData = (
     dataRecesso: employmentContract?.endDate
       ? new Date(employmentContract.endDate)
       : null,
-    motivazioneCessazione: employmentContract?.cessationMotivation || "",
-    trasformazioni: employmentContract?.transformations || "",
-    ccnl: employmentContract?.collectiveAgreement || "",
-    ral: employmentContract?.annualGrossSalary || 0,
-    trasferta: employmentContract?.travelAllowance || 0,
+    motivazioneCessazione: employmentContract?.cessationMotivation,
+    trasformazioni: employmentContract?.transformations,
+    ccnl: employmentContract?.collectiveAgreement,
+    ral: employmentContract?.annualGrossSalary,
+    trasferta: employmentContract?.travelAllowance,
     buoniPasto: employmentContract?.mealVouchers,
-    nettoMese: employmentContract?.netMonthly || 0,
-    costoAnnuale: employmentContract?.annualCost || 0,
-    tariffaVendita: employmentContract?.salesRate || 0,
-    note: employmentContract?.notes || "",
+    nettoMese: employmentContract?.netMonthly,
+    costoAnnuale: employmentContract?.annualCost,
+    tariffaVendita: employmentContract?.salesRate,
+    note: employmentContract?.notes,
   };
 };
 
@@ -276,16 +276,16 @@ export const dataAdapter = (row: Record<string, any>) => {
   const employmentContracts = row.trattamentoEconomicoArray || [];
 
   const anagraficaData: AnagraficaData = {
-    person_id: row.anagrafica.person_id || "",
-    sede: row.anagrafica.sede || "",
+    person_id: row.anagrafica.person_id,
+    sede: row.anagrafica.sede,
     sede_autocomplete: row.anagrafica.sede_autocomplete,
-    nome: row.anagrafica.nome || "",
-    cognome: row.anagrafica.cognome || "",
-    email: row.email || "",
-    matricola: row.anagrafica.matricola || "",
-    seniority: row.anagrafica.seniority || "",
+    nome: row.anagrafica.nome,
+    cognome: row.anagrafica.cognome,
+    email: row.email,
+    matricola: row.anagrafica.matricola,
+    seniority: row.anagrafica.seniority,
     sesso: row.anagrafica.sesso,
-    città: row.anagrafica.città || "",
+    città: row.anagrafica.città,
     attachment_id: row.anagrafica.attachment_id || null,
     attachment: row.anagrafica.attachment || null,
     residenza: row.anagrafica.residenza || undefined,
@@ -293,22 +293,22 @@ export const dataAdapter = (row: Record<string, any>) => {
     existingFile: row.anagrafica.existingFile || undefined,
     skills: row.anagrafica.skills,
     //comuneResidenza: row.anagrafica.comuneResidenza || "",
-    indirizzoResidenza: row.anagrafica.indirizzoResidenza || "",
+    indirizzoResidenza: row.anagrafica.indirizzoResidenza,
     dataNascita: row.anagrafica.dataNascita
       ? new Date(row.anagrafica.dataNascita)
       : null,
     cap: row.anagrafica.cap,
     cellulare: row.anagrafica.cellulare
       ? parseInt(row.anagrafica.cellulare, 10)
-      : 0,
+      : undefined,
     telefonoCasa: row.anagrafica.telefonoCasa
       ? parseInt(row.anagrafica.telefonoCasa, 10)
-      : 0,
-    emailPrivata: row.anagrafica.emailPrivata || "",
-    iban: row.anagrafica.iban || "",
-    stato: row.anagrafica.stato || "",
-    partitaIva: row.anagrafica.partitaIva || 0,
-    codiceFiscale: row.anagrafica.codiceFiscale || "",
+      : undefined,
+    emailPrivata: row.anagrafica.emailPrivata,
+    iban: row.anagrafica.iban,
+    stato: row.anagrafica.stato,
+    partitaIva: row.anagrafica.partitaIva,
+    codiceFiscale: row.anagrafica.codiceFiscale,
   };
 
   const trattamentoEconomicoDataArray: TrattamentoEconomicoData[] =
@@ -316,12 +316,12 @@ export const dataAdapter = (row: Record<string, any>) => {
       return {
         id: contract.id,
         societa: contract.societa,
-        tipologiaContratto: contract.tipologiaContratto || "",
-        tipoAmbitoLavorativo: contract.tipoAmbitoLavorativo || "",
+        tipologiaContratto: contract.tipologiaContratto,
+        tipoAmbitoLavorativo: contract.tipoAmbitoLavorativo,
         dataInizioTrattamento: contract.dataInizioTrattamento
           ? new Date(contract.dataInizioTrattamento)
           : null,
-        costoGiornaliero: contract.costoGiornaliero || 0,
+        costoGiornaliero: contract.costoGiornaliero,
         dataAssunzione: contract.dataAssunzione
           ? new Date(contract.dataAssunzione)
           : null,
@@ -331,34 +331,34 @@ export const dataAdapter = (row: Record<string, any>) => {
         dataRecesso: contract.dataRecesso
           ? new Date(contract.dataRecesso)
           : null,
-        motivazioneCessazione: contract.motivazioneCessazione || "",
-        trasformazioni: contract.trasformazioni || "",
-        ccnl: contract.ccnl || "",
-        ral: contract.annualGrossSalary || 0,
-        trasferta: contract.trasferta || 0,
-        buoniPasto: contract.buoniPasto || "",
-        nettoMese: contract.nettoMese || 0,
-        costoAnnuale: contract.costoAnnuale || 0,
-        tariffaVendita: contract.tariffaVendita || 0,
-        note: contract.note || "",
+        motivazioneCessazione: contract.motivazioneCessazione,
+        trasformazioni: contract.trasformazioni,
+        ccnl: contract.ccnl,
+        ral: contract.annualGrossSalary,
+        trasferta: contract.trasferta,
+        buoniPasto: contract.buoniPasto,
+        nettoMese: contract.nettoMese,
+        costoAnnuale: contract.costoAnnuale,
+        tariffaVendita: contract.tariffaVendita,
+        note: contract.note,
       };
     });
 
   const trattamentoEconomicoData: TrattamentoEconomicoData = {
     id: row.trattamentoEconomico.id,
     tipologiaContratto:
-      row.trattamentoEconomico?.tipologiaContratto.toString() || "",
-    societa: row.trattamentoEconomico.societa?.toString() || "",
+      row.trattamentoEconomico?.tipologiaContratto?.toString(),
+    societa: row.trattamentoEconomico.societa?.toString(),
     tipologiaContratto_autocomplete:
       row.trattamentoEconomico?.tipologiaContratto_autocomplete,
     tipoAmbitoLavorativo_autocomplete:
       row.trattamentoEconomico.tipoAmbitoLavorativo_autocomplete || {},
     tipoAmbitoLavorativo:
-      row.trattamentoEconomico?.tipoAmbitoLavorativo.toString() || "",
+      row.trattamentoEconomico?.tipoAmbitoLavorativo?.toString(),
     dataInizioTrattamento: row.trattamentoEconomico?.dataInizioTrattamento
       ? new Date(row.trattamentoEconomico.dataInizioTrattamento)
       : null,
-    costoGiornaliero: row.trattamentoEconomico.costoGiornaliero || 0,
+    costoGiornaliero: row.trattamentoEconomico.costoGiornaliero,
     dataAssunzione: row.trattamentoEconomico.dataAssunzione
       ? new Date(row.trattamentoEconomico.dataAssunzione)
       : null,
@@ -368,16 +368,16 @@ export const dataAdapter = (row: Record<string, any>) => {
     dataRecesso: row.trattamentoEconomico.dataRecesso
       ? new Date(row.trattamentoEconomico.dataRecesso)
       : null,
-    motivazioneCessazione: row.trattamentoEconomico.motivazioneCessazione || "",
-    trasformazioni: row.trattamentoEconomico.trasformazioni || "",
-    ccnl: row.trattamentoEconomico.ccnl || "",
-    ral: row.trattamentoEconomico.ral || 0,
-    trasferta: row.trattamentoEconomico.trasferta || 0,
+    motivazioneCessazione: row.trattamentoEconomico.motivazioneCessazione,
+    trasformazioni: row.trattamentoEconomico.trasformazioni,
+    ccnl: row.trattamentoEconomico.ccnl,
+    ral: row.trattamentoEconomico.ral,
+    trasferta: row.trattamentoEconomico.trasfert,
     buoniPasto: row.trattamentoEconomico.buoniPasto,
-    nettoMese: row.trattamentoEconomico.nettoMese || 0,
-    costoAnnuale: row.trattamentoEconomico.costoAnnuale || 0,
-    tariffaVendita: row.trattamentoEconomico.tariffaVendita || 0,
-    note: row.trattamentoEconomico.note || "",
+    nettoMese: row.trattamentoEconomico.nettoMese,
+    costoAnnuale: row.trattamentoEconomico.costoAnnuale,
+    tariffaVendita: row.trattamentoEconomico.tariffaVendita,
+    note: row.trattamentoEconomico.note,
   };
 
 

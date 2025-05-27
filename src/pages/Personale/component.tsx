@@ -61,8 +61,8 @@ const columns: any = [
     render:(n)=>{
       return <td>
                 <div style={{ display: 'flex', justifyContent: 'flex-start', gap: 15, alignItems: 'center', paddingTop: 5, paddingBottom: 5 }}>
-                    <AvatarIcon name={`${n.firstName} ${n.lastName}`}
-                        initials={`${n.firstName[0].toUpperCase()}${n.lastName[0].toUpperCase()}`} />
+                    <AvatarIcon name={n.firstName ? `${n.firstName} ${n.lastName}` : n.email}
+                        initials={n.firstName ? `${n.firstName[0]?.toUpperCase()}${n.lastName[0]?.toUpperCase()}`: n.email[0].toUpperCase()} />
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
                         <Typography.h6>{n.firstName} {n.lastName}</Typography.h6>
                         <Typography.p>{n.email}</Typography.p>

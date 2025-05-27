@@ -56,7 +56,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             name: "sede_autocomplete",
             label: "Sede",
             type: "sede-selector",
-            value: formData.sede_autocomplete || "",
+            value: formData.sede_autocomplete,
             required: true,
             disabled: (type === "view" || isViewOnly),
             valueOnChange: valueOnChange,
@@ -70,7 +70,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             name: "nome",
             label: "Nome",
             type: "text",
-            value: formData.nome || "",
+            value: formData.nome,
             required: true,
             disabled: (type === "view" || isViewOnly),
             valueOnChange: valueOnChange,
@@ -82,7 +82,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             name: "cognome",
             label: "Cognome",
             type: "text",
-            value: formData.cognome || "",
+            value: formData.cognome,
             disabled: (type === "view" || isViewOnly),
             required: true,
             valueOnChange: valueOnChange,
@@ -94,7 +94,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             name: "email",
             label: "Email Aziendale",
             type: "email",
-            value: formData.email || "",
+            value: formData.email,
             required: true,
             disabled: (type === "view" || isViewOnly),
             valueOnChange: valueOnChange,
@@ -108,7 +108,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             type: "text",
             disabled: (type === "view" || isViewOnly),
             valueOnChange: valueOnChange,
-            value: formData.matricola || "",
+            value: formData.matricola,
         },
         sesso: {
             name: "sesso",
@@ -116,7 +116,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             type: "select",
             showLabel: false,
             disabled: (type === "view" || isViewOnly),
-            value: formData.sesso || "",
+            value: formData.sesso,
             required: true,
             options: genderOptions,
             valueOnChange: valueOnChange,
@@ -195,7 +195,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             label: "Data di Nascita",
             type: "date",
             disabled: (type === "view" || isViewOnly),
-            value: formData.dataNascita || "",
+            value: formData.dataNascita,
             required: true,
             valueOnChange: valueOnChange,
             validator: createValidator(type === "view" || isViewOnly, dateValidator),
@@ -206,7 +206,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             type: "text",
             valueOnChange: valueOnChange,
             disabled: (type === "view" || isViewOnly),
-            value: formData.indirizzoResidenza || "",
+            value: formData.indirizzoResidenza,
         },
         fields.cap = {
             name: "cap",
@@ -214,7 +214,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             type: "text",
             valueOnChange: valueOnChange,
             disabled: (type === "view" || isViewOnly),
-            value: formData.cap || 0,
+            value: formData.cap,
             validator: createValidator(type === "view" || isViewOnly, (value: any) =>
                 optionalCapValidator(value) ? "" : "Il campo CAP deve contenere solo 5 numeri"
             ),
@@ -225,7 +225,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             type: "text",
             valueOnChange: valueOnChange,
             disabled: (type === "view" || isViewOnly),
-            value: formData.cellulare || 0,
+            value: formData.cellulare,
             validator: createValidator(type === "view" || isViewOnly, (value: any) =>
                 optionalCellulareValidator(value) ? "" : "Il campo Cellulare deve essere nel formato +39XXXXXXXXXX o XXXXXXXXXX"
             ),
@@ -235,7 +235,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             label: "Telefono di Casa",
             type: "text",
             disabled: (type === "view" || isViewOnly),
-            value: formData.telefonoCasa || 0,
+            value: formData.telefonoCasa,
             valueOnChange: valueOnChange,
             validator: createValidator(type === "view" || isViewOnly, (value: any) =>
                 optionalTelefonoCasaValidator(value) ? "" : "Il campo Telefono di Casa deve essere nel formato +0XXXXXXXXX"
@@ -247,7 +247,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             type: "text",
             spinners: false,
             disabled: (type === "view" || isViewOnly),
-            value: formData.telefonoLavoro || 0,
+            value: formData.telefonoLavoro,
             valueOnChange: valueOnChange,
             validator: createValidator(type === "view" || isViewOnly, (value: any) =>
                 optionalCellulareValidator(value) ? "" : "Il campo Telefono di Lavoro deve essere nel formato +39XXXXXXXXXX o XXXXXXXXXX"
@@ -259,7 +259,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             type: "email",
             valueOnChange: valueOnChange,
             disabled: (type === "view" || isViewOnly),
-            value: formData.emailPrivata || "",
+            value: formData.emailPrivata,
         },
         fields.iban = {
             name: "iban",
@@ -267,7 +267,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             type: "text",
             valueOnChange: valueOnChange,
             disabled: (type === "view" || isViewOnly),
-            value: formData.iban || "",
+            value: formData.iban,
         },
         fields.codiceFiscale = {
             name: "codiceFiscale",
@@ -275,7 +275,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             valueOnChange: valueOnChange,
             type: "text",
             disabled: (type === "view" || isViewOnly),
-            value: formData.codiceFiscale || "",
+            value: formData.codiceFiscale,
         },
         fields.partitaIva = {
             name: "partitaIva",
@@ -283,7 +283,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             valueOnChange: valueOnChange,
             type: "text",
             disabled: (type === "view" || isViewOnly),
-            value: formData.partitaIva || "",
+            value: formData.partitaIva,
         }
 
 
@@ -337,7 +337,7 @@ export const getFormTrattamentoEconomicoFields = (
             label: "Tipologia di Contratto di Lavoro",
             type: "contract-type",
             disabled: (type === "view" || isViewOnly),
-            value: formData?.tipologiaContratto_autocomplete || "",
+            value: formData?.tipologiaContratto_autocomplete,
             required: true,
             valueOnChange: (name: string, value: any) => {
                 combinedValueOnChangeContractType(name, value); // Usa la funzione combinata
@@ -352,7 +352,7 @@ export const getFormTrattamentoEconomicoFields = (
             type: "select",
             showLabel: false,
             disabled: (type === "view" || isViewOnly),
-            value: formData?.societa || "",
+            value: formData?.societa,
             required: true,
             valueOnChange: valueOnChange,
             validator: createValidator(type === "view" || isViewOnly, (value: any) =>
@@ -386,7 +386,7 @@ export const getFormTrattamentoEconomicoFields = (
             validator: dataInizioTrattamentoValidator,
 
 
-            value: formData?.dataInizioTrattamento || "",
+            value: formData?.dataInizioTrattamento,
         },
 
 
@@ -394,9 +394,10 @@ export const getFormTrattamentoEconomicoFields = (
             name: "dataAssunzione",
             label: "Data Assunzione",
             type: "date",
+            required: true,
             valueOnChange: valueOnChange,
             disabled: (type === "view") || !(isFirstTreatment || isFirstTreatmentUpdate) || isViewOnly,
-            value: formData?.dataAssunzione || "",
+            value: formData?.dataAssunzione,
             validator: dataAssunzioneValidator,
         },
 
@@ -406,7 +407,7 @@ export const getFormTrattamentoEconomicoFields = (
             type: "date",
             valueOnChange: valueOnChange,
             disabled: (type === "view" || isScadenzaEffettivaDisabled || isViewOnly),
-            value: formData?.scadenzaEffettiva || "",
+            value: formData?.scadenzaEffettiva,
             validator:scadenzaEffettivaValidator
         },
 
@@ -416,7 +417,7 @@ export const getFormTrattamentoEconomicoFields = (
             type: "date",
             valueOnChange: valueOnChange,
             disabled: (type === "view") || newForm || isFirstTreatment,
-            value: formData?.dataRecesso || "",
+            value: formData?.dataRecesso,
             validator: createValidator(type === "view" || isViewOnly, (value: any) =>
                 optionalDateValidator("Data del Recesso")(value, formData) ? "" : "Il campo Data del Recesso non può essere lo stesso giorno o prima della Data di Assunzione o della Data di Inizio del Trattamento"
             ),
@@ -432,7 +433,7 @@ export const getFormTrattamentoEconomicoFields = (
             validator: createValidator(type === "view" || isViewOnly, (value: any) =>
                 value ? "" : "Il campo Costo Giornaliero è obbligatorio"
             ),
-            value: formData?.costoGiornaliero || 0,
+            value: formData?.costoGiornaliero,
         },
         motivazioneCessazione: {
             name: "motivazioneCessazione",
@@ -440,7 +441,7 @@ export const getFormTrattamentoEconomicoFields = (
             type: "textarea",
             valueOnChange: valueOnChange,
             disabled: (type === "view" || isViewOnly),
-            value: formData?.motivazioneCessazione || "",
+            value: formData?.motivazioneCessazione,
         },
         trasformazioni: {
             name: "trasformazioni",
@@ -448,7 +449,7 @@ export const getFormTrattamentoEconomicoFields = (
             type: "textarea",
             valueOnChange: valueOnChange,
             disabled: (type === "view" || isViewOnly),
-            value: formData?.trasformazioni || "",
+            value: formData?.trasformazioni,
         },
         ccnl: {
             name: "ccnl",
@@ -456,7 +457,7 @@ export const getFormTrattamentoEconomicoFields = (
             type: "text",
             valueOnChange: valueOnChange,
             disabled: (type === "view" || isViewOnly),
-            value: formData?.ccnl || "",
+            value: formData?.ccnl,
         },
         ral: {
             name: "ral",
@@ -465,7 +466,7 @@ export const getFormTrattamentoEconomicoFields = (
             valueOnChange: valueOnChange,
             spinners: false,
             disabled: (type === "view" || isViewOnly),
-            value: formData?.ral || 0,
+            value: formData?.ral,
         },
         trasferta: {
             name: "trasferta",
@@ -474,7 +475,7 @@ export const getFormTrattamentoEconomicoFields = (
             valueOnChange: valueOnChange,
             disabled: (type === "view" || isViewOnly),
             spinners: false,
-            value: formData?.trasferta || 0,
+            value: formData?.trasferta,
         },
         buoniPasto: {
             name: "buoniPasto",
@@ -493,7 +494,7 @@ export const getFormTrattamentoEconomicoFields = (
             valueOnChange: valueOnChange,
             disabled: (type === "view" || isViewOnly),
             spinners: false,
-            value: formData?.nettoMese || 0,
+            value: formData?.nettoMese,
         },
         costoAnnuale: {
             name: "costoAnnuale",
@@ -502,7 +503,7 @@ export const getFormTrattamentoEconomicoFields = (
             disabled: (type === "view" || isViewOnly),
             type: "number",
             spinners: false,
-            value: formData?.costoAnnuale || 0,
+            value: formData?.costoAnnuale,
         },
         tariffaVendita: {
             name: "tariffaVendita",
@@ -511,7 +512,7 @@ export const getFormTrattamentoEconomicoFields = (
             disabled: (type === "view" || isViewOnly),
             spinners: false,
             valueOnChange: valueOnChange,
-            value: formData?.tariffaVendita || 0,
+            value: formData?.tariffaVendita,
         },
         note: {
             name: "note",
@@ -519,7 +520,7 @@ export const getFormTrattamentoEconomicoFields = (
             label: "Note",
             valueOnChange: valueOnChange,
             type: "textarea",
-            value: formData?.note || "",
+            value: formData?.note,
         },
     }
 
