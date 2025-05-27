@@ -5,7 +5,7 @@ import InputText from "common/InputText";
 import Button from "common/Button";
 import { useDebounce } from "@uidotdev/usehooks";
 import { LookupsService } from "../../services/LookupService";
-import { LookUpsSelector } from "../../components/lookupsSelector/component";
+import { getLookups, LookUpsSelector } from "../../components/lookupsSelector/component";
 import styles from './style.module.scss';
 
 
@@ -71,6 +71,7 @@ const determineFieldType = (
 
 const LookUps = () => {
   const [selectedData, setSelectedData] = useState<string>("ProjectType");
+  const [selectedModel, setSelectedModel] = useState(getLookups.find(lookup => lookup.name === "ProjectType"));
   const [columns, setColumns] = useState<any[]>([]);
   const [fields, setFields] = useState<any>({});
   const [termValue, setTermValue] = useState<string>();
@@ -108,7 +109,7 @@ const LookUps = () => {
   };
 
   useEffect(() => {
-    loadModel(selectedData);
+    if (selectedData) loadModel(selectedData);
   }, [selectedData]);
 
   const loadData = async (pagination: any, filter: any, sorting: any[]) => {
@@ -131,7 +132,8 @@ const LookUps = () => {
   const handleTypeChange = (type: any) => {
     const newSelectedData = type?.value?.name;
     setSelectedData(newSelectedData);
-    loadModel(newSelectedData);
+    setSelectedModel(getLookups.find(lookup => lookup.name === newSelectedData));
+    if (newSelectedData) loadModel(newSelectedData);
   };
 
   const handleSearchTerm = (event: any) => {
@@ -162,7 +164,7 @@ const LookUps = () => {
 
   useEffect(() => {
     if (gridRef.current) {
-      gridRef.current.refreshTable();
+      if (selectedData) gridRef.current.refreshTable();
     }
   }, [debouncedSearchTerm, selectedData]);
 
@@ -178,6 +180,7 @@ const LookUps = () => {
           <>
             <InputText placeholder={"Cerca"} value={termValue} onChange={handleSearchTerm} />
             <LookUpsSelector
+              value={selectedModel}
               placeholder={"Inserisci Tipologica"}
               onChange={(event: { id: number; name: string }) =>
                 handleTypeChange(event)
