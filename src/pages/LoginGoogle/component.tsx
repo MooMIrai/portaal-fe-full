@@ -3,16 +3,18 @@ import client from "common/services/BEService";
 import { LoginForm } from "./form";
 import Form from "common/Form";
 import Button from "common/Button";
-import {googleIcon} from 'common/icons';
 import { ProfileService } from "../../services/profileService";
 import Typography from 'common/Typography';
 import NotificationActions from 'common/providers/NotificationProvider';
 import styles from "./styles.module.css";
 
-const LoginGoogleComponent = () => {
-  const handleGoogleLogin = async () => {
+const LoginComponent = () => {
+
+  const loginProvider = process.env.LOGIN_PROVIDER;
+
+  const handleLogin = async () => {
     try {
-      window.location.href = client.defaults.baseURL + "/auth/";
+      window.location.href = client.defaults.baseURL + "/auth";
     } catch (error) {
       console.error("Error during Google login:", error);
     }
@@ -22,8 +24,6 @@ const LoginGoogleComponent = () => {
     <div className={styles.loginContainer}>
       {/* <Card className={styles.loginCard}> */}
         <div className={styles.loginContent}>
-          
-          
 
           <div className={styles.header}>
          
@@ -51,18 +51,23 @@ const LoginGoogleComponent = () => {
               submitText={'Login'}
             />
           </div>
-          <Typography.h6>Oppure accedi tramite</Typography.h6>
+          <Typography.h6>Oppure</Typography.h6>
           <div className={styles.boxSSO}>
           
-          <Button
-            svgIcon={googleIcon}
-            onClick={handleGoogleLogin}
-            className={`${styles.kButton} `}
-            themeColor={'error'}
-            /* icon="google" */
+          {(loginProvider?.toLowerCase() === "google") && <Button
+            onClick={handleLogin}
+            style={{padding: 0, border: 0}}
           >
-            Google
-          </Button>
+            <img src="/image/google_login_logo.svg"></img>
+          </Button>}
+
+          {(loginProvider?.toLowerCase() === "microsoft") && <Button
+            onClick={handleLogin}
+            style={{padding: 0, border: 0}}
+          >
+            <img style={{height: "38.5px"}} src="/image/microsoft_login_logo.svg"></img>
+          </Button>}
+
           </div>
         </div>
       {/* </Card> */}
@@ -70,4 +75,4 @@ const LoginGoogleComponent = () => {
   );
 };
 
-export default LoginGoogleComponent;
+export default LoginComponent;
