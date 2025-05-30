@@ -172,14 +172,14 @@ export const recruitingSkillType = {
 export const WorkModel = [
     {
         id:'R',
-        name:'R verificare ed aggiornare'
+        name:'Remoto'
     },
     {
         id:'S',
-        name:'S verificare ed aggiornare'
+        name:'Sede'
     },
     {
         id:'H',
-        name:'H verificare ed aggiornare'
+        name:'Ibrido'
     }
 ];

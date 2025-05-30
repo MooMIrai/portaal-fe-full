@@ -90,7 +90,7 @@ export const getFormRichiesta = (
         },
         WorkModel: {
             name: "WorkModel",
-            label: "Ambito lavorativo",
+            label: "Tipologia di Lavoro",
             type: "workModel-selector",
             value: formData.WorkModel || "",
             required: true,
