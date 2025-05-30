@@ -6,7 +6,7 @@ import { CandidateOffer } from "../CandidateOffer/component";
 import { CandidateSendCv } from "../CandidateSendCv/component";
 import { CandidateSendContract } from "../CandidateSendContract/component";
 import CandidateCreateAccount from "../CandidateCreateAccount/component";
-import { isEmpty, cloneDeep } from "lodash";
+import { isEmpty } from "lodash";
 
 export function CandidateStepper(props) {
 
@@ -18,7 +18,7 @@ export function CandidateStepper(props) {
         if (data) {
             if (data.Candidate) {
                 setSteps([
-                    { label: 'Contatto', isValid: data.RecruitingContact },
+                    { label: 'Contatto', isValid: data.RecruitingContact.length },
                     { label: 'Colloqui', isValid: data.RecruitingInterview.length },
                     { label: 'Proposta economica', isValid: data.RecruitingOffer },
                     //{ label: 'Valutazione finale', isValid: data.RecruitingFinalEvaluation },
@@ -28,7 +28,7 @@ export function CandidateStepper(props) {
                 ])
             } else {
                 setSteps([
-                    { label: 'Contatto', isValid: data.RecruitingContact },
+                    { label: 'Contatto', isValid: data.RecruitingContact.length },
                     { label: 'Invio CV', isValid: data.RecruitingSendCv },
                 ])
             }
@@ -43,7 +43,7 @@ export function CandidateStepper(props) {
 
     const handleContactChange = (contact) => {
         setData((prevData) => {
-            return { ...prevData, RecruitingContact: contact }
+            return { ...prevData, RecruitingContact: [...prevData.RecruitingContact, contact] }
         })
     }
 
