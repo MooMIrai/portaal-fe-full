@@ -106,22 +106,20 @@ const FeriePermessiSection = () => {
         const timeUnit = dataItem.ActivityType.time_unit; 
   
         if (dataItem.TimesheetDetail.length > 0) {
+
+          const startDate = new Date(dataItem.start_date);
+          const endDate = new Date(dataItem.end_date);
           const totalHours = dataItem.TimesheetDetail[0].hours; 
   
           if (timeUnit === "D") {
-            const fullDays = Math.floor(totalHours / 8); 
-            const remainingHours = totalHours % 8; 
-  
-            if (fullDays > 0 && remainingHours > 0) {
-              hours = `${fullDays} giorno/i e ${remainingHours} ora/e`;
-            } else if (fullDays > 0) {
-              hours = `${fullDays} giorno/i`;
-            } else {
-              hours = `${remainingHours} ora/e`;
-            }
-          } else {
+            const fullDays = ((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)) + 1; 
+            hours = `${fullDays} giorno/i`;
+          }
+          
+          else {
             hours = `${totalHours} ora/e`;
           }
+
         }
   
         // Ritorna l'elemento dati con la nuova proprietà 'hours'
