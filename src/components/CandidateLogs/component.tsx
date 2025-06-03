@@ -58,17 +58,24 @@ const extractTimelineData=(data)=> {
     const timeline:any[] = [];
 
     [data].forEach((entry) => {
-        const candidateName = entry.Candidate? `${entry.Candidate.Person.firstName} ${entry.Candidate.Person.lastName}`:
-                              entry.Person?`${entry.Person.firstName} ${entry.Person.lastName}`:'';
+
+        const candidateName = entry.Candidate
+        ? `${entry.Candidate.Person.firstName} ${entry.Candidate.Person.lastName}`
+        : entry.Person
+            ? `${entry.Person.firstName} ${entry.Person.lastName}`
+            : ''
+        ;
 
         // Aggiungi gli eventi RecruitingContact
-        if (entry.RecruitingContact) {
-            timeline.push({
-                date: new Date(entry.RecruitingContact.date_log),
+        if (entry.RecruitingContact?.length > 0) {
+
+            timeline.push(...entry.RecruitingContact.map(contact => ({
+                date: new Date(contact.date_log),
                 title: "Contatto",
                 subtitle: candidateName,
-                description: `(${mapContactType(entry.RecruitingContact.ContactType)}): ${entry.RecruitingContact.notes}`,
-            });
+                description: `(${mapContactType(contact.ContactType)}): ${contact.notes || "Nessuna nota"}`,
+            })));
+
         }
 
         // Aggiungi gli eventi RecruitingInterview
@@ -91,7 +98,7 @@ const extractTimelineData=(data)=> {
                 date: new Date(entry.RecruitingOffer.date_log),
                 title: "Offerta",
                 subtitle: candidateName,
-                description: `RAL: ${entry.RecruitingOffer.RAL}, Note: ${entry.RecruitingOffer.notes}`,
+                description: `RAL: ${entry.RecruitingOffer.RAL || "Nessun RAL"}, Note: ${entry.RecruitingOffer.notes || "Nessuna nota"}`,
             });
         }
 
@@ -101,7 +108,7 @@ const extractTimelineData=(data)=> {
                 date: new Date(entry.RecruitingSendCv.date_log),
                 title: "CV Inviato",
                 subtitle: candidateName,
-                description: `${entry.RecruitingSendCv.notes}`,
+                description: `Note: ${entry.RecruitingSendCv.notes || "Nessuna nota"}`,
             });
         }
 
@@ -111,7 +118,7 @@ const extractTimelineData=(data)=> {
                 date: new Date(entry.RecruitingSendContract.date_log),
                 title: "Contratto Inviato",
                 subtitle: candidateName,
-                description: `${entry.RecruitingSendContract.notes}`,
+                description: `Note: ${entry.RecruitingSendContract.notes || "Nessuna nota"}`,
             });
         }
 
@@ -125,7 +132,6 @@ const extractTimelineData=(data)=> {
             });
         }
     });
-
 
     return timeline;
 }
