@@ -223,7 +223,7 @@ const DynamicForm = React.forwardRef<any, DynamicFormProps>((props, ref) => {
   } = props;
 
   const formRefContext = useContext(FormRefContext);
-  const isTouched = (ref: any) => ref?.current ? Object.values(ref.current.touched).length > 0 : false;
+  const isTouched = (ref: any) => ref?.current ? Object.values(ref.current.visited).length > 0 : false;
 
   return <Form
     initialValues={formData}
