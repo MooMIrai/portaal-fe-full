@@ -52,6 +52,29 @@ const mapContactType = rowData=>{
     return tipoText
 }
 
+const mapOutcometype = (rowData) => {
+
+    let tipoText = "";
+
+    switch (rowData.OutComeType) {
+        case "P":
+            tipoText = 'Positivo';
+            break;
+        case "N":
+            tipoText = 'Negativo';
+            break;
+        case "R":
+            tipoText = 'Rimandato';
+            break;
+        case "A":
+            tipoText = 'Annullato';
+            break;
+
+    }
+
+    return tipoText;
+}
+
 // Funzione per estrarre i dati (come mostrato prima)
 const extractTimelineData=(data)=> {
 
@@ -89,6 +112,16 @@ const extractTimelineData=(data)=> {
                         interview.notes || "Nessuna nota"
                     }`,
                 });
+            });
+        }
+
+        // Aggiungi gli eventi RecruitingFinalEvaluation
+        if (entry.RecruitingFinalEvaluation) {
+            timeline.push({
+                date: new Date(entry.RecruitingFinalEvaluation.date_log),
+                title: "Valutazione Finale",
+                subtitle: candidateName,
+                description: `Esito: ${mapOutcometype(entry.RecruitingFinalEvaluation)}`,
             });
         }
 

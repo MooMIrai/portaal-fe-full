@@ -69,8 +69,8 @@ export function CandidateForRequest(props: PropsWithChildren<{ requestId: number
         </td>}},
         { key: "RecruitingContact", label: "Contattato", type: "custom", render:(rowData)=><td>{rowData.RecruitingContact?.length > 0 ? <SvgIcon icon={checkCircleIcon} themeColor="success" />:<SvgIcon icon={xCircleIcon} themeColor="error" />}</td>},
         { key: "RecruitingInterview", label: "Colloquiato", type: "custom", render:(rowData)=><td>{rowData.RecruitingInterview?.length > 0 ? <SvgIcon icon={checkCircleIcon} themeColor="success" />:<SvgIcon icon={xCircleIcon} themeColor="error" />}</td>},
+        { key: "RecruitingFinalEvaluation", label: "Valutazione finale", type: "custom", render:(rowData)=><td>{rowData.RecruitingFinalEvaluation?<SvgIcon icon={checkCircleIcon} themeColor="success" />:<SvgIcon icon={xCircleIcon} themeColor="error" />}</td>},
         { key: "RecruitingOffer", label: "Proposta economica", type: "custom", render:(rowData)=><td>{rowData.RecruitingOffer?<SvgIcon icon={checkCircleIcon} themeColor="success" />:<SvgIcon icon={xCircleIcon} themeColor="error" />}</td>},
-        //{ key: "RecruitingFinalEvaluation", label: "Valutazione finale", type: "custom", render:(rowData)=><td>{rowData.RecruitingFinalEvaluation?<SvgIcon icon={checkCircleIcon} themeColor="success" />:<SvgIcon icon={xCircleIcon} themeColor="error" />}</td>},
         { key: "RecruitingSendCv", label: "Invio CV", type: "custom", render:(rowData)=><td>{rowData.RecruitingSendCv?<SvgIcon icon={checkCircleIcon} themeColor="success" />:<SvgIcon icon={xCircleIcon} themeColor="error" />}</td>},
         { key: "RecruitingSendContract", label: "Contratto", type: "custom", render:(rowData)=><td>{rowData.RecruitingSendContract?<SvgIcon icon={checkCircleIcon} themeColor="success" />:<SvgIcon icon={xCircleIcon} themeColor="error" />}</td>},
         { key: "RecruitingCreateAccount", label: "Account", type: "custom", render: (rowData) => {

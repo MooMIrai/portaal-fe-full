@@ -7,6 +7,7 @@ import { CandidateSendCv } from "../CandidateSendCv/component";
 import { CandidateSendContract } from "../CandidateSendContract/component";
 import CandidateCreateAccount from "../CandidateCreateAccount/component";
 import { isEmpty } from "lodash";
+import { CandidateFinalEvaluation } from "../CandidateFinalEvaluation/component";
 
 export function CandidateStepper(props) {
 
@@ -20,8 +21,8 @@ export function CandidateStepper(props) {
                 setSteps([
                     { label: 'Contatto', isValid: data.RecruitingContact.length },
                     { label: 'Colloqui', isValid: data.RecruitingInterview.length },
+                    { label: 'Valutazione finale', isValid: data.RecruitingFinalEvaluation },
                     { label: 'Proposta economica', isValid: data.RecruitingOffer },
-                    //{ label: 'Valutazione finale', isValid: data.RecruitingFinalEvaluation },
                     { label: 'Invio CV', isValid: data.RecruitingSendCv },
                     { label: 'Contratto', isValid: data.RecruitingSendContract },
                     { label: "Creazione account", isValid: !isEmpty(data.Candidate.Person.Accounts)}
@@ -52,6 +53,12 @@ export function CandidateStepper(props) {
             return { ...prevData, RecruitingInterview: interviews }
         })
     }
+
+    const handleFinalEvaluationChange = (finalEvaluation) => {
+        setData((prevData) => {
+            return { ...prevData, RecruitingFinalEvaluation: finalEvaluation }
+        })
+    };
 
     const handleOfferChange = (interviews) => {
         setData((prevData) => {
@@ -96,16 +103,19 @@ export function CandidateStepper(props) {
                         step === 1 && <Candidateinterviews onChange={handleInterviewChange} currentInterviews={data.RecruitingInterview} assignmentId={props.data.id} />
                     }
                     {
-                        step === 2 && <CandidateOffer onChange={handleOfferChange} currentData={data.RecruitingOffer} assignmentId={props.data.id} />
+                        step === 2 && <CandidateFinalEvaluation onChange={handleFinalEvaluationChange} currentData={data.RecruitingFinalEvaluation} assignmentId={props.data.id} />
                     }
                     {
-                        step === 3 && <CandidateSendCv onChange={handleSendCvChange} currentData={data.RecruitingSendCv} assignmentId={props.data.id} />
+                        step === 3 && <CandidateOffer onChange={handleOfferChange} currentData={data.RecruitingOffer} assignmentId={props.data.id} />
                     }
                     {
-                        step === 4 && <CandidateSendContract onChange={handleSendContractChange} currentData={data.RecruitingSendContract} assignmentId={props.data.id} />
+                        step === 4 && <CandidateSendCv onChange={handleSendCvChange} currentData={data.RecruitingSendCv} assignmentId={props.data.id} />
                     }
                     {
-                        step === 5 && <CandidateCreateAccount onChange={handleCreateAccountChange} currentData={data.Candidate.Person?.Accounts?.[0]} person_id={data.Candidate.person_id}/>
+                        step === 5 && <CandidateSendContract onChange={handleSendContractChange} currentData={data.RecruitingSendContract} assignmentId={props.data.id} />
+                    }
+                    {
+                        step === 6 && <CandidateCreateAccount onChange={handleCreateAccountChange} currentData={data.Candidate.Person?.Accounts?.[0]} person_id={data.Candidate.person_id}/>
                     }
                 </> : <>
                     {
