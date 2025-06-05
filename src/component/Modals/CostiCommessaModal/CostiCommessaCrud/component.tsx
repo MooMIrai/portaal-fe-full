@@ -12,7 +12,23 @@ export interface CostiCommessaCrudProps {
 }
 
 const CostiCommessaCrud = (props: CostiCommessaCrudProps) => {
+  
   const [data, setData] = useState<any[] | undefined>(undefined);
+
+  const addExistingFile = (fields: any[]) => {
+
+    const file =  props.dataItem.file;
+
+    const fields_with_file = fields.map(field => {
+
+      if (field.name === "file" && file) field.existingFile = [{name: file.file_name, id: file.uniqueIdentifier}];
+      return field;
+
+    });
+
+    return fields_with_file;
+
+  };
 
   useEffect(() => {
     setData({
@@ -28,7 +44,7 @@ const CostiCommessaCrud = (props: CostiCommessaCrudProps) => {
         submitText={"Salva"}
         customDisabled={false}
         formData={data}
-        fields={Object.values(props.fields)}
+        fields={addExistingFile(Object.values(props.fields))}
         addedFields={props.addedFields}
         showSubmit={true}
         extraButton={true}

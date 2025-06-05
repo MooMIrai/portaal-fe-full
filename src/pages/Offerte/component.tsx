@@ -179,20 +179,17 @@ export default function OffertePage() {
       initialWidthWindow={initialWidthWindow}
       resizable={true}
       actions={(row) => {
+
         const actions: string[] = ["create"];
 
-        if (row?.outcome_type?.id === "P") {
-          if (row?.thereisProject) {
-            actions.push("show");
-          } else {
-            actions.push("show", "delete");
-          }
-        } else if (row?.thereisProject) {
-          actions.push("show", "edit");
-        } else {
+        if (row?.thereisProject) {
+          actions.push("show");
+        } 
+        
+        else {
           actions.push("show", "edit", "delete");
         }
-
+        
         return actions;
       }}
 
