@@ -148,6 +148,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
 
         attachment: {
             name: "attachment",
+            options: { property_name: "Person.files" },
             label: "Carica CV",
             type: "uploadSingleFile",
             withCredentials: false,
@@ -155,7 +156,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             value: formData.attachment || "",
             valueOnChange: valueOnChange,
             existingFile: formData.attachment && formData.attachment.length ?
-            formData.attachment
+            formData.attachment.map(attachment => ({name: attachment.file_name, id: attachment.uniqueIdentifier}))
             :undefined,
             //onDownload: download && name_attachment ? handleDownload : undefined,
             multiple: false,
@@ -167,7 +168,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             type: "buttonCustom",
             valueOnChange: valueOnChange,
             loader: true,
-            conditions: (formD) => formD.attachment && formD.attachment.create,
+            conditions: (formD) => formD.attachment && (formD.attachment.create?.length > 0 || formD.attachment.length > 0),
             onClick: () => handleFileUpload(formData.attachment),
             disabled: (type === "view" || isViewOnly),
         }

@@ -76,6 +76,8 @@ const mapToAnagraficaData = (
         : undefined,
   },
 
+  attachment: Person?.files,
+
   attachment_id : Person && Array.isArray(Person.files)
   ? Person.files.map((file) => ({
       id: file.uniqueRecordIdentifier,
@@ -272,7 +274,7 @@ export const transformUserData = (data: any[], sede: locationOption[]) => {
 
 // adapter per le row per le modali
 export const dataAdapter = (row: Record<string, any>) => {
-  
+
   const employmentContracts = row.trattamentoEconomicoArray || [];
 
   const anagraficaData: AnagraficaData = {
@@ -807,18 +809,21 @@ export const reverseAdapterUpdate = (combinedData: {
   newFormTrattamentoEconomico: boolean;
   skills: MappedSkill[];
 }) => {
-  const permessiIDs =
-    mapPermessiNamesToIDs(combinedData.permessi, combinedData.idPermessi) || [];
-  
+
+  const permessiIDs = mapPermessiNamesToIDs(combinedData.permessi, combinedData.idPermessi) || [];
   const result: any = {};
-  console.log(combinedData.anagrafica)
-  console.log(combinedData.modifiedData.seniority)
-  const attachments = combinedData.modifiedData.attachment
-    ? combinedData.modifiedData.attachment.create.map((o) => ({
-        ...o,
-        property: "Person.files",
-      }))
-    : null;
+
+  const attachments = combinedData.modifiedData.attachment;
+
+  if (attachments) {
+
+    attachments.create = (attachments.create || []).map((o) => ({
+      ...o,
+      property: "Person.files",
+    }));
+
+  }
+
   if (combinedData.anagrafica.accountStatus_id) {
     result.accountStatus_id = combinedData.anagrafica.accountStatus_id;
   }
