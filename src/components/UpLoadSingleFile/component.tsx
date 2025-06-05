@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Button } from '@progress/kendo-react-buttons';
 import styles from './styles.module.scss';
-import { downloadIcon, googleIcon } from '@progress/kendo-svg-icons';
+import { downloadIcon, googleIcon, trashIcon, xIcon } from '@progress/kendo-svg-icons';
 import FileService from '../../services/FileService';
 import NotificationProviderActions from '../Notification/provider';
 
@@ -24,6 +24,7 @@ type CustomUploadProps = {
   disabled?: boolean;
   existingFile?: { id: string, name: string; }[];
   name:string,
+  property_name?: string;
   externalValue?:FileList 
 };
 
@@ -32,14 +33,15 @@ function UploadSingleFileComponent(props: CustomUploadProps) {
   const [selectedFile, setSelectedFile] = useState<File | null >(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [selectedLink,setSelectedLink] = useState<string>();
+  const [deletingFile, setDeletingFile] = useState(false);
   const [deleteDrive,setDeleteDrive] = useState<boolean | undefined>();
+  const file_name = props.property_name || props.name;
 
   useEffect(()=>{
-    
-    if(props.externalValue){
+    if(props.externalValue && props.externalValue.length > 0){
       convertFiles(props.externalValue);
     }
-  },[props.externalValue])
+  },[props.externalValue]);
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputElement = event.target;
@@ -52,7 +54,7 @@ function UploadSingleFileComponent(props: CustomUploadProps) {
       const fileDataArray = await FileService.convertListToBE(files);
       const fileArray = Array.from(files);
 
-      setSelectedFileName(fileArray[0].name);
+      setSelectedFileName(fileArray[0]?.name);
       setSelectedFile(fileArray[0]);
       setSelectedLink(undefined);
 
@@ -61,19 +63,19 @@ function UploadSingleFileComponent(props: CustomUploadProps) {
             "Vuoi eliminare il file anche su drive?",
             ()=>{
               setDeleteDrive(true);
-              props.onFileChange(FileService.combineDataToBE(fileDataArray,props.existingFile?.map(p=>p.id),props.name,true));
+              props.onFileChange(FileService.combineDataToBE(fileDataArray,props.existingFile?.map(p=>p.id),file_name,true));
             },
             'Conferma operazione',
             ()=>{
               setDeleteDrive(false);
-              props.onFileChange(FileService.combineDataToBE(fileDataArray,props.existingFile?.map(p=>p.id),props.name,false));
+              props.onFileChange(FileService.combineDataToBE(fileDataArray,props.existingFile?.map(p=>p.id),file_name,false));
             }
           )
       }else{
-        props.onFileChange(FileService.combineDataToBE(fileDataArray,props.existingFile?.map(p=>p.id),props.name,deleteDrive));
+        props.onFileChange(FileService.combineDataToBE(fileDataArray,props.existingFile?.map(p=>p.id),file_name,deleteDrive));
       }
 
-      
+      setDeletingFile(false);
 
 
     }
@@ -101,6 +103,39 @@ function UploadSingleFileComponent(props: CustomUploadProps) {
    }
   };
 
+  const handleDelete = () => {
+
+    if(deleteDrive === undefined) {
+
+      NotificationProviderActions.openConfirm(
+        "Vuoi eliminare il file anche su drive?",
+        ()=>{
+          setDeleteDrive(true);
+          props.onFileChange(FileService.combineLinksToBE([], props.existingFile?.map(p=>p.id), file_name, true));
+        },
+        'Conferma operazione',
+        ()=>{
+          setDeleteDrive(false);
+          props.onFileChange(FileService.combineLinksToBE([], props.existingFile?.map(p=>p.id), file_name, false));
+        }
+      );
+    }
+
+    else props.onFileChange(FileService.combineLinksToBE([], props.existingFile?.map(p=>p.id), file_name, deleteDrive));
+    
+    setDeletingFile(true);
+    props.onFileChange(FileService.combineDataToBE([], props.existingFile?.map(p => p.id), file_name, false));
+
+  };
+
+  const cancelUpload = () => { 
+    setSelectedFileName(null);
+    setSelectedFile(null);
+    setSelectedLink(undefined);
+    props.onFileChange(FileService.combineDataToBE([], [], file_name, false));
+    if (inputRef.current) inputRef.current.value = "";
+  };
+
   const handlePasteLink = ()=> {
     // Controlla se l'API Clipboard è supportata
     if (!navigator.clipboard) {
@@ -120,7 +155,7 @@ function UploadSingleFileComponent(props: CustomUploadProps) {
                   "Vuoi eliminare il file anche su drive?",
                   ()=>{
                     setDeleteDrive(true);
-                    props.onFileChange(FileService.combineLinksToBE([res],props.existingFile?.map(p=>p.id),props.name,true));
+                    props.onFileChange(FileService.combineLinksToBE([res],props.existingFile?.map(p=>p.id),file_name,true));
                     setSelectedFileName(text);
                     setSelectedFile(null);
                     setSelectedLink(text);
@@ -128,18 +163,20 @@ function UploadSingleFileComponent(props: CustomUploadProps) {
                   'Conferma operazione',
                   ()=>{
                     setDeleteDrive(false);
-                    props.onFileChange(FileService.combineLinksToBE([res],props.existingFile?.map(p=>p.id),props.name,false));
+                    props.onFileChange(FileService.combineLinksToBE([res],props.existingFile?.map(p=>p.id),file_name,false));
                     setSelectedFileName(text);
                     setSelectedFile(null);
                     setSelectedLink(text);
                   }
                 )
             }else{
-              props.onFileChange(FileService.combineLinksToBE([res],props.existingFile?.map(p=>p.id),props.name,deleteDrive));
+              props.onFileChange(FileService.combineLinksToBE([res],props.existingFile?.map(p=>p.id),file_name,deleteDrive));
               setSelectedFileName(text);
               setSelectedFile(null);
               setSelectedLink(text);
             }
+
+            setDeletingFile(false);
           });
          
         } else {
@@ -177,18 +214,22 @@ function UploadSingleFileComponent(props: CustomUploadProps) {
         multiple={props.multiple}
       />
       <div className={styles.fileInfoContainer}>
-        {props.existingFile && !selectedFileName && (
+        {props.existingFile && !selectedFileName && !deletingFile && (
           <p>
             File caricato: <strong><small>{props.existingFile?.[0]?.name}</small></strong>
           </p>
         )}
         {selectedFileName && (
-          <p>
-            File selezionato: <strong><small>{selectedFileName}</small></strong>
-          </p>
+          <div style={{display: "flex", alignItems: "center"}}>
+
+            <div style={{fontSize: "15px"}}>File selezionato: <strong>{selectedFileName}</strong></div>
+            <Button onClick={cancelUpload} style={{background: "none", border: "none", height: "15px"}} type='button' svgIcon={xIcon} />
+
+          </div>
         )}
-        {props.onDownload && props.existingFile && !selectedFile && !selectedLink && (
-          <div>
+        {props.onDownload && props.existingFile && !selectedFile && !deletingFile && !selectedLink && (
+          <div style={{display: "flex", gap: "10px"}}>
+
             <Button
               type='button'
               themeColor={"primary"}
@@ -196,6 +237,15 @@ function UploadSingleFileComponent(props: CustomUploadProps) {
               onClick={handleFileDownload}
             >
               Scarica
+            </Button>
+
+            <Button
+              type='button'
+              themeColor={"secondary"}
+              svgIcon={trashIcon}
+              onClick={handleDelete}
+            >
+              Elimina
             </Button>
           </div>
         )}

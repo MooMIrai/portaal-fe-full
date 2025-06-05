@@ -271,23 +271,29 @@ const UploadSingleFIleInputC = (
 
   const handleDownload = ()=>{
     
-    if(value && value[0]){
+    let newValue = value;
+    if (newValue && !Array.isArray(newValue)) newValue = [newValue];
+
+    if(newValue && newValue[0]){
       
-      FileService.openFromBE(value[0])
+      FileService.openFromBE(newValue[0]);
     }
     
   }
+
+  const { externalValue, property_name } = fieldRenderProps.options || {};
 
   return (
     <div>
       <UploadSingleFileComponent
         name={others.name}
+        property_name={property_name}
         onFileChange={handleFileUpload}
         multiple={multiple}
         existingFile={existingFile}
         disabled={disabled}
         onDownload={handleDownload}
-        externalValue={fieldRenderProps.options}
+        externalValue={externalValue}
       />
     </div>
   );

@@ -27,7 +27,7 @@ export default function UploadMultiple(props:UploadMultipleProps){
             const value = FileService.combineDataToBE(values,removedExisting,props.name,deleteOnDrive)
             props.onChange(value);
         }
-    },[values,removedExisting])
+    },[values,deleteOnDrive])
 
     const handleValue = ()=>{
         if(currentSingle && currentSingle.create){
@@ -43,7 +43,7 @@ export default function UploadMultiple(props:UploadMultipleProps){
 
     const handleRemoveExisting = (data:any)=>{
         setRemovedExisting([...removedExisting,data.uniqueIdentifier])
-        if(removedExisting === undefined)
+        if((removedExisting === undefined) || removedExisting.length === 0)
         {    
             NotificationProviderActions.openConfirm(
                 "Vuoi eliminare il file anche su drive?",
