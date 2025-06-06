@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import Form from 'common/Form';
+import style from "./style.module.scss";
 import { InterviewForm } from "./form";
 import { interviewAddedFields } from "./customFields";
 import { interviewService } from "../../services/interviewService";
@@ -101,7 +102,7 @@ export function Candidateinterviews(props: { currentInterviews: any[], assignmen
                     const dateB = new Date(b.date_log).getTime(); // Converte in timestamp
                     return dateA - dateB; // Ordina in ordine crescente
                 })
-                    .map(ci => <tr className="k-table-row" key={ci.id}>
+                    .map(ci => <tr className={`k-table-row ${style.recruitingInterview}`} key={ci.id}>
                         <td className="k-table-td">{new Date(ci.date_log).toLocaleDateString()}</td>
                         <td className="k-table-td">{ci.isExternal ? 'Si' : 'No'}</td>
                         <td className="k-table-td">{mapInterviewtype(ci)}</td>

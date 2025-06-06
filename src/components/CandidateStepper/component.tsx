@@ -15,27 +15,42 @@ export function CandidateStepper(props) {
     const [data, setData] = useState<any>(props.data);
     const [steps, setSteps] = useState<Array<any>>([]);
 
+    const addClassName = (steps: {isValid: boolean, className?: string}[]) => steps.map(step => {
+        if (step.isValid) step.className = "successStep";
+        else step.className = "errorStep";
+        return step;
+    });
+
     useEffect(() => {
+
         if (data) {
+
             if (data.Candidate) {
-                setSteps([
-                    { label: 'Contatto', isValid: data.RecruitingContact.length },
-                    { label: 'Colloqui', isValid: data.RecruitingInterview.length },
+
+                const steps = [
+                    { label: 'Contatto', isValid: data.RecruitingContact.length},
+                    { label: 'Colloqui', isValid: data.RecruitingInterview.length},
                     { label: 'Valutazione finale', isValid: data.RecruitingFinalEvaluation },
                     { label: 'Proposta economica', isValid: data.RecruitingOffer },
                     { label: 'Invio CV', isValid: data.RecruitingSendCv },
                     { label: 'Contratto', isValid: data.RecruitingSendContract },
                     { label: "Creazione account", isValid: !isEmpty(data.Candidate.Person.Accounts)}
-                ])
-            } else {
-                setSteps([
+                ];
+
+                setSteps(addClassName(steps));
+            } 
+            
+            else {
+
+                const steps = [
                     { label: 'Contatto', isValid: data.RecruitingContact.length },
-                    { label: 'Invio CV', isValid: data.RecruitingSendCv },
-                ])
+                    { label: 'Invio CV', isValid: data.RecruitingSendCv }
+                ];
+                setSteps(addClassName(steps));
             }
         }
 
-    }, [data])
+    }, [data]);
 
     const handleChange = (e: any) => {
 

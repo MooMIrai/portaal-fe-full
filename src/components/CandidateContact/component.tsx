@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
+import { sortBy } from "lodash";
 import Form from 'common/Form';
 import { contactForm } from "./form";
 import { contactAddedFields } from "./customFields";
 import { contactService } from "../../services/contactService";
 import NotificationProviderActions from "common/providers/NotificationProvider";
+import style from "./style.module.scss";
 
 const mapContactType = rowData=>{
     let tipoText = "";
@@ -83,8 +85,8 @@ export function CandidateContact(props:{currentData:any,assignmentId: number, on
                     </tr>
                 </thead>
                 <tbody className="k-table-tbody">
-                    {currentContacts?.map(ci => 
-                        <tr className="k-table-row" key={ci.id}>
+                    {sortBy(currentContacts, ["date_log"]).map(ci => 
+                        <tr className={`k-table-row ${style.recruitingContactRow}`} key={ci.id}>
                             <td className="k-table-td">{new Date(ci.date_log).toLocaleDateString()}</td>
                             <td className="k-table-td">{ci.ContactType.name}</td>
                             <td className="k-table-td">{ci.notes}</td>
