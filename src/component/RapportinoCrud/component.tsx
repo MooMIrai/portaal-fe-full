@@ -1,6 +1,7 @@
 import Accordion from 'common/Accordion'
 import React, { PropsWithChildren, useEffect, useState } from 'react'
 import { TimesheetsService } from '../../services/rapportinoService';
+import { sortBy } from "lodash";
 import InputText from 'common/InputText';
 import Button from 'common/Button';
 import CustomChip from 'common/CustomChip';
@@ -259,7 +260,7 @@ export default function RapportinoCrud(props: RapportinoCrudProps) {
                         : <>
                             {getApprovedPills()}
                             <div style={{display: "flex", flexDirection: "column", gap: "10px"}}>
-                                {data.holidays.map((res) => {
+                                {sortBy(data.holidays, ["Activity.ActivityType.time_unit"]).map((res) => {
                                     return <RapportinoInput
                                         disabled={!!props.editLocked || (!!disableExcept && disableExcept !== res.Activity.id) || (data.holidays.some(res => res.Activity.ActivityType.time_unit === 'D' && isHolidayApproved(res.Activity.id)))}
                                         type={res.Activity.ActivityType.time_unit}
