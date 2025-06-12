@@ -72,6 +72,8 @@ const mfeConfig = {
     "./gof/Adapter": "./src/adapters/baseAdapter",
 
     "./icons": "@progress/kendo-svg-icons",
+
+    "./xlsx": "xlsx"
   },
   shared: {
     ...deps,

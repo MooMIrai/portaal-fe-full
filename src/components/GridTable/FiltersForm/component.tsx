@@ -11,9 +11,12 @@ import { getAddedFields } from "./customfield";
 export function FiltersForm(props: {
     columns: TableColumn[],
     onSubmit: (filters: CompositeFilterDescriptor) => void,
-    addedFilters?: FieldConfig[]
+    addedFilters?: FieldConfig[],
+    openFilterDefault?: boolean,
+    filterInitialValues?: Record<string, any>,
+    formStyle?: React.CSSProperties
 }) {
-    const [opened, setOpened] = useState<boolean>(false);
+    const [opened, setOpened] = useState<boolean>(!!props.openFilterDefault);
 
     const mapColumnToField = (columns: TableColumn[]): FieldConfig[] => {
         const ret:FieldConfig[] = [];
@@ -184,9 +187,10 @@ export function FiltersForm(props: {
                 <DynamicForm 
                     addedFields={addedField} 
                     fields={fields} 
-                    formData={{}} 
+                    formData={props.filterInitialValues || {}}
                     onSubmit={(data) => props.onSubmit(mapFormToKendoFilter(data))} 
                     submitText={"Cerca"} 
+                    style={props.formStyle}
                     showSubmit 
                 />
             </div>

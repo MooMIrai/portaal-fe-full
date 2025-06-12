@@ -84,6 +84,8 @@ interface TablePaginatedProps extends GridProps {
   onFilterChangeExternalFilter?: (filter: CompositeFilterDescriptor) => void;
   filter?: CompositeFilterDescriptor;
   filterFields?: FilterField[];
+  openFilterDefault?: boolean;
+  filterInitialValues?: Record<string, any>;
 
   // Style
   className?: string;
@@ -91,6 +93,7 @@ interface TablePaginatedProps extends GridProps {
   customHeader?: string;
   resizable?: boolean;
   dropListLookup?: boolean;
+  filterFormStyle?: React.CSSProperties;
 
   // Sort
   sortable?: boolean;
@@ -160,6 +163,9 @@ interface TablePaginatedProps extends GridProps {
 
   //custom labels for actions
   createLabel?: string;
+
+  //extra buttons/components to be added alongside the excel report
+  extraButtons?: Array<JSX.Element>;
 }
 
 const MyPager = (props: PagerProps) => (
@@ -638,8 +644,12 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
             >
               Esporta
             </Button>
+
+            {props.extraButtons}
+
             {props.columns && props.filterable && (
-              <FiltersForm columns={props.columns} onSubmit={(filterss)=>{
+              <FiltersForm columns={props.columns} openFilterDefault={props.openFilterDefault} formStyle={props.filterFormStyle}
+              filterInitialValues={props.filterInitialValues} onSubmit={(filterss)=>{
                 
                 const newPagination = {
                   ...pagination,
