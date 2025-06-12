@@ -198,6 +198,32 @@ class TimesheetsServiceC {
         ).then(res=>res.data);
         
     };
+
+    getReport = async (month: number, year: number) => {
+
+      type HolidayReport = {
+        nominativo: string;
+        società: string;
+        assunzione: string | Date;
+        scadenza: string | Date;
+        straordinari: number;
+        ["ore lavorate"]: number;
+        ["ore totali"]: number;
+        note?: string;
+      } & {[x: string]: any};
+
+      type CalendarReport = {[x: string]: string | null};
+
+      type Report = {
+        report: {
+          [x: string]: {holidayReport: HolidayReport[], calendarReport: CalendarReport[]}
+        },
+        holidaysKey: Array<{codice: string, descrizione: string}>
+      };
+
+      return client.get(`/api/v1/timesheets/getReport/${year}/${month}`).then((res: {data: Report}) => res.data) as Report;
+    
+    }
 }
 
 export const TimesheetsService = new TimesheetsServiceC();

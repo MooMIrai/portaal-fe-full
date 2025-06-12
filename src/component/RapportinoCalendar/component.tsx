@@ -178,6 +178,7 @@ export default function RapportinoCalendar(props: RapportinoCalendarProps) {
               activities.push({
                 request: el.LeaveRequest,
                 activity: el.PersonActivity.Activity,
+                person_activity_id: el.person_activity_id,
                 id: el.id,
                 title: el.PersonActivity.Activity.description,
                 day: el.day,
@@ -240,6 +241,7 @@ export default function RapportinoCalendar(props: RapportinoCalendarProps) {
     const dates: Date[] = [];
     let currentDate = new Date(slot.start);
     const values = {};
+    const assignment_values = {};
     const holidaysData = {};
 
     let hasHolidayInSelection = false;
@@ -261,8 +263,10 @@ export default function RapportinoCalendar(props: RapportinoCalendarProps) {
       //prendere i dati per riempire le ore dentro il crud
       if (valuesByDate) {
         values[currentDate.getDate()] = {};
+        assignment_values[currentDate.getDate()] = {};
         valuesByDate.forEach((el) => {
           values[currentDate.getDate()][el.activity.id] = el.hours;
+          assignment_values[currentDate.getDate()][el.activity.id] = el.person_activity_id;
         });
       }
 
@@ -302,6 +306,7 @@ export default function RapportinoCalendar(props: RapportinoCalendarProps) {
           dates={dates}
           timesheetId={timeSheetsId || 0}
           values={values}
+          assignment_values={assignment_values}
           hasHoliday={hasHolidayInSelection}
           closeModal={() => {
             closeModalCallback();
@@ -359,6 +364,7 @@ export default function RapportinoCalendar(props: RapportinoCalendarProps) {
 
     const dates: Date[] = [];
     const values = {};
+    const assignment_values = {};
     let hasHolidayInSelection = false;
     const holidaysData = {};
 
@@ -376,7 +382,8 @@ export default function RapportinoCalendar(props: RapportinoCalendarProps) {
         }
       });
       dataFiltered.forEach(d => {
-        values[mobileSelectedDate.getDate()][d.activity.id] = d.hours
+        values[mobileSelectedDate.getDate()][d.activity.id] = d.hours;
+        assignment_values[mobileSelectedDate.getDate()][d.activity.id] = d.person_activity_id;
       });
 
       data.filter((el) => {
@@ -409,6 +416,7 @@ export default function RapportinoCalendar(props: RapportinoCalendarProps) {
       dates={dates}
       timesheetId={timeSheetsId || 0}
       values={values}
+      assignment_values={assignment_values}
       hasHoliday={hasHolidayInSelection}
       closeModal={() => {
         document.dispatchEvent(new CustomEvent("CalendarRefreshData"));

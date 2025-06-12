@@ -26,6 +26,7 @@ interface RapportinoCrudProps {
     dates: Date[];
     timesheetId: number;
     values: Record<number, Record<string, number>>;
+    assignment_values: Record<number, Record<string, number>>;
     hasHoliday: boolean;
     closeModal: () => void;
     holidaysData: Record<number, Record<string, { hours: number, name: string, approved: Date }[]>>;
@@ -101,9 +102,25 @@ export default function RapportinoCrud(props: RapportinoCrudProps) {
                         setValues(newObj);
                     }
                 }
+                if (props.assignment_values) {
+
+                    if (Object.keys(props.assignment_values).length === 1) {
+                        let day = Object.keys(props.assignment_values)[0];
+                        let ids = Object.keys(props.assignment_values[day]);
+                        let newObj = {};
+                        ids.forEach((id: string) => {
+                            let isApprovedHoliday = !!(props.holidaysData[day] && props.holidaysData[day][id]?.every(h => h.approved));
+                            if (!isApprovedHoliday) {
+                                newObj[id] = props.assignment_values[day][id];
+                            }
+                        });
+                        setPersonActivityValues(newObj);
+                    }
+
+                }
             });
         }
-    }, [props.dates])
+    }, [props.dates]);
 
     useEffect(() => {
         const filteredKeys = Object.keys(values).filter(k => values[k] !== 0);

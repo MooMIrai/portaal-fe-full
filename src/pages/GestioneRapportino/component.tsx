@@ -1,11 +1,13 @@
 import React, { useState, useCallback, useRef } from "react";
+import { mapKeys, pick, sortBy } from "lodash";
 import GridTable from "common/Table";
+import * as XLSX from "common/xlsx";
 import { TimesheetsService } from "../../services/rapportinoService";
 import Typography from 'common/Typography';
 import { GestioneRapportinoInner } from "../../component/GestioneRapportinoInner/component";
 import Button from 'common/Button';
 import Modal from 'common/Modal';
-import { unlockIcon, lockIcon, calendarIcon } from "common/icons";
+import { unlockIcon, lockIcon, calendarIcon, calculatorIcon } from "common/icons";
 import RapportinoCalendar from "../../component/RapportinoCalendar/component";
 
 export function GestioneRapportinoPage() {
@@ -37,6 +39,10 @@ export function GestioneRapportinoPage() {
     const [currentYear, setCurrentYear] = useState<number>(new Date().getFullYear());
     const [currentMonth, setCurrentMonth] = useState<number>(new Date().getMonth());
     const [dataItem, setDataItem] = useState<any>(undefined);
+
+    const filterInitialValues = {
+        year: new Date().getFullYear()
+    };
 
     const loadData = async (
         pagination: any,
@@ -85,12 +91,114 @@ export function GestioneRapportinoPage() {
         <GestioneRapportinoInner id={rowProps.dataItem.timesheet_id} />
     ), [tableGestioneRapportino.current]);
 
+    
+    const createReport = async () => {
+
+        function getOrigin (worksheet: any, blankRows: number) {
+            const range = XLSX.utils.decode_range(worksheet["!ref"]!);
+            const origin = XLSX.utils.encode_cell({r: range.e.r + 1 + blankRows, c: 0});
+            return origin;
+        }
+
+        function getMonthHeader () {
+            const date = new Date(currentYear, currentMonth);
+            const month = date.toLocaleDateString("it-IT", {month: "long"});
+            const dateString = `${month.toUpperCase()} ${currentYear}`;
+            return dateString;
+        }
+
+        function setWidth (worksheet: any) {
+
+            const range = XLSX.utils.decode_range(worksheet["!ref"]!);
+            const numRows = range.e.r + 1;
+            const numColumns = range.e.c + 1;
+
+            const maxWidths: Array<{wch: number}> = [];
+
+            for (let column = 0; column < numColumns; column++) {
+
+                let maxWidth = 0;
+
+                for (let row = 0; row < numRows; row++) {
+                    const address = XLSX.utils.encode_cell({r: row, c: column});
+                    const value = worksheet[address]?.v;
+                    const width = value ? String(value).length : 1;
+                    maxWidth = width > maxWidth ? width : maxWidth;
+
+                }
+
+                maxWidths.push({wch: maxWidth + 1});
+            }
+
+            worksheet['!cols'] = maxWidths;
+        }
+
+        const reportData = await TimesheetsService.getReport(currentMonth + 1, currentYear);
+        const reports_by_company = reportData.report;
+        const holidays_table = reportData.holidaysKey;
+        const workbook = XLSX.utils.book_new();
+
+        Object.entries(reports_by_company).forEach(([company, report]) => {
+
+            const holidayReport = sortBy(report.holidayReport, (o => o.nominativo.toLowerCase()));
+            let calendarReport = report.calendarReport;
+
+            const monthHeader = getMonthHeader();
+            for (const holidayRow of holidayReport) {
+    
+                calendarReport = calendarReport.map(calendarRow => {
+                    if (!calendarRow[holidayRow.nominativo]) calendarRow[holidayRow.nominativo] = null;
+                    return calendarRow;
+                });
+    
+            }
+            calendarReport = calendarReport.map(row => {
+                const day = row["day"];
+                delete row["day"];
+                const sorted_row = pick(row, sortBy(Object.keys(row), o => o.toLowerCase()));
+                return {[monthHeader]: day, ...sorted_row};
+            });
+
+            const holiday_worksheet = XLSX.utils.json_to_sheet(
+                holidayReport.map(row => mapKeys(row, (_, key) => key.toUpperCase()))
+            );
+
+            const calendar_worksheet = XLSX.utils.sheet_add_json(
+                holiday_worksheet, 
+                calendarReport, 
+                {origin: getOrigin(holiday_worksheet, 2)}
+            );
+
+            const holiday_key_worksheet = XLSX.utils.sheet_add_json(
+                calendar_worksheet, 
+                holidays_table.map(row => mapKeys(row, (_, key) => key.toUpperCase())),
+                {origin: getOrigin(calendar_worksheet, 3)}
+            );
+
+            setWidth(holiday_key_worksheet);
+
+            // Append the worksheet to the workbook
+            XLSX.utils.book_append_sheet(workbook, holiday_key_worksheet, company);
+
+        });
+
+
+        // Export the workbook as an Excel file
+        XLSX.writeFile(workbook, "report.xlsx");
+    };
 
 
     return <div>
 
         <GridTable
             ref={tableGestioneRapportino}
+            className={`text-align-center`}
+            filterFormStyle={{alignItems: "unset"}}
+            openFilterDefault={true}
+            filterInitialValues={filterInitialValues}
+            extraButtons={[
+                <Button svgIcon={calculatorIcon} onClick={createReport} themeColor={"error"}>Genera Report</Button>
+            ]}
             //writePermissions={["WRITE_TIMESHEET_MANAGER"]}
             expand={{
                 enabled: true,
@@ -109,6 +217,7 @@ export function GestioneRapportinoPage() {
                     name: "month",
                     label: "Mese",
                     type: "filter-autocomplete",
+                    required: true,
                     options: {
                         getData: (term: string) => Promise.resolve([
                             { id: 0, name: "Gennaio" },
@@ -125,12 +234,27 @@ export function GestioneRapportinoPage() {
                             { id: 11, name: "Dicembre" }
                         ].filter(p => !term || p.name.toLowerCase().indexOf(term.toLowerCase()) >= 0)),
                         getValue: (v: any) => v?.id
-                    }
+                    },
+                    validator: value => value ? "" : "Completare il campo 'Mese'"
                 },
                 {
                     name: "year",
                     label: "Anno",
-                    type: "number"
+                    required: true,
+                    type: "number",
+                    validator: value => value ? "" : "Completare il campo 'Anno'"
+                },
+                {
+                    name: "finalized",
+                    label: "Stato rapportino",
+                    type: "filter-autocomplete",
+                    options: {
+                        getData: () => Promise.resolve([
+                            {id: true, name: "Consolidato"},
+                            {id: false, name: "Non consolidato"}
+                        ]),
+                        getValue: (v: any) => v?.id
+                    }
                 }
             ]}
             filterable={true}
