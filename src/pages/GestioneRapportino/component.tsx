@@ -140,9 +140,13 @@ export function GestioneRapportinoPage() {
 
         Object.entries(reports_by_company).forEach(([company, report]) => {
 
-            const holidayReport = sortBy(report.holidayReport, (o => o.nominativo.toLowerCase()));
-            let calendarReport = report.calendarReport;
+            let holidayReport = report.holidayReport.map(row => {
+                const {note, ...row_no_notes} = row;
+                return {...row_no_notes, note};
+            });
+            holidayReport = sortBy(holidayReport, (o => o.nominativo.toLowerCase()));
 
+            let calendarReport = report.calendarReport;
             const monthHeader = getMonthHeader();
             for (const holidayRow of holidayReport) {
     
