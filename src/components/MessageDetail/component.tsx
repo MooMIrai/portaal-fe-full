@@ -21,6 +21,7 @@ export function MessageDetail(props:PropsWithRef<{
 }>){
 
     const [data,setData] = useState<any>();
+    //const [firstName, setFirstName]
     const [modalData,setModalData] = useState<any>();
 
     const updateData = useCallback(()=>{
@@ -145,16 +146,29 @@ export function MessageDetail(props:PropsWithRef<{
             }
             {data && <div className={styles.body +(dr?' '+styles.hasResponse:'')}>
                 
-                <div className={styles.nameContainer}>
-                    <AvatarIcon name={(data.NotifyUser.ManagerAccount?.Person?.firstName || '') + ' ' + (data.NotifyUser.ManagerAccount?.Person?.lastName || '')} initials={
-                                        (data.NotifyUser.ManagerAccount?.Person?.firstName[0].toUpperCase() || '')
-                                        + (data.NotifyUser.ManagerAccount?.Person?.lastName[0].toUpperCase() || '')
-                    } />
-                    <div>
-                        <Typography.h5>{(data.NotifyUser.ManagerAccount?.Person?.firstName || '') + ' ' + (data.NotifyUser.ManagerAccount?.Person?.lastName || '')}</Typography.h5>
-                        <Typography.p>{data.NotifyUser.ManagerAccount?.email || ''}</Typography.p>
-                    </div>
-                </div>
+                {(() => {
+
+                    const isSystemAccount = data.NotifyUser.ManagerAccount.email === "system@system.com";
+                    const firstName = data.NotifyUser.ManagerAccount.Person?.firstName || (isSystemAccount ? "System" : '');
+                    const lastName = data.NotifyUser.ManagerAccount.Person?.lastName || (isSystemAccount ? "Account" : '');
+
+                    return (
+
+                        <div className={styles.nameContainer}>
+
+                            <AvatarIcon name={firstName + ' ' + lastName} initials={firstName[0].toUpperCase() + lastName[0].toUpperCase()} />
+
+                            <div>
+
+                                <Typography.h5>{firstName + ' ' + lastName}</Typography.h5>
+                                <Typography.p>{data.NotifyUser.ManagerAccount?.email || ''}</Typography.p>
+
+                            </div>
+
+                        </div>
+                    );
+
+                })()}
                 <Typography.h4>{data.NotifyUser.content.title}</Typography.h4>
                 <Typography.h5>{data.NotifyUser.content.sub_title}</Typography.h5>
                 <HtmlParser html={data.NotifyUser.content.text} />

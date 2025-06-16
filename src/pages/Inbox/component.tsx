@@ -44,15 +44,21 @@ export function InboxPage() {
             <StarFlag n={n} type={"LIST"} className={styles.starIcon} />
         </td> },
         { key: "id",width:'200px', label: "Destinatario", type: "custom", render: (n) => {
+
             if (!n.NotifyUser.ManagerAccount) {
                 return <td>{n.user_created}</td>;
             }
+
+            const isSystemAccount = n.NotifyUser.ManagerAccount.email === "system@system.com";
+            const firstName = n.NotifyUser.ManagerAccount.Person?.firstName || (isSystemAccount ? "System" : '');
+            const lastName = n.NotifyUser.ManagerAccount.Person?.lastName || (isSystemAccount ? "Account" : '');
+
             return <td>
                 <div style={{ display: 'flex', justifyContent: 'flex-start', gap: 15, alignItems: 'center', paddingTop: 5, paddingBottom: 5 }}>
-                    <AvatarIcon name={`${n.NotifyUser.ManagerAccount.Person?.firstName || ''} ${n.NotifyUser.ManagerAccount.Person?.lastName || ''}`}
-                        initials={`${n.NotifyUser.ManagerAccount.Person?.firstName[0].toUpperCase() || ''}${n.NotifyUser.ManagerAccount.Person?.lastName[0].toUpperCase() || ''}`} />
+                    <AvatarIcon name={`${firstName} ${lastName}`}
+                        initials={`${firstName[0].toUpperCase()}${lastName[0].toUpperCase()}`} />
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-                        <Typography.h6>{n.NotifyUser.ManagerAccount.Person?.firstName || ''} {n.NotifyUser.ManagerAccount.Person?.lastName || ''}</Typography.h6>
+                        <Typography.h6>{firstName} {lastName}</Typography.h6>
                         <Typography.p>{n.NotifyUser.ManagerAccount.email}</Typography.p>
                     </div>
                 </div>
