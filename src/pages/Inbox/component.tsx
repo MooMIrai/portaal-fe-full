@@ -49,10 +49,10 @@ export function InboxPage() {
             }
             return <td>
                 <div style={{ display: 'flex', justifyContent: 'flex-start', gap: 15, alignItems: 'center', paddingTop: 5, paddingBottom: 5 }}>
-                    <AvatarIcon name={`${n.NotifyUser.ManagerAccount.Person?.firstName} ${n.NotifyUser.ManagerAccount.Person?.lastName}`}
-                        initials={`${n.NotifyUser.ManagerAccount.Person?.firstName[0].toUpperCase()}${n.NotifyUser.ManagerAccount.Person?.lastName[0].toUpperCase()}`} />
+                    <AvatarIcon name={`${n.NotifyUser.ManagerAccount.Person?.firstName || ''} ${n.NotifyUser.ManagerAccount.Person?.lastName || ''}`}
+                        initials={`${n.NotifyUser.ManagerAccount.Person?.firstName[0].toUpperCase() || ''}${n.NotifyUser.ManagerAccount.Person?.lastName[0].toUpperCase() || ''}`} />
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-                        <Typography.h6>{n.NotifyUser.ManagerAccount.Person?.firstName} {n.NotifyUser.ManagerAccount.Person?.lastName}</Typography.h6>
+                        <Typography.h6>{n.NotifyUser.ManagerAccount.Person?.firstName || ''} {n.NotifyUser.ManagerAccount.Person?.lastName || ''}</Typography.h6>
                         <Typography.p>{n.NotifyUser.ManagerAccount.email}</Typography.p>
                     </div>
                 </div>

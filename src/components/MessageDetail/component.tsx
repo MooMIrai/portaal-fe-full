@@ -146,12 +146,12 @@ export function MessageDetail(props:PropsWithRef<{
             {data && <div className={styles.body +(dr?' '+styles.hasResponse:'')}>
                 
                 <div className={styles.nameContainer}>
-                    <AvatarIcon name={data.NotifyUser.ManagerAccount?.Person?.firstName || '' + ' ' + data.NotifyUser.ManagerAccount?.Person?.lastName || ''} initials={
-                                        data.NotifyUser.ManagerAccount?.Person?.firstName[0].toUpperCase() || ''
-                                        +data.NotifyUser.ManagerAccount?.Person?.lastName[0].toUpperCase() || ''
+                    <AvatarIcon name={(data.NotifyUser.ManagerAccount?.Person?.firstName || '') + ' ' + (data.NotifyUser.ManagerAccount?.Person?.lastName || '')} initials={
+                                        (data.NotifyUser.ManagerAccount?.Person?.firstName[0].toUpperCase() || '')
+                                        + (data.NotifyUser.ManagerAccount?.Person?.lastName[0].toUpperCase() || '')
                     } />
                     <div>
-                        <Typography.h5>{data.NotifyUser.ManagerAccount?.Person?.firstName || '' + ' ' + data.NotifyUser.ManagerAccount?.Person?.lastName || ''}</Typography.h5>
+                        <Typography.h5>{(data.NotifyUser.ManagerAccount?.Person?.firstName || '') + ' ' + (data.NotifyUser.ManagerAccount?.Person?.lastName || '')}</Typography.h5>
                         <Typography.p>{data.NotifyUser.ManagerAccount?.email || ''}</Typography.p>
                     </div>
                 </div>
