@@ -93,15 +93,6 @@ p {
   display: flex;
   justify-content: space-evenly;
   margin-top: 15px;
-  padding-top:30px;
-  border-top: 1px solid #dedede;
-}
-
-.mobileBoxSSO {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 15px;
-  padding-top: 15px;
+  padding-top:15px;
   border-top: 1px solid #dedede;
 }

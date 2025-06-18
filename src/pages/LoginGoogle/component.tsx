@@ -79,7 +79,7 @@ const LoginComponent = () => {
 
             <MobileView>
 
-              <div className={!isMobile ? styles.boxSSO : styles.mobileBoxSSO}>
+              <div className={styles.boxSSO}>
 
                 <Button style={{padding: 0, border: 0, background: "none"}}>
 
