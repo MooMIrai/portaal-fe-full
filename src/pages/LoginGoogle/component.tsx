@@ -7,6 +7,7 @@ import { ProfileService } from "../../services/profileService";
 import Typography from 'common/Typography';
 import NotificationActions from 'common/providers/NotificationProvider';
 import styles from "./styles.module.css";
+import { MobileView } from "react-device-detect";
 
 const LoginComponent = () => {
 
@@ -33,7 +34,9 @@ const LoginComponent = () => {
               className={styles.logo}
             />
           </div>
+
           <Typography.h6>Usa le tue credenziali</Typography.h6>
+
           <div className={styles.formLogin}>
             
            <Form
@@ -51,24 +54,51 @@ const LoginComponent = () => {
               submitText={'Login'}
             />
           </div>
+
           <Typography.h6>Oppure</Typography.h6>
+
           <div className={styles.boxSSO}>
           
-          {(loginProvider?.toLowerCase() === "google") && <Button
-            onClick={handleLogin}
-            style={{padding: 0, border: 0}}
-          >
-            <img src="/image/google_login_logo.svg"></img>
-          </Button>}
+            {(loginProvider?.toLowerCase() === "google") && <Button
+              onClick={handleLogin}
+              style={{padding: 0, border: 0, background: "none"}}
+            >
+              <img src="/image/google_login_logo.svg"></img>
+            </Button>}
 
-          {(loginProvider?.toLowerCase() === "microsoft") && <Button
-            onClick={handleLogin}
-            style={{padding: 0, border: 0}}
-          >
-            <img style={{height: "38.5px"}} src="/image/microsoft_login_logo.svg"></img>
-          </Button>}
+            {(loginProvider?.toLowerCase() === "microsoft") && <Button
+              onClick={handleLogin}
+              style={{padding: 0, border: 0, background: "none"}}
+            >
+              <img style={{height: "38.5px"}} src="/image/microsoft_login_logo.svg"></img>
+            </Button>}
 
           </div>
+
+          <MobileView>
+
+            <div className={styles.boxSSO}>
+
+              <Button style={{padding: 0, border: 0, background: "none"}}>
+
+                <a href="/image/app_store_logo.svg" download>
+                  <img style={{width: "200px"}} src="/image/app_store_logo.svg"></img>
+                </a>
+
+              </Button>
+
+              <Button style={{padding: 0, border: 0, background: "none"}}>
+
+                <a href="/image/google_play_logo.png" download>
+                  <img style={{width: "220px"}} src="/image/google_play_logo.png"></img>
+                </a>
+
+              </Button>
+
+            </div>
+
+          </MobileView>
+          
         </div>
       {/* </Card> */}
     </div>
