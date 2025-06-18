@@ -41,6 +41,12 @@ body::before{
   width: 300px;
   margin-bottom: 20px;
 }
+
+.logoMobile {
+  width: 200px;
+  margin-bottom: 20px;
+}
+
 .header{
   display: flex;
   justify-content: center;

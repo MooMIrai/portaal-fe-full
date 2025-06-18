@@ -31,7 +31,7 @@ const LoginComponent = () => {
             <img
               src="/image/logoTaal.png"
               alt="TAAL Logo"
-              className={styles.logo}
+              className={!isMobile ? styles.logo : styles.logoMobile}
             />
           </div>
 
@@ -84,7 +84,7 @@ const LoginComponent = () => {
                 <Button style={{padding: 0, border: 0, background: "none"}}>
 
                   <a href="/image/app_store_logo.svg" download>
-                    <img style={{width: "200px"}} src="/image/app_store_logo.svg"></img>
+                    <img style={{width: !isMobile ? "200px": "150px"}} src="/image/app_store_logo.svg"></img>
                   </a>
 
                 </Button>
@@ -92,7 +92,7 @@ const LoginComponent = () => {
                 <Button style={{padding: 0, border: 0, background: "none"}}>
 
                   <a href="/image/google_play_logo.png" download>
-                    <img style={{width: "220px"}} src="/image/google_play_logo.png"></img>
+                    <img style={{width: !isMobile ? "220px": "150px"}} src="/image/google_play_logo.png"></img>
                   </a>
 
                 </Button>
