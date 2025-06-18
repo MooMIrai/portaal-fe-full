@@ -5,8 +5,8 @@ import authService from "common/services/AuthService";
 import { GlobalRouting, LoginRouting, mfeInitMenu } from "./mfeInit";
 import { Route, Routes } from "react-router-dom";
 import { Spinner } from "./components/Spinner/component";
-
-//import "./index.css";
+import { isMobile } from "react-device-detect";
+import "./App.css";
 
 export const App = () => {
   const [routes, setRoutes] = useState<Array<any>>([]);
@@ -15,6 +15,10 @@ export const App = () => {
   const [showLoader, setShowLoader] = useState(true);
 
   const [addedRoutes,setAddedRoutes] = useState<Array<any>>([]);
+
+  useEffect(() => {
+    if (isMobile) document.body?.classList.add("mobileBody");
+  }, []);
 
   useEffect(() => {
 
