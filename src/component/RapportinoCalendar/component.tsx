@@ -222,9 +222,11 @@ export default function RapportinoCalendar(props: RapportinoCalendarProps) {
         "Data non valida verrà ripristinata la data precedente",
         ()=>{
           setError(false);
-          if(previousDate)
+          if(previousDate) {
             setDate(previousDate)
+          }
         },
+        "Rapportino non disponibile",
         ()=>{
           setError(false);
           if(previousDate)
