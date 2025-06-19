@@ -91,7 +91,7 @@ const LoginComponent = () => {
 
                 <Button style={{padding: 0, border: 0, background: "none"}}>
 
-                  <a href="/image/google_play_logo.png" download>
+                  <a href="https://expo.dev/artifacts/eas/6FigHb7Ve2Heyd1LZ6Qe4J.apk" download>
                     <img style={{width: !isMobile ? "220px": "150px"}} src="/image/google_play_logo.png"></img>
                   </a>
 
