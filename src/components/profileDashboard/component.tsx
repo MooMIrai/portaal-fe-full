@@ -76,7 +76,7 @@ export default function ProfileDashboard(props: ProfileProps) {
               </div>
               <div className={styles.singleInfo}>
                 <label className={styles.label}>Birth Date:</label>
-                <span>{displayInfo(birthDate)}</span>
+                <span>{displayInfo(new Date(birthDate).toLocaleDateString("it-IT", {timeZone: "Europe/Rome"}))}</span>
               </div>
               <div className={styles.singleInfo}>
                 <label className={styles.label}>Gender:</label>
