@@ -112,7 +112,9 @@ const FeriePermessiSection = () => {
           const totalHours = dataItem.TimesheetDetail[0].hours; 
   
           if (timeUnit === "D") {
-            const fullDays = ((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)) + 1; 
+            const endDay = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDay());
+            const startDay = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDay());
+            const fullDays = ((endDay.getTime() - startDay.getTime()) / (1000 * 60 * 60 * 24)) + 1; 
             hours = `${fullDays} giorno/i`;
           }
           
