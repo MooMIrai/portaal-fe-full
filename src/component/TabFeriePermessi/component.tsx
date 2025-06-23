@@ -198,6 +198,7 @@ const FeriePermessiSection = () => {
               }]
             }
             writePermissions={["WRITE_HR_HOLIDAY"]}
+            className={"text-align-center"}
             ref={requestsTableRef}
             dropListLookup={false}
             filterable={true}
