@@ -223,7 +223,7 @@ const Sidebar = ({ children, items }: SidebarPros) => {
   return <div className={styles.page}><AppBar themeColor="light" className={styles.navbar}>
     <AppBarSection className="title">
         <div className="k-drawer-logo"><img
-          width={140}
+          width={120}
           style={{marginLeft:30}}
           src="/image/logoNexa.png"
           alt="Logo Taal"
