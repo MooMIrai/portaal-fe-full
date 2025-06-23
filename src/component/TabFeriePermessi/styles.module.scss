@@ -40,6 +40,14 @@
   color: green;
 }
 
+.approvedRequest svg {
+  fill: green;
+}
+
+.rejectedRequest svg {
+  fill: red;
+}
+
 .rejectedText {
   color: red;
 }

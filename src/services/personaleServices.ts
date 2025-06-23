@@ -152,9 +152,9 @@ class CrudGenericServiceC {
       .then((res) => res.data);
   };
 
-  searchAccount = (text: string) => {
+  searchAccount = (text: string, expiredContracts: boolean = false) => {
     return client
-      .get(`api/v1/accounts/findByName?search=${text}`)
+      .get(`api/v1/accounts/findByName?search=${text}&expiredContracts=${expiredContracts}`)
       .then((res) => res.data);
   };
 

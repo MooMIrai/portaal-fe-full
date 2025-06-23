@@ -8,6 +8,7 @@ import HoursDaysFilterCell from "common/HoursDaysFilterCell"
 import authService from "common/services/AuthService";
 import AvatarIcon from 'common/AvatarIcon';
 import Typography from 'common/Typography';
+import SvgIcon from 'common/SvgIcon';
 
 import styles from "./styles.module.scss";
 
@@ -81,14 +82,17 @@ const FeriePermessiSection = () => {
     
     if(selectedTab===1){
       columns.push({
-        
         key: 'approved',
         label: 'Approvata',
         sortable: true,
-        type: 'boolean',
-        filter: 'boolean'
-      
-  })
+        type: 'custom',
+        filter: 'boolean',
+        render: (row: any) => {
+          const icon = row.approved ? checkOutlineIcon : xOutlineIcon;
+          const className = row.approved ? styles.approvedRequest : styles.rejectedRequest;
+          return <td className={className}><SvgIcon icon={icon} /></td>;
+        }
+      } as any)
     }
 
 
