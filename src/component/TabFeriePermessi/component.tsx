@@ -19,6 +19,14 @@ const FeriePermessiSection = () => {
   const [selectedTab, setSelectedTab] = useState<number>(0);
 
 
+  const defaultSort = [
+    {
+      "field": "start_date",
+      "dir": "desc"
+    }
+  ];
+
+
   const columns=[
     {
       key: "Person.lastName",
@@ -194,6 +202,7 @@ const FeriePermessiSection = () => {
             dropListLookup={false}
             filterable={true}
             sortable={true}
+            sorting={defaultSort}
             getData={getData}
             columns={columns}
             resizable={true}
@@ -269,6 +278,7 @@ const FeriePermessiSection = () => {
             dropListLookup={false}
             filterable={true}
             sortable={true}
+            sorting={defaultSort}
             getData={getData}
             columns={columns}
             resizable={true}
