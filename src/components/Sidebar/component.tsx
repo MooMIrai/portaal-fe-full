@@ -225,7 +225,7 @@ const Sidebar = ({ children, items }: SidebarPros) => {
         <div className="k-drawer-logo"><img
           width={140}
           style={{marginLeft:30}}
-          src="/image/logoTaal.png"
+          src="/image/logoNexa.png"
           alt="Logo Taal"
         />
         </div>
