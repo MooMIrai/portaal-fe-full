@@ -280,6 +280,7 @@ const FeriePermessiSection = () => {
             filterable={true}
             sortable={true}
             sorting={defaultSort}
+            className={"text-align-center"}
             getData={getData}
             columns={columns}
             resizable={true}
