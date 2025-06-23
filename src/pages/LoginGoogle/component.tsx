@@ -29,7 +29,7 @@ const LoginComponent = () => {
           <div className={styles.header}>
          
             <img
-              src="/image/logoTaal.png"
+              src="/image/logoNexa.png"
               alt="TAAL Logo"
               className={!isMobile ? styles.logo : styles.logoMobile}
             />
