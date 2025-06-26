@@ -161,7 +161,7 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
   const valueOnChange = (name: string, value: any) => {
 
     if (name === "project_type") {
-      if (value.name === "Consulenza") {
+      if (value?.name === "Consulenza") {
         const updatedBillingType = { id: "Daily", name: "Fatturazione a giornata" };
         formCustomer.current.values.billing_type = updatedBillingType;
         setIsDaily(true)
@@ -182,7 +182,7 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
         }
       }
     } if (name === "billing_type") {
-      if (value.name === "Fatturazione a corpo") {
+      if (value?.name === "Fatturazione a corpo") {
         setIsLumpSum(true)
       } else {
         setIsLumpSum(false)
@@ -213,7 +213,7 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
   };
 
   const valueOnChangeByllingType = (name: string, value: any) => {
-    if (value.name === "Fatturazione a giornata") {
+    if (value?.name === "Fatturazione a giornata") {
 
       setIsDaily(true)
     } else {

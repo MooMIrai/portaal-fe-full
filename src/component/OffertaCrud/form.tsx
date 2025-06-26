@@ -43,7 +43,7 @@ export const getFormOfferFields = (
             value: formData.billing_type,
             valueOnChange: combinedValueOnChangeBillyngType,
             required: true,
-            disabled: type === "view" || isDaily,
+            disabled: type === "view",
             validator: (value: any) => (value ? "" : "Selezionare un Tipo di fatturazione valida")
         },
         creation_date: {

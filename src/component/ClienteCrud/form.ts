@@ -79,11 +79,10 @@ export const getFormCustomerFields = (formData: CustomerModel, type:string) => {
         },
         address: {
             name: "address",
-            label: "indirizzo",
+            label: "Indirizzo",
             type: "text",
             disabled:type === "view",
-            value: formData.address || "",
-            validator: (value: any) => optional(value,onlyLettersValidator),
+            value: formData.address || ""
         },
         city: {
             name: "city",
