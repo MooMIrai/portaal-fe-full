@@ -28,18 +28,31 @@ const ProjectTable = (props: { customer: number }) => {
 
 
   const loadData = async (pagination: any, filter: any, sorting: any[]) => {
+
     const include = true;
     let correctFilters = JSON.parse(JSON.stringify(filter));
-    const customerFilter = {
-      field: "Offer.customer_id",
-      operator: "equals",
-      value: props.customer,
-    };
+    const currentDate = new Date();
+
+    const dateFilters = [
+      {
+        field: "start_date",
+        value: new Date(currentDate.getFullYear() - 1, 0).toISOString(),
+        operator: "gte"
+      },
+      {
+        field: "start_date",
+        value: new Date(currentDate.getFullYear(), 12).toISOString(),
+        operator: "lt"
+      }
+    ];
+
     if (!correctFilters) {
-      correctFilters = { logic: "and", filters: [customerFilter] };
-    } else {
+      correctFilters = { logic: "and", filters: [...dateFilters] };
+    }
+    
+    else if (!correctFilters.filters.some(filter => filter.field === "start_date")) {
       correctFilters.logic = "and";
-      correctFilters.filters.push(customerFilter);
+      correctFilters.filters.push(...dateFilters);
     }
 
     const tableResponse = await progettoService.getProjectByCustomer(
@@ -47,7 +60,7 @@ const ProjectTable = (props: { customer: number }) => {
       pagination.currentPage,
       pagination.pageSize,
       include,
-      filter,
+      correctFilters,
       sorting
     );
 
@@ -56,6 +69,13 @@ const ProjectTable = (props: { customer: number }) => {
       meta: tableResponse?.meta,
     };
   };
+
+  const defaultSort = [
+    {
+      field: "start_date",
+      dir: "desc"
+    }
+  ];
 
  
   const handleFormSubmit = (
@@ -105,6 +125,7 @@ const ProjectTable = (props: { customer: number }) => {
       filterable={true}
       pageable={true}
       sortable={true}
+      sorting={defaultSort}
       getData={loadData}
       columns={columns}
       resizableWindow={true}
