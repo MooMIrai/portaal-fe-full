@@ -568,12 +568,13 @@ const dataAssunzioneValidator = useMemo(() => {
         if (!value) return "Il campo Data Assunzione è obbligatorio";
         const inizioTrattamento= valueGetter("dataInizioTrattamento")
         if (formTrattamentoEconomicoData?.dataInizioTrattamento ||inizioTrattamento ) {
+          if (isFirstTreatment || isFirstTreatmentUpdate) {
             const assunzioneDate = new Date(value);
             const inizioTrattamentoDate = new Date(inizioTrattamento);
-
             if (assunzioneDate.getTime() !== inizioTrattamentoDate.getTime()) {
                 return "Per il primo trattamento, la Data di Assunzione deve essere uguale alla Data di Inizio del Trattamento";
             }
+          }
         }
         return "";
     };
