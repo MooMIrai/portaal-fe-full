@@ -6,17 +6,6 @@ import { columnsCustomer } from "./config";
 
 export default function ProgettiPage() {
 
-  const loadData = async (pagination: any, filter: any, sorting: any[]) => {
-    const tableResponse = await customerService.getHasProject(pagination.currentPage,pagination.pageSize,filter,sorting,undefined,true);
-    
-    return {
-      data: tableResponse?.data,
-      meta: {
-        total: tableResponse?.meta?.total,
-      },
-    };
-  };
-
   const yearFilter = [
     {
       name: "fromYear",
@@ -29,6 +18,44 @@ export default function ProgettiPage() {
       type: "number"
     }
   ];
+
+  const loadData = async (pagination: any, filter: any, sorting: any[]) => {
+
+    const yearFilterNames = yearFilter.map(filter => filter.name);
+    const currentFilters = (filter?.filters || []).map(filter => filter.field);
+
+    if (!yearFilterNames.some(name => currentFilters.includes(name))) {
+
+      const currentDate = new Date();
+
+      const dateFilters = [
+        {
+          field: "fromYear",
+          operator: "eq",
+          value: currentDate.getFullYear() - 1
+        },
+        {
+          field: "toYear",
+          operator: "eq",
+          value: currentDate.getFullYear()
+        }
+      ];
+
+      if (!filter) filter = {};
+      filter.logic = "AND";
+      filter.filters = [...(filter.filters || []), ...dateFilters];
+    }
+
+    const tableResponse = await customerService.getHasProject(pagination.currentPage,pagination.pageSize,filter,sorting,undefined,true);
+    
+    return {
+      data: tableResponse?.data,
+      meta: {
+        total: tableResponse?.meta?.total,
+      },
+    };
+  };
+
 
   return (
     <GridTable
