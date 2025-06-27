@@ -83,7 +83,7 @@ const LoginComponent = () => {
 
                 <Button style={{padding: 0, border: 0, background: "none"}}>
 
-                  <a href="/image/app_store_logo.svg" download>
+                  <a href="#">
                     <img style={{width: !isMobile ? "200px": "150px"}} src="/image/app_store_logo.svg"></img>
                   </a>
 
@@ -100,6 +100,16 @@ const LoginComponent = () => {
               </div>
 
             </MobileView>
+
+            <div className={styles.boxSSO}>
+
+              <div className={styles.webAppButtonContainer}>
+                <a href="https://nexa-timsheet.up.railway.app" target="_blank">
+                  <button className={styles.webAppButton}>WEB APP RAPPORTINO</button>
+                </a>
+              </div>
+
+            </div>
 
           </div>
 
