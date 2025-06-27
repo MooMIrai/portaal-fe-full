@@ -183,8 +183,8 @@ export default function OffertePage() {
         const actions: string[] = ["create"];
 
         if (row?.thereisProject) {
-          actions.push("show");
-        } 
+          actions.push("show", "edit");
+        }
         
         else {
           actions.push("show", "edit", "delete");

@@ -297,7 +297,7 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
 
       if (!hasError) {
         const outcomeType = formCustomer.current.values.outcome_type.name;
-        if (outcomeType === "Positivo") {
+        if (outcomeType === "Positivo" && !formCustomerData.thereisProject) {
           NotificationActions.openConfirm(
             "Salvando i dati con esito positivo, è necessario creare una nuova commessa. Vuoi procedere?",
             () => {
