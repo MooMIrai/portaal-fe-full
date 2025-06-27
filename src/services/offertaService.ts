@@ -26,6 +26,12 @@ class OffertaService extends BaseHttpService {
     })
   }
 
+  async getProtocol (customer_code: string) {
+    const response = await client.get(`/api/v1/offers/getProtocol?customer_code=${customer_code}`);
+    const protocol = response.data;
+    return protocol;
+  }
+
   fetchResources = async (
     resourceType: string,
     pageNum?: number,

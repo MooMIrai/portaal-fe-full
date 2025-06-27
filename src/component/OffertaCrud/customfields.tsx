@@ -16,6 +16,12 @@ const getDataBilling= (filterP:string)=>{
     return offertaService.getBillingType(filterP);
 }
 
+const getProtocol = async (customer_code: string) => {
+    const data = await offertaService.getProtocol(customer_code);
+    const protocol = data.protocol;
+    return protocol;
+}
+
 const getDataCustomer= (filterP:string)=>{
     return customerService.search(1,20,
         {"logic":"or","filters":[{"field":"name","operator":"contains","value":filterP}]
@@ -59,26 +65,6 @@ const ProtocolInput =  (
     props:any
   ) => {
 
-    const generateCompanyCode = (companyName) => {
-        // Rimuove spazi multipli e trasforma tutto in maiuscolo
-        const cleanName = companyName.trim().toUpperCase();
-      
-        // Se il nome ha almeno 5 caratteri, prendi le prime 3 e le ultime 2 lettere
-        if (cleanName.length >= 5) {
-          return cleanName.slice(0, 3) + cleanName.slice(-2);
-        }
-      
-        // Se il nome ha meno di 5 caratteri, aggiunge lettere per arrivare a 5
-        let code = cleanName.slice(0, 3); // Prende fino alle prime 3 lettere disponibili
-        const remainingChars = 5 - code.length;
-      
-        // Aggiunge le lettere rimanenti alla fine del nome se disponibili
-        code += cleanName.slice(-remainingChars);
-      
-        // Se ancora troppo corto, aggiunge "X" fino a raggiungere 5 caratteri
-        return code.padEnd(5, 'X');
-    }
-
     return <div style={{
         display: 'grid',
         gridTemplateColumns: "80% 20%"
@@ -87,15 +73,10 @@ const ProtocolInput =  (
         <Button style={{
             borderStartStartRadius:0,
             borderEndStartRadius:0
-        }} themeColor="primary" type="button" onClick={()=>{
-            let companyName = "";
-            if(props.options()){
-                companyName = props.options().name.toUpperCase().split(' ').join('');
-            }
-            let protocol = generateCompanyCode(companyName);
-            const now = new Date();
-            protocol+= now.getDate()+""+(now.getMonth()+1)+""+ now.getFullYear()
-            props.onChange({value:protocol});
+        }} themeColor="primary" type="button" onClick={async () => {
+            const customer_code =  props.options()?.customer_code || "XXX";
+            const protocol = await getProtocol(customer_code);
+            props.onChange({ value: protocol });
         }}>
             Genera
         </Button>
