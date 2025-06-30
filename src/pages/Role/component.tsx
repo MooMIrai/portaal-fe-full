@@ -16,11 +16,11 @@ export function RolePage() {
     const columns = [
         { key: "role", label: "Ruolo", type: "string", sortable: true, filter: "text" },
         { key: "description", label: "Descrizione", type: "string", sortable: true, filter: "text" },
-        { key: "id", label: "Permessi", type: "custom", sortable: false, render:(rowdata:any)=><Button fillMode={"link"}
+        { key: "id", label: "Permessi", type: "custom", sortable: false, render:(rowdata:any)=><td><Button fillMode={"link"}
         themeColor={"info"}
         onClick={() =>
           setSelectedRole(rowdata.id)
-        }>Associa permessi</Button> }   
+        }>Associa permessi</Button></td> }   
       ];
       
 
@@ -33,7 +33,7 @@ export function RolePage() {
     return {
       data: tableResponse.data,
       meta: {
-        total: tableResponse.meta.model
+        total: tableResponse.meta.total
       }
     }
 
@@ -63,6 +63,7 @@ export function RolePage() {
 
   return <><GridTable
     writePermissions={["WRITE_ROLES"]}
+    className={"text-align-center"}
     filterable={true}
     pageable={true}
     sortable={true}

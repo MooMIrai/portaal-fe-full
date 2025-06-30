@@ -53,7 +53,7 @@ export function RolePermission(props: PropsWithRef<{ idRole: number, open: boole
         <div className={styles.container}>
             {
                 allList.map((p, i) => <div onClick={() => toggleSelected(p.id)} className={styles.input} key={"permission_" + i}>
-                    <span><input type="checkbox" checked={IsSelected(p.id)} />
+                    <span style={{display: "flex", gap: "5px"}}><input type="checkbox" checked={IsSelected(p.id)} />
                         {p.description} </span><small><code>{p.type_permission}</code></small>
                 </div>)
             }

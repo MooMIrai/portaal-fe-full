@@ -64,6 +64,7 @@ export function RoleCrud(props: PropsWithRef<RoleCrudProps>) {
                 formData={props.row}
                 onSubmit={handleSubmit}
                 showSubmit
+                noDisableOnTouched
                 submitText={props.type!=='create'?'Modifica':'Aggiungi'}
               />
             </div>
