@@ -133,8 +133,9 @@ export interface DynamicFormProps {
   extraBtnAction?: () => void;
   customDisabled?: boolean;
   submitText: string;
-  addedFields?: Record<string, React.JSX.Element>
-  style?:any
+  addedFields?: Record<string, React.JSX.Element>;
+  style?:any;
+  noDisableOnTouched?: boolean;
 }
 
 const DynamicField = ({
@@ -219,7 +220,8 @@ const DynamicForm = React.forwardRef<any, DynamicFormProps>((props, ref) => {
     children,
     customDisabled,
     submitText,
-    addedFields
+    addedFields,
+    noDisableOnTouched
   } = props;
 
   const formRefContext = useContext(FormRefContext);
@@ -229,13 +231,15 @@ const DynamicForm = React.forwardRef<any, DynamicFormProps>((props, ref) => {
     initialValues={formData}
     onSubmit={(dataItem) => onSubmit(dataItem)}
     ref={ref}
+    ignoreModified={noDisableOnTouched}
     render={(formRenderProps: FormRenderProps) => (
       <FormElement>
         {children === undefined && (
           <fieldset className={"k-form-fieldset"}  style={props.style}>
             <legend className={"k-form-legend"}>{description}</legend>
             {fields.filter((field) => {
-              if (formRefContext?.setDisabled) formRefContext.setDisabled(isTouched(ref));
+              if (noDisableOnTouched) formRefContext?.setDisabled(true);
+              else if (formRefContext?.setDisabled) formRefContext.setDisabled(isTouched(ref));
               const formRef: any = ref;
               return !field.conditions || (formRef && formRef.current && field.conditions(formRef.current.values))
             }).map((field, index) => {
