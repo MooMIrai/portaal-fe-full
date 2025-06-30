@@ -13,35 +13,34 @@ export function WaitingProject(){
         { key: "startDate", label: "Data inizio", type: "date", sortable: true, filter: "text" },
       ];
 
-      const loadData = async (
-          pagination: any,
-          filter: any,
-          sorting: any[],
-        ) => {
-          const include = true;
-      
-          const tableResponse = await 
-          CrudGenericService.getResourceAlignment(
-            pagination.currentPage,
-            pagination.pageSize,
-            filter,
-            sorting,
-            include,
-          );
+      const loadData = async (pagination: any, filter: any, sorting: any[]) => {
 
-          return {
-            data: tableResponse.data || tableResponse,
-            meta: tableResponse.meta?tableResponse.meta:{
-              total: tableResponse.length
-            }
+        const include = true;
+
+        if (!(sorting?.length > 0)) sorting = [{field: "startDate", dir: "desc"}];
+    
+        const tableResponse = await CrudGenericService.getResourceAlignment(
+          pagination.currentPage,
+          pagination.pageSize,
+          filter,
+          sorting,
+          include,
+        );
+
+        return {
+          data: tableResponse.data || tableResponse,
+          meta: tableResponse.meta?tableResponse.meta:{
+            total: tableResponse.length
           }
+        }
       
-        };
+      };
 
 
     return <>
         { <GridTable
             writePermissions={["WRITE_RESOURCE_ALIGNMENT"]}
+            className={"text-align-center"}
             filterable={true}
             pageable={true}
             sortable={true}
