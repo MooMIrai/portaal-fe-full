@@ -104,10 +104,12 @@ export default function OffertePage() {
 
     const include = true;
     const mappedFilter = mapFilterFields(filter);
-    const mappedSorting = sorting.map((s) => ({
+    let mappedSorting = sorting.map((s) => ({
       ...s,
       field: mapColumnKey[s.field] || s.field,
     }));
+
+    if (!(mappedSorting?.length > 0)) mappedSorting = [{field: "date_created", dir: "desc"}];
 
     const tableResponse = await offertaService.search(
       pagination.currentPage,
