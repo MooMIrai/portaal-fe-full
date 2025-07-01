@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { isNil } from "lodash";
 import Calendar from "common/Calendar";
 import CalendarMobile from "common/CalendarMobile";
 import { TimesheetsService } from "../../services/rapportinoService";
@@ -431,6 +432,9 @@ export default function RapportinoCalendar(props: RapportinoCalendarProps) {
     />
   }
 
+  const hasUnapprovedRequests = () : boolean => data.some(detail => detail.request && isNil(detail.request.approved));
+  const unApprovedRequestsMessage = "Impossibile consolidare rapportino con richieste non approvate.";
+
   return (
     <>
       {!props.forcePerson ? <div style={{ display: 'flex', flexDirection: size.width && size.width >= 768 ? 'row' : 'column', justifyContent: "space-between", marginBottom: 10 }}>
@@ -444,7 +448,17 @@ export default function RapportinoCalendar(props: RapportinoCalendarProps) {
             }
           }} />
           </div>}
-          {isFinalized != undefined && authService.hasPermission('WRITE_HR_TIMESHEET') && <Button style={{ maxHeight: 'min-content' }} themeColor="success" onClick={() => setShowConsolidaConfirmModal(true)}>{isFinalized ? "Deconsolida" : "Consolida"}</Button>}
+          {isFinalized != undefined && authService.hasPermission('WRITE_HR_TIMESHEET') && 
+            <Button style={{ maxHeight: 'min-content' }} themeColor="success" 
+            onClick={() => {
+              if (!hasUnapprovedRequests()) setShowConsolidaConfirmModal(true);
+              else NotificationActions.openModal({ icon: true, style: "error" }, unApprovedRequestsMessage);
+            }}
+            disabled={isFinalized && !authService.hasPermission('WRITE_HR_TIMESHEET_DEAUTH')}
+            >
+              {isFinalized ? "Deconsolida" : "Consolida"}
+            </Button>
+          }
         </div>
 
       </div> : null}
