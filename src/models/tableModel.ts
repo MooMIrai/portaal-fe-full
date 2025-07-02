@@ -1,4 +1,4 @@
-import { GridFilterCellProps } from "@progress/kendo-react-grid";
+import { GridFilterCellProps, GridHeaderCellProps } from "@progress/kendo-react-grid";
 import { SVGIcon } from "@progress/kendo-svg-icons";
 
 export interface TableColumn {
@@ -16,7 +16,8 @@ export interface TableColumn {
   hasCellAction?: boolean;
   cellActionIcon?: SVGIcon;
   cellModalContent?: (dataItem: any) => JSX.Element;
-  width?:number | string
+  width?:number | string;
+  headerCell?: (props: GridHeaderCellProps) => JSX.Element;
 }
 
 export enum TABLE_COLUMN_TYPE {

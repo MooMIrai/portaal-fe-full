@@ -182,3 +182,7 @@ td{
 .k-notification-content {
   font-size: 18px;
 }
+
+.k-grid-header, .k-grid-container {
+  padding: 5px !important;
+}

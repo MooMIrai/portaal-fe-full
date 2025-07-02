@@ -725,6 +725,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
               filterable={!!column.filter}
               sortable={column.sortable}
               width={column.width}
+              headerCell={column.headerCell}
               cell={cell}
             />
           );
