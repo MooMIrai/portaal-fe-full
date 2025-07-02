@@ -238,6 +238,7 @@ const FeriePermessiSection = () => {
 
   const handleSelect = (e: any) => {
     setSelectedTab(e.selected);
+    setSelectedRecords([]);
   };
 
   const getData = (pagination: any, filtering: any, sorting: any[]) => {
@@ -279,6 +280,8 @@ const FeriePermessiSection = () => {
         // Ritorna l'elemento dati con la nuova proprietà 'hours'
         return { ...dataItem, hours }; 
       });
+
+      setSelectedRecords([]);
   
       return {
         ...response,
