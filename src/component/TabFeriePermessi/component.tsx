@@ -142,7 +142,7 @@ const FeriePermessiSection = () => {
           <td style={{padding: 0, display: "flex", justifyContent: "center"}}>
             <input 
             type="checkbox"
-            checked={selectedRecords?.length === data?.length}
+            checked={data?.length > 0 && selectedRecords?.length === data?.length}
             onChange={(e) => {
               const all_ids = data.map(record => record.id);
               if (e.target.checked) setSelectedRecords(all_ids);
