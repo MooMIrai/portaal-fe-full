@@ -16,6 +16,7 @@ import SvgIcon from 'common/SvgIcon';
 import styles from "./styles.module.scss";
 
 const FeriePermessiSection = () => {
+  const [data, setData] = useState<any>();
   const [refreshRequests, setRefreshRequests] = useState<number>(0);
   const [refreshArchive, setRefreshArchive] = useState<number>(0);
   const [notes, setNotes] = useState<string>();
@@ -134,7 +135,24 @@ const FeriePermessiSection = () => {
   const columns=[
     {
       key: "id",
-      label: " ",
+      label: "",
+      headerCell:  (props: any) => {
+
+        return (
+          <td style={{padding: 0, display: "flex", justifyContent: "center"}}>
+            <input 
+            type="checkbox"
+            checked={selectedRecords?.length === data?.length}
+            onChange={(e) => {
+              const all_ids = data.map(record => record.id);
+              if (e.target.checked) setSelectedRecords(all_ids);
+              else setSelectedRecords([]);
+            }}
+            />
+          </td>
+        );
+
+      },
       type: "custom",
       width: "40px",
       render: (row) => {
@@ -153,14 +171,15 @@ const FeriePermessiSection = () => {
       key: "Person.lastName",
       label: "Nominativo",
       type: "custom",
+      width: "200px",
       sortable: true,
       render:(row)=>{
         const n = row.Person;
         return <td>
-                  <div style={{ display: 'flex', justifyContent: 'flex-start', gap: 15, alignItems: 'center', paddingTop: 5, paddingBottom: 5 }}>
+                  <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', paddingTop: 5, paddingBottom: 5 }}>
                       <AvatarIcon name={`${n.firstName} ${n.lastName}`}
                           initials={`${n.firstName[0].toUpperCase()}${n.lastName[0].toUpperCase()}`} />
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 0, flexGrow: 1 }}>
                           <Typography.h6>{n.firstName} {n.lastName}</Typography.h6>
                           <Typography.p>{row.user_created}</Typography.p>
                       </div>
@@ -282,6 +301,7 @@ const FeriePermessiSection = () => {
       });
 
       setSelectedRecords([]);
+      setData(transformedData);
   
       return {
         ...response,
@@ -345,7 +365,7 @@ const FeriePermessiSection = () => {
               }]
             }
             writePermissions={["WRITE_HR_HOLIDAY"]}
-            className={"text-align-center"}
+            className={"text-align-center center-align-th"}
             ref={requestsTableRef}
             extraButtons={getMultipleApprovalButtons()}
             dropListLookup={false}
@@ -428,7 +448,7 @@ const FeriePermessiSection = () => {
             filterable={true}
             sortable={true}
             sorting={defaultSort}
-            className={"text-align-center"}
+            className={"text-align-center center-align-th"}
             extraButtons={getMultipleResetButton()}
             getData={getData}
             columns={columns}
