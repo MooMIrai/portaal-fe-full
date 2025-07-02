@@ -41,6 +41,19 @@ class PFMServiceC {
     }
   };
 
+  approveRejectRequestMany = async (
+    requestIds: number[],
+    approve: boolean,
+  ) => {
+    try {
+      const response = await client.post(`api/v1/leave_requests/archiveMany?id=${requestIds.join(",")}&approved=${approve}`, {});
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching resources:", error);
+      throw error;
+    }
+  };
+
   undoApproveReject = async (
     requestId: number,
   ) => {
@@ -52,6 +65,19 @@ class PFMServiceC {
       throw error;
     }
   }
+
+  undoApproveRejectMany = async (
+    requestIds: number[]
+  ) => {
+    try {
+      const response = await client.post(`api/v1/leave_requests/resetMany?id=${requestIds.join(",")}`, {});
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching resources:", error);
+      throw error;
+    }
+  };
+  
 }
 
 export const PFMService = new PFMServiceC();

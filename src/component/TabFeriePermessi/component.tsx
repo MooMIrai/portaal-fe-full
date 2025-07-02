@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
+import { isNil } from "lodash";
 import Button from "common/Button";
 import Tab from "common/Tab";
 import GenericGrid from "common/Table";
 import { PFMService } from "../../services/pfmService";
 import { checkOutlineIcon, xOutlineIcon, cancelOutlineIcon, pencilIcon } from "common/icons";
-import Modal from 'common/Modal'
-import HoursDaysFilterCell from "common/HoursDaysFilterCell"
+import Modal from 'common/Modal';
+import NotificationActions from 'common/providers/NotificationProvider'
+import HoursDaysFilterCell from "common/HoursDaysFilterCell";
 import authService from "common/services/AuthService";
 import AvatarIcon from 'common/AvatarIcon';
 import Typography from 'common/Typography';
@@ -18,9 +20,107 @@ const FeriePermessiSection = () => {
   const [refreshArchive, setRefreshArchive] = useState<number>(0);
   const [notes, setNotes] = useState<string>();
   const [notesModal, setNotesModal] = useState<boolean>();
+  const [selectedRecords, setSelectedRecords] = useState<number[]>([]);
+  const [multipleApprovalModal, setMultipleApprovalModal] = useState<{open: boolean, approve?: boolean}>();
   const requestsTableRef = useRef(null);
   const archiveTableRef = useRef(null);
   const [selectedTab, setSelectedTab] = useState<number>(0);
+
+
+  const getMultipleApprovalButtons = () => {
+
+    return [
+
+      <Button themeColor="info" svgIcon={checkOutlineIcon} disabled={!selectedRecords.length} 
+      onClick={() => setMultipleApprovalModal({open: true, approve: true})}>
+        Approva
+      </Button>,
+
+      <Button themeColor="error" svgIcon={xOutlineIcon} disabled={!selectedRecords.length}
+      onClick={() => setMultipleApprovalModal({open: true, approve: false})}>
+        Rifiuta
+      </Button>
+
+    ];
+  };
+
+  const getMultipleResetButton = () => {
+
+    return [
+      <Button themeColor="warning" svgIcon={cancelOutlineIcon} disabled={!selectedRecords.length} 
+      onClick={() => setMultipleApprovalModal({open: true})}>
+        Annulla
+      </Button>
+    ];
+  };
+
+  const getMultipleModalMessage = () => {
+
+    const approveMessage = selectedRecords.length > 1
+    ? `Saranno approvate ${selectedRecords.length} richieste.`
+    : `Sarà approvata ${selectedRecords.length} richiesta.`;
+
+    const denyMessage = selectedRecords.length > 1
+    ? `Saranno rifiutate ${selectedRecords.length} richieste.`
+    : `Sarà rifiutata ${selectedRecords.length} richiesta.`;
+
+    const resetMessage = selectedRecords.length > 1
+    ? `Saranno annullate ${selectedRecords.length} richieste.`
+    : `Sarà annullata ${selectedRecords.length} richiesta.`;
+    
+    const confirmMessage = `Confermare?`;
+
+    if (multipleApprovalModal?.approve === true) return `${approveMessage} ${confirmMessage}`;
+    else if(multipleApprovalModal?.approve === false) return `${denyMessage} ${confirmMessage}`;
+    else return `${resetMessage} ${confirmMessage}`;
+  };
+
+  const multipleApprovalStyle: React.CSSProperties = {display: "flex", justifyContent: "center", alignItems: "center"};
+
+  const onChangeSelected = (id: number, isSelected: boolean) => {
+
+    const currentSelection = new Set(selectedRecords);
+    if (isSelected) currentSelection.add(id);
+    else currentSelection.delete(id);
+
+    setSelectedRecords([...currentSelection]);
+  };
+
+  const onSubmitMultiple = () => {
+
+    if (!isNil(multipleApprovalModal?.approve)) {
+
+      PFMService.approveRejectRequestMany(selectedRecords, multipleApprovalModal?.approve!)
+      .then(res => {
+        if (res) setRefreshRequests(prev => prev + 1);
+        setMultipleApprovalModal({open: false});
+        setSelectedRecords([]);
+      })
+      .catch(err => {
+        NotificationActions.openModal({ icon: true, style: "error" }, err?.message || "Errore nell'operazione.");
+        setMultipleApprovalModal({open: false});
+        setSelectedRecords([]);
+      });
+
+    }
+
+    else {
+
+      PFMService.undoApproveRejectMany(selectedRecords)
+      .then(res => {
+        if (res) setRefreshArchive(prev => prev + 1);
+        setMultipleApprovalModal({open: false});
+        setSelectedRecords([]);
+      })
+      .catch(err => {
+        NotificationActions.openModal({ icon: true, style: "error" }, err?.message || "Errore nell'operazione.");
+        setMultipleApprovalModal({open: false});
+        setSelectedRecords([]);
+      });
+
+    } 
+
+  };
 
 
   const defaultSort = [
@@ -32,6 +132,23 @@ const FeriePermessiSection = () => {
 
 
   const columns=[
+    {
+      key: "id",
+      label: " ",
+      type: "custom",
+      width: "40px",
+      render: (row) => {
+        return (
+          <td>
+            <input 
+              type="checkbox"
+              checked={selectedRecords.includes(row.id)} 
+              onChange={(e) => onChangeSelected(row.id, e.target.checked)} 
+            />
+          </td>
+        );
+      }
+    },
     {
       key: "Person.lastName",
       label: "Nominativo",
@@ -227,6 +344,7 @@ const FeriePermessiSection = () => {
             writePermissions={["WRITE_HR_HOLIDAY"]}
             className={"text-align-center"}
             ref={requestsTableRef}
+            extraButtons={getMultipleApprovalButtons()}
             dropListLookup={false}
             filterable={true}
             sortable={true}
@@ -308,6 +426,7 @@ const FeriePermessiSection = () => {
             sortable={true}
             sorting={defaultSort}
             className={"text-align-center"}
+            extraButtons={getMultipleResetButton()}
             getData={getData}
             columns={columns}
             resizable={true}
@@ -346,6 +465,18 @@ const FeriePermessiSection = () => {
   return (
     <>
       <Tab selected={selectedTab} onSelect={handleSelect} tabs={getTabs()} />
+      <Modal
+        title={"Gestione richieste"}
+        callToAction="Conferma"
+        showModalFooter
+        height={150}
+        style={multipleApprovalStyle}
+        isOpen={multipleApprovalModal?.open}
+        onClose={() => setMultipleApprovalModal({open: false})}
+        onSubmit={onSubmitMultiple}
+        >
+          {getMultipleModalMessage()}
+        </Modal>
       <Modal
         title={"Note"}
         callToAction="Chiudi"
