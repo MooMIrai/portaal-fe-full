@@ -11,7 +11,8 @@ interface ModalProps {
   onSubmit?: () => void;
   children?: ReactNode;
   width?:number | string;
-  height?:number | string
+  height?:number | string;
+  noClose?: boolean;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -23,7 +24,8 @@ const Modal: React.FC<ModalProps> = ({
   callToAction,
   showModalFooter,
   width,
-  height
+  height,
+  noClose
 }) => (
   <>
     {isOpen && (
@@ -41,7 +43,7 @@ const Modal: React.FC<ModalProps> = ({
         {children}
         {showModalFooter && (
           <DialogActionsBar>
-            <Button onClick={onClose}>Cancel</Button>
+            {!noClose ? <Button onClick={onClose}>Cancel</Button> : null}
             <Button themeColor={"primary"} onClick={onSubmit}>
               {callToAction}
             </Button>
