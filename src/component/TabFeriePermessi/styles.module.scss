@@ -60,6 +60,13 @@
   padding-top: 1.5rem;
 }
 
+.notesButton {
+  color: white;
+  font-weight: bold;
+  background-image: linear-gradient(-180deg, #FF7E31, #E62C03);
+  box-shadow: rgba(0, 0, 0, 0.1) 0 2px 4px;
+}
+
 .paginationContainer {
   padding-top: 1.5rem !important;
 }

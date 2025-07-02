@@ -3,7 +3,8 @@ import Button from "common/Button";
 import Tab from "common/Tab";
 import GenericGrid from "common/Table";
 import { PFMService } from "../../services/pfmService";
-import { checkOutlineIcon, xOutlineIcon, cancelOutlineIcon } from "common/icons";
+import { checkOutlineIcon, xOutlineIcon, cancelOutlineIcon, pencilIcon } from "common/icons";
+import Modal from 'common/Modal'
 import HoursDaysFilterCell from "common/HoursDaysFilterCell"
 import authService from "common/services/AuthService";
 import AvatarIcon from 'common/AvatarIcon';
@@ -15,6 +16,8 @@ import styles from "./styles.module.scss";
 const FeriePermessiSection = () => {
   const [refreshRequests, setRefreshRequests] = useState<number>(0);
   const [refreshArchive, setRefreshArchive] = useState<number>(0);
+  const [notes, setNotes] = useState<string>();
+  const [notesModal, setNotesModal] = useState<boolean>();
   const requestsTableRef = useRef(null);
   const archiveTableRef = useRef(null);
   const [selectedTab, setSelectedTab] = useState<number>(0);
@@ -76,6 +79,26 @@ const FeriePermessiSection = () => {
         filter:"numeric",
         type: 'number',
         filterCell: (props) => <HoursDaysFilterCell {...props} />
+      },
+      {
+        key: 'notes',
+        label: "Note",
+        sortable: false,
+        type: "custom",
+        filter: "text",
+        render: (row: any) => {
+
+          const openModal = () => {
+            setNotes(row.notes);
+            setNotesModal(true);
+          };
+
+          return (
+            <td>
+              <Button className={row.notes ? styles.notesButton : ""} onClick={openModal} svgIcon={pencilIcon}>Apri</Button>
+            </td>
+          );
+        }
       }
       
     ]
@@ -320,7 +343,23 @@ const FeriePermessiSection = () => {
     ]
   }
 
-  return <Tab selected={selectedTab} onSelect={handleSelect} tabs={getTabs()} />
+  return (
+    <>
+      <Tab selected={selectedTab} onSelect={handleSelect} tabs={getTabs()} />
+      <Modal
+        title={"Note"}
+        callToAction="Chiudi"
+        noClose
+        showModalFooter
+        height={250}
+        isOpen={notesModal}
+        onClose={() => setNotesModal(false)}
+        onSubmit={() => setNotesModal(false)}
+      >
+        {notes || <i>Nessuna nota.</i>}
+      </Modal>
+    </>
+  );
 }
 
 export default FeriePermessiSection;

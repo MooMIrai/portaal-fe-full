@@ -291,6 +291,7 @@ export default function RapportinoCalendar(props: RapportinoCalendarProps) {
           hours: hol.hours,
           approved: hol.request.approve_date ? new Date(hol.request.approve_date) : null,
           name: hol.title,
+          notes: hol.request.notes
         }
         if (holidaysData[currentDate.getDate()][hol.activity.id]) {
           holidaysData[currentDate.getDate()][hol.activity.id].push(holActData);

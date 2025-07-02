@@ -76,6 +76,8 @@ export default function RapportinoCrud(props: RapportinoCrudProps) {
     const [data, setData] = useState<Record<string, any>>();
     const [values, setValues] = useState<Record<number, number>>({});
     const [personActivityvalues, setPersonActivityValues] = useState<Record<number, number>>({});
+    const [personActivityNotes, setPersonActivityNotes] = useState<string>();
+    const [holidayDetails, setHolidayDetails] = useState<number[]>([]);
     const [errors, setErrors] = useState<string>();
     const [disableExcept, setDisableExcept] = useState();
 
@@ -109,10 +111,18 @@ export default function RapportinoCrud(props: RapportinoCrudProps) {
                         let ids = Object.keys(props.assignment_values[day]);
                         let newObj = {};
                         ids.forEach((id: string) => {
+
                             let isApprovedHoliday = !!(props.holidaysData[day] && props.holidaysData[day][id]?.every(h => h.approved));
                             if (!isApprovedHoliday) {
                                 newObj[id] = props.assignment_values[day][id];
                             }
+
+                            const notes = props.holidaysData?.[day]?.[id]?.find(request => request.notes)?.notes;
+                            if (notes) setPersonActivityNotes(notes);
+
+                            const isHoliday = props.holidaysData?.[day]?.[id];
+                            if (isHoliday) setHolidayDetails(holidayDetails => [...holidayDetails, Number(id)]);
+
                         });
                         setPersonActivityValues(newObj);
                     }
@@ -174,7 +184,8 @@ export default function RapportinoCrud(props: RapportinoCrudProps) {
                     person_activity_id:personActivityvalues[key],
                     activity_id: parseInt(key),
                     hours: values[key],
-                    minutes: 0
+                    minutes: 0,
+                    notes: holidayDetails.includes(parseInt(key)) ? personActivityNotes : undefined
                 }
             }),
             holidayConfirm
@@ -292,7 +303,8 @@ export default function RapportinoCrud(props: RapportinoCrudProps) {
                                                 else
                                                     setDisableExcept(undefined);
                                             }
-                                            onInputChange(res.Activity.id, value,res.id)
+                                            onInputChange(res.Activity.id, value,res.id);
+                                            setHolidayDetails(holidayDetails => [...holidayDetails, res.Activity.id]);
                                         }}
 
                                     />
@@ -300,6 +312,12 @@ export default function RapportinoCrud(props: RapportinoCrudProps) {
                             </div>
                         </>
                 }
+                <div className={styles.leaveRequestNotes} onKeyDown={e => e.stopPropagation()}>
+                    <label htmlFor='LeaveRequestNotes'>Note</label>
+                    <textarea maxLength={255} id='LeaveRequestNotes' value={personActivityNotes}
+                    onChange={e => setPersonActivityNotes(e.target.value)}
+                    />
+                </div>
             </Accordion>
         </div>
         {
