@@ -13,6 +13,7 @@ interface ModalProps {
   width?:number | string;
   height?:number | string;
   noClose?: boolean;
+  style?: React.CSSProperties
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -25,7 +26,8 @@ const Modal: React.FC<ModalProps> = ({
   showModalFooter,
   width,
   height,
-  noClose
+  noClose,
+  style
 }) => (
   <>
     {isOpen && (
@@ -38,7 +40,7 @@ const Modal: React.FC<ModalProps> = ({
         overlayStyle={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
         themeColor="primary"
         
-        contentStyle={{ marginBottom: 30 }}
+        contentStyle={style || { marginBottom: 30 }}
       >
         {children}
         {showModalFooter && (
