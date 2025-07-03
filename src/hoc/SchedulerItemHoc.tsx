@@ -7,7 +7,7 @@ const withSchedulerItem= (WrappedComponent:any) => {
     {...props}
     style={{
       ...props.style,
-      
+      pointerEvents: "none"
       //backgroundColor: propsi.isAllDay ? "pink" : "blue",
     }}
   >
