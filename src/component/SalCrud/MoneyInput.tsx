@@ -18,8 +18,6 @@ export function MoneyInputSal(props:MoneyInputSalProps)
     const [effectiveDaysPristine,setEffectiveDaysPristine] = useState<boolean>(!!props.value?.actualDays);
     const [finalAmount,setFinalAmount] = useState<number | undefined>(props.value?.amount);
     
-    const [isFirstloading,setIsFirstloading] = useState<boolean>(true);
-    
     const [rapportinoViewParam,setRapportinoViewParam] = useState<{
         person:{
             id:number,
@@ -27,10 +25,6 @@ export function MoneyInputSal(props:MoneyInputSalProps)
         },
         date:Date
     }>()
-
-    useEffect(()=>{
-        setTimeout(()=>{setIsFirstloading(false)},500)
-    },[]);//accrocchio ma non sapevo come fare in modo veloce
 
     useEffect(()=>{
 
@@ -72,8 +66,8 @@ export function MoneyInputSal(props:MoneyInputSalProps)
             effectiveDays,
             finalAmount
         }});
-        if(!isFirstloading)
-            setFinalAmount(props.options.project.rate * (effectiveDays || 0));
+
+        setFinalAmount(props.options.project.rate * (effectiveDays || 0));
     },[effectiveDays])
 
     useEffect(()=>{
