@@ -35,3 +35,9 @@
   flex-wrap: wrap;
   justify-content: center;
 }
+
+div:has(> .gridNoRecordsCell) {
+  border: 0;
+  margin: 0;
+  flex-grow: 1;
+}

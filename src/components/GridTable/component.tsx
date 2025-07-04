@@ -618,7 +618,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
               <Loader size="medium" type="pulsing" />
             </div>
           ) : (
-            "Nessun record disponibile."
+            <div className={styles.gridNoRecordsCell}>Nessun record disponibile.</div>
           )}
         </GridNoRecords>
 
