@@ -57,17 +57,39 @@ export function GestioneRapportinoPage() {
         
         if (filter && filter.filters) {
             
-            f.filters = filter.filters.filter(f => f.field != 'year' && f.field != 'month');
+            f.filters = f.filters.filter(f => f.field != 'year' && f.field != 'month');
             const monthFilter = filter.filters.find(f => f.field === 'month');
             if (monthFilter) {
                 month = monthFilter.value ;
                 setCurrentMonth(monthFilter.value);
             }
-            const yearFilter = filter.filters.find(f => f.field === 'year');
+            const yearFilter = f.filters.find(f => f.field === 'year');
             if (yearFilter) {
                 year = yearFilter.value;
                 setCurrentYear(yearFilter.value);
             }
+
+            const finalizedFilter = filter.filters.find(f => f.field === 'finalized');
+            if (finalizedFilter && finalizedFilter.value === false) {
+
+                f.filters = f.filters.filter(f => f.field != 'finalized');
+
+                f.filters.push({
+                    logic: "or",
+                    filters: [
+                        {
+                            field: "finalized",
+                            operator: "eq",
+                            value: false
+                        },
+                        {
+                            field: "finalized",
+                            operator: "isnull"
+                        }
+                    ]
+                });
+            }
+
         }
         const tableResponse = await TimesheetsService.getGestioneRapportino(
             pagination.currentPage,
