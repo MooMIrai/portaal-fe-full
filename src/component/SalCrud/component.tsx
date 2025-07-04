@@ -46,10 +46,14 @@ export function SalCrud(props:PropsWithRef<SalCrudProps>){
           actualDays:formSal.current.values.money.effectiveDays,
           SalState:'PENDING'
         };
+
         if(props.type==='create'){
-          action =salService.createResource(mappedObj);
-        } else if(props.type==='edit'){
-          const billData={
+          action = salService.createResource(mappedObj);
+        } 
+        
+        else if(props.type==='edit'){
+
+          const billData= {
             amount: formSal.current.values.amount ? parseFloat(formSal.current.values.amount) : undefined,
             billing_date: formSal.current.values.billing_date,
             billing_number: formSal.current.values.billing_number,
@@ -58,15 +62,19 @@ export function SalCrud(props:PropsWithRef<SalCrudProps>){
             baf_number: formSal.current.values.baf_number,
             sal_id:formSalData.id
           };
+
           if(formSalData.SalState==='BILLING_OK'){
-            if(!formSalData.Bill){
-              action = salService.createBill(billData);
-            }else{
-              action = salService.updateBill(formSalData.Bill.id,billData);
-            }
-          }else if (formSalData.SalState === "BILLED") {
+            if(!formSalData.Bill) action = salService.createBill(billData);
+            else action = salService.updateBill(formSalData.Bill.id,billData);
+          }
+          
+          else if (formSalData.SalState === "BILLED") {
             billData.amount = formSal.current.values.amountBill ? parseFloat(formSal.current.values.amountBill) : undefined;
-            action=salService.updateBill(formSalData.Bill.id, billData);
+            action = salService.updateBill(formSalData.Bill.id, billData);
+          }
+
+          else if (formSalData.SalState === "PENDING") {
+            action = salService.updateResource(formSalData.id, mappedObj);
           }
           
         }

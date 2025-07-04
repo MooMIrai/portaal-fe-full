@@ -144,7 +144,7 @@ const AssigningTable = (props: { activity_id: number }) => {
   return (
     <GridTable
       filterable={true}
-      pageable={false}
+      pageable={true}
       sortable={true}
       getData={loadData}
       columns={attivitaAssegnazioneColumns}
