@@ -21,10 +21,10 @@ export function GestioneRapportinoPage() {
         {
             key: "id", label: " ", type: 'custom', width: 250, render: (data) => {
                 return <td>
-                    {data.finalized ? <Button svgIcon={unlockIcon} themeColor="error" onClick={() => {
+                    {data.finalized ? <Button disabled={!data.timesheet_id} svgIcon={unlockIcon} themeColor="error" onClick={() => {
                         TimesheetsService.deconsolidateTimesheet(data.timesheet_id).finally(tableGestioneRapportino.current.refreshTable)
                     }}>Deconsolida</Button> :
-                        <Button svgIcon={lockIcon} themeColor="success" onClick={() => {
+                        <Button svgIcon={lockIcon} disabled={!data.timesheet_id} themeColor="success" onClick={() => {
                             TimesheetsService.finalizeTimesheet(data.timesheet_id).finally(tableGestioneRapportino.current.refreshTable)
                         }}>Consolida</Button>
                     }
@@ -283,7 +283,13 @@ export function GestioneRapportinoPage() {
                 tableGestioneRapportino.current.refreshTable();
 
             }}>
-            {dataItem && <RapportinoCalendar forceTimeSheet={dataItem.timesheet_id} forceDate={new Date(currentYear, currentMonth, 1)} />}
+            {dataItem && 
+
+                <RapportinoCalendar 
+                forcePerson={{id: dataItem.person_id, name: dataItem.first_name + ' ' + dataItem.last_name}} 
+                forceDate={new Date(currentYear, currentMonth, 1)} 
+                />
+            }
         </Modal>
 
     </div>

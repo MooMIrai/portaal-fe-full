@@ -15,17 +15,23 @@ export function GestioneRapportinoInner(props:{id:number}){
 
     const loadData = async () => {
 
+      if (props.id) {
+
+        const tableResponse = await TimesheetsService.getDettaglioGestioneRapportino(props.id);
+  
+        return {
+          data: tableResponse,
+          meta:{total:tableResponse.length}
+        };
+
+      }
             
-            const tableResponse = await TimesheetsService.getDettaglioGestioneRapportino(
-              props.id
-            );
-        
-            return {
-              data: tableResponse,
-              meta:{total:tableResponse.length}
-              
-            }
-        
+      else {
+        return {
+          data: [],
+          meta: {total: undefined}
+        };
+      }
     };
 
     return <div>

@@ -19,6 +19,7 @@ const RapportinoItemView = (props: any) => {
   let bg: string | undefined = undefined;
   let color: string | undefined = undefined;
   let status = '';
+  
   if (props.request) {
     if (props.request.approved === null) {
       bg = 'rgb(255, 192, 0)';
@@ -80,8 +81,7 @@ const RapportinoItem = withScheduler(RapportinoItemView)
 
 export interface RapportinoCalendarProps {
   forcePerson?: { id: number, name: string };
-  forceDate?:Date,
-  forceTimeSheet?:number
+  forceDate?:Date
 }
 
 export default function RapportinoCalendar(props: RapportinoCalendarProps) {
@@ -162,40 +162,34 @@ export default function RapportinoCalendar(props: RapportinoCalendarProps) {
     
     TimesheetsService.findOrCreate(year, month, "", userSelected.id > 0 ? userSelected.id : undefined)
       .then((response) => {
-        setTimeSheetsId(props.forceTimeSheet || response.id);
+
+        setTimeSheetsId(response.id);
         setHolidays(response.holidays);
         setUnavailableDays(response.unavailable_days);
-        TimesheetsService.getSingleTimesheets(props.forceTimeSheet || response.id, true).then((res) => {
+        setIsFinalized(!!response?.finalized);
+        setPreviousDate(date);
 
-          setIsFinalized(!!res?.finalized);
-          setPreviousDate(date);
+        let activities: any = [];
 
-          let activities: any = [];
+        response?.TimesheetDetail.forEach((el) => {
 
-          res?.TimesheetDetail.forEach((el) => {
-
-            if (el) {
-              setError(false);
-              activities.push({
-                request: el.LeaveRequest,
-                activity: el.PersonActivity.Activity,
-                person_activity_id: el.person_activity_id,
-                id: el.id,
-                title: el.PersonActivity.Activity.description,
-                day: el.day,
-                hours: el.hours,
-                start: new Date(
-                  convertToISODateString(year, month, el.day, 9, 0)
-                ),
-                end: new Date(
-                  convertToISODateString(year, month, el.day, 18, 0)
-                ),
-              });
-            }
-          });
-
-          setData(mergeRequests(activities));
+          if (el) {
+            setError(false);
+            activities.push({
+              request: el.LeaveRequest,
+              activity: el.PersonActivity.Activity,
+              person_activity_id: el.person_activity_id,
+              id: el.id,
+              title: el.PersonActivity.Activity.description,
+              day: el.day,
+              hours: el.hours,
+              start: new Date(convertToISODateString(year, month, el.day, 9, 0)),
+              end: new Date(convertToISODateString(year, month, el.day, 18, 0)),
+            });
+          }
         });
+
+        setData(mergeRequests(activities));
       })
       .catch((error) => {
         console.error("Errore:", error);
@@ -204,9 +198,12 @@ export default function RapportinoCalendar(props: RapportinoCalendarProps) {
   };
 
   const handleDateChange = (event: any) => {
-    //const dateObject = new Date(event.value);
-    //fetchTimesheet(dateObject);
-    setDate(event.value);
+
+    const currentDate = new Date();
+    const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+    const isNextMonth = event.value > endOfMonth;
+
+    if (!isNextMonth) setDate(event.value);
   };
 
   useEffect(() => {
@@ -441,7 +438,7 @@ export default function RapportinoCalendar(props: RapportinoCalendarProps) {
       {!props.forcePerson ? <div style={{ display: 'flex', flexDirection: size.width && size.width >= 768 ? 'row' : 'column', justifyContent: "space-between", marginBottom: 10 }}>
         <p>Tocca una data per inserire le ore di attività o trascina per selezionare più date</p>
         <div style={{ display: 'flex', justifyContent: "space-between", alignItems: 'flex-end', gap: 15 }}>
-          { authService.hasPermission('READ_HR_TIMESHEET_DEAUTH') && !props.forcePerson && !props.forceTimeSheet && <div style={{ width: 300 }}>Utente Selezionato <AutoCompletePerson label="" value={userSelected} onChange={(e) => {
+          { authService.hasPermission('READ_HR_TIMESHEET_DEAUTH') && !props.forcePerson && <div style={{ width: 300 }}>Utente Selezionato <AutoCompletePerson label="" value={userSelected} onChange={(e) => {
             if (!e.value) {
               setUserSelected(defaultPerson)
             } else {

@@ -314,7 +314,7 @@ export default function RapportinoCrud(props: RapportinoCrudProps) {
                 }
                 <div className={styles.leaveRequestNotes} onKeyDown={e => e.stopPropagation()}>
                     <label htmlFor='LeaveRequestNotes'>Note</label>
-                    <textarea maxLength={255} id='LeaveRequestNotes' value={personActivityNotes}
+                    <textarea disabled={props.editLocked} maxLength={255} id='LeaveRequestNotes' value={personActivityNotes}
                     onChange={e => setPersonActivityNotes(e.target.value)}
                     />
                 </div>
