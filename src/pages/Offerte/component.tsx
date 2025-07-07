@@ -4,6 +4,7 @@ import GridTable from "common/Table";
 import { offertaService } from "../../services/offertaService";
 import { fromOfferBEModelToOfferModel } from "../../adapters/offertaAdapters";
 import { OffertaCrud } from "../../component/OffertaCrud/component";
+import { CrudGenericService } from "../../services/personaleServices";
 
 
 const columns = [
@@ -18,8 +19,7 @@ const columns = [
     key: "accountManager.name",
     label: "Commerciale",
     type: "string",
-    sortable: true,
-    filter: "text",
+    sortable: true
   },
   {
     key: "protocol",
@@ -180,6 +180,22 @@ export default function OffertePage() {
       initialHeightWindow={initialHeightWindow}
       initialWidthWindow={initialWidthWindow}
       resizable={true}
+      addedFilters={[
+        {
+          name: "accountManager_id",
+          label: "Commerciale",
+          type: "filter-autocomplete",
+          options: {
+              getData: (term: string) => Promise.resolve(
+                CrudGenericService.searchCommerciale(term).then(res => {
+                  if(res) return res.map(r => ({id: r.id, name: `${r.Person.firstName} ${r.Person.lastName} (${r.email})`}));
+                  else return [];
+                })
+              ),
+              getValue: (v: any) => v?.id
+          }
+        }
+      ]}
       actions={(row) => {
 
         const actions: string[] = ["create"];
