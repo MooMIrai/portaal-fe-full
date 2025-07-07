@@ -47,7 +47,7 @@ export function MoneyInputSal(props:MoneyInputSalProps)
                       },0);
                     const allAcronyms = person.map(singlePerson => singlePerson.billAcronym);
                     setAcronyms(allAcronyms);
-                    setWorkingDays(allPersonSum);
+                    setWorkingDays(allPersonSum ? Number(allPersonSum.toFixed(2)): 0);
                     setPerson(person);
                 }
             })
@@ -104,7 +104,7 @@ export function MoneyInputSal(props:MoneyInputSalProps)
                             {person.map(p=><tr className="k-table-row" key={p.id}>
                                 <td className="k-table-td">{p.first_name} {p.last_name}</td>
                                 <td className="k-table-td">{p.billAcronym}</td>
-                                <td className="k-table-td">{p.total} Giorni</td>
+                                <td className="k-table-td">{p.total ? Number(p.total.toFixed(2)): 0} Giorni</td>
                                 <td className="k-table-td"><div>
                                 <Button
                                     type="button"
@@ -137,8 +137,8 @@ export function MoneyInputSal(props:MoneyInputSalProps)
                 <InputText label="Giorni Lavorati Sal"  type="number" value={workingDays} disabled /> 
                 <InputText label="Giorni Effettivi Sal" onChange={(e)=>{
                     setEffectiveDaysPristine(true);
-                    let v = e.target.value && e.target.value.length?parseFloat(e.target.value):undefined;
-                    setEffectiveDays(v);
+                    let v = e.target.value && e.target.value.length ? parseFloat(e.target.value) : undefined;
+                    setEffectiveDays(v ? Number(v.toFixed(2)): undefined);
                    
                 }} required type="number" value={effectiveDays} disabled={props.disabled} />
                 <InputText label="Tariffa Sal" type="number" value={props.options.project.rate} disabled />
@@ -148,7 +148,7 @@ export function MoneyInputSal(props:MoneyInputSalProps)
         
         <InputText required label="Importo Sal" type="number" value={finalAmount} onChange={(e)=>{
             let v = e.target.value && e.target.value.length?parseFloat(e.target.value):undefined;
-            setFinalAmount(v);
+            setFinalAmount(v ? Number(v.toFixed(2)): undefined);
         }} disabled={props.disabled} />
         
         {rapportinoViewParam && <Modal title={"Rapportino di " + rapportinoViewParam.person.name }
