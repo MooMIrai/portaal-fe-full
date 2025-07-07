@@ -113,6 +113,15 @@
   background-color: #fff !important;
 }
 
+.sideBarDrawer {
+
+  & :global(.k-drawer) {
+    height: 90vh !important;
+    overflow: auto !important;
+  }
+
+}
+
 .drawerContainer{
   position: relative;
   z-index: 1;

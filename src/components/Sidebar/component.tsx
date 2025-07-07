@@ -267,6 +267,7 @@ const Sidebar = ({ children, items }: SidebarPros) => {
         items={data.filter(d=>{
           return !d.permissions || !d.permissions.length || d.permissions.some(AuthService.hasPermission)
         })}
+        className={styles.sideBarDrawer}
         item={CustomItem}
         onSelect={onSelect}
         mini={true}
