@@ -509,13 +509,41 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
     return innerText;
   }
 
-  const excelExport = () => {
+  const excelExport = async () => {
 
-    if(data){
+    function setWidth (worksheet: any) {
+
+      const range = XLSX.utils.decode_range(worksheet["!ref"]!);
+      const numRows = range.e.r + 1;
+      const numColumns = range.e.c + 1;
+
+      const maxWidths: Array<{wch: number}> = [];
+
+      for (let column = 0; column < numColumns; column++) {
+
+          let maxWidth = 0;
+
+          for (let row = 0; row < numRows; row++) {
+              const address = XLSX.utils.encode_cell({r: row, c: column});
+              const value = worksheet[address]?.v;
+              const width = value ? String(value).length : 1;
+              maxWidth = width > maxWidth ? width : maxWidth;
+
+          }
+
+          maxWidths.push({wch: maxWidth + 1});
+      }
+
+      worksheet['!cols'] = maxWidths;
+    }
+
+    if (total > 0) {
+
+      const allData = await props.getData({currentPage: 1, pageSize: total}, filter, sorting);
 
       const workbook = XLSX.utils.book_new();
       
-      const newArr = data.map((row,rowIndex) => {
+      const newArr = allData.data.map((row,rowIndex) => {
 
         let objRow: any = {};
 
@@ -526,11 +554,18 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
           try{
 
             if(column.render){
-              objRow[column.label]=readInnerTextFromElement(column.render(row));
+              objRow[column.label] = readInnerTextFromElement(column.render(row));
             }
             
             else {
-              objRow[column.label]=getProperty(column.key,row)
+
+              let value = getProperty(column.key, row);
+
+              let asDate = value ? new Date(value) : null;
+              if (asDate && asDate.toString() !== "Invalid Date") value = asDate.toLocaleDateString("it-IT", {timeZone: "Europe/Rome"});
+              
+              objRow[column.label] = value;
+
             }
             
           }
@@ -563,6 +598,9 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
       });
       // Convert JSON data to a worksheet
       const worksheet = XLSX.utils.json_to_sheet(newArr);
+
+      //Set the columns' width based on their content
+      setWidth(worksheet);
 
       // Append the worksheet to the workbook
       XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
