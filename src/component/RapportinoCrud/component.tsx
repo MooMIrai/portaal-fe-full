@@ -230,6 +230,8 @@ export default function RapportinoCrud(props: RapportinoCrudProps) {
         return false;
     }
 
+    const addOfferName = (name: string) => !name ? "" : ` (${name})`;
+
 
     if (!data) {
         return <p>loading...</p>
@@ -253,7 +255,7 @@ export default function RapportinoCrud(props: RapportinoCrudProps) {
                                     value={values ? values[res.Activity.id] : 0}
                                     key={res.Activity.id}
                                     id={res.Activity.id}
-                                    description={res.Activity.description}
+                                    description={res.Activity.description + addOfferName(res.Activity.Project?.Offer?.name)}
                                     onChange={(value) => {
                                         onInputChange(res.Activity.id, value,res.id)
                                     }}
@@ -273,7 +275,7 @@ export default function RapportinoCrud(props: RapportinoCrudProps) {
                                     value={values ? values[res.Activity.id] : 0}
                                     key={res.Activity.id}
                                     id={res.Activity.id}
-                                    description={res.Activity.description}
+                                    description={res.Activity.description + addOfferName(res.Activity.Project?.Offer?.name)}
                                     onChange={(value) => {
                                         onInputChange(res.Activity.id, value,res.id)
                                     }}
