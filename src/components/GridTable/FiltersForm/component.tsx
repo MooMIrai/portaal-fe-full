@@ -192,6 +192,8 @@ export function FiltersForm(props: {
                     submitText={"Cerca"} 
                     style={props.formStyle}
                     showSubmit 
+                    noDisableOnTouched
+                    showCancel
                 />
             </div>
         </>

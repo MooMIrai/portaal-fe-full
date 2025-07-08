@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, {useContext, useState} from "react";
 import { Button } from "@progress/kendo-react-buttons";
 import {
   Form,
@@ -25,7 +25,6 @@ import {
 import CountrySelector from "../CountrySelector/component";
 import styles from "./styles.module.scss";
 import SkillMultiSelect from "../SkillsSelector/component";
-import { MultiSelectFilterChangeEvent } from "@progress/kendo-react-dropdowns";
 import { FormRefContext } from "../Tab/form.ref.provider";
 
 const getFieldComponent = (type: FieldType) => {
@@ -129,6 +128,7 @@ export interface DynamicFormProps {
   onSubmit: (dataItem: any) => void;
   description?: string;
   showSubmit?: boolean;
+  showCancel?: boolean;
   extraButton?: boolean;
   extraBtnAction?: () => void;
   customDisabled?: boolean;
@@ -214,6 +214,7 @@ const DynamicForm = React.forwardRef<any, DynamicFormProps>((props, ref) => {
     formData,
     onSubmit,
     showSubmit,
+    showCancel,
     extraButton,
     extraBtnAction,
     description,
@@ -226,66 +227,78 @@ const DynamicForm = React.forwardRef<any, DynamicFormProps>((props, ref) => {
 
   const formRefContext = useContext(FormRefContext);
   const isTouched = (ref: any) => ref?.current ? Object.values(ref.current.visited).length > 0 : false;
+  const [resetForm, setResetForm] = useState<"On" | "Off">("On");
 
-  return <Form
-    initialValues={formData}
-    onSubmit={(dataItem) => onSubmit(dataItem)}
-    ref={ref}
-    ignoreModified={noDisableOnTouched}
-    render={(formRenderProps: FormRenderProps) => (
-      <FormElement>
-        {children === undefined && (
-          <fieldset className={"k-form-fieldset"}  style={props.style}>
-            <legend className={"k-form-legend"}>{description}</legend>
-            {fields.filter((field) => {
-              if (noDisableOnTouched) formRefContext?.setDisabled(true);
-              else if (formRefContext?.setDisabled) formRefContext.setDisabled(isTouched(ref));
-              const formRef: any = ref;
-              return !field.conditions || (formRef && formRef.current && field.conditions(formRef.current.values))
-            }).map((field, index) => {
-              if(field.noContainer){
-                return <DynamicField
-                addedFields={addedFields}
-                field={field}
-                formRenderProps={formRenderProps}
-                valueOnChange={field.valueOnChange}
-              />
-              }
-              return (
-                <FieldWrapper key={index} className={field.name+'-input'}>
-                  <DynamicField
-                    addedFields={addedFields}
-                    field={field}
-                    formRenderProps={formRenderProps}
-                    valueOnChange={field.valueOnChange}
-                  />
+  const clearFilters = () => {
+    setResetForm(state => state === "On" ? "Off": "On");
+    props.onSubmit({});
+  }
 
-                </FieldWrapper>
-              )
-            }
-            )}
-          </fieldset>
-        )}
-        {children}
-        <div className={"k-form-buttons " + (styles.buttonsContainer ?? '')}>
-          {extraButton && <Button onClick={extraBtnAction}>Cancel</Button>}
-          {showSubmit && (
-            <Button
-              themeColor={"primary"}
-              disabled={
-                customDisabled ?? !formRenderProps.allowSubmit
-                /* children !== undefined || customDisabled === true
-                  ? false
-                  : !formRenderProps.allowSubmit */
+  return (
+    <>
+      <Form
+      key={resetForm}
+      initialValues={formData}
+      onSubmit={(dataItem) => onSubmit(dataItem)}
+      ref={ref}
+      ignoreModified={noDisableOnTouched}
+      render={(formRenderProps: FormRenderProps) => (
+        <FormElement>
+          {children === undefined && (
+            <fieldset className={"k-form-fieldset"}  style={props.style}>
+              <legend className={"k-form-legend"}>{description}</legend>
+              {fields.filter((field) => {
+                if (noDisableOnTouched) formRefContext?.setDisabled(true);
+                else if (formRefContext?.setDisabled) formRefContext.setDisabled(isTouched(ref));
+                const formRef: any = ref;
+                return !field.conditions || (formRef && formRef.current && field.conditions(formRef.current.values))
+              }).map((field, index) => {
+                if(field.noContainer){
+                  return <DynamicField
+                  addedFields={addedFields}
+                  field={field}
+                  formRenderProps={formRenderProps}
+                  valueOnChange={field.valueOnChange}
+                />
+                }
+                return (
+                  <FieldWrapper key={index} className={field.name+'-input'}>
+                    <DynamicField
+                      addedFields={addedFields}
+                      field={field}
+                      formRenderProps={formRenderProps}
+                      valueOnChange={field.valueOnChange}
+                    />
+
+                  </FieldWrapper>
+                )
               }
-            >
-              {submitText}
-            </Button>
+              )}
+            </fieldset>
           )}
-        </div>
-      </FormElement>
-    )}
-  />
+          {children}
+          <div className={"k-form-buttons " + (styles.buttonsContainer ?? '')}>
+            {extraButton && <Button onClick={extraBtnAction}>Cancel</Button>}
+            {showCancel && <Button onClick={clearFilters} themeColor={"secondary"}>Cancella</Button>}
+            {showSubmit && (
+              <Button
+                themeColor={"primary"}
+                disabled={
+                  customDisabled ?? !formRenderProps.allowSubmit
+                  /* children !== undefined || customDisabled === true
+                    ? false
+                    : !formRenderProps.allowSubmit */
+                }
+              >
+                {submitText}
+              </Button>
+            )}
+          </div>
+        </FormElement>
+      )}
+      />
+    </>
+  );
 })
 
 
