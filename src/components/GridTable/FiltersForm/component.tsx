@@ -163,10 +163,17 @@ export function FiltersForm(props: {
         return "eq";
     };
 
+    const getCustomFilter = (f: any) => ({...f, type: f.type + "_" + f.name});
+
     let fields:any[] = mapColumnToField(props.columns);
 
     if (props.addedFilters) {
-        fields = [...fields, ...props.addedFilters.map(f=>({...f,type:f.type+'_'+f.name}))];
+        
+        const withIndex = props.addedFilters.filter(filter => filter.indexPosition);
+        const others = props.addedFilters.filter(filter => !filter.indexPosition);
+        withIndex.forEach(filter => fields.splice(filter.indexPosition!, 0, getCustomFilter(filter)));
+
+        fields = [...fields, ...others.map(getCustomFilter)];
     }
 
     const addedField = useMemo(() => {

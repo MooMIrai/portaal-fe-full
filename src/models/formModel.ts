@@ -29,7 +29,8 @@ export interface FieldConfig {
   value: any;
   disabled?: boolean;
   required?: boolean;
-  showLabel?:boolean
+  showLabel?:boolean;
+  indexPosition?: number;
   //onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
