@@ -200,10 +200,12 @@ export default function RapportinoCalendar(props: RapportinoCalendarProps) {
   const handleDateChange = (event: any) => {
 
     const currentDate = new Date();
-    const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-    const isNextMonth = event.value > endOfMonth;
+    const nextYear = new Date(currentDate.getFullYear() + 1, currentDate.getMonth(), 1);
 
-    if (!isNextMonth) setDate(event.value);
+    const currentMonth = new Date(event.value.getFullYear(), event.value.getMonth(), 1);
+    const isNextYear = currentMonth > nextYear;
+    
+    if (!isNextYear) setDate(event.value);
   };
 
   useEffect(() => {
