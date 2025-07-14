@@ -185,6 +185,7 @@ export default function OffertePage() {
           name: "accountManager_id",
           label: "Commerciale",
           type: "filter-autocomplete",
+          indexPosition: 1,
           options: {
               getData: (term: string) => Promise.resolve(
                 CrudGenericService.searchCommerciale(term).then(res => {
