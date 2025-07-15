@@ -385,7 +385,7 @@ class SalService extends BaseHttpService {
     };
 
     searchCustomer (text:string) {
-      return client.get(`api/v1/crud/Customer?term=${text}`).then(res => res.data.data)
+      return client.get(`api/v1/customers?term=${text}`).then(res => res.data.data)
    };
 
    transformFilters(obj: any): Record<string, any> | null {
