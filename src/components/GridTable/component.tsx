@@ -82,6 +82,7 @@ interface TablePaginatedProps extends GridProps {
   filterable?: boolean;
   externalFilter?: boolean;
   onFilterChangeExternalFilter?: (filter: CompositeFilterDescriptor) => void;
+  onFilterSubmit?: VoidFunction;
   filter?: CompositeFilterDescriptor;
   filterFields?: FilterField[];
   openFilterDefault?: boolean;
@@ -688,13 +689,13 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
             {props.columns && props.filterable && (
               <FiltersForm columns={props.columns} openFilterDefault={props.openFilterDefault} formStyle={props.filterFormStyle}
               filterInitialValues={props.filterInitialValues} onSubmit={(filterss)=>{
-                
                 const newPagination = {
                   ...pagination,
                   currentPage: 1
                 };
                 setPagination(newPagination);
-                setFilter(filterss)
+                setFilter(filterss);
+                props.onFilterSubmit?.();
               }} addedFilters={props.addedFilters}/>
             )}
         </GridToolbar> : null}
