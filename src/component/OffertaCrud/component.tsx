@@ -161,50 +161,48 @@ export function OffertaCrud(props: PropsWithRef<OffertaCrudProps>) {
   const valueOnChange = (name: string, value: any) => {
 
     if (name === "project_type") {
+
       if (value?.name === "Consulenza") {
+
         const updatedBillingType = { id: "Daily", name: "Fatturazione a giornata" };
         formCustomer.current.values.billing_type = updatedBillingType;
-        setIsDaily(true)
+        setIsDaily(true);
+
         if (props.type === "edit") {
           setModifiedFields((prevState) => ({
             ...prevState,
             billing_type: updatedBillingType,
           }));
         }
-      } else {
-        formCustomer.current.values.billing_type = { id: undefined, name: undefined };
-        setIsDaily(false);
-        if (props.type === "edit") {
-          setModifiedFields((prevState) => ({
-            ...prevState,
-            billing_type: { id: undefined, name: undefined },
-          }));
-        }
+
       }
-    } if (name === "billing_type") {
-      if (value?.name === "Fatturazione a corpo") {
-        setIsLumpSum(true)
-      } else {
-        setIsLumpSum(false)
-      }
+      
     }
+    
+    if (name === "billing_type") {
+      if (value?.name === "Fatturazione a corpo") setIsLumpSum(true);
+      else setIsLumpSum(false);
+    }
+
     const currentValue = modifiedFields[name];
+
     if (currentValue !== value) {
+
       setModifiedFields((prevState) => ({
         ...prevState,
         [name]: value,
       }));
+
       if (props.type === "edit") {
-
-
         if (name === "location") {
           setRowLocation(value);
         }
       }
+
     }
-    if(name==='customer'){
-      handleChangeCustomerProtocol(value);
-    }
+
+    if(name==='customer') handleChangeCustomerProtocol(value);
+
   };
 
 

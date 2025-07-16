@@ -83,10 +83,8 @@ export const getFormFields=(values,onChange,type,project,otherSal?)=>{
         label: "Numero BAF",
         type: "text",
         value: values.baf_number,
-        required: true,
         disabled:type === "view",
         conditions:(formData)=>formData.SalState==='BILLING_OK' || formData.SalState === 'BILLED',
-        validator: (value: any) => requiredValidator("Numero BAF", value)
     },
     {
         name: "billToPerson",

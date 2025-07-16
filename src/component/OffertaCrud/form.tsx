@@ -171,11 +171,9 @@ export const getFormOfferFields = (
         //valueOnChange: valueOnChange,
         label: "Data approvazione",
         type: "date",
-
         value: formData.approval_date,
         disabled: type === "view",
         validator:approvalDateValidator,
-        
     };
     
 
