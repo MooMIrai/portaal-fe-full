@@ -195,6 +195,20 @@ export default function OffertePage() {
               ),
               getValue: (v: any) => v?.id
           }
+        },
+        {
+          name: "Project.Activities.PersonActivities.person_id",
+          label: "Dipendente assegnato",
+          type: "filter-autocomplete",
+          options: {
+              getData: (term: string) => Promise.resolve(
+                CrudGenericService.searchAccount(term).then(res => {
+                  if(res) return res.map(r => ({id: r.person_id, name: `${r.firstName} ${r.lastName} (${r.email})`}));
+                  else return [];
+                })
+              ),
+              getValue: (v: any) => v?.id
+          }
         }
       ]}
       actions={(row) => {

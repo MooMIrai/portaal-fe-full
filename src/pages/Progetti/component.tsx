@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import GridTable from "common/Table";
 import { customerService } from "../../services/clienteService";
+import { CrudGenericService } from "../../services/personaleServices";
 import ProjectTable from "../../component/ProgettoCrud/component";
 import { columnsCustomer } from "./config";
 
 export default function ProgettiPage() {
+
+  const [currentFilter, setCurrentFilter] = useState<any>();
 
   const yearFilter = [
     {
@@ -47,7 +50,8 @@ export default function ProgettiPage() {
     }
 
     const tableResponse = await customerService.getHasProject(pagination.currentPage,pagination.pageSize,filter,sorting,undefined,true);
-    
+    setCurrentFilter(filter);
+
     return {
       data: tableResponse?.data,
       meta: {
@@ -62,13 +66,29 @@ export default function ProgettiPage() {
       writePermissions={["WRITE_SALES_PROJECT"]}
       expand={{
         enabled: true,
-        render: (rowProps) => <ProjectTable customer={rowProps.dataItem.id} />,
+        render: (rowProps) => <ProjectTable customer={rowProps.dataItem.id} currentFilter={currentFilter} />,
       }}
       filterable={true}
       sortable={true}
       getData={loadData}
       columns={columnsCustomer}
-      addedFilters = {[...yearFilter]}
+      addedFilters = {[
+        ...yearFilter, 
+        {
+          name: "person_id",
+          label: "Dipendente assegnato",
+          type: "filter-autocomplete",
+          options: {
+              getData: (term: string) => Promise.resolve(
+                CrudGenericService.searchAccount(term).then(res => {
+                  if(res) return res.map(r => ({id: r.person_id, name: `${r.firstName} ${r.lastName} (${r.email})`}));
+                  else return [];
+                })
+              ),
+              getValue: (v: any) => v?.id
+          }
+        }
+      ]}
       resizableWindow={true}
       draggableWindow={true}
       initialHeightWindow={800}

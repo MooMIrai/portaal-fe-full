@@ -1,31 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import DynamicForm from "common/Form";
 import { progettoService } from "../../services/progettoServices";
-import { salService } from "../../services/salService";
+import { CrudGenericService } from "../../services/personaleServices";
 import GridTable from "common/Table";
 import Button from "common/Button";
 import NotificationProviderActions from "common/providers/NotificationProvider";
-import { columns, SalColumns } from "./config";
-import {
-  detailSectionIcon,
-  dollarIcon,
-  infoCircleIcon,
-  bookIcon,
-  rowsIcon,
-  trashIcon
-} from "common/icons";
+import { columns } from "./config";
+import { detailSectionIcon, bookIcon, rowsIcon, trashIcon} from "common/icons";
 import { formFields } from "./customFields";
 import styles from "./styles.module.scss";
 import DatiOrdineModal from "../Modals/DatiOrdineModal/component";
-import SalModal from "../Modals/SalModal/component";
 import AttivitaModal from "../Modals/AttivitaModal/component";
 import CostiCommessaModal from "../Modals/CostiCommessaModal/component";
 import { progettoForm } from "./forms/progetto";
 
 
 
-const ProjectTable = (props: { customer: number }) => {
+const ProjectTable = (props: { customer: number, currentFilter: any }) => {
 
+  const [overrideParentFilters, setOverrideParentFilters] = useState<boolean>();
 
   const loadData = async (pagination: any, filter: any, sorting: any[]) => {
 
@@ -53,6 +46,11 @@ const ProjectTable = (props: { customer: number }) => {
     else if (!correctFilters.filters.some(filter => filter.field === "start_date")) {
       correctFilters.logic = "and";
       correctFilters.filters.push(...dateFilters);
+    }
+
+    if (props.currentFilter && props.currentFilter.filters?.length > 0 && !overrideParentFilters) {
+      const personFilter = props.currentFilter.filters.find(filter => filter.field === "person_id");
+      if (personFilter) correctFilters.filters.push(personFilter);
     }
 
     const tableResponse = await progettoService.getProjectByCustomer(
@@ -128,6 +126,23 @@ const ProjectTable = (props: { customer: number }) => {
       sorting={defaultSort}
       getData={loadData}
       columns={columns}
+      onFilterSubmit={() => setOverrideParentFilters(true)}
+      addedFilters={[
+        {
+          name: "person_id",
+          label: "Dipendente assegnato",
+          type: "filter-autocomplete",
+          options: {
+              getData: (term: string) => Promise.resolve(
+                CrudGenericService.searchAccount(term).then(res => {
+                  if(res) return res.map(r => ({id: r.person_id, name: `${r.firstName} ${r.lastName} (${r.email})`}));
+                  else return [];
+                })
+              ),
+              getValue: (v: any) => v?.id
+          }
+        }
+      ]}
       resizableWindow={true}
       initialHeightWindow={1000}
       draggableWindow={true}
