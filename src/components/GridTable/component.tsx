@@ -246,10 +246,11 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
   const [filter, setFilter] = useState<any>({ logic: "or", filters: [] });
   const [sorting, setSorting] = useState<any[]>(props.sorting || []);
   const [loading, setLoading] = useState(false);
+  const stopEffect = useRef(false);
 
  // const [actions,setActions] = useState<TABLE_ACTION_TYPE[]>([]);
 
-  const debouncedFilterColumn = useDebounce(filter, 650);
+  const debouncedFilterColumn = useDebounce(filter, 50);
   const actionMode = props.actionMode ?? "row";
 
   const expandChange = (event: GridExpandChangeEvent) => {
@@ -293,7 +294,8 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
   };
 
   useEffect(() => {
-    refreshTable();
+    if (stopEffect.current) stopEffect.current = false;
+    else refreshTable();
   }, [pagination, debouncedFilterColumn, sorting]);
 
   useEffect(() => {
@@ -693,6 +695,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
                   ...pagination,
                   currentPage: 1
                 };
+                stopEffect.current = true;
                 setPagination(newPagination);
                 setFilter(filterss);
                 props.onFilterSubmit?.();
