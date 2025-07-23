@@ -206,7 +206,7 @@ const DynamicField = ({
   );
 };
 
-const DynamicForm = React.forwardRef<any, DynamicFormProps>((props, ref) => {
+const DynamicForm = React.forwardRef<any, DynamicFormProps>((props, forwardedRef) => {
 
   const {
     fields,
@@ -224,6 +224,9 @@ const DynamicForm = React.forwardRef<any, DynamicFormProps>((props, ref) => {
     noDisableOnTouched
   } = props;
 
+  const fallbackRef = useRef(null);
+  const ref = forwardedRef || fallbackRef;
+
   const formRefContext = useContext(FormRefContext);
   const isTouched = (ref: any) => ref?.current ? Object.values(ref.current.visited).length > 0 : false;
 
@@ -231,7 +234,7 @@ const DynamicForm = React.forwardRef<any, DynamicFormProps>((props, ref) => {
     (ref as any)?.current?.resetForm();
     props.onSubmit({});
   }
-
+  
   return (
     <>
       <Form
