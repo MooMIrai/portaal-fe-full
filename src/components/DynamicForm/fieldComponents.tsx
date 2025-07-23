@@ -1,14 +1,8 @@
 import React, { useState } from "react";
 import { DropDownList } from "@progress/kendo-react-dropdowns";
 import { FieldRenderProps } from "@progress/kendo-react-form";
-import {
-  Input,
-  TextArea,
-  RadioGroup,
-  Checkbox,
-} from "@progress/kendo-react-inputs";
+import {Input, TextArea, RadioGroup, Checkbox} from "@progress/kendo-react-inputs";
 import { Calendar, CalendarProps, DatePicker } from "@progress/kendo-react-dateinputs";
-
 import withField from "../../hoc/Field";
 import { Button } from "@progress/kendo-react-buttons";
 import UploadMultipleFileComponent from "../UploadMultipleFiles/component";
@@ -32,9 +26,8 @@ const TextInputC = (
   />
 }
 
-const DateInputC = (
-  fieldRenderProps: FieldRenderProps & { disabled?: boolean; label?: string }
-) => {
+const DateInputC = (fieldRenderProps: FieldRenderProps & { disabled?: boolean; label?: string }) => {
+
   const {
     validationMessage,
     visited,
@@ -42,14 +35,35 @@ const DateInputC = (
     required,
     value,
     label,
+    monthOnly,
     ...others
   } = fieldRenderProps;
-  return <DatePicker
-    {...others}
-    value={value ? typeof value === 'string' ? new Date(value) : value : null}
-    required={required}
-    disabled={disabled}
-  />
+
+  if (!monthOnly) {
+    return <DatePicker
+      {...others}
+      value={value ? typeof value === 'string' ? new Date(value) : value : null}
+      required={required}
+      disabled={disabled}
+    />;
+  }
+
+  else {
+
+    const customCalendar = (props: CalendarProps) => <Calendar bottomView="year" topView="year" value={props.value} onChange={props.onChange} />
+
+    return <DatePicker
+      {...others}
+      format="MMMM yyyy"
+      placeholder={"Inserire data..."}
+      value={value ? typeof value === 'string' ? new Date(value) : value : null}
+      required={required}
+      disabled={disabled}
+      calendar={customCalendar}
+    />;
+
+  }
+
 };
 
 const EmailInputC = (

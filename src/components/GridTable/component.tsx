@@ -621,6 +621,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
   .join(" ");
 
   return (
+    
     <div className={styles.gridContainer}>
       
       <Grid
@@ -706,15 +707,24 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
         {props.columns.map((column: TableColumn, idx: number) => {
 
           let cell: React.ComponentType<GridCellProps> | undefined;
+
           if (column.type === TABLE_COLUMN_TYPE.date) {
             cell = (cellGrid: GridCellProps) => {
+
               let dateString = 'Nessuna data';
+
               if (cellGrid.dataItem[column.key]) {
-                const date = new Date(cellGrid.dataItem[column.key]);
-                const day = String(date.getDate()).padStart(2, "0");
-                const month = String(date.getMonth() + 1).padStart(2, "0");
-                const year = date.getFullYear();
-                dateString = `${day}/${month}/${year}`;
+
+                if (!column.renderValue) {
+                  const date = new Date(cellGrid.dataItem[column.key]);
+                  const day = String(date.getDate()).padStart(2, "0");
+                  const month = String(date.getMonth() + 1).padStart(2, "0");
+                  const year = date.getFullYear();
+                  dateString = `${day}/${month}/${year}`;
+                }
+
+                else dateString = column.renderValue(cellGrid.dataItem);
+                
               }
 
               return (
@@ -726,7 +736,9 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
               );
             };
           }
+
           if (column.type === TABLE_COLUMN_TYPE.datetime) {
+
             cell = (cellGrid: GridCellProps) => {
               const date = new Date(cellGrid.dataItem[column.key]);
               const time = date.toLocaleTimeString().substring(0, 5);
@@ -738,11 +750,10 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
                 </td>
               );
             };
-          } else if (
-            actionMode === "cell" &&
-            column.hasCellAction &&
-            column.cellActionIcon !== undefined
-          ) {
+          } 
+          
+          else if (actionMode === "cell" && column.hasCellAction && column.cellActionIcon !== undefined) {
+
             cell = (cellGrid: GridCellProps) => (
               <CellAction
                 {...cellGrid}
@@ -754,9 +765,12 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
                 
               />
             );
-          } else if (column.type === TABLE_COLUMN_TYPE.custom) {
+          } 
+          
+          else if (column.type === TABLE_COLUMN_TYPE.custom) {
             cell = (cellGrid: GridCellProps) => <>{column.render ? column.render(cellGrid.dataItem, refreshTable) : null}</>
           }
+
           return (
             <GridColumn
               key={idx}

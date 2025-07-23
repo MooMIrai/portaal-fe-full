@@ -10,6 +10,7 @@ export interface TableColumn {
   sortable: boolean;
   type?: TABLE_COLUMN_TYPE;
   render?: (row: any, refreshTable?: () => void) => JSX.Element;
+  renderValue?: (row: any) => string;
   filter?: any;
   hidden?: boolean;
   filterCell?: React.ComponentType<GridFilterCellProps>
@@ -18,6 +19,7 @@ export interface TableColumn {
   cellModalContent?: (dataItem: any) => JSX.Element;
   width?:number | string;
   headerCell?: (props: GridHeaderCellProps) => JSX.Element;
+  [x: string]: any;
 }
 
 export enum TABLE_COLUMN_TYPE {

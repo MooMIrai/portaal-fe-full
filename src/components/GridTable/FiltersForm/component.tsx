@@ -19,42 +19,52 @@ export function FiltersForm(props: {
     const [opened, setOpened] = useState<boolean>(!!props.openFilterDefault);
 
     const mapColumnToField = (columns: TableColumn[]): FieldConfig[] => {
+
         const ret:FieldConfig[] = [];
+
         columns
-            .filter(col => col.filter !== undefined && col.type !== TABLE_COLUMN_TYPE.custom)
-            .forEach(col => {
-                const filterType =mapColumnTypeToFieldType(col.type);
-                if(filterType=='date'){
-                    ret.push({
-                        name: col.key+'&start',
-                        label: col.label + ' Da',
-                        type: filterType,
-                        value: "",
-                        required: false,
-                        showLabel: col.type != TABLE_COLUMN_TYPE.boolean,
-                    });
-                    ret.push({
-                        name: col.key+'&end',
-                        label: col.label + ' A',
-                        type: filterType,
-                        value: "",
-                        required: false,
-                        showLabel: col.type != TABLE_COLUMN_TYPE.boolean,
-                    })
-                }else{
-                    ret.push({
-                        name: col.key,
-                        label: col.label,
-                        type: filterType,
-                        value: "",
-                        required: false,
-                        showLabel: col.type != TABLE_COLUMN_TYPE.boolean,
-                    })
-                }
-                
+        .filter(col => col.filter !== undefined && col.type !== TABLE_COLUMN_TYPE.custom)
+        .forEach(col => {
+
+            const filterType = mapColumnTypeToFieldType(col.type);
+
+            if(filterType == 'date') {
+
+                ret.push({
+                    name: col.key+'&start',
+                    label: col.label + ' Da',
+                    type: filterType,
+                    value: "",
+                    required: false,
+                    monthOnly: col.monthOnly,
+                    showLabel: col.type != TABLE_COLUMN_TYPE.boolean,
+                });
+
+                ret.push({
+                    name: col.key+'&end',
+                    label: col.label + ' A',
+                    type: filterType,
+                    value: "",
+                    required: false,
+                    monthOnly: col.monthOnly,
+                    showLabel: col.type != TABLE_COLUMN_TYPE.boolean,
+                });
+
+            }
+            
+            else{
+                ret.push({
+                    name: col.key,
+                    label: col.label,
+                    type: filterType,
+                    value: "",
+                    required: false,
+                    showLabel: col.type != TABLE_COLUMN_TYPE.boolean,
+                });
+            }      
         });
 
-            return ret;
+        return ret;
     };
 
     const mapColumnTypeToFieldType = (columnType?: TABLE_COLUMN_TYPE): FieldType => {
@@ -163,17 +173,20 @@ export function FiltersForm(props: {
         return "eq";
     };
 
-    const getCustomFilter = (f: any) => ({...f, type: f.type + "_" + f.name});
+    const getCustomFilter = (f: any) => {
+        if (!f.type.includes('filter-autocomplete')) return f;
+        else return {...f, type: f.type + "_" + f.name};
+    };
 
-    let fields:any[] = mapColumnToField(props.columns);
+    let fields: any[] = mapColumnToField(props.columns);
 
     if (props.addedFilters) {
-        
+
         const withIndex = props.addedFilters.filter(filter => filter.indexPosition);
-        const others = props.addedFilters.filter(filter => !filter.indexPosition);
+        const noIndex = props.addedFilters.filter(filter => !filter.indexPosition);
         withIndex.forEach(filter => fields.splice(filter.indexPosition!, 0, getCustomFilter(filter)));
 
-        fields = [...fields, ...others.map(getCustomFilter)];
+        fields = [...fields, ...noIndex.map(getCustomFilter)];
     }
 
     const addedField = useMemo(() => {

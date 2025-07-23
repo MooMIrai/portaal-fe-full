@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useRef} from "react";
 import { Button } from "@progress/kendo-react-buttons";
 import {
   Form,
@@ -117,7 +117,8 @@ export interface FieldConfig {
   existingLink?: string;
   onFileDrop?: ((files: File[]) => void)
   isDroppable?:boolean,
-  noContainer?:boolean
+  noContainer?:boolean;
+  [x: string]: any;
   //onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -151,20 +152,18 @@ const DynamicField = ({
 
 }) => {
 
-
-
-  const { name, type, label, validator, options, disabled, required, showLabel = true, onDownload, multiple, existingFile, onFileUpload, onClick, loader, existingLink, onFileDrop,isDroppable, onChange: fieldOnChange } = field;
+  const { name, type, label, validator, options, disabled, required, showLabel = true, onDownload, multiple, existingFile, onFileUpload, onClick, loader, existingLink, onFileDrop,isDroppable, onChange: fieldOnChange, monthOnly } = field;
   let Component: any = getFieldComponent(type);
 
   if (addedFields && Object.keys(addedFields).some(s => s === type)) {
     Component = addedFields[type];
   }
  
-  
   return (
     <Field
       name={name}
       component={Component}
+      monthOnly={monthOnly}
       label={label + (required ? '*' : '')}
       showLabel={showLabel}
       validator={validator}
@@ -207,7 +206,7 @@ const DynamicField = ({
   );
 };
 
-const DynamicForm = React.forwardRef<any, DynamicFormProps>((props, ref) => {
+const DynamicForm = (props: DynamicFormProps) => {
 
   const {
     fields,
@@ -227,20 +226,19 @@ const DynamicForm = React.forwardRef<any, DynamicFormProps>((props, ref) => {
 
   const formRefContext = useContext(FormRefContext);
   const isTouched = (ref: any) => ref?.current ? Object.values(ref.current.visited).length > 0 : false;
-  const [resetForm, setResetForm] = useState<"On" | "Off">("On");
+  const formRef = useRef<HTMLFormElement>(null);
 
   const clearFilters = () => {
-    setResetForm(state => state === "On" ? "Off": "On");
+    formRef.current?.resetForm();
     props.onSubmit({});
   }
 
   return (
     <>
       <Form
-      key={resetForm}
       initialValues={formData}
       onSubmit={(dataItem) => onSubmit(dataItem)}
-      ref={ref}
+      ref={formRef}
       ignoreModified={noDisableOnTouched}
       render={(formRenderProps: FormRenderProps) => (
         <FormElement>
@@ -249,8 +247,7 @@ const DynamicForm = React.forwardRef<any, DynamicFormProps>((props, ref) => {
               <legend className={"k-form-legend"}>{description}</legend>
               {fields.filter((field) => {
                 if (noDisableOnTouched) formRefContext?.setDisabled(true);
-                else if (formRefContext?.setDisabled) formRefContext.setDisabled(isTouched(ref));
-                const formRef: any = ref;
+                else if (formRefContext?.setDisabled) formRefContext.setDisabled(isTouched(formRef));
                 return !field.conditions || (formRef && formRef.current && field.conditions(formRef.current.values))
               }).map((field, index) => {
                 if(field.noContainer){
@@ -278,8 +275,8 @@ const DynamicForm = React.forwardRef<any, DynamicFormProps>((props, ref) => {
           )}
           {children}
           <div className={"k-form-buttons " + (styles.buttonsContainer ?? '')}>
-            {extraButton && <Button onClick={extraBtnAction}>Cancel</Button>}
-            {showCancel && <Button onClick={clearFilters} themeColor={"secondary"}>Cancella</Button>}
+            {extraButton && <Button type="button" onClick={extraBtnAction}>Cancel</Button>}
+            {showCancel && <Button type="button" onClick={clearFilters} themeColor={"secondary"}>Cancella</Button>}
             {showSubmit && (
               <Button
                 themeColor={"primary"}
@@ -299,7 +296,7 @@ const DynamicForm = React.forwardRef<any, DynamicFormProps>((props, ref) => {
       />
     </>
   );
-})
+}
 
 
 

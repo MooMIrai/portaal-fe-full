@@ -11,6 +11,10 @@
   vertical-align: middle !important;
 }
 
+.no-justify-th thead th :global(.k-link) {
+  justify-content: flex-start !important;
+}
+
 .grid {
   height: 100%;
   padding: 0.5rem;
