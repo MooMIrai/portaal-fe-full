@@ -57,6 +57,7 @@ export const SalDraft = React.memo(() => {
 
   return (
     <GridTable
+      className={"no-justify-th"}
       writePermissions={["WRITE_SALES_SAL"]}
       expand={{
         enabled: true,

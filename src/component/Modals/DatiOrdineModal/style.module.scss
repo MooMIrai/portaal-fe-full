@@ -1,3 +1,7 @@
-.form > form > fieldset > div{
+.form > form > fieldset > div:not(:global(.waitingForOrder-input)) {
     margin-top: 0 !important;
+}
+
+:global(.waitingForOrder-input) {
+    margin-top: 25px !important;
 }

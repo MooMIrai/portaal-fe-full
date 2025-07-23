@@ -53,6 +53,7 @@ export function SalReadyToBill(){
 
     return <GridTable
               writePermissions={["WRITE_SALES_SAL"]}
+              className={"no-justify-th"}
               addedFilters={[
                       {
                         name: "month",

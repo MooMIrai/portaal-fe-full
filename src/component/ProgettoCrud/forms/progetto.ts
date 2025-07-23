@@ -26,7 +26,7 @@ export const progettoForm = {
     "ProjectState": {
       "name": "ProjectState",
       "type": "select",
-      "label": "Stato",
+      "label": "Stato Progetto",
       "value": "",
       "required": true,
       "options": [

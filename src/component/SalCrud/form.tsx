@@ -80,7 +80,7 @@ export const getFormFields=(values,onChange,type,project,otherSal?)=>{
     },
     {
         name: "baf_number",
-        label: "Numero BAF",
+        label: "Numero Autorizzazione Cliente",
         type: "text",
         value: values.baf_number,
         disabled:type === "view",

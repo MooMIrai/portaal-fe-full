@@ -30,7 +30,7 @@ const DatiOrdineModal = (props: DatiOrdineModalProps) => {
 
   return (
     <div className={styles.form}>
-      <h3>Dettagli per {props.dataItem.offer_name}</h3>
+      <h3 style={{marginBottom: "20px"}}>Dettagli per {props.dataItem.offer_name}</h3>
       {data ? <DynamicForm
         style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr 1fr', gap : 20}}
         submitText={"Salva"}

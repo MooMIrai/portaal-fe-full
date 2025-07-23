@@ -9,9 +9,12 @@ export const columnsCustomer = [
   {
     key: "name",
     label: "Cliente",
-    type: "string",
+    type: "custom",
     sortable: true,
     filter: "text",
+    render: (dataItem) => {
+      return <td>{dataItem.name}</td>
+    }
   },
   {
     key: "amount_total",

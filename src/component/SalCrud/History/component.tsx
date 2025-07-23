@@ -52,6 +52,7 @@ export const SalHistoryCustomer = React.memo(() => {
         enabled: true,
         render: renderExpand,
       }}
+      className={"no-justify-th"}
       ref={tableRef}
       filterable={true}
       pageable={true}

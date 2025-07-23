@@ -9,6 +9,12 @@ function formatNumber(num) {
   return new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR" }).format(num);
 }
 
+function getMonthDate (dateString: string) {
+  const date = new Date(dateString);
+  const monthString = date.toLocaleDateString("it-IT", {timeZone: "Europe/Rome", month: "long", year: "numeric"});
+  return monthString.charAt(0).toUpperCase() + monthString.slice(1);
+}
+
 const columns = [
   { key: "Offer.name", label: "Offerta", type: "string",sortable: true, filter: "text"  },
   { key: "Offer.ProjectType.description", label: "Tipo progetto", type: "string", sortable: true, filter: "text"  },
@@ -22,7 +28,7 @@ const columns = [
   { key: "totalBill", label: "Totale Sal Fatturato", type: "custom", render:(dataItem)=>{
     return <td>{formatNumber(dataItem.totalBill)}</td>
   }, sortable: true},
-  { key: "lastSal", label: "Data Ultimo Sal", type: "date", sortable: true, filter: "date" },
+  { key: "lastSal", label: "Data Ultimo Sal", type: "date", sortable: true, filter: "date", monthOnly: true, renderValue: (row: any) => getMonthDate(row.lastSal)},
   { key: "start_date", label: "Data Inizio Progetto", type: "date", sortable: true, filter: "date" },
   { key: "end_date", label: "Data Fine Progetto", type: "date", sortable: true, filter: "date" }
 ];
