@@ -158,7 +158,7 @@ const DynamicField = ({
   if (addedFields && Object.keys(addedFields).some(s => s === type)) {
     Component = addedFields[type];
   }
- 
+
   return (
     <Field
       name={name}
@@ -206,7 +206,7 @@ const DynamicField = ({
   );
 };
 
-const DynamicForm = (props: DynamicFormProps) => {
+const DynamicForm = React.forwardRef<any, DynamicFormProps>((props, ref) => {
 
   const {
     fields,
@@ -226,10 +226,9 @@ const DynamicForm = (props: DynamicFormProps) => {
 
   const formRefContext = useContext(FormRefContext);
   const isTouched = (ref: any) => ref?.current ? Object.values(ref.current.visited).length > 0 : false;
-  const formRef = useRef<HTMLFormElement>(null);
 
   const clearFilters = () => {
-    formRef.current?.resetForm();
+    (ref as any)?.current?.resetForm();
     props.onSubmit({});
   }
 
@@ -238,7 +237,7 @@ const DynamicForm = (props: DynamicFormProps) => {
       <Form
       initialValues={formData}
       onSubmit={(dataItem) => onSubmit(dataItem)}
-      ref={formRef}
+      ref={ref}
       ignoreModified={noDisableOnTouched}
       render={(formRenderProps: FormRenderProps) => (
         <FormElement>
@@ -247,7 +246,8 @@ const DynamicForm = (props: DynamicFormProps) => {
               <legend className={"k-form-legend"}>{description}</legend>
               {fields.filter((field) => {
                 if (noDisableOnTouched) formRefContext?.setDisabled(true);
-                else if (formRefContext?.setDisabled) formRefContext.setDisabled(isTouched(formRef));
+                else if (formRefContext?.setDisabled) formRefContext.setDisabled(isTouched(ref));
+                const formRef: any = ref;
                 return !field.conditions || (formRef && formRef.current && field.conditions(formRef.current.values))
               }).map((field, index) => {
                 if(field.noContainer){
@@ -296,7 +296,7 @@ const DynamicForm = (props: DynamicFormProps) => {
       />
     </>
   );
-}
+});
 
 
 
