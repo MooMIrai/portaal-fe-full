@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import GridTable from "common/Table";
+
 import PersonaleSection from "./../../component/TabPersonaleHR/component";
 import { accountsService, CrudGenericService } from "../../services/personaleServices";
 import {
@@ -128,6 +129,7 @@ const columns: any = [
 ];
 
 const PersonalPage = () => {
+
   const [data, setData] = useState<any>();
   const [sede, setSede] = useState<locationOption[]>([]);
   const [isLocationDataReady, setIsLocationDataReady] = useState(false); // Nuovo stato per i dati geografici
@@ -135,8 +137,12 @@ const PersonalPage = () => {
   const [companies, setCompanies] = useState<companyOption[]>([]);
   const [genders, setGenders] = useState<genderOption[]>([]);
   const [activity, setActivity] = useState<ActivityTypeOption[]>([]);
-   const [skills, setSkills] = useState<MappedSkill[] | undefined>()
+  const [skills, setSkills] = useState<MappedSkill[] | undefined>();
+  const [viewCanceled, setViewCanceled] = useState<boolean>(false);
+  const viewCanceledRef = useRef<boolean>(false);
+
   useEffect(() => {
+
     const fetchCountryData = async () => {
 
       try {
@@ -146,16 +152,22 @@ const PersonalPage = () => {
 
         // Imposta lo stato a true dopo aver caricato tutti i dati geografici
         setIsLocationDataReady(true);
-      } catch (error) {
+      } 
+      
+      catch (error) {
         console.error("Error fetching country data:", error);
       }
+
     };
 
     fetchCountryData();
+
   }, []);
 
   useEffect(() => {
+
     const fetchData = async () => {
+
       try {
         const [rolesResponse, companiesResponse, gendersResponse, activityResponse,skillResponse] = await Promise.all([
           CrudGenericService.fetchResources("role"),
@@ -164,6 +176,7 @@ const PersonalPage = () => {
           CrudGenericService.fetchResources("ActivityType"),
           CrudGenericService.getSkillArea(true)
         ]);
+        
         const adaptedRoles = roleAdapter(rolesResponse);
         const adaptedCompany = companyAdapter(companiesResponse);
         const adaptedGender = genderAdapter(gendersResponse);
@@ -176,14 +189,22 @@ const PersonalPage = () => {
         setRoles(adaptedRoles);
         setCompanies(adaptedCompany);
         setGenders(adaptedGender);
-      } catch (error) {
+      } 
+      
+      
+      catch (error) {
         console.error("Error fetching data:", error);
       }
+
     };
 
     fetchData();
+
   }, []);
+
+
   const loadData = async (pagination: any, filter: any, sorting: any[]) => {
+
     if (!isLocationDataReady) {
       return {
         data: [],
@@ -193,23 +214,18 @@ const PersonalPage = () => {
 
     const include = true;
     const mappedFilter = mapFilterFields(filter);
-    const mappedSorting = sorting.map((s) => ({
-      ...s,
-      field: columnFieldMap[s.field] || s.field,
-    }));
+    const mappedSorting = sorting.map((s) => ({...s, field: columnFieldMap[s.field] || s.field}));
 
     const resources = await CrudGenericService.getAccounts(
       pagination.currentPage,
       pagination.pageSize,
       mappedFilter,
       mappedSorting,
-      include
+      include,
+      viewCanceledRef.current
     );
 
-    const transformedData = transformUserData(
-      resources.data,
-      sede
-    );
+    const transformedData = transformUserData(resources.data, sede);
     setData(transformedData);
 
     return {
@@ -218,17 +234,17 @@ const PersonalPage = () => {
         total: resources.meta.total,
       },
     };
+
   };
+
   const handleFormSubmit = (type: string, formData: any, refreshTable: any, id: any, closeModal: () => void) => {
+
     let promise: Promise<any> | undefined = undefined;
 
-    if (type === "create") {
-      promise = CrudGenericService.createResource(formData);
-    } else if (type === "edit") {
-      promise = CrudGenericService.updateResource(id, formData);
-    } else if (type === "delete") {
-      promise = CrudGenericService.deleteResource(id);
-    } 
+    if (type === "create") promise = CrudGenericService.createResource(formData);
+    else if (type === "edit") promise = CrudGenericService.updateResource(id, formData);
+    else if (type === "delete") promise = CrudGenericService.deleteResource(id);
+    else if (type === "restore") promise = CrudGenericService.updateResource(id, {isDeleted: false});
 
     if (promise) {
       promise.then(() => {
@@ -239,37 +255,31 @@ const PersonalPage = () => {
     }
 
   }
-/*   const handleFormSubmit = (type, formData, refreshTable, id,closeModal: () => void) => {
-    try {
-      if (type === "create") {
-        promise = CrudGenericService.createResource(formData);
-      } else if (type === "edit") {
-        await CrudGenericService.updateResource(id, formData);
-      } else if (type === "delete") {
-        await CrudGenericService.deleteResource(id);
-      }
 
-     if (promise) {
-         promise.then(() => {
-           NotificationProviderActions.openModal({ icon: true, style: 'success' }, "Operazione avvenuta con successo");
-           refreshTable();
-           closeModal();
-         })
-       }
-    } catch (error) {
-      console.error("Error during form submission:", error);
-    }
-  }; */
+  const viewCanceledInput = (
+    <div className={styles.canceledUsersInput}>
+      <label htmlFor="view-canceled-input">Utenti cancellati</label>
+      <input
+      style={{height: "20px"}}
+      id="view-canceled-input"
+      type="checkbox" 
+      checked={viewCanceled} 
+      onChange={() => {
+        viewCanceledRef.current = !viewCanceledRef.current;
+        setViewCanceled(curr => !curr);
+      }}
+      />
+    </div>
+  );
 
   // Se i dati non sono pronti, non renderizzare nulla
-  if (!isLocationDataReady) {
-    return null;
-  }
+  if (!isLocationDataReady) return null;
 
   return (
     <div>
       <GridTable
         writePermissions={["WRITE_HR_EMPLOYEE"]}
+        extraButtonsRight={[{component: viewCanceledInput, refreshTable: true}]}
         addedFilters={[
           {
             name: "Person.firstName",
@@ -296,8 +306,7 @@ const PersonalPage = () => {
                           .map(c=>({id:c.value,name:c.label}))
               }),
               getValue:(v:any)=>v?.id
-          },
-                  
+            },
           }
         ]}
         filterable={true}
@@ -308,10 +317,16 @@ const PersonalPage = () => {
         resizable={true}
         pageable={true}
         stageWindow={"FULLSCREEN"}
-        actions={() => ["show", "edit", "delete", "create"]}
+        actions={(row) => {
+          const actions = ["show", "edit", "delete", "create"];
+          if (row?.isDeleted) actions.push("restore");
+          return actions;
+        }}
         classNameWindow={styles.windowStyle}
         classNameWindowDelete={styles.windowDelete}
-        formCrud={(row, type, closeModalCallback, refreshTable) => (
+        formCrud={(row, type, closeModalCallback, refreshTable) => {
+
+          return (
           
               <PersonaleSection
                 row={row}
@@ -325,7 +340,7 @@ const PersonalPage = () => {
                 refreshTable={refreshTable}
                 onSubmit={handleFormSubmit}
               />
-        )}
+        )}}
       />
     </div>
   );

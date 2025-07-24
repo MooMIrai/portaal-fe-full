@@ -1,9 +1,4 @@
-import {
-  AnagraficaData,
-  TrattamentoEconomicoData,
-  RuoliData,
-  PermessiData,
-} from "../component/TabPersonaleHR/modelForms";
+import { AnagraficaData, TrattamentoEconomicoData, RuoliData, PermessiData} from "../component/TabPersonaleHR/modelForms";
 
 export const convertToFileObjectBlob = (fileObject: any) => {
   if (fileObject && fileObject.data && fileObject.file_name) {
@@ -229,23 +224,17 @@ const findMostRecentContract = (
 
 //per la tabella sia per le cllonne che per gestire tutto
 export const transformUserData = (data: any[], sede: locationOption[]) => {
+
   return data.map((user) => {
+
     const currentContract = user?.Person?.CurrentContract?.Contract || null;
     const employmentContracts = user?.Person?.EmploymentContract || [];
-    const mostRecentContract = findMostRecentContract(
-      employmentContracts,
-      currentContract
-    );
+    const mostRecentContract = findMostRecentContract(employmentContracts, currentContract);
 
-    const otherContracts = employmentContracts.filter(
-      (contract) => contract.id !== mostRecentContract?.id
-    );
+    const otherContracts = employmentContracts.filter((contract) => contract.id !== mostRecentContract?.id);
+    const sedeLabel = sede?.find((sede) => sede.value === user?.Person?.location_id)?.label || " ";
 
-    const sedeLabel =
-      sede?.find((sede) => sede.value === user?.Person?.location_id)?.label ||
-      " ";
-
-    return {
+    const adaptedUser = {
       id: user.id,
       person_id: user.person_id,
       company: currentContract?.Company?.name ?? "",
@@ -269,6 +258,11 @@ export const transformUserData = (data: any[], sede: locationOption[]) => {
       permessi: mapToPermessiData(user.Person?.ActivityType || []),
       permessiId: getPermessiIds(user.Person?.ActivityType || []),
     };
+
+    if (Object.keys(user).includes("isDeleted")) adaptedUser["isDeleted"] = user.isDeleted;
+
+    return adaptedUser;
+
   });
 };
 

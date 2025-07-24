@@ -289,8 +289,11 @@ const PersonaleSection: React.FC<PersonaleSectionProps & {
   };
 
   const handleSubmit = () => {
+
     let hasError = false;
+
     if (type === "create" || type === "edit") {
+
       if (newForm) {
         setAlert(true);
         setNewForm(false)
@@ -300,38 +303,26 @@ const PersonaleSection: React.FC<PersonaleSectionProps & {
 
       if (formAnagrafica.current) {
         formAnagrafica.current.onSubmit();
-        if (formAnagrafica.current.isValid()) {
-          setFormAnagraficaData(formAnagrafica.current.values);
-        } else {
-          hasError = true;
-        }
+        if (formAnagrafica.current.isValid()) setFormAnagraficaData(formAnagrafica.current.values);
+        else hasError = true;
       }
 
       if (formTrattamentoEconomico.current) {
         formTrattamentoEconomico.current.onSubmit();
-        if (formTrattamentoEconomico.current.isValid()) {
-          setFormTrattamentoEconomicoData(formTrattamentoEconomico.current.values);
-        } else {
-          hasError = true;
-        }
+        if (formTrattamentoEconomico.current.isValid()) setFormTrattamentoEconomicoData(formTrattamentoEconomico.current.values);
+        else hasError = true;
       }
 
       if (formRuoli.current) {
         formRuoli.current.onSubmit();
-        if (formRuoli.current.isValid()) {
-          setFormRuoliData(formRuoli.current.values);
-        } else {
-          hasError = true;
-        }
+        if (formRuoli.current.isValid()) setFormRuoliData(formRuoli.current.values);
+        else hasError = true;
       }
 
       if (formPermessi.current) {
         formPermessi.current.onSubmit();
-        if (!formPermessi.current.isValid()) {
-          hasError = true;
-        } else {
-          setFormPermessiData(formPermessi.current.values);
-        }
+        if (!formPermessi.current.isValid()) hasError = true;
+        else setFormPermessiData(formPermessi.current.values);
       }
     }
 
@@ -341,11 +332,11 @@ const PersonaleSection: React.FC<PersonaleSectionProps & {
         "Alcuni campi non sono validi. Controlla i campi obbligatori e riprova."
       );
     }
+
     setNewForm(false);
+
     const modifiedData = Object.keys(modifiedFields).reduce((result, key) => {
-      if (modifiedFields[key] !== undefined) {
-        result[key] = modifiedFields[key];
-      }
+      if (modifiedFields[key] !== undefined) result[key] = modifiedFields[key];
       return result;
     }, {});
 
@@ -367,6 +358,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps & {
 
 
     if (!hasError) {
+
       if (isCreate) {
         console.log("combineddatabeforeadapt", combinedData)
         const formattedData = reverseAdapter(combinedData);
@@ -375,14 +367,17 @@ const PersonaleSection: React.FC<PersonaleSectionProps & {
         onSubmit(type, formattedData, refreshTable, idrow,closeModalCallback);
         setNewFormTrattamentoUpdate(false)
 
-      } else {
+      } 
+      
+      else {
         const formattedData = reverseAdapterUpdate(combinedData);
         const idrow = row.id;
         onSubmit(type, formattedData, refreshTable, idrow,closeModalCallback);
         setNewFormTrattamentoUpdate(false)
 
       }
-      if (type === 'delete') {
+
+      if (type === 'delete' || type === "restore") {
         onSubmit(type, {}, refreshTable, row.id, closeModalCallback);
       }
       
@@ -655,10 +650,23 @@ const dataInizioTrattamentoValidator = useMemo(() => {
         <span>{"Sei sicuro di voler eliminare il record?"}</span>
 
         <div >
-          <Button onClick={() => closeModalCallback()}>Cancel</Button>
-          <Button themeColor={"error"} onClick={handleSubmit}>
-            Elimina
-          </Button>
+          <Button onClick={() => closeModalCallback()}>Annulla</Button>
+          <Button themeColor={"error"} onClick={handleSubmit}>Elimina</Button>
+        </div>
+      </div>
+
+    )
+  }
+
+  if (type === "restore") {
+    return (
+
+      <div className={styles.formDelete}>
+        <span>{"Sei sicuro di voler ripristinare il record?"}</span>
+
+        <div>
+          <Button onClick={() => closeModalCallback()}>Annulla</Button>
+          <Button themeColor={"tertiary"} onClick={handleSubmit}>Ripristina</Button>
         </div>
       </div>
 

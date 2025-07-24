@@ -7,13 +7,15 @@ class CrudGenericServiceC {
     pageSize: number,
     filtering: any,
     sorting: any,
-    include?: boolean
+    include?: boolean,
+    canceled?: boolean
   ) => {
     try {
       const params = {
         pageNum,
         pageSize,
         include,
+        canceled
       };
 
       const response = await client.post(
