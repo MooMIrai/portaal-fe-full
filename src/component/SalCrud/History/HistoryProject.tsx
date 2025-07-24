@@ -65,6 +65,7 @@ export const SalHistoryProject = React.memo((props: PropsWithChildren<{ customer
       enabled: true,
       render: renderExpand,
     }}
+    className={"text-align-center"}
     filterable={true}
     pageable={true}
     sortable={true}
@@ -77,6 +78,13 @@ export const SalHistoryProject = React.memo((props: PropsWithChildren<{ customer
     resizable={true}
     actions={() => [
      // 'show'
+    ]}
+    addedFilters={[
+      {
+        name: "baf_number",
+        label: "Num. autorizz. cliente",
+        type: "string"
+      }
     ]}
 
   />

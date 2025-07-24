@@ -1,5 +1,6 @@
 import BaseHttpService from "common/services/BaseHTTPService"
 import client from "common/services/BEService";
+import { remove } from "lodash";
 
 class SalService extends BaseHttpService {
 
@@ -313,17 +314,18 @@ class SalService extends BaseHttpService {
       include?: boolean
     ) => {
       
-        const params = {
-          pageNum,
-          pageSize,
-          include,
-        };
+        const params = {pageNum, pageSize, include};
+
+        const mainFilters = ["baf_number"];
+        const filters = remove(filtering.filters, record => mainFilters.includes(record.field));
+        const mainFiltering = Object.fromEntries(filters.map(filter => [filter.field, filter.value]));
 
         const response = await client.post(
           `/api/v1/bills/getBillByProject/${customer_id}`,
-          { filtering: {other_filters: filtering}, sorting },
+          { filtering: {other_filters: filtering, ...mainFiltering}, sorting },
           { params }
         );
+
         return response.data;
       
     };

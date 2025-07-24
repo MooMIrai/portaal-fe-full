@@ -132,7 +132,7 @@ export const SalDraft = React.memo(() => {
         },
         {
           name: "person_id",
-          label: "Dipendente(digita un carattere per la ricerca)",
+          label: "Dipendente",
           type: "filter-autocomplete",
           options:{
             getData:(term:string)=> CrudGenericService.searchAccount(term).then(res=> res?res.map(r=>({id:r.person_id,name:r.firstName+ ' '+r.lastName})):[]),

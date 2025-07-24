@@ -51,6 +51,12 @@ class CS extends BaseHttpService {
       throw error;
     }
   };
+
+  searchCustomer = async (text: string) => {
+    const body = {filtering: {logic: "and", filters: [{field: "name", operator: "contains", value: text}]}};
+    const response = await client.post('api/v1/customers', body);
+    return response.data.data;
+  }
   
 
 }

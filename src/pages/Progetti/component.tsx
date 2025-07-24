@@ -87,6 +87,21 @@ export default function ProgettiPage() {
               ),
               getValue: (v: any) => v?.id
           }
+        },
+        {
+          name: "id",
+          label: "Cliente",
+          indexPosition: 1,
+          type: "filter-autocomplete",
+          options: {
+            getData: (term: string) => Promise.resolve(
+              customerService.searchCustomer(term).then(res => {
+                if (res) return res.map(r => ({id: r.id, name: r.name}));
+                else return [];
+              })
+            ),
+            getValue: (v: any) => v?.id
+          }
         }
       ]}
       resizableWindow={true}

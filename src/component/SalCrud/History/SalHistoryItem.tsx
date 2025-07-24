@@ -11,7 +11,7 @@ function formatNumber(num) {
 }
 
 const columns = [
-  { key: "SalState", label: "Stato", type: "custom", render:(rowData)=><td>Sal Fatturato</td> },
+  { key: "baf_number", label: "Numero autorizzazione", type: "text", filter: "text", sortable: true },
   { key: "Sal.actualDays", label: "Giorni Lavorati", type: "number" },
   { key: "amount", label: "Importo",  type: "custom", render:(dataItem)=>{
     return <td>{formatNumber(dataItem.amount)}</td>
@@ -57,6 +57,7 @@ export const SalHistoryItem = React.memo((props: PropsWithChildren<{ project: an
     <GridTable
         filterable={true}
         sortable={true}
+        className={"text-align-center"}
         getData={loadData}
         columns={columns}
         resizableWindow={true}
