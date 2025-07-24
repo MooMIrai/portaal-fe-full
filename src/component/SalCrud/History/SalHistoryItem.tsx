@@ -11,13 +11,13 @@ function formatNumber(num) {
 }
 
 const columns = [
-  { key: "baf_number", label: "Numero autorizzazione", type: "text", filter: "text", sortable: true },
   { key: "Sal.actualDays", label: "Giorni Lavorati", type: "number" },
   { key: "amount", label: "Importo",  type: "custom", render:(dataItem)=>{
     return <td>{formatNumber(dataItem.amount)}</td>
   } },
   { key:"billing_date", label:"Data fatturazione",type:'date',sortable:true,filter:'date'},
   { key: "billing_number", label: "Numero fattura", type: "text", sortable: true, filter: "text" },
+  { key: "baf_number", label: "Numero autorizzazione", type: "text", filter: "text", sortable: true },
   { key: "month", label: "Mese", type: "custom", sortable: true, filter: "number", render:(row)=>{
     const date = new Date(new Date().getFullYear(), row.Sal.month - 1, 1);  
     let monthStr = date.toLocaleString('it-IT', { month: 'long' }).toString();
