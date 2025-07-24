@@ -72,6 +72,7 @@ export enum FORM_TYPE {
   "delete",
   "create",
   "custom",
+  "restore"
 }
 
 export type Fields = Record<string, FieldConfig>;

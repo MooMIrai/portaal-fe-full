@@ -7,11 +7,15 @@
   text-align: center !important;
 }
 
+.text-align-center label {
+  text-align: initial !important;
+}
+
 .center-align-th thead th {
   vertical-align: middle !important;
 }
 
-.no-justify-th thead th :global(.k-link) {
+.no-justify-th > div > :global(.k-grid-header) thead th :global(.k-link) {
   justify-content: flex-start !important;
 }
 
@@ -23,7 +27,7 @@
 .commandButtons {
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: 5px;
 }
 
 .columnGrid {

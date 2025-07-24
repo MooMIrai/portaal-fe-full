@@ -1,13 +1,4 @@
-import React, {
-  Dispatch,
-  forwardRef,
-  SetStateAction,
-  useEffect,
-  useState,
-  useRef,
-  useImperativeHandle,
-  useCallback,
-} from "react";
+import React, { Dispatch, forwardRef, SetStateAction, useEffect, useState, useRef, useImperativeHandle, useCallback} from "react";
 import {
   Grid,
   GridColumn,
@@ -32,18 +23,8 @@ import {
   //@ts-ignore
 } from "@progress/kendo-data-query";
 import styles from "./styles.module.scss";
-import {
-  plusIcon,
-  pencilIcon,
-  trashIcon,
-  eyeIcon,
-  fileExcelIcon,
-} from "@progress/kendo-svg-icons";
-import {
-  TableColumn,
-  TABLE_ACTION_TYPE,
-  TABLE_COLUMN_TYPE,
-} from "../../models/tableModel";
+import { plusIcon, pencilIcon, trashIcon, undoIcon, eyeIcon, fileExcelIcon} from "@progress/kendo-svg-icons";
+import { TableColumn, TABLE_ACTION_TYPE, TABLE_COLUMN_TYPE} from "../../models/tableModel";
 import CustomWindow from "../Window/component";
 import { useDebounce } from "@uidotdev/usehooks";
 import { WindowActionsEvent } from "@progress/kendo-react-dialogs";
@@ -167,6 +148,9 @@ interface TablePaginatedProps extends GridProps {
 
   //extra buttons/components to be added alongside the excel report
   extraButtons?: Array<JSX.Element>;
+
+  //extra buttons/components to be added to the right alongside the filter icon
+  extraButtonsRight?: Array<{component: JSX.Element, refreshTable?: boolean}>;
 }
 
 const MyPager = (props: PagerProps) => (
@@ -342,16 +326,9 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
   ,[getActions]);
 
 
-  const openModal = (
-    type: TABLE_ACTION_TYPE,
-    currentData?: Record<string, any>
-  ) => {
+  const openModal = (type: TABLE_ACTION_TYPE, currentData?: Record<string, any>) => {
     setRow(currentData || {});
-    setModal({
-      open: true,
-      data: currentData,
-      type: type,
-    });
+    setModal({open: true, data: currentData, type: type});
   };
 
   const handleCloseModal = () => {
@@ -421,6 +398,10 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
       title: "Modifica",
       callToAction: "Salva modifica",
     },
+    [TABLE_ACTION_TYPE.restore]: {
+      title: "Ripristina",
+      callToAction: "Conferma"
+    },
     [TABLE_ACTION_TYPE.custom]: {
       title: "Personalizzato",
       callToAction: "Conferma",
@@ -443,10 +424,11 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
   const handleFilterColumnChange = (e: any) => {
     setFilter(e.filter);
   };
-  const windowClassName =
-    modal.open && modal.type === TABLE_ACTION_TYPE.delete
-      ? props.classNameWindowDelete
-      : props.classNameWindow;
+
+  const windowClassName = modal.open && modal.type === 
+  TABLE_ACTION_TYPE.delete ? props.classNameWindowDelete : 
+  TABLE_ACTION_TYPE.restore ? props.classNameWindowDelete :
+  props.classNameWindow;
 
 
   const rowRender = (trElement: any, propsR: GridRowProps) => {
@@ -621,7 +603,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
   .join(" ");
 
   return (
-    
+
     <div className={styles.gridContainer}>
       
       <Grid
@@ -691,7 +673,8 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
 
             {props.columns && props.filterable && (
               <FiltersForm columns={props.columns} openFilterDefault={props.openFilterDefault} formStyle={props.filterFormStyle}
-              filterInitialValues={props.filterInitialValues} onSubmit={(filterss)=>{
+              filterInitialValues={props.filterInitialValues} extraButtonsRight={props.extraButtonsRight} refreshTable={refreshTable}
+              onSubmit={(filterss)=>{
                 const newPagination = {
                   ...pagination,
                   currentPage: 1
@@ -700,7 +683,9 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
                 setPagination(newPagination);
                 setFilter(filterss);
                 props.onFilterSubmit?.();
-              }} addedFilters={props.addedFilters}/>
+              }} 
+              addedFilters={props.addedFilters}
+              />
             )}
         </GridToolbar> : null}
 
@@ -839,6 +824,14 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
                         }
                       ></Button>
                     )}
+                    {actions?.includes(TABLE_ACTION_TYPE.restore) && (
+                      <Button
+                      svgIcon={undoIcon}
+                      fillMode={"link"}
+                      themeColor={"tertiary"}
+                      onClick={() => openModal(TABLE_ACTION_TYPE.restore, cellGrid.dataItem)}
+                      />
+                    )}
                   </div>
                 </td>
               );
@@ -910,25 +903,27 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
         className={windowClassName}
       >
         {modal.open && props.formCrud && modal.type
-          ? props.formCrud(
+          ? 
+            props.formCrud(
             row,
             new TableToFormTypeAdapter().adapt(modal.type),
             handleCloseModal,
-            refreshTable
-          )
-          : customActionModal.open &&
-            customActionModal.actionIndex !== null &&
-            props.customRowActions?.[customActionModal.actionIndex]
-              ?.modalContent
-            ? props.customRowActions[customActionModal.actionIndex!]
-              .modalContent!(
-                customActionModal.dataItem,
-                closeCustomActionModal,
-                refreshTable
-              )
-            : cellModal.open && cellModal.content
-              ? cellModal.content(cellModal.dataItem)
-              : null}
+            refreshTable)
+          : 
+            customActionModal.open 
+            && customActionModal.actionIndex !== null 
+            && props.customRowActions?.[customActionModal.actionIndex]?.modalContent
+              ? 
+                props.customRowActions[customActionModal.actionIndex!].modalContent!(
+                  customActionModal.dataItem,
+                  closeCustomActionModal,
+                  refreshTable
+                )
+              : 
+                cellModal.open && cellModal.content
+                ? cellModal.content(cellModal.dataItem)
+                : null
+        }
       </CustomWindow>
     </div>
   );

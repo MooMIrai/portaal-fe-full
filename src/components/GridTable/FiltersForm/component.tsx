@@ -11,10 +11,12 @@ import { getAddedFields } from "./customfield";
 export function FiltersForm(props: {
     columns: TableColumn[],
     onSubmit: (filters: CompositeFilterDescriptor) => void,
+    refreshTable: () => Promise<void>,
     addedFilters?: FieldConfig[],
     openFilterDefault?: boolean,
     filterInitialValues?: Record<string, any>,
-    formStyle?: React.CSSProperties
+    formStyle?: React.CSSProperties,
+    extraButtonsRight?: Array<{component: JSX.Element, refreshTable?: boolean}>
 }) {
     const [opened, setOpened] = useState<boolean>(!!props.openFilterDefault);
 
@@ -193,16 +195,22 @@ export function FiltersForm(props: {
         return props.addedFilters ? getAddedFields(props.addedFilters) : {};
         
     }, [props.addedFilters]);
+    
 
     return (
         <>
-            <CustomButton 
-                className={styles.btn} 
-                onClick={() => setOpened(!opened)} 
-                themeColor="info" 
-                svgIcon={opened ? filterClearIcon : filterIcon} 
-                fillMode={'link'} 
-            />
+            <div className={styles.btn} >
+                {props.extraButtonsRight?.map(button => {
+                    if (button.refreshTable) return <div onChange={props.refreshTable}>{button.component}</div>
+                    return <div>{button.component}</div>;
+                })}
+                <CustomButton
+                    onClick={() => setOpened(!opened)} 
+                    themeColor="info" 
+                    svgIcon={opened ? filterClearIcon : filterIcon} 
+                    fillMode={'link'} 
+                />
+            </div>
             <div className={styles.container + ' ' + (!opened ? styles.closed : '')}>
                 <DynamicForm 
                     addedFields={addedField} 

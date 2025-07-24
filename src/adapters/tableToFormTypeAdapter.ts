@@ -24,6 +24,8 @@ export class TableToFormTypeAdapter extends BaseAdapter<
         return FORM_TYPE.edit;
       case TABLE_ACTION_TYPE.custom:
         return FORM_TYPE.custom;
+      case TABLE_ACTION_TYPE.restore:
+        return FORM_TYPE.restore;
       default:
         return FORM_TYPE.view;
     }

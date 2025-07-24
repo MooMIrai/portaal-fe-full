@@ -36,5 +36,6 @@ export enum TABLE_ACTION_TYPE {
   "edit" = "edit",
   "delete" = "delete",
   "create" = "create",
+  "restore" = "restore",
   "custom" = "custom",
 }
