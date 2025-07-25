@@ -194,7 +194,7 @@ export function FiltersForm(props: {
     const addedField = useMemo(() => {
         return props.addedFilters ? getAddedFields(props.addedFilters) : {};
         
-    }, [props.addedFilters]);
+    }, []);
     
 
     return (
