@@ -1,5 +1,5 @@
-import { base } from "@progress/kendo-react-common";
 import { OfferBEModel, OfferModel } from "../component/OffertaCrud/model";
+import { getUTCDate } from "./utils";
 
 export type locationOption = {
   label: string;
@@ -101,8 +101,7 @@ export function fromOfferModelToOfferBEModel(
     project_code: offerModel.protocol, // mapping protocol to offer_name
     name: offerModel.title, // mapping title to name
     Attachment: files,
-    /* start_date: offerModel.start_date.toISOString(), */
-    deadline_date: offerModel.end_date?.toISOString() || undefined, // fallback to undefined if empty
+    deadline_date: getUTCDate(offerModel.end_date)?.toISOString() || undefined, // fallback to undefined if empty
     other_details: offerModel.description || "", // mapping description to other_details
     rate: offerModel.rate && parseFloat(offerModel.rate.toString()),
     amount: offerModel.amount && parseFloat(offerModel.amount.toString()),
@@ -115,11 +114,11 @@ export function fromOfferModelToOfferBEModel(
     year: offerModel.year ? offerModel.year.getFullYear() : undefined,
     days: offerModel.days && Number(offerModel.days),
     noCollective: offerModel.NoCollective,
-    approval_date: offerModel.approval_date?.toISOString() || undefined,
+    approval_date: getUTCDate(offerModel.approval_date)?.toISOString() || undefined,
     ProjectData: offerModel.start_date
       ? {
-          start_date: offerModel.start_date?.toISOString() || "",
-          end_date: offerModel.end_dateP?.toISOString() || undefined,
+          start_date: getUTCDate(offerModel.start_date)?.toISOString() || "",
+          end_date: getUTCDate(offerModel.end_dateP)?.toISOString() || undefined,
           orderNum: offerModel.orderNum || undefined,
           waitingForOrder: offerModel.waitingForOrder || false,
         }

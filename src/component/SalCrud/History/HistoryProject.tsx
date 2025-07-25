@@ -34,7 +34,7 @@ export const SalHistoryProject = React.memo((props: PropsWithChildren<{ customer
     filter: any,
     sorting: any[],
   ) => {
-    
+
     const include = true;
 
     const tableResponse = await salService.getHistoryBillFromCustomer(
@@ -66,6 +66,7 @@ export const SalHistoryProject = React.memo((props: PropsWithChildren<{ customer
       render: renderExpand,
     }}
     className={"text-align-center"}
+    filterInitialValues={Object.fromEntries(filters.filters.map(filter => [filter.field, filter.value]))}
     filterable={true}
     pageable={true}
     sortable={true}

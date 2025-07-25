@@ -32,7 +32,9 @@ export const SalHistoryItem = React.memo((props: PropsWithChildren<{ project: an
   const { filters } = useContext(SalContext);
 
   const loadData = useCallback(async (pagination: any, filter: any, sorting: any[]) => {
+
     const include = true;
+
     const tableResponse = await salService.getHistoryBillFromProject(
       props.project.id,
       pagination.currentPage,
@@ -46,7 +48,7 @@ export const SalHistoryItem = React.memo((props: PropsWithChildren<{ project: an
       data: tableResponse.data,
       meta: tableResponse.meta
     };
-  }, [props.project.id,filters]);
+  }, [props.project.id, filters]);
 
 
 
@@ -56,6 +58,7 @@ export const SalHistoryItem = React.memo((props: PropsWithChildren<{ project: an
     
     <GridTable
         filterable={true}
+        filterInitialValues={Object.fromEntries(filters.filters.map(filter => [filter.field, filter.value]))}
         sortable={true}
         className={"text-align-center"}
         getData={loadData}
