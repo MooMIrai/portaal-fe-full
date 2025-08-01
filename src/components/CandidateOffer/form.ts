@@ -11,11 +11,7 @@ export const offerForm = [
     {
         name: "date_start_contract",
         label: "Data inizio contratto",
-        type: "date",
-        required:true,
-        validator:(value:any)=> {
-            
-            return value && value instanceof Date ?'':'Il campo Data inizio contratto è obbligatorio'}
+        type: "date"
     },
     {
         name: "RAL",

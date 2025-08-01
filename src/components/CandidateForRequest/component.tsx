@@ -1,9 +1,9 @@
-import React, { PropsWithChildren, useCallback, useEffect, useRef, useState } from "react";
+import React, { PropsWithChildren, useRef, useState } from "react";
 import { richiestaService } from "../../services/richiestaService";
 import GridTable from "common/Table";
 import Tab from 'common/Tab';
 import { candidatoService } from "../../services/candidatoService";
-import {checkCircleIcon ,xCircleIcon, pencilIcon, plusIcon, reportElementIcon ,fileIcon} from 'common/icons';
+import {checkCircleIcon ,xCircleIcon, trashIcon, pencilIcon, plusIcon, reportElementIcon ,fileIcon} from 'common/icons';
 import SvgIcon from 'common/SvgIcon';
 import Accordion from 'common/Accordion';
 import { CandidateStepper } from "../CandidateStepper/component";
@@ -20,6 +20,8 @@ export function CandidateForRequest(props: PropsWithChildren<{ requestId: number
     const [currentTimeline,setCurrentTimeline] = useState<any>();
     const [selectedTab, setSelectedTab] = useState<number>(0);
     const [loading,setLoading] = useState<boolean>(false);
+    const [deleteModal, setDeleteModal] = useState<{isOpen: boolean, currentId?: number}>();
+    const [deleteId, setDeleteId] = useState<number>();
     
     const tableAssigned= useRef<any>();
     const tableSystem = useRef<any>();
@@ -27,10 +29,17 @@ export function CandidateForRequest(props: PropsWithChildren<{ requestId: number
     const tableSystemDip = useRef<any>();
     const tableManualDip = useRef<any>();
 
+    const handleDelete = async () => {
+        const result = await richiestaService.deleteAssignment(deleteModal?.currentId!);
+        setDeleteModal({isOpen: false});
+        setDeleteId(result.id);
+    }
+
     const columnsAssociated = [
 
-        { key: "id", label: " ", type: "custom",width:'40px', render:(rowData)=> <td style={{cursor:'pointer'}} onClick={()=>setCurrentPerson(rowData)} title="gestisci"><SvgIcon icon={pencilIcon} themeColor="warning" /></td> },
-        { key: "id", label: " ", type: "custom",width:'45px', render:(rowData)=> <td style={{cursor:'pointer'}} onClick={()=>setCurrentTimeline(rowData)} title="visualizza log"><SvgIcon icon={reportElementIcon} themeColor="info" /></td> },
+        { key: "id", label: " ", type: "custom", width:'40px', render: (rowData) => <td style={{cursor:'pointer'}} onClick={()=>setCurrentPerson(rowData)} title="Gestisci"><SvgIcon icon={pencilIcon} themeColor="warning" /></td> },
+        { key: "id", label: " ", type: "custom", width:'45px', render: (rowData) => <td style={{cursor:'pointer'}} onClick={()=>setCurrentTimeline(rowData)} title="Visualizza log"><SvgIcon icon={reportElementIcon} themeColor="info" /></td> },
+        { key: "id", label: " ", type: "custom", width:'40px', render: (rowData) => <td style={{cursor:'pointer'}} onClick={()=>setDeleteModal({isOpen: true, currentId: rowData.id})} title="Cancella"><SvgIcon icon={trashIcon} themeColor="error" /></td>},
         { key: "id", label: "CV", type: "custom", width:45, render:(rowData)=>{
         
             if(rowData.Candidate){
@@ -444,6 +453,7 @@ export function CandidateForRequest(props: PropsWithChildren<{ requestId: number
     </span>
     <GridTable
         ref={tableAssigned}
+        forceRefresh={deleteId}
         filterable={true}
         sortable={true}
         getData={loadDataAssociated}
@@ -473,6 +483,19 @@ export function CandidateForRequest(props: PropsWithChildren<{ requestId: number
 
 
     />
+
+    <Modal 
+    isOpen={deleteModal?.isOpen} 
+    title="Cancellazione assegnazione" 
+    onSubmit={handleDelete} 
+    onClose={() => setDeleteModal({isOpen: false})}
+    callToAction="Confirm"
+    showModalFooter
+    height={200}
+    >
+        <div>Sei sicuro di voler cancellare quest'assegnazione e gli step a essa associati?</div>
+    </Modal>
+
     {!props.preselectedId && <div style={{marginTop:20}}>
         <Accordion title="Aggiungi candidato" defaultOpened={false}>
         {

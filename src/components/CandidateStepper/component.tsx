@@ -57,9 +57,9 @@ export function CandidateStepper(props) {
         setStep(e.value);
     };
 
-    const handleContactChange = (contact) => {
+    const handleContactChange = (contacts) => {
         setData((prevData) => {
-            return { ...prevData, RecruitingContact: [...prevData.RecruitingContact, contact] }
+            return { ...prevData, RecruitingContact: contacts }
         })
     }
 

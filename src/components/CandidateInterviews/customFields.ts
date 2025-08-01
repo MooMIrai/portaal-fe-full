@@ -1,5 +1,15 @@
+import { richiestaService } from "../../services/richiestaService";
 import withField from "common/hoc/Field";
 import withAutoComplete from "common/hoc/AutoComplete";
+
+const getEmployee = (filterP: string) => {
+    return richiestaService.searchAccount(filterP).then((res) => {
+        if (res) {
+            return res.map(r => ({ id: r.account_id, name: r.firstName + ' ' + r.lastName }));
+        }
+        return [];
+    });
+}
 
 const getOutcome = (filterP: string) => {
     return Promise.resolve([
@@ -19,6 +29,10 @@ const getOutcome = (filterP: string) => {
             id:'A',
             name:'Annullato'
         },
+        {
+            id: 'W',
+            name: 'In Attesa'
+        }
     ].filter(p=>(!filterP || !filterP.length || p.name.toLocaleLowerCase().indexOf(filterP.toLocaleLowerCase())>=0)));
     
 }
@@ -64,6 +78,7 @@ const getEvaluationType = (filterP: string) => {
 }
 
 export const interviewAddedFields={
+    "hr-selector":withField(withAutoComplete(getEmployee)),
     "outcome-selector":withField(withAutoComplete(getOutcome)),
     'type-selector':withField(withAutoComplete(getType)),
     'evaluationtype-selector':withField(withAutoComplete(getEvaluationType)),

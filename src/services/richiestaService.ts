@@ -108,6 +108,11 @@ class RichiestaServiceC extends BaseHttpService{
       "pageSize": pageSize
     })
 
+    deleteAssignment = async (id: number) => {
+      const result = await client.delete(`api/v1/recruitingAssignment/delete/${id}`);
+      return result;
+    }
+
   }
 
 export const richiestaService = new RichiestaServiceC();

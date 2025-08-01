@@ -31,6 +31,11 @@ export const InterviewForm=[
         //required:true
     },
     {
+        name: "technical_referent_id",
+        label: "Referente tecnico",
+        type: "hr-selector"
+    },
+    {
         name: "OutComeType",
         label: "Esito",
         type: "outcome-selector",
