@@ -265,16 +265,25 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
       }
   });
 
-  // Se non ci sono filtri validi, esci senza effettuare la chiamata
-  if (!hasValidFilters) {
+    // Se non ci sono filtri validi, esci senza effettuare la chiamata
+    if (!hasValidFilters) {
       console.log("Nessun filtro valido, chiamata API non effettuata.");
       return;
-  }
+    }
+
     setLoading(true);
-    const res = await props.getData(pagination, filter, sorting);
-    setData(res?.data);
-    setTotal(res?.meta.total);
-    setLoading(false);
+    let res = await props.getData(pagination, filter, sorting);
+
+    if (res?.data.length <= 0 && pagination.currentPage > 1) {
+      setPagination({currentPage: pagination.currentPage - 1, pageSize: pagination.pageSize});
+    }
+
+    else {
+      setData(res?.data);
+      setTotal(res?.meta.total);
+      setLoading(false);
+    }
+
   };
 
   useEffect(() => {
