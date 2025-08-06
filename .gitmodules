@@ -1,0 +1,3 @@
+[submodule "portaal-fe-dashboard"]
+	path = portaal-fe-dashboard
+	url = taal@vs-ssh.visualstudio.com:v3/taal/Portaal.js/portaal-fe-dashboard
