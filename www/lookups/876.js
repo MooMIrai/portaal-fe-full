@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkportaal_mfe_lookUps=self.webpackChunkportaal_mfe_lookUps||[]).push([[876],{6876:(e,t,a)=>{a.r(t),a.d(t,{default:()=>r});var l=a(4914),n=a.n(l),s=a(9196),o=a(6141),p=a.n(o);const r=function(){return n().createElement(p(),{data:[{path:"/lookups",element:n().createElement(s.A,null),permissions:["READ_LOOKUPS"]}]})}}}]);
+//# sourceMappingURL=876.js.map

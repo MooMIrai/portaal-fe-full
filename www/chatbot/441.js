@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkportaal_mfe_chatbot=self.webpackChunkportaal_mfe_chatbot||[]).push([[441],{441:(t,e,o)=>{o.r(e),o.d(e,{default:()=>d});var n=o(914),a=o.n(n),c=o(338),r=o(966);function d(){var t=document.getElementById("chatbot-root");return t||((t=document.createElement("div")).id="chatbot-root",document.body.appendChild(t)),(0,c.H)(document.getElementById("chatbot-root")).render(a().createElement(r.V,null)),{menuItems:[]}}}}]);
+//# sourceMappingURL=441.js.map

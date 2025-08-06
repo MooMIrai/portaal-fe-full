@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkportaal_mfe_chatbot=self.webpackChunkportaal_mfe_chatbot||[]).push([[876],{876:(t,e,a)=>{a.r(e),a.d(e,{default:()=>c});var n=a(914),r=a.n(n);const c=function(){return r().createElement(r().Fragment,null)}}}]);
+//# sourceMappingURL=876.js.map

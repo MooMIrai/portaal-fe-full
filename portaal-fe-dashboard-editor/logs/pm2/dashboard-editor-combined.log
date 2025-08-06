@@ -1,0 +1,240 @@
+2025-08-05T09:39:54: /tmp/xfs-ecb02c6f/yarn:2
+2025-08-05T09:39:54: exec "/home/mverde/.nvm/versions/node/v22.16.0/bin/node" '/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/corepack/dist/yarn.js' "$@"
+2025-08-05T09:39:54:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-08-05T09:39:54: 
+2025-08-05T09:39:54: SyntaxError: Unexpected string
+2025-08-05T09:39:54:     at wrapSafe (node:internal/modules/cjs/loader:1662:18)
+2025-08-05T09:39:54:     at Module._compile (node:internal/modules/cjs/loader:1704:20)
+2025-08-05T09:39:54:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:39:54:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:39:54:     at Function.<anonymous> (node:internal/modules/cjs/loader:1282:12)
+2025-08-05T09:39:54:     at require$$0.Module._load (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:27931:31)
+2025-08-05T09:39:54:     at Object.<anonymous> (/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2025-08-05T09:39:54:     at Module._compile (node:internal/modules/cjs/loader:1730:14)
+2025-08-05T09:39:54:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:39:54:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:39:54: /tmp/xfs-ecb02c6f/yarn:2
+2025-08-05T09:39:54: exec "/home/mverde/.nvm/versions/node/v22.16.0/bin/node" '/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/corepack/dist/yarn.js' "$@"
+2025-08-05T09:39:54:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-08-05T09:39:54: 
+2025-08-05T09:39:54: SyntaxError: Unexpected string
+2025-08-05T09:39:54:     at wrapSafe (node:internal/modules/cjs/loader:1662:18)
+2025-08-05T09:39:54:     at Module._compile (node:internal/modules/cjs/loader:1704:20)
+2025-08-05T09:39:54:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:39:54:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:39:54:     at Function.<anonymous> (node:internal/modules/cjs/loader:1282:12)
+2025-08-05T09:39:54:     at require$$0.Module._load (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:27931:31)
+2025-08-05T09:39:54:     at Object.<anonymous> (/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2025-08-05T09:39:54:     at Module._compile (node:internal/modules/cjs/loader:1730:14)
+2025-08-05T09:39:54:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:39:54:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:39:55: /tmp/xfs-ecb02c6f/yarn:2
+2025-08-05T09:39:55: exec "/home/mverde/.nvm/versions/node/v22.16.0/bin/node" '/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/corepack/dist/yarn.js' "$@"
+2025-08-05T09:39:55:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-08-05T09:39:55: 
+2025-08-05T09:39:55: SyntaxError: Unexpected string
+2025-08-05T09:39:55:     at wrapSafe (node:internal/modules/cjs/loader:1662:18)
+2025-08-05T09:39:55:     at Module._compile (node:internal/modules/cjs/loader:1704:20)
+2025-08-05T09:39:55:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:39:55:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:39:55:     at Function.<anonymous> (node:internal/modules/cjs/loader:1282:12)
+2025-08-05T09:39:55:     at require$$0.Module._load (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:27931:31)
+2025-08-05T09:39:55:     at Object.<anonymous> (/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2025-08-05T09:39:55:     at Module._compile (node:internal/modules/cjs/loader:1730:14)
+2025-08-05T09:39:55:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:39:55:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:39:55: /tmp/xfs-ecb02c6f/yarn:2
+2025-08-05T09:39:55: exec "/home/mverde/.nvm/versions/node/v22.16.0/bin/node" '/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/corepack/dist/yarn.js' "$@"
+2025-08-05T09:39:55:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-08-05T09:39:55: 
+2025-08-05T09:39:55: SyntaxError: Unexpected string
+2025-08-05T09:39:55:     at wrapSafe (node:internal/modules/cjs/loader:1662:18)
+2025-08-05T09:39:55:     at Module._compile (node:internal/modules/cjs/loader:1704:20)
+2025-08-05T09:39:55:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:39:55:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:39:55:     at Function.<anonymous> (node:internal/modules/cjs/loader:1282:12)
+2025-08-05T09:39:55:     at require$$0.Module._load (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:27931:31)
+2025-08-05T09:39:55:     at Object.<anonymous> (/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2025-08-05T09:39:55:     at Module._compile (node:internal/modules/cjs/loader:1730:14)
+2025-08-05T09:39:55:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:39:55:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:39:55: /tmp/xfs-ecb02c6f/yarn:2
+2025-08-05T09:39:55: exec "/home/mverde/.nvm/versions/node/v22.16.0/bin/node" '/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/corepack/dist/yarn.js' "$@"
+2025-08-05T09:39:55:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-08-05T09:39:55: 
+2025-08-05T09:39:55: SyntaxError: Unexpected string
+2025-08-05T09:39:55:     at wrapSafe (node:internal/modules/cjs/loader:1662:18)
+2025-08-05T09:39:55:     at Module._compile (node:internal/modules/cjs/loader:1704:20)
+2025-08-05T09:39:55:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:39:55:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:39:55:     at Function.<anonymous> (node:internal/modules/cjs/loader:1282:12)
+2025-08-05T09:39:55:     at require$$0.Module._load (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:27931:31)
+2025-08-05T09:39:55:     at Object.<anonymous> (/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2025-08-05T09:39:55:     at Module._compile (node:internal/modules/cjs/loader:1730:14)
+2025-08-05T09:39:55:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:39:55:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:39:56: /tmp/xfs-ecb02c6f/yarn:2
+2025-08-05T09:39:56: exec "/home/mverde/.nvm/versions/node/v22.16.0/bin/node" '/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/corepack/dist/yarn.js' "$@"
+2025-08-05T09:39:56:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-08-05T09:39:56: 
+2025-08-05T09:39:56: SyntaxError: Unexpected string
+2025-08-05T09:39:56:     at wrapSafe (node:internal/modules/cjs/loader:1662:18)
+2025-08-05T09:39:56:     at Module._compile (node:internal/modules/cjs/loader:1704:20)
+2025-08-05T09:39:56:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:39:56:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:39:56:     at Function.<anonymous> (node:internal/modules/cjs/loader:1282:12)
+2025-08-05T09:39:56:     at require$$0.Module._load (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:27931:31)
+2025-08-05T09:39:56:     at Object.<anonymous> (/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2025-08-05T09:39:56:     at Module._compile (node:internal/modules/cjs/loader:1730:14)
+2025-08-05T09:39:56:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:39:56:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:39:56: /tmp/xfs-ecb02c6f/yarn:2
+2025-08-05T09:39:56: exec "/home/mverde/.nvm/versions/node/v22.16.0/bin/node" '/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/corepack/dist/yarn.js' "$@"
+2025-08-05T09:39:56:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-08-05T09:39:56: 
+2025-08-05T09:39:56: SyntaxError: Unexpected string
+2025-08-05T09:39:56:     at wrapSafe (node:internal/modules/cjs/loader:1662:18)
+2025-08-05T09:39:56:     at Module._compile (node:internal/modules/cjs/loader:1704:20)
+2025-08-05T09:39:56:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:39:56:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:39:56:     at Function.<anonymous> (node:internal/modules/cjs/loader:1282:12)
+2025-08-05T09:39:56:     at require$$0.Module._load (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:27931:31)
+2025-08-05T09:39:56:     at Object.<anonymous> (/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2025-08-05T09:39:56:     at Module._compile (node:internal/modules/cjs/loader:1730:14)
+2025-08-05T09:39:56:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:39:56:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:39:56: /tmp/xfs-ecb02c6f/yarn:2
+2025-08-05T09:39:56: exec "/home/mverde/.nvm/versions/node/v22.16.0/bin/node" '/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/corepack/dist/yarn.js' "$@"
+2025-08-05T09:39:56:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-08-05T09:39:56: 
+2025-08-05T09:39:56: SyntaxError: Unexpected string
+2025-08-05T09:39:56:     at wrapSafe (node:internal/modules/cjs/loader:1662:18)
+2025-08-05T09:39:56:     at Module._compile (node:internal/modules/cjs/loader:1704:20)
+2025-08-05T09:39:56:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:39:56:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:39:56:     at Function.<anonymous> (node:internal/modules/cjs/loader:1282:12)
+2025-08-05T09:39:56:     at require$$0.Module._load (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:27931:31)
+2025-08-05T09:39:56:     at Object.<anonymous> (/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2025-08-05T09:39:56:     at Module._compile (node:internal/modules/cjs/loader:1730:14)
+2025-08-05T09:39:56:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:39:56:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:39:57: /tmp/xfs-ecb02c6f/yarn:2
+2025-08-05T09:39:57: exec "/home/mverde/.nvm/versions/node/v22.16.0/bin/node" '/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/corepack/dist/yarn.js' "$@"
+2025-08-05T09:39:57:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-08-05T09:39:57: 
+2025-08-05T09:39:57: SyntaxError: Unexpected string
+2025-08-05T09:39:57:     at wrapSafe (node:internal/modules/cjs/loader:1662:18)
+2025-08-05T09:39:57:     at Module._compile (node:internal/modules/cjs/loader:1704:20)
+2025-08-05T09:39:57:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:39:57:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:39:57:     at Function.<anonymous> (node:internal/modules/cjs/loader:1282:12)
+2025-08-05T09:39:57:     at require$$0.Module._load (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:27931:31)
+2025-08-05T09:39:57:     at Object.<anonymous> (/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2025-08-05T09:39:57:     at Module._compile (node:internal/modules/cjs/loader:1730:14)
+2025-08-05T09:39:57:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:39:57:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:39:57: /tmp/xfs-ecb02c6f/yarn:2
+2025-08-05T09:39:57: exec "/home/mverde/.nvm/versions/node/v22.16.0/bin/node" '/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/corepack/dist/yarn.js' "$@"
+2025-08-05T09:39:57:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-08-05T09:39:57: 
+2025-08-05T09:39:57: SyntaxError: Unexpected string
+2025-08-05T09:39:57:     at wrapSafe (node:internal/modules/cjs/loader:1662:18)
+2025-08-05T09:39:57:     at Module._compile (node:internal/modules/cjs/loader:1704:20)
+2025-08-05T09:39:57:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:39:57:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:39:57:     at Function.<anonymous> (node:internal/modules/cjs/loader:1282:12)
+2025-08-05T09:39:57:     at require$$0.Module._load (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:27931:31)
+2025-08-05T09:39:57:     at Object.<anonymous> (/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2025-08-05T09:39:57:     at Module._compile (node:internal/modules/cjs/loader:1730:14)
+2025-08-05T09:39:57:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:39:57:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:39:57: /tmp/xfs-ecb02c6f/yarn:2
+2025-08-05T09:39:57: exec "/home/mverde/.nvm/versions/node/v22.16.0/bin/node" '/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/corepack/dist/yarn.js' "$@"
+2025-08-05T09:39:57:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-08-05T09:39:57: 
+2025-08-05T09:39:57: SyntaxError: Unexpected string
+2025-08-05T09:39:57:     at wrapSafe (node:internal/modules/cjs/loader:1662:18)
+2025-08-05T09:39:57:     at Module._compile (node:internal/modules/cjs/loader:1704:20)
+2025-08-05T09:39:57:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:39:57:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:39:57:     at Function.<anonymous> (node:internal/modules/cjs/loader:1282:12)
+2025-08-05T09:39:57:     at require$$0.Module._load (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:27931:31)
+2025-08-05T09:39:57:     at Object.<anonymous> (/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2025-08-05T09:39:57:     at Module._compile (node:internal/modules/cjs/loader:1730:14)
+2025-08-05T09:39:57:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:39:57:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:39:58: /tmp/xfs-ecb02c6f/yarn:2
+2025-08-05T09:39:58: exec "/home/mverde/.nvm/versions/node/v22.16.0/bin/node" '/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/corepack/dist/yarn.js' "$@"
+2025-08-05T09:39:58:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-08-05T09:39:58: 
+2025-08-05T09:39:58: SyntaxError: Unexpected string
+2025-08-05T09:39:58:     at wrapSafe (node:internal/modules/cjs/loader:1662:18)
+2025-08-05T09:39:58:     at Module._compile (node:internal/modules/cjs/loader:1704:20)
+2025-08-05T09:39:58:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:39:58:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:39:58:     at Function.<anonymous> (node:internal/modules/cjs/loader:1282:12)
+2025-08-05T09:39:58:     at require$$0.Module._load (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:27931:31)
+2025-08-05T09:39:58:     at Object.<anonymous> (/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2025-08-05T09:39:58:     at Module._compile (node:internal/modules/cjs/loader:1730:14)
+2025-08-05T09:39:58:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:39:58:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:39:58: /tmp/xfs-ecb02c6f/yarn:2
+2025-08-05T09:39:58: exec "/home/mverde/.nvm/versions/node/v22.16.0/bin/node" '/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/corepack/dist/yarn.js' "$@"
+2025-08-05T09:39:58:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-08-05T09:39:58: 
+2025-08-05T09:39:58: SyntaxError: Unexpected string
+2025-08-05T09:39:58:     at wrapSafe (node:internal/modules/cjs/loader:1662:18)
+2025-08-05T09:39:58:     at Module._compile (node:internal/modules/cjs/loader:1704:20)
+2025-08-05T09:39:58:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:39:58:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:39:58:     at Function.<anonymous> (node:internal/modules/cjs/loader:1282:12)
+2025-08-05T09:39:58:     at require$$0.Module._load (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:27931:31)
+2025-08-05T09:39:58:     at Object.<anonymous> (/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2025-08-05T09:39:58:     at Module._compile (node:internal/modules/cjs/loader:1730:14)
+2025-08-05T09:39:58:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:39:58:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:39:58: /tmp/xfs-ecb02c6f/yarn:2
+2025-08-05T09:39:58: exec "/home/mverde/.nvm/versions/node/v22.16.0/bin/node" '/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/corepack/dist/yarn.js' "$@"
+2025-08-05T09:39:58:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-08-05T09:39:58: 
+2025-08-05T09:39:58: SyntaxError: Unexpected string
+2025-08-05T09:39:58:     at wrapSafe (node:internal/modules/cjs/loader:1662:18)
+2025-08-05T09:39:58:     at Module._compile (node:internal/modules/cjs/loader:1704:20)
+2025-08-05T09:39:58:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:39:58:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:39:58:     at Function.<anonymous> (node:internal/modules/cjs/loader:1282:12)
+2025-08-05T09:39:58:     at require$$0.Module._load (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:27931:31)
+2025-08-05T09:39:58:     at Object.<anonymous> (/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2025-08-05T09:39:58:     at Module._compile (node:internal/modules/cjs/loader:1730:14)
+2025-08-05T09:39:58:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:39:58:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:39:59: /tmp/xfs-ecb02c6f/yarn:2
+2025-08-05T09:39:59: exec "/home/mverde/.nvm/versions/node/v22.16.0/bin/node" '/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/corepack/dist/yarn.js' "$@"
+2025-08-05T09:39:59:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-08-05T09:39:59: 
+2025-08-05T09:39:59: SyntaxError: Unexpected string
+2025-08-05T09:39:59:     at wrapSafe (node:internal/modules/cjs/loader:1662:18)
+2025-08-05T09:39:59:     at Module._compile (node:internal/modules/cjs/loader:1704:20)
+2025-08-05T09:39:59:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:39:59:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:39:59:     at Function.<anonymous> (node:internal/modules/cjs/loader:1282:12)
+2025-08-05T09:39:59:     at require$$0.Module._load (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:27931:31)
+2025-08-05T09:39:59:     at Object.<anonymous> (/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2025-08-05T09:39:59:     at Module._compile (node:internal/modules/cjs/loader:1730:14)
+2025-08-05T09:39:59:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:39:59:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:39:59: /tmp/xfs-ecb02c6f/yarn:2
+2025-08-05T09:39:59: exec "/home/mverde/.nvm/versions/node/v22.16.0/bin/node" '/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/corepack/dist/yarn.js' "$@"
+2025-08-05T09:39:59:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-08-05T09:39:59: 
+2025-08-05T09:39:59: SyntaxError: Unexpected string
+2025-08-05T09:39:59:     at wrapSafe (node:internal/modules/cjs/loader:1662:18)
+2025-08-05T09:39:59:     at Module._compile (node:internal/modules/cjs/loader:1704:20)
+2025-08-05T09:39:59:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:39:59:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:39:59:     at Function.<anonymous> (node:internal/modules/cjs/loader:1282:12)
+2025-08-05T09:39:59:     at require$$0.Module._load (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:27931:31)
+2025-08-05T09:39:59:     at Object.<anonymous> (/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2025-08-05T09:39:59:     at Module._compile (node:internal/modules/cjs/loader:1730:14)
+2025-08-05T09:39:59:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:39:59:     at Module.load (node:internal/modules/cjs/loader:1465:32)

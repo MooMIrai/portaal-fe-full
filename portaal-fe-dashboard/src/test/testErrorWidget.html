@@ -1,0 +1,126 @@
+<!-- Test HTML for widget that generates errors -->
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+  <!-- Chart 1: Working chart -->
+  <div>
+    <h3>Chart 1: Working Chart</h3>
+    <canvas id="chart1"></canvas>
+  </div>
+  
+  <!-- Chart 2: Chart with error -->
+  <div>
+    <h3>Chart 2: Chart with Error</h3>
+    <canvas id="chart2"></canvas>
+  </div>
+  
+  <!-- Chart 3: Chart with async error -->
+  <div>
+    <h3>Chart 3: Chart with Async Error</h3>
+    <canvas id="chart3"></canvas>
+  </div>
+  
+  <!-- Chart 4: Chart with null reference -->
+  <div>
+    <h3>Chart 4: Chart with Null Reference</h3>
+    <canvas id="chart4"></canvas>
+  </div>
+</div>
+
+<script>
+// Chart 1: Working chart
+var ctx1 = document.getElementById('chart1').getContext('2d');
+new Chart(ctx1, {
+  type: 'bar',
+  data: {
+    labels: ['A', 'B', 'C', 'D'],
+    datasets: [{
+      label: 'Working Data',
+      data: [12, 19, 3, 5],
+      backgroundColor: 'rgba(75, 192, 192, 0.2)',
+      borderColor: 'rgba(75, 192, 192, 1)',
+      borderWidth: 1
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      title: {
+        display: true,
+        text: 'Working Chart'
+      }
+    }
+  }
+});
+</script>
+
+<script>
+// Chart 2: Chart with immediate error
+try {
+  var ctx2 = document.getElementById('chart2').getContext('2d');
+  // This will cause an error - invalid chart configuration
+  new Chart(ctx2, {
+    type: 'invalidType', // Invalid chart type
+    data: {
+      labels: ['A', 'B', 'C'],
+      datasets: [{
+        label: 'Error Data',
+        data: null, // Invalid data
+        backgroundColor: undefined.property // This will throw error
+      }]
+    }
+  });
+} catch (e) {
+  console.error('Chart 2 error caught:', e);
+}
+</script>
+
+<script>
+// Chart 3: Chart with async error
+var ctx3 = document.getElementById('chart3').getContext('2d');
+var chart3 = new Chart(ctx3, {
+  type: 'line',
+  data: {
+    labels: ['Jan', 'Feb', 'Mar'],
+    datasets: [{
+      label: 'Async Error Data',
+      data: [10, 20, 30],
+      borderColor: 'red'
+    }]
+  },
+  options: {
+    responsive: true
+  }
+});
+
+// Simulate async error after 2 seconds
+setTimeout(function() {
+  try {
+    // This will cause an error
+    chart3.data.datasets[0].data = null.value;
+    chart3.update();
+  } catch (e) {
+    console.error('Chart 3 async error:', e);
+  }
+}, 2000);
+</script>
+
+<script>
+// Chart 4: Chart with null reference error
+try {
+  var ctx4 = document.getElementById('chart4').getContext('2d');
+  var nonExistentVariable;
+  
+  new Chart(ctx4, {
+    type: 'pie',
+    data: {
+      labels: ['Red', 'Blue', 'Yellow'],
+      datasets: [{
+        label: 'Null Reference Data',
+        data: [nonExistentVariable.data, 50, 100], // This will cause error
+        backgroundColor: ['red', 'blue', 'yellow']
+      }]
+    }
+  });
+} catch (e) {
+  console.error('Chart 4 null reference error:', e);
+}
+</script>

@@ -1,0 +1,564 @@
+2025-08-05T09:43:11: /tmp/xfs-16184731/node:2
+2025-08-05T09:43:11: exec "/home/mverde/.nvm/versions/node/v22.16.0/bin/node"  "$@"
+2025-08-05T09:43:11:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-08-05T09:43:11: 
+2025-08-05T09:43:11: SyntaxError: Unexpected string
+2025-08-05T09:43:11:     at wrapSafe (node:internal/modules/cjs/loader:1662:18)
+2025-08-05T09:43:11:     at Module._compile (node:internal/modules/cjs/loader:1704:20)
+2025-08-05T09:43:11:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:43:11:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:43:11:     at Function.<anonymous> (node:internal/modules/cjs/loader:1282:12)
+2025-08-05T09:43:11:     at require$$0.Module._load (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:27931:31)
+2025-08-05T09:43:11:     at Object.<anonymous> (/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2025-08-05T09:43:11:     at Module._compile (node:internal/modules/cjs/loader:1730:14)
+2025-08-05T09:43:11:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:43:11:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:43:11: /tmp/xfs-16184731/node:2
+2025-08-05T09:43:11: exec "/home/mverde/.nvm/versions/node/v22.16.0/bin/node"  "$@"
+2025-08-05T09:43:11:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-08-05T09:43:11: 
+2025-08-05T09:43:11: SyntaxError: Unexpected string
+2025-08-05T09:43:11:     at wrapSafe (node:internal/modules/cjs/loader:1662:18)
+2025-08-05T09:43:11:     at Module._compile (node:internal/modules/cjs/loader:1704:20)
+2025-08-05T09:43:11:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:43:11:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:43:11:     at Function.<anonymous> (node:internal/modules/cjs/loader:1282:12)
+2025-08-05T09:43:11:     at require$$0.Module._load (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:27931:31)
+2025-08-05T09:43:11:     at Object.<anonymous> (/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2025-08-05T09:43:11:     at Module._compile (node:internal/modules/cjs/loader:1730:14)
+2025-08-05T09:43:11:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:43:11:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:43:12: /tmp/xfs-16184731/node:2
+2025-08-05T09:43:12: exec "/home/mverde/.nvm/versions/node/v22.16.0/bin/node"  "$@"
+2025-08-05T09:43:12:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-08-05T09:43:12: 
+2025-08-05T09:43:12: SyntaxError: Unexpected string
+2025-08-05T09:43:12:     at wrapSafe (node:internal/modules/cjs/loader:1662:18)
+2025-08-05T09:43:12:     at Module._compile (node:internal/modules/cjs/loader:1704:20)
+2025-08-05T09:43:12:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:43:12:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:43:12:     at Function.<anonymous> (node:internal/modules/cjs/loader:1282:12)
+2025-08-05T09:43:12:     at require$$0.Module._load (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:27931:31)
+2025-08-05T09:43:12:     at Object.<anonymous> (/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2025-08-05T09:43:12:     at Module._compile (node:internal/modules/cjs/loader:1730:14)
+2025-08-05T09:43:12:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:43:12:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:43:12: /tmp/xfs-16184731/node:2
+2025-08-05T09:43:12: exec "/home/mverde/.nvm/versions/node/v22.16.0/bin/node"  "$@"
+2025-08-05T09:43:12:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-08-05T09:43:12: 
+2025-08-05T09:43:12: SyntaxError: Unexpected string
+2025-08-05T09:43:12:     at wrapSafe (node:internal/modules/cjs/loader:1662:18)
+2025-08-05T09:43:12:     at Module._compile (node:internal/modules/cjs/loader:1704:20)
+2025-08-05T09:43:12:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:43:12:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:43:12:     at Function.<anonymous> (node:internal/modules/cjs/loader:1282:12)
+2025-08-05T09:43:12:     at require$$0.Module._load (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:27931:31)
+2025-08-05T09:43:12:     at Object.<anonymous> (/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2025-08-05T09:43:12:     at Module._compile (node:internal/modules/cjs/loader:1730:14)
+2025-08-05T09:43:12:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:43:12:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:43:12: /tmp/xfs-16184731/node:2
+2025-08-05T09:43:12: exec "/home/mverde/.nvm/versions/node/v22.16.0/bin/node"  "$@"
+2025-08-05T09:43:12:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-08-05T09:43:12: 
+2025-08-05T09:43:12: SyntaxError: Unexpected string
+2025-08-05T09:43:12:     at wrapSafe (node:internal/modules/cjs/loader:1662:18)
+2025-08-05T09:43:12:     at Module._compile (node:internal/modules/cjs/loader:1704:20)
+2025-08-05T09:43:12:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:43:12:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:43:12:     at Function.<anonymous> (node:internal/modules/cjs/loader:1282:12)
+2025-08-05T09:43:12:     at require$$0.Module._load (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:27931:31)
+2025-08-05T09:43:12:     at Object.<anonymous> (/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2025-08-05T09:43:12:     at Module._compile (node:internal/modules/cjs/loader:1730:14)
+2025-08-05T09:43:12:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:43:12:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:43:13: /tmp/xfs-16184731/node:2
+2025-08-05T09:43:13: exec "/home/mverde/.nvm/versions/node/v22.16.0/bin/node"  "$@"
+2025-08-05T09:43:13:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-08-05T09:43:13: 
+2025-08-05T09:43:13: SyntaxError: Unexpected string
+2025-08-05T09:43:13:     at wrapSafe (node:internal/modules/cjs/loader:1662:18)
+2025-08-05T09:43:13:     at Module._compile (node:internal/modules/cjs/loader:1704:20)
+2025-08-05T09:43:13:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:43:13:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:43:13:     at Function.<anonymous> (node:internal/modules/cjs/loader:1282:12)
+2025-08-05T09:43:13:     at require$$0.Module._load (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:27931:31)
+2025-08-05T09:43:13:     at Object.<anonymous> (/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2025-08-05T09:43:13:     at Module._compile (node:internal/modules/cjs/loader:1730:14)
+2025-08-05T09:43:13:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:43:13:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:43:13: /tmp/xfs-16184731/node:2
+2025-08-05T09:43:13: exec "/home/mverde/.nvm/versions/node/v22.16.0/bin/node"  "$@"
+2025-08-05T09:43:13:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-08-05T09:43:13: 
+2025-08-05T09:43:13: SyntaxError: Unexpected string
+2025-08-05T09:43:13:     at wrapSafe (node:internal/modules/cjs/loader:1662:18)
+2025-08-05T09:43:13:     at Module._compile (node:internal/modules/cjs/loader:1704:20)
+2025-08-05T09:43:13:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:43:13:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:43:13:     at Function.<anonymous> (node:internal/modules/cjs/loader:1282:12)
+2025-08-05T09:43:13:     at require$$0.Module._load (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:27931:31)
+2025-08-05T09:43:13:     at Object.<anonymous> (/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2025-08-05T09:43:13:     at Module._compile (node:internal/modules/cjs/loader:1730:14)
+2025-08-05T09:43:13:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:43:13:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:43:13: /tmp/xfs-16184731/node:2
+2025-08-05T09:43:13: exec "/home/mverde/.nvm/versions/node/v22.16.0/bin/node"  "$@"
+2025-08-05T09:43:13:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-08-05T09:43:13: 
+2025-08-05T09:43:13: SyntaxError: Unexpected string
+2025-08-05T09:43:13:     at wrapSafe (node:internal/modules/cjs/loader:1662:18)
+2025-08-05T09:43:13:     at Module._compile (node:internal/modules/cjs/loader:1704:20)
+2025-08-05T09:43:13:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:43:13:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:43:13:     at Function.<anonymous> (node:internal/modules/cjs/loader:1282:12)
+2025-08-05T09:43:13:     at require$$0.Module._load (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:27931:31)
+2025-08-05T09:43:13:     at Object.<anonymous> (/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2025-08-05T09:43:13:     at Module._compile (node:internal/modules/cjs/loader:1730:14)
+2025-08-05T09:43:13:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:43:13:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:43:14: /tmp/xfs-16184731/node:2
+2025-08-05T09:43:14: exec "/home/mverde/.nvm/versions/node/v22.16.0/bin/node"  "$@"
+2025-08-05T09:43:14:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-08-05T09:43:14: 
+2025-08-05T09:43:14: SyntaxError: Unexpected string
+2025-08-05T09:43:14:     at wrapSafe (node:internal/modules/cjs/loader:1662:18)
+2025-08-05T09:43:14:     at Module._compile (node:internal/modules/cjs/loader:1704:20)
+2025-08-05T09:43:14:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:43:14:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:43:14:     at Function.<anonymous> (node:internal/modules/cjs/loader:1282:12)
+2025-08-05T09:43:14:     at require$$0.Module._load (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:27931:31)
+2025-08-05T09:43:14:     at Object.<anonymous> (/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2025-08-05T09:43:14:     at Module._compile (node:internal/modules/cjs/loader:1730:14)
+2025-08-05T09:43:14:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:43:14:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:43:14: /tmp/xfs-16184731/node:2
+2025-08-05T09:43:14: exec "/home/mverde/.nvm/versions/node/v22.16.0/bin/node"  "$@"
+2025-08-05T09:43:14:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-08-05T09:43:14: 
+2025-08-05T09:43:14: SyntaxError: Unexpected string
+2025-08-05T09:43:14:     at wrapSafe (node:internal/modules/cjs/loader:1662:18)
+2025-08-05T09:43:14:     at Module._compile (node:internal/modules/cjs/loader:1704:20)
+2025-08-05T09:43:14:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:43:14:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:43:14:     at Function.<anonymous> (node:internal/modules/cjs/loader:1282:12)
+2025-08-05T09:43:14:     at require$$0.Module._load (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:27931:31)
+2025-08-05T09:43:14:     at Object.<anonymous> (/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2025-08-05T09:43:14:     at Module._compile (node:internal/modules/cjs/loader:1730:14)
+2025-08-05T09:43:14:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:43:14:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:43:14: /tmp/xfs-16184731/node:2
+2025-08-05T09:43:14: exec "/home/mverde/.nvm/versions/node/v22.16.0/bin/node"  "$@"
+2025-08-05T09:43:14:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-08-05T09:43:14: 
+2025-08-05T09:43:14: SyntaxError: Unexpected string
+2025-08-05T09:43:14:     at wrapSafe (node:internal/modules/cjs/loader:1662:18)
+2025-08-05T09:43:14:     at Module._compile (node:internal/modules/cjs/loader:1704:20)
+2025-08-05T09:43:14:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:43:14:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:43:14:     at Function.<anonymous> (node:internal/modules/cjs/loader:1282:12)
+2025-08-05T09:43:14:     at require$$0.Module._load (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:27931:31)
+2025-08-05T09:43:14:     at Object.<anonymous> (/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2025-08-05T09:43:14:     at Module._compile (node:internal/modules/cjs/loader:1730:14)
+2025-08-05T09:43:14:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:43:14:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:43:15: /tmp/xfs-16184731/node:2
+2025-08-05T09:43:15: exec "/home/mverde/.nvm/versions/node/v22.16.0/bin/node"  "$@"
+2025-08-05T09:43:15:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-08-05T09:43:15: 
+2025-08-05T09:43:15: SyntaxError: Unexpected string
+2025-08-05T09:43:15:     at wrapSafe (node:internal/modules/cjs/loader:1662:18)
+2025-08-05T09:43:15:     at Module._compile (node:internal/modules/cjs/loader:1704:20)
+2025-08-05T09:43:15:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:43:15:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:43:15:     at Function.<anonymous> (node:internal/modules/cjs/loader:1282:12)
+2025-08-05T09:43:15:     at require$$0.Module._load (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:27931:31)
+2025-08-05T09:43:15:     at Object.<anonymous> (/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2025-08-05T09:43:15:     at Module._compile (node:internal/modules/cjs/loader:1730:14)
+2025-08-05T09:43:15:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:43:15:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:43:15: /tmp/xfs-16184731/node:2
+2025-08-05T09:43:15: exec "/home/mverde/.nvm/versions/node/v22.16.0/bin/node"  "$@"
+2025-08-05T09:43:15:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-08-05T09:43:15: 
+2025-08-05T09:43:15: SyntaxError: Unexpected string
+2025-08-05T09:43:15:     at wrapSafe (node:internal/modules/cjs/loader:1662:18)
+2025-08-05T09:43:15:     at Module._compile (node:internal/modules/cjs/loader:1704:20)
+2025-08-05T09:43:15:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:43:15:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:43:15:     at Function.<anonymous> (node:internal/modules/cjs/loader:1282:12)
+2025-08-05T09:43:15:     at require$$0.Module._load (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:27931:31)
+2025-08-05T09:43:15:     at Object.<anonymous> (/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2025-08-05T09:43:15:     at Module._compile (node:internal/modules/cjs/loader:1730:14)
+2025-08-05T09:43:15:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:43:15:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:43:15: /tmp/xfs-16184731/node:2
+2025-08-05T09:43:15: exec "/home/mverde/.nvm/versions/node/v22.16.0/bin/node"  "$@"
+2025-08-05T09:43:15:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-08-05T09:43:15: 
+2025-08-05T09:43:15: SyntaxError: Unexpected string
+2025-08-05T09:43:15:     at wrapSafe (node:internal/modules/cjs/loader:1662:18)
+2025-08-05T09:43:15:     at Module._compile (node:internal/modules/cjs/loader:1704:20)
+2025-08-05T09:43:15:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:43:15:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:43:15:     at Function.<anonymous> (node:internal/modules/cjs/loader:1282:12)
+2025-08-05T09:43:15:     at require$$0.Module._load (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:27931:31)
+2025-08-05T09:43:15:     at Object.<anonymous> (/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2025-08-05T09:43:15:     at Module._compile (node:internal/modules/cjs/loader:1730:14)
+2025-08-05T09:43:15:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:43:15:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:43:16: /tmp/xfs-16184731/node:2
+2025-08-05T09:43:16: exec "/home/mverde/.nvm/versions/node/v22.16.0/bin/node"  "$@"
+2025-08-05T09:43:16:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-08-05T09:43:16: 
+2025-08-05T09:43:16: SyntaxError: Unexpected string
+2025-08-05T09:43:16:     at wrapSafe (node:internal/modules/cjs/loader:1662:18)
+2025-08-05T09:43:16:     at Module._compile (node:internal/modules/cjs/loader:1704:20)
+2025-08-05T09:43:16:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:43:16:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:43:16:     at Function.<anonymous> (node:internal/modules/cjs/loader:1282:12)
+2025-08-05T09:43:16:     at require$$0.Module._load (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:27931:31)
+2025-08-05T09:43:16:     at Object.<anonymous> (/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2025-08-05T09:43:16:     at Module._compile (node:internal/modules/cjs/loader:1730:14)
+2025-08-05T09:43:16:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:43:16:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:43:16: /tmp/xfs-16184731/node:2
+2025-08-05T09:43:16: exec "/home/mverde/.nvm/versions/node/v22.16.0/bin/node"  "$@"
+2025-08-05T09:43:16:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-08-05T09:43:16: 
+2025-08-05T09:43:16: SyntaxError: Unexpected string
+2025-08-05T09:43:16:     at wrapSafe (node:internal/modules/cjs/loader:1662:18)
+2025-08-05T09:43:16:     at Module._compile (node:internal/modules/cjs/loader:1704:20)
+2025-08-05T09:43:16:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:43:16:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:43:16:     at Function.<anonymous> (node:internal/modules/cjs/loader:1282:12)
+2025-08-05T09:43:16:     at require$$0.Module._load (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:27931:31)
+2025-08-05T09:43:16:     at Object.<anonymous> (/home/mverde/.nvm/versions/node/v22.16.0/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2025-08-05T09:43:16:     at Module._compile (node:internal/modules/cjs/loader:1730:14)
+2025-08-05T09:43:16:     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-05T09:43:16:     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-05T09:59:39: Starting portaal-fe-notifications in /home/mverde/src/taal/portaal-fe-full/portaal-fe-notifications
+2025-08-05T09:59:39: ! Corepack is about to download https://registry.yarnpkg.com/yarn/-/yarn-1.22.22.tgz
+2025-08-05T09:59:40: yarn run v1.22.22
+2025-08-05T09:59:40: $ webpack serve --open --mode development --live-reload --hot
+2025-08-05T09:59:40: error Error: Cannot find module 'pnpapi'
+2025-08-05T09:59:40: Require stack:
+2025-08-05T09:59:40: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js
+2025-08-05T09:59:40: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/bin/yarn.js
+2025-08-05T09:59:40: Require stack:
+2025-08-05T09:59:40: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js
+2025-08-05T09:59:40: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/bin/yarn.js
+2025-08-05T09:59:40:     at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+2025-08-05T09:59:40:     at require$$0.Module._resolveFilename (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:28017:54)
+2025-08-05T09:59:40:     at require.resolve (/home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/v8-compile-cache.js:162:23)
+2025-08-05T09:59:40:     at /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:34245:76
+2025-08-05T09:59:40:     at Generator.next (<anonymous>)
+2025-08-05T09:59:40:     at step (/home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:310:30)
+2025-08-05T09:59:40:     at /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:321:13
+2025-08-05T09:59:40: info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+2025-08-05T09:59:40: portaal-fe-notifications exited with code 1
+2025-08-05T09:59:40: Starting portaal-fe-notifications in /home/mverde/src/taal/portaal-fe-full/portaal-fe-notifications
+2025-08-05T09:59:41: yarn run v1.22.22
+2025-08-05T09:59:41: $ webpack serve --open --mode development --live-reload --hot
+2025-08-05T09:59:41: error Error: Cannot find module 'pnpapi'
+2025-08-05T09:59:41: Require stack:
+2025-08-05T09:59:41: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js
+2025-08-05T09:59:41: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/bin/yarn.js
+2025-08-05T09:59:41: Require stack:
+2025-08-05T09:59:41: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js
+2025-08-05T09:59:41: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/bin/yarn.js
+2025-08-05T09:59:41:     at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+2025-08-05T09:59:41:     at require$$0.Module._resolveFilename (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:28017:54)
+2025-08-05T09:59:41:     at require.resolve (/home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/v8-compile-cache.js:162:23)
+2025-08-05T09:59:41:     at /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:34245:76
+2025-08-05T09:59:41:     at Generator.next (<anonymous>)
+2025-08-05T09:59:41:     at step (/home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:310:30)
+2025-08-05T09:59:41:     at /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:321:13
+2025-08-05T09:59:41: info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+2025-08-05T09:59:41: portaal-fe-notifications exited with code 1
+2025-08-05T09:59:41: Starting portaal-fe-notifications in /home/mverde/src/taal/portaal-fe-full/portaal-fe-notifications
+2025-08-05T09:59:41: yarn run v1.22.22
+2025-08-05T09:59:42: $ webpack serve --open --mode development --live-reload --hot
+2025-08-05T09:59:42: error Error: Cannot find module 'pnpapi'
+2025-08-05T09:59:42: Require stack:
+2025-08-05T09:59:42: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js
+2025-08-05T09:59:42: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/bin/yarn.js
+2025-08-05T09:59:42: Require stack:
+2025-08-05T09:59:42: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js
+2025-08-05T09:59:42: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/bin/yarn.js
+2025-08-05T09:59:42:     at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+2025-08-05T09:59:42:     at require$$0.Module._resolveFilename (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:28017:54)
+2025-08-05T09:59:42:     at require.resolve (/home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/v8-compile-cache.js:162:23)
+2025-08-05T09:59:42:     at /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:34245:76
+2025-08-05T09:59:42:     at Generator.next (<anonymous>)
+2025-08-05T09:59:42:     at step (/home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:310:30)
+2025-08-05T09:59:42:     at /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:321:13
+2025-08-05T09:59:42: info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+2025-08-05T09:59:42: portaal-fe-notifications exited with code 1
+2025-08-05T09:59:42: Starting portaal-fe-notifications in /home/mverde/src/taal/portaal-fe-full/portaal-fe-notifications
+2025-08-05T09:59:42: yarn run v1.22.22
+2025-08-05T09:59:42: $ webpack serve --open --mode development --live-reload --hot
+2025-08-05T09:59:42: error Error: Cannot find module 'pnpapi'
+2025-08-05T09:59:42: Require stack:
+2025-08-05T09:59:42: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js
+2025-08-05T09:59:42: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/bin/yarn.js
+2025-08-05T09:59:42: Require stack:
+2025-08-05T09:59:42: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js
+2025-08-05T09:59:42: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/bin/yarn.js
+2025-08-05T09:59:42:     at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+2025-08-05T09:59:42:     at require$$0.Module._resolveFilename (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:28017:54)
+2025-08-05T09:59:42:     at require.resolve (/home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/v8-compile-cache.js:162:23)
+2025-08-05T09:59:42:     at /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:34245:76
+2025-08-05T09:59:42:     at Generator.next (<anonymous>)
+2025-08-05T09:59:42:     at step (/home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:310:30)
+2025-08-05T09:59:42:     at /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:321:13
+2025-08-05T09:59:42: info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+2025-08-05T09:59:42: portaal-fe-notifications exited with code 1
+2025-08-05T09:59:43: Starting portaal-fe-notifications in /home/mverde/src/taal/portaal-fe-full/portaal-fe-notifications
+2025-08-05T09:59:43: yarn run v1.22.22
+2025-08-05T09:59:43: $ webpack serve --open --mode development --live-reload --hot
+2025-08-05T09:59:43: error Error: Cannot find module 'pnpapi'
+2025-08-05T09:59:43: Require stack:
+2025-08-05T09:59:43: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js
+2025-08-05T09:59:43: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/bin/yarn.js
+2025-08-05T09:59:43: Require stack:
+2025-08-05T09:59:43: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js
+2025-08-05T09:59:43: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/bin/yarn.js
+2025-08-05T09:59:43:     at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+2025-08-05T09:59:43:     at require$$0.Module._resolveFilename (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:28017:54)
+2025-08-05T09:59:43:     at require.resolve (/home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/v8-compile-cache.js:162:23)
+2025-08-05T09:59:43:     at /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:34245:76
+2025-08-05T09:59:43:     at Generator.next (<anonymous>)
+2025-08-05T09:59:43:     at step (/home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:310:30)
+2025-08-05T09:59:43:     at /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:321:13
+2025-08-05T09:59:43: info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+2025-08-05T09:59:43: portaal-fe-notifications exited with code 1
+2025-08-05T09:59:43: Starting portaal-fe-notifications in /home/mverde/src/taal/portaal-fe-full/portaal-fe-notifications
+2025-08-05T09:59:44: yarn run v1.22.22
+2025-08-05T09:59:44: $ webpack serve --open --mode development --live-reload --hot
+2025-08-05T09:59:44: error Error: Cannot find module 'pnpapi'
+2025-08-05T09:59:44: Require stack:
+2025-08-05T09:59:44: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js
+2025-08-05T09:59:44: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/bin/yarn.js
+2025-08-05T09:59:44: Require stack:
+2025-08-05T09:59:44: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js
+2025-08-05T09:59:44: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/bin/yarn.js
+2025-08-05T09:59:44:     at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+2025-08-05T09:59:44:     at require$$0.Module._resolveFilename (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:28017:54)
+2025-08-05T09:59:44:     at require.resolve (/home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/v8-compile-cache.js:162:23)
+2025-08-05T09:59:44:     at /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:34245:76
+2025-08-05T09:59:44:     at Generator.next (<anonymous>)
+2025-08-05T09:59:44:     at step (/home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:310:30)
+2025-08-05T09:59:44:     at /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:321:13
+2025-08-05T09:59:44: info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+2025-08-05T09:59:44: portaal-fe-notifications exited with code 1
+2025-08-05T09:59:44: Starting portaal-fe-notifications in /home/mverde/src/taal/portaal-fe-full/portaal-fe-notifications
+2025-08-05T09:59:44: yarn run v1.22.22
+2025-08-05T09:59:44: $ webpack serve --open --mode development --live-reload --hot
+2025-08-05T09:59:45: error Error: Cannot find module 'pnpapi'
+2025-08-05T09:59:45: Require stack:
+2025-08-05T09:59:45: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js
+2025-08-05T09:59:45: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/bin/yarn.js
+2025-08-05T09:59:45: Require stack:
+2025-08-05T09:59:45: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js
+2025-08-05T09:59:45: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/bin/yarn.js
+2025-08-05T09:59:45:     at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+2025-08-05T09:59:45:     at require$$0.Module._resolveFilename (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:28017:54)
+2025-08-05T09:59:45:     at require.resolve (/home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/v8-compile-cache.js:162:23)
+2025-08-05T09:59:45:     at /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:34245:76
+2025-08-05T09:59:45:     at Generator.next (<anonymous>)
+2025-08-05T09:59:45:     at step (/home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:310:30)
+2025-08-05T09:59:45:     at /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:321:13
+2025-08-05T09:59:45: info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+2025-08-05T09:59:45: portaal-fe-notifications exited with code 1
+2025-08-05T09:59:45: Starting portaal-fe-notifications in /home/mverde/src/taal/portaal-fe-full/portaal-fe-notifications
+2025-08-05T09:59:45: yarn run v1.22.22
+2025-08-05T09:59:45: $ webpack serve --open --mode development --live-reload --hot
+2025-08-05T09:59:45: error Error: Cannot find module 'pnpapi'
+2025-08-05T09:59:45: Require stack:
+2025-08-05T09:59:45: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js
+2025-08-05T09:59:45: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/bin/yarn.js
+2025-08-05T09:59:45: Require stack:
+2025-08-05T09:59:45: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js
+2025-08-05T09:59:45: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/bin/yarn.js
+2025-08-05T09:59:45:     at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+2025-08-05T09:59:45:     at require$$0.Module._resolveFilename (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:28017:54)
+2025-08-05T09:59:45:     at require.resolve (/home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/v8-compile-cache.js:162:23)
+2025-08-05T09:59:45:     at /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:34245:76
+2025-08-05T09:59:45:     at Generator.next (<anonymous>)
+2025-08-05T09:59:45:     at step (/home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:310:30)
+2025-08-05T09:59:45:     at /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:321:13
+2025-08-05T09:59:45: info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+2025-08-05T09:59:45: portaal-fe-notifications exited with code 1
+2025-08-05T09:59:46: Starting portaal-fe-notifications in /home/mverde/src/taal/portaal-fe-full/portaal-fe-notifications
+2025-08-05T09:59:46: yarn run v1.22.22
+2025-08-05T09:59:46: $ webpack serve --open --mode development --live-reload --hot
+2025-08-05T09:59:46: error Error: Cannot find module 'pnpapi'
+2025-08-05T09:59:46: Require stack:
+2025-08-05T09:59:46: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js
+2025-08-05T09:59:46: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/bin/yarn.js
+2025-08-05T09:59:46: Require stack:
+2025-08-05T09:59:46: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js
+2025-08-05T09:59:46: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/bin/yarn.js
+2025-08-05T09:59:46:     at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+2025-08-05T09:59:46:     at require$$0.Module._resolveFilename (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:28017:54)
+2025-08-05T09:59:46:     at require.resolve (/home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/v8-compile-cache.js:162:23)
+2025-08-05T09:59:46:     at /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:34245:76
+2025-08-05T09:59:46:     at Generator.next (<anonymous>)
+2025-08-05T09:59:46:     at step (/home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:310:30)
+2025-08-05T09:59:46:     at /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:321:13
+2025-08-05T09:59:46: info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+2025-08-05T09:59:46: portaal-fe-notifications exited with code 1
+2025-08-05T09:59:46: Starting portaal-fe-notifications in /home/mverde/src/taal/portaal-fe-full/portaal-fe-notifications
+2025-08-05T09:59:47: yarn run v1.22.22
+2025-08-05T09:59:47: $ webpack serve --open --mode development --live-reload --hot
+2025-08-05T09:59:47: error Error: Cannot find module 'pnpapi'
+2025-08-05T09:59:47: Require stack:
+2025-08-05T09:59:47: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js
+2025-08-05T09:59:47: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/bin/yarn.js
+2025-08-05T09:59:47: Require stack:
+2025-08-05T09:59:47: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js
+2025-08-05T09:59:47: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/bin/yarn.js
+2025-08-05T09:59:47:     at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+2025-08-05T09:59:47:     at require$$0.Module._resolveFilename (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:28017:54)
+2025-08-05T09:59:47:     at require.resolve (/home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/v8-compile-cache.js:162:23)
+2025-08-05T09:59:47:     at /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:34245:76
+2025-08-05T09:59:47:     at Generator.next (<anonymous>)
+2025-08-05T09:59:47:     at step (/home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:310:30)
+2025-08-05T09:59:47:     at /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:321:13
+2025-08-05T09:59:47: info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+2025-08-05T09:59:47: portaal-fe-notifications exited with code 1
+2025-08-05T09:59:47: Starting portaal-fe-notifications in /home/mverde/src/taal/portaal-fe-full/portaal-fe-notifications
+2025-08-05T09:59:47: yarn run v1.22.22
+2025-08-05T09:59:47: $ webpack serve --open --mode development --live-reload --hot
+2025-08-05T09:59:47: error Error: Cannot find module 'pnpapi'
+2025-08-05T09:59:47: Require stack:
+2025-08-05T09:59:47: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js
+2025-08-05T09:59:47: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/bin/yarn.js
+2025-08-05T09:59:47: Require stack:
+2025-08-05T09:59:47: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js
+2025-08-05T09:59:47: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/bin/yarn.js
+2025-08-05T09:59:47:     at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+2025-08-05T09:59:47:     at require$$0.Module._resolveFilename (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:28017:54)
+2025-08-05T09:59:47:     at require.resolve (/home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/v8-compile-cache.js:162:23)
+2025-08-05T09:59:47:     at /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:34245:76
+2025-08-05T09:59:47:     at Generator.next (<anonymous>)
+2025-08-05T09:59:47:     at step (/home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:310:30)
+2025-08-05T09:59:47:     at /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:321:13
+2025-08-05T09:59:47: info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+2025-08-05T09:59:47: portaal-fe-notifications exited with code 1
+2025-08-05T09:59:48: Starting portaal-fe-notifications in /home/mverde/src/taal/portaal-fe-full/portaal-fe-notifications
+2025-08-05T09:59:48: yarn run v1.22.22
+2025-08-05T09:59:48: $ webpack serve --open --mode development --live-reload --hot
+2025-08-05T09:59:48: error Error: Cannot find module 'pnpapi'
+2025-08-05T09:59:48: Require stack:
+2025-08-05T09:59:48: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js
+2025-08-05T09:59:48: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/bin/yarn.js
+2025-08-05T09:59:48: Require stack:
+2025-08-05T09:59:48: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js
+2025-08-05T09:59:48: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/bin/yarn.js
+2025-08-05T09:59:48:     at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+2025-08-05T09:59:48:     at require$$0.Module._resolveFilename (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:28017:54)
+2025-08-05T09:59:48:     at require.resolve (/home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/v8-compile-cache.js:162:23)
+2025-08-05T09:59:48:     at /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:34245:76
+2025-08-05T09:59:48:     at Generator.next (<anonymous>)
+2025-08-05T09:59:48:     at step (/home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:310:30)
+2025-08-05T09:59:48:     at /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:321:13
+2025-08-05T09:59:48: info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+2025-08-05T09:59:48: portaal-fe-notifications exited with code 1
+2025-08-05T09:59:49: Starting portaal-fe-notifications in /home/mverde/src/taal/portaal-fe-full/portaal-fe-notifications
+2025-08-05T09:59:49: yarn run v1.22.22
+2025-08-05T09:59:49: $ webpack serve --open --mode development --live-reload --hot
+2025-08-05T09:59:49: error Error: Cannot find module 'pnpapi'
+2025-08-05T09:59:49: Require stack:
+2025-08-05T09:59:49: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js
+2025-08-05T09:59:49: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/bin/yarn.js
+2025-08-05T09:59:49: Require stack:
+2025-08-05T09:59:49: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js
+2025-08-05T09:59:49: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/bin/yarn.js
+2025-08-05T09:59:49:     at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+2025-08-05T09:59:49:     at require$$0.Module._resolveFilename (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:28017:54)
+2025-08-05T09:59:49:     at require.resolve (/home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/v8-compile-cache.js:162:23)
+2025-08-05T09:59:49:     at /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:34245:76
+2025-08-05T09:59:49:     at Generator.next (<anonymous>)
+2025-08-05T09:59:49:     at step (/home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:310:30)
+2025-08-05T09:59:49:     at /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:321:13
+2025-08-05T09:59:49: info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+2025-08-05T09:59:49: portaal-fe-notifications exited with code 1
+2025-08-05T09:59:49: Starting portaal-fe-notifications in /home/mverde/src/taal/portaal-fe-full/portaal-fe-notifications
+2025-08-05T09:59:50: yarn run v1.22.22
+2025-08-05T09:59:50: $ webpack serve --open --mode development --live-reload --hot
+2025-08-05T09:59:50: error Error: Cannot find module 'pnpapi'
+2025-08-05T09:59:50: Require stack:
+2025-08-05T09:59:50: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js
+2025-08-05T09:59:50: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/bin/yarn.js
+2025-08-05T09:59:50: Require stack:
+2025-08-05T09:59:50: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js
+2025-08-05T09:59:50: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/bin/yarn.js
+2025-08-05T09:59:50:     at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+2025-08-05T09:59:50:     at require$$0.Module._resolveFilename (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:28017:54)
+2025-08-05T09:59:50:     at require.resolve (/home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/v8-compile-cache.js:162:23)
+2025-08-05T09:59:50:     at /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:34245:76
+2025-08-05T09:59:50:     at Generator.next (<anonymous>)
+2025-08-05T09:59:50:     at step (/home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:310:30)
+2025-08-05T09:59:50:     at /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:321:13
+2025-08-05T09:59:50: info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+2025-08-05T09:59:50: portaal-fe-notifications exited with code 1
+2025-08-05T09:59:50: Starting portaal-fe-notifications in /home/mverde/src/taal/portaal-fe-full/portaal-fe-notifications
+2025-08-05T09:59:51: yarn run v1.22.22
+2025-08-05T09:59:51: $ webpack serve --open --mode development --live-reload --hot
+2025-08-05T09:59:51: error Error: Cannot find module 'pnpapi'
+2025-08-05T09:59:51: Require stack:
+2025-08-05T09:59:51: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js
+2025-08-05T09:59:51: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/bin/yarn.js
+2025-08-05T09:59:51: Require stack:
+2025-08-05T09:59:51: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js
+2025-08-05T09:59:51: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/bin/yarn.js
+2025-08-05T09:59:51:     at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+2025-08-05T09:59:51:     at require$$0.Module._resolveFilename (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:28017:54)
+2025-08-05T09:59:51:     at require.resolve (/home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/v8-compile-cache.js:162:23)
+2025-08-05T09:59:51:     at /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:34245:76
+2025-08-05T09:59:51:     at Generator.next (<anonymous>)
+2025-08-05T09:59:51:     at step (/home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:310:30)
+2025-08-05T09:59:51:     at /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:321:13
+2025-08-05T09:59:51: info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+2025-08-05T09:59:51: portaal-fe-notifications exited with code 1
+2025-08-05T09:59:51: Starting portaal-fe-notifications in /home/mverde/src/taal/portaal-fe-full/portaal-fe-notifications
+2025-08-05T09:59:51: yarn run v1.22.22
+2025-08-05T09:59:51: $ webpack serve --open --mode development --live-reload --hot
+2025-08-05T09:59:51: error Error: Cannot find module 'pnpapi'
+2025-08-05T09:59:51: Require stack:
+2025-08-05T09:59:51: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js
+2025-08-05T09:59:51: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/bin/yarn.js
+2025-08-05T09:59:51: Require stack:
+2025-08-05T09:59:51: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js
+2025-08-05T09:59:51: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/bin/yarn.js
+2025-08-05T09:59:51:     at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+2025-08-05T09:59:51:     at require$$0.Module._resolveFilename (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:28017:54)
+2025-08-05T09:59:51:     at require.resolve (/home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/v8-compile-cache.js:162:23)
+2025-08-05T09:59:51:     at /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:34245:76
+2025-08-05T09:59:51:     at Generator.next (<anonymous>)
+2025-08-05T09:59:51:     at step (/home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:310:30)
+2025-08-05T09:59:51:     at /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:321:13
+2025-08-05T09:59:51: info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+2025-08-05T09:59:51: portaal-fe-notifications exited with code 1
+2025-08-05T09:59:52: Starting portaal-fe-notifications in /home/mverde/src/taal/portaal-fe-full/portaal-fe-notifications
+2025-08-05T09:59:52: yarn run v1.22.22
+2025-08-05T09:59:52: $ webpack serve --open --mode development --live-reload --hot
+2025-08-05T09:59:52: error Error: Cannot find module 'pnpapi'
+2025-08-05T09:59:52: Require stack:
+2025-08-05T09:59:52: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js
+2025-08-05T09:59:52: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/bin/yarn.js
+2025-08-05T09:59:52: Require stack:
+2025-08-05T09:59:52: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js
+2025-08-05T09:59:52: - /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/bin/yarn.js
+2025-08-05T09:59:52:     at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+2025-08-05T09:59:52:     at require$$0.Module._resolveFilename (/home/mverde/src/taal/portaal-fe-full/.pnp.cjs:28017:54)
+2025-08-05T09:59:52:     at require.resolve (/home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/v8-compile-cache.js:162:23)
+2025-08-05T09:59:52:     at /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:34245:76
+2025-08-05T09:59:52:     at Generator.next (<anonymous>)
+2025-08-05T09:59:52:     at step (/home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:310:30)
+2025-08-05T09:59:52:     at /home/mverde/.cache/node/corepack/v1/yarn/1.22.22/lib/cli.js:321:13
+2025-08-05T09:59:52: info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+2025-08-05T09:59:52: portaal-fe-notifications exited with code 1

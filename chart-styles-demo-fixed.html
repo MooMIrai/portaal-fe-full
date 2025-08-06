@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chart.js Style Gallery - Demo</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .controls {
+            text-align: center;
+            margin-bottom: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .style-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+        
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        button.active {
+            background: #4285F4;
+            color: white;
+            transform: scale(1.05);
+        }
+        
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .chart-container h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 1.3rem;
+        }
+        
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
+        }
+        
+        .current-style {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 20px;
+            margin-top: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        @media (max-width: 768px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎨 Chart.js Style Gallery</h1>
+        <p>Clicca sui pulsanti per vedere diversi stili applicati ai grafici</p>
+    </div>
+    
+    <div class="controls">
+        <h3>Seleziona uno Stile:</h3>
+        <div class="style-buttons">
+            <button onclick="switchStyle('default', this)">Default</button>
+            <button onclick="switchStyle('gradient', this)">Gradient</button>
+            <button onclick="switchStyle('glass', this)">Glassmorphism</button>
+            <button onclick="switchStyle('neon', this)">Neon Glow</button>
+            <button onclick="switchStyle('material', this)">Material</button>
+            <button onclick="switchStyle('neumorphism', this)">Neumorphism</button>
+            <button onclick="switchStyle('minimal', this)">Minimal</button>
+            <button onclick="switchStyle('dark', this)">Dark Mode</button>
+            <button onclick="switchStyle('rounded', this)">Rounded</button>
+        </div>
+        <h3 style="margin-top: 20px; color: #666;">🚀 Advanced Styles:</h3>
+        <div class="style-buttons">
+            <button onclick="switchStyle('shadow3d', this)" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">3D Shadow</button>
+            <button onclick="switchStyle('volume3d', this)" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">Volume 3D</button>
+            <button onclick="switchStyle('datadriven', this)" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white;">Data-Driven</button>
+            <button onclick="switchStyle('dynamicgradient', this)" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white;">Dynamic Gradient</button>
+            <button onclick="switchStyle('advanced3d', this)" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white;">Advanced 3D</button>
+        </div>
+        <div class="current-style" id="currentStyle">Stile Attuale: Default</div>
+    </div>
+    
+    <div class="charts-grid">
+        <div class="chart-container">
+            <h3>📊 Bar Chart</h3>
+            <div class="chart-wrapper">
+                <canvas id="barChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="chart-container">
+            <h3>📈 Line Chart</h3>
+            <div class="chart-wrapper">
+                <canvas id="lineChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="chart-container">
+            <h3>🥧 Pie Chart</h3>
+            <div class="chart-wrapper">
+                <canvas id="pieChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="chart-container">
+            <h3>🍩 Doughnut Chart</h3>
+            <div class="chart-wrapper">
+                <canvas id="doughnutChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Plugin per ombre 3D professionali
+        const dropShadowPlugin = {
+            id: 'dropShadow',
+            beforeDatasetsDraw: (chart, args, options) => {
+                const { ctx } = chart;
+                ctx.save();
+                
+                // Apply shadow settings
+                ctx.shadowColor = options.shadowColor || 'rgba(0, 0, 0, 0.5)';
+                ctx.shadowBlur = options.shadowBlur || 20;
+                ctx.shadowOffsetX = options.shadowOffsetX || 10;
+                ctx.shadowOffsetY = options.shadowOffsetY || 10;
+                
+                ctx.restore();
+            }
+        };
+        
+        // Variabili globali per i grafici
+        let charts = {};
+        
+        // Funzione per creare gradiente
+        function createGradient(ctx, chartArea, colors) {
+            if (!chartArea) return colors[0];
+            const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+            colors.forEach((color, index) => {
+                gradient.addColorStop(index / (colors.length - 1), color);
+            });
+            return gradient;
+        }
+        
+        // Stili predefiniti
+        const chartStyles = {
+            default: {
+                name: 'Default',
+                barColors: ['rgba(54, 162, 235, 0.5)'],
+                barBorderColors: ['rgba(54, 162, 235, 1)'],
+                barBorderWidth: 1,
+                barBorderRadius: 0,
+                lineColor: 'rgb(75, 192, 192)',
+                lineBgColor: 'rgba(75, 192, 192, 0.2)',
+                lineTension: 0.1,
+                pieColors: [
+                    'rgba(255, 99, 132, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(255, 206, 86, 0.7)',
+                    'rgba(75, 192, 192, 0.7)',
+                    'rgba(153, 102, 255, 0.7)'
+                ],
+                pieBorderWidth: 1
+            },
+            
+            gradient: {
+                name: 'Gradient',
+                useGradient: true,
+                barColors: [
+                    ['rgba(54, 162, 235, 0.1)', 'rgba(54, 162, 235, 0.5)', 'rgba(54, 162, 235, 0.9)']
+                ],
+                barBorderWidth: 0,
+                barBorderRadius: 5,
+                lineColor: 'rgb(75, 192, 192)',
+                lineBgGradient: ['rgba(75, 192, 192, 0)', 'rgba(75, 192, 192, 0.6)'],
+                lineTension: 0.4,
+                pieColors: [
+                    'rgba(255, 99, 132, 0.9)',
+                    'rgba(54, 162, 235, 0.9)',
+                    'rgba(255, 206, 86, 0.9)',
+                    'rgba(75, 192, 192, 0.9)',
+                    'rgba(153, 102, 255, 0.9)'
+                ],
+                pieBorderWidth: 2,
+                pieBorderColor: '#fff'
+            },
+            
+            glass: {
+                name: 'Glassmorphism',
+                barColors: ['rgba(99, 102, 241, 0.15)', 'rgba(168, 85, 247, 0.15)', 'rgba(236, 72, 153, 0.15)', 'rgba(59, 130, 246, 0.15)', 'rgba(16, 185, 129, 0.15)', 'rgba(245, 158, 11, 0.15)'],
+                barBorderColors: ['rgba(99, 102, 241, 0.6)', 'rgba(168, 85, 247, 0.6)', 'rgba(236, 72, 153, 0.6)', 'rgba(59, 130, 246, 0.6)', 'rgba(16, 185, 129, 0.6)', 'rgba(245, 158, 11, 0.6)'],
+                barBorderWidth: 2,
+                barBorderRadius: 10,
+                lineColor: 'rgba(99, 102, 241, 0.8)',
+                lineBgColor: 'rgba(99, 102, 241, 0.1)',
+                lineTension: 0.4,
+                lineBorderWidth: 3,
+                pieColors: [
+                    'rgba(99, 102, 241, 0.2)',
+                    'rgba(168, 85, 247, 0.2)',
+                    'rgba(236, 72, 153, 0.2)',
+                    'rgba(59, 130, 246, 0.2)',
+                    'rgba(16, 185, 129, 0.2)'
+                ],
+                pieBorderColor: 'rgba(255, 255, 255, 0.5)',
+                pieBorderWidth: 2
+            },
+            
+            neon: {
+                name: 'Neon Glow',
+                barColors: ['rgba(0, 255, 255, 0.5)'],
+                barBorderColors: ['#00ffff'],
+                barBorderWidth: 2,
+                barBorderRadius: 5,
+                lineColor: '#00ff00',
+                lineBgColor: 'rgba(0, 255, 0, 0.2)',
+                lineTension: 0.4,
+                lineBorderWidth: 3,
+                pieColors: [
+                    'rgba(255, 0, 255, 0.7)',
+                    'rgba(0, 255, 255, 0.7)',
+                    'rgba(255, 255, 0, 0.7)',
+                    'rgba(0, 255, 0, 0.7)',
+                    'rgba(255, 0, 0, 0.7)'
+                ],
+                pieBorderColors: ['#ff00ff', '#00ffff', '#ffff00', '#00ff00', '#ff0000'],
+                pieBorderWidth: 2
+            },
+            
+            material: {
+                name: 'Material Design',
+                barColors: ['#4285F4', '#DB4437', '#F4B400', '#0F9D58', '#AB47BC', '#00ACC1'],
+                barBorderWidth: 0,
+                barBorderRadius: 4,
+                lineColor: '#4285F4',
+                lineBgColor: 'rgba(66, 133, 244, 0.1)',
+                lineTension: 0.4,
+                lineBorderWidth: 2,
+                pieColors: ['#4285F4', '#DB4437', '#F4B400', '#0F9D58', '#AB47BC'],
+                pieBorderWidth: 0
+            },
+            
+            neumorphism: {
+                name: 'Neumorphism',
+                barColors: ['#e0e5ec'],
+                barBorderWidth: 0,
+                barBorderRadius: 10,
+                lineColor: '#a3b1c6',
+                lineBgColor: 'rgba(163, 177, 198, 0.2)',
+                lineTension: 0.4,
+                lineBorderWidth: 3,
+                pieColors: ['#e0e5ec', '#cbd5e0', '#b8c6db', '#a3b1c6', '#9baacf'],
+                pieBorderWidth: 0
+            },
+            
+            minimal: {
+                name: 'Minimal',
+                barColors: ['#000000'],
+                barBorderWidth: 0,
+                barBorderRadius: 0,
+                barThickness: 2,
+                lineColor: '#000000',
+                lineBgColor: 'transparent',
+                lineTension: 0,
+                lineBorderWidth: 1,
+                linePointRadius: 0,
+                pieColors: ['#000', '#333', '#666', '#999', '#ccc'],
+                pieBorderWidth: 5,
+                pieBorderColor: '#ffffff',
+                hideLegend: true,
+                hideScales: true
+            },
+            
+            dark: {
+                name: 'Dark Mode',
+                barColors: [
+                    'rgba(139, 92, 246, 0.8)',
+                    'rgba(236, 72, 153, 0.8)',
+                    'rgba(59, 130, 246, 0.8)',
+                    'rgba(16, 185, 129, 0.8)',
+                    'rgba(245, 158, 11, 0.8)',
+                    'rgba(239, 68, 68, 0.8)'
+                ],
+                barBorderColors: [
+                    'rgb(139, 92, 246)',
+                    'rgb(236, 72, 153)',
+                    'rgb(59, 130, 246)',
+                    'rgb(16, 185, 129)',
+                    'rgb(245, 158, 11)',
+                    'rgb(239, 68, 68)'
+                ],
+                barBorderWidth: 2,
+                barBorderRadius: 8,
+                lineColor: 'rgb(139, 92, 246)',
+                lineBgColor: 'rgba(139, 92, 246, 0.1)',
+                lineTension: 0.4,
+                lineBorderWidth: 2,
+                pieColors: [
+                    'rgba(139, 92, 246, 0.8)',
+                    'rgba(236, 72, 153, 0.8)',
+                    'rgba(59, 130, 246, 0.8)',
+                    'rgba(16, 185, 129, 0.8)',
+                    'rgba(245, 158, 11, 0.8)'
+                ],
+                pieBorderColor: '#1a1a1a',
+                pieBorderWidth: 2
+            },
+            
+            rounded: {
+                name: 'Rounded & Colorful',
+                barColors: [
+                    'rgba(255, 99, 132, 0.8)',
+                    'rgba(255, 159, 64, 0.8)',
+                    'rgba(255, 206, 86, 0.8)',
+                    'rgba(75, 192, 192, 0.8)',
+                    'rgba(54, 162, 235, 0.8)',
+                    'rgba(153, 102, 255, 0.8)'
+                ],
+                barBorderWidth: 0,
+                barBorderRadius: 20,
+                barPercentage: 0.6,
+                lineColor: 'rgb(255, 99, 132)',
+                lineBgColor: 'rgba(255, 99, 132, 0.2)',
+                lineTension: 0.5,
+                lineBorderWidth: 3,
+                linePointRadius: 8,
+                pieColors: [
+                    'rgba(255, 99, 132, 0.8)',
+                    'rgba(255, 159, 64, 0.8)',
+                    'rgba(255, 206, 86, 0.8)',
+                    'rgba(75, 192, 192, 0.8)',
+                    'rgba(153, 102, 255, 0.8)'
+                ],
+                pieBorderWidth: 5,
+                pieBorderColor: '#fff',
+                pieHoverOffset: 10
+            },
+            
+            // Advanced Styles from Professional Document
+            shadow3d: {
+                name: '3D Shadow',
+                barColors: [
+                    'rgba(99, 102, 241, 0.9)',
+                    'rgba(168, 85, 247, 0.9)',
+                    'rgba(236, 72, 153, 0.9)',
+                    'rgba(59, 130, 246, 0.9)',
+                    'rgba(16, 185, 129, 0.9)',
+                    'rgba(245, 158, 11, 0.9)'
+                ],
+                barBorderWidth: 0,
+                barBorderRadius: 8,
+                lineColor: 'rgb(99, 102, 241)',
+                lineBgColor: 'rgba(99, 102, 241, 0.2)',
+                lineTension: 0.4,
+                lineBorderWidth: 3,
+                pieColors: [
+                    'rgba(99, 102, 241, 0.9)',
+                    'rgba(168, 85, 247, 0.9)',
+                    'rgba(236, 72, 153, 0.9)',
+                    'rgba(59, 130, 246, 0.9)',
+                    'rgba(16, 185, 129, 0.9)'
+                ],
+                pieBorderWidth: 0,
+                useDropShadow: true,
+                dropShadowOptions: {
+                    shadowColor: 'rgba(0, 0, 0, 0.4)',
+                    shadowBlur: 15,
+                    shadowOffsetX: 8,
+                    shadowOffsetY: 8
+                }
+            },
+            
+            volume3d: {
+                name: 'Volume 3D',
+                useGradient: true,
+                barColors: [
+                    ['rgba(240, 147, 251, 0.2)', 'rgba(240, 147, 251, 0.6)', 'rgba(245, 87, 108, 0.9)']
+                ],
+                barBorderColors: ['rgba(245, 87, 108, 1)'],
+                barBorderWidth: 2,
+                barBorderRadius: 12,
+                lineColor: 'rgb(245, 87, 108)',
+                lineBgGradient: ['rgba(240, 147, 251, 0)', 'rgba(245, 87, 108, 0.4)'],
+                lineTension: 0.4,
+                lineBorderWidth: 3,
+                pieColors: [
+                    'rgba(240, 147, 251, 0.8)',
+                    'rgba(245, 87, 108, 0.8)',
+                    'rgba(255, 154, 0, 0.8)',
+                    'rgba(123, 31, 162, 0.8)',
+                    'rgba(32, 201, 151, 0.8)'
+                ],
+                pieBorderWidth: 2,
+                pieBorderColor: '#fff',
+                useDropShadow: true,
+                dropShadowOptions: {
+                    shadowColor: 'rgba(245, 87, 108, 0.4)',
+                    shadowBlur: 20,
+                    shadowOffsetX: 10,
+                    shadowOffsetY: 15
+                }
+            },
+            
+            datadriven: {
+                name: 'Data-Driven Colors',
+                useDataDriven: true,
+                barColors: (context) => {
+                    const value = context.parsed?.y || 0;
+                    // Verde per valori positivi alti, rosso per valori bassi
+                    if (value > 70) return 'rgba(16, 185, 129, 0.8)';
+                    if (value > 50) return 'rgba(59, 130, 246, 0.8)';
+                    if (value > 30) return 'rgba(245, 158, 11, 0.8)';
+                    return 'rgba(239, 68, 68, 0.8)';
+                },
+                barBorderColors: (context) => {
+                    const value = context.parsed?.y || 0;
+                    if (value > 70) return 'rgb(16, 185, 129)';
+                    if (value > 50) return 'rgb(59, 130, 246)';
+                    if (value > 30) return 'rgb(245, 158, 11)';
+                    return 'rgb(239, 68, 68)';
+                },
+                barBorderWidth: 2,
+                barBorderRadius: 6,
+                lineColor: 'rgb(79, 172, 254)',
+                lineBgColor: 'rgba(79, 172, 254, 0.2)',
+                lineTension: 0.3,
+                linePointBackgroundColor: (context) => {
+                    const value = context.parsed?.y || 0;
+                    if (value > 70) return 'rgb(16, 185, 129)';
+                    if (value > 50) return 'rgb(59, 130, 246)';
+                    if (value > 30) return 'rgb(245, 158, 11)';
+                    return 'rgb(239, 68, 68)';
+                },
+                linePointRadius: 6,
+                pieColors: [
+                    'rgba(79, 172, 254, 0.8)',
+                    'rgba(0, 242, 254, 0.8)',
+                    'rgba(16, 185, 129, 0.8)',
+                    'rgba(245, 158, 11, 0.8)',
+                    'rgba(239, 68, 68, 0.8)'
+                ],
+                pieBorderWidth: 2,
+                pieBorderColor: '#fff'
+            },
+            
+            dynamicgradient: {
+                name: 'Dynamic Gradient',
+                useGradient: true,
+                barColors: [
+                    ['rgba(67, 233, 123, 0)', 'rgba(67, 233, 123, 0.5)', 'rgba(56, 249, 215, 0.9)']
+                ],
+                barBorderWidth: 0,
+                barBorderRadius: 15,
+                lineColor: 'rgb(56, 249, 215)',
+                lineBgGradient: ['rgba(67, 233, 123, 0)', 'rgba(56, 249, 215, 0.6)'],
+                lineTension: 0.5,
+                lineBorderWidth: 4,
+                linePointRadius: 0,
+                pieUseGradient: true,
+                pieColors: (context) => {
+                    const chart = context.chart;
+                    const {ctx, chartArea} = chart;
+                    if (!chartArea) return 'rgba(67, 233, 123, 0.8)';
+                    
+                    const centerX = (chartArea.left + chartArea.right) / 2;
+                    const centerY = (chartArea.top + chartArea.bottom) / 2;
+                    const r = Math.min(
+                        (chartArea.right - chartArea.left) / 2,
+                        (chartArea.bottom - chartArea.top) / 2
+                    );
+                    
+                    const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, r);
+                    gradient.addColorStop(0, 'rgba(67, 233, 123, 0.9)');
+                    gradient.addColorStop(0.5, 'rgba(56, 249, 215, 0.7)');
+                    gradient.addColorStop(1, 'rgba(56, 249, 215, 0.3)');
+                    return gradient;
+                },
+                pieBorderWidth: 3,
+                pieBorderColor: 'rgba(255, 255, 255, 0.8)',
+                animationDuration: 2000
+            },
+            
+            advanced3d: {
+                name: 'Advanced 3D',
+                useGradient: true,
+                barColors: [
+                    ['rgba(250, 112, 154, 0.3)', 'rgba(250, 112, 154, 0.7)', 'rgba(254, 225, 64, 0.9)']
+                ],
+                barBorderColors: ['rgba(254, 225, 64, 1)'],
+                barBorderWidth: 3,
+                barBorderRadius: {
+                    topLeft: 20,
+                    topRight: 20,
+                    bottomLeft: 0,
+                    bottomRight: 0
+                },
+                lineColor: 'rgb(250, 112, 154)',
+                lineBgGradient: ['rgba(250, 112, 154, 0)', 'rgba(254, 225, 64, 0.5)'],
+                lineTension: 0.4,
+                lineBorderWidth: 4,
+                linePointRadius: 8,
+                linePointBackgroundColor: 'white',
+                linePointBorderWidth: 3,
+                pieColors: [
+                    'rgba(250, 112, 154, 0.9)',
+                    'rgba(254, 225, 64, 0.9)',
+                    'rgba(255, 154, 0, 0.9)',
+                    'rgba(237, 117, 23, 0.9)',
+                    'rgba(201, 42, 42, 0.9)'
+                ],
+                pieBorderWidth: 4,
+                pieBorderColor: '#fff',
+                pieHoverOffset: 15,
+                useDropShadow: true,
+                dropShadowOptions: {
+                    shadowColor: 'rgba(250, 112, 154, 0.5)',
+                    shadowBlur: 25,
+                    shadowOffsetX: 12,
+                    shadowOffsetY: 20
+                }
+            }
+        };
+        
+        // Funzione per cambiare stile
+        function switchStyle(styleName, button) {
+            // Aggiorna bottoni
+            document.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+            if (button) button.classList.add('active');
+            
+            // Aggiorna testo
+            document.getElementById('currentStyle').textContent = 
+                `Stile Attuale: ${chartStyles[styleName].name}`;
+            
+            // Applica nuovo stile
+            applyStyleToCharts(styleName);
+        }
+        
+        // Applica stile a tutti i grafici
+        function applyStyleToCharts(styleName) {
+            const style = chartStyles[styleName];
+            
+            // Distruggi e ricrea i grafici con il nuovo stile
+            Object.values(charts).forEach(chart => chart.destroy());
+            createCharts(styleName);
+        }
+        
+        // Crea tutti i grafici
+        function createCharts(styleName = 'default') {
+            const style = chartStyles[styleName];
+            
+            // Determine which plugins to use
+            const plugins = [];
+            if (style.useDropShadow) {
+                plugins.push(dropShadowPlugin);
+            }
+            
+            // Bar Chart
+            const barCtx = document.getElementById('barChart').getContext('2d');
+            charts.bar = new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno'],
+                    datasets: [{
+                        label: 'Vendite 2024',
+                        data: [65, 59, 80, 81, 56, 85],
+                        backgroundColor: style.useGradient ? 
+                            (context) => {
+                                const chart = context.chart;
+                                const {ctx, chartArea} = chart;
+                                return createGradient(ctx, chartArea, style.barColors[0]);
+                            } : 
+                            style.useDataDriven && typeof style.barColors === 'function' ?
+                            style.barColors :
+                            style.barColors,
+                        borderColor: style.useDataDriven && typeof style.barBorderColors === 'function' ?
+                            style.barBorderColors :
+                            style.barBorderColors || style.barColors,
+                        borderWidth: style.barBorderWidth,
+                        borderRadius: style.barBorderRadius || 0,
+                        barThickness: style.barThickness,
+                        barPercentage: style.barPercentage || 0.9
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: !style.hideLegend
+                        }
+                    },
+                    scales: style.hideScales ? {} : {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                },
+                plugins: plugins
+            });
+            
+            // Line Chart
+            const lineCtx = document.getElementById('lineChart').getContext('2d');
+            charts.line = new Chart(lineCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno'],
+                    datasets: [{
+                        label: 'Trend 2024',
+                        data: [28, 48, 40, 65, 59, 80],
+                        borderColor: style.lineColor,
+                        backgroundColor: style.lineBgGradient ? 
+                            (context) => {
+                                const chart = context.chart;
+                                const {ctx, chartArea} = chart;
+                                return createGradient(ctx, chartArea, style.lineBgGradient);
+                            } : 
+                            style.lineBgColor,
+                        tension: style.lineTension,
+                        borderWidth: style.lineBorderWidth || 2,
+                        pointRadius: style.linePointRadius !== undefined ? style.linePointRadius : 3,
+                        pointBackgroundColor: typeof style.linePointBackgroundColor === 'function' ?
+                            style.linePointBackgroundColor :
+                            style.linePointBackgroundColor || style.lineColor,
+                        pointBorderColor: style.lineColor,
+                        pointBorderWidth: style.linePointBorderWidth || 2,
+                        fill: style.lineBgColor !== 'transparent'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: !style.hideLegend
+                        }
+                    },
+                    scales: style.hideScales ? {} : {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                },
+                plugins: plugins
+            });
+            
+            // Pie Chart
+            const pieCtx = document.getElementById('pieChart').getContext('2d');
+            charts.pie = new Chart(pieCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Rosso', 'Blu', 'Giallo', 'Verde', 'Viola'],
+                    datasets: [{
+                        data: [12, 19, 3, 5, 2],
+                        backgroundColor: style.pieUseGradient && typeof style.pieColors === 'function' ?
+                            style.pieColors :
+                            style.pieColors,
+                        borderColor: style.pieBorderColors || style.pieBorderColor || '#fff',
+                        borderWidth: style.pieBorderWidth,
+                        hoverOffset: style.pieHoverOffset || 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: !style.hideLegend,
+                            position: 'right'
+                        }
+                    }
+                },
+                plugins: plugins
+            });
+            
+            // Doughnut Chart
+            const doughnutCtx = document.getElementById('doughnutChart').getContext('2d');
+            charts.doughnut = new Chart(doughnutCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Desktop', 'Mobile', 'Tablet', 'Altri'],
+                    datasets: [{
+                        data: [45, 35, 15, 5],
+                        backgroundColor: style.pieUseGradient && typeof style.pieColors === 'function' ?
+                            style.pieColors :
+                            style.pieColors.slice ? style.pieColors.slice(0, 4) : style.pieColors,
+                        borderColor: style.pieBorderColors ? style.pieBorderColors.slice(0, 4) : 
+                                    (style.pieBorderColor || '#fff'),
+                        borderWidth: style.pieBorderWidth,
+                        hoverOffset: style.pieHoverOffset || 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: !style.hideLegend,
+                            position: 'right'
+                        }
+                    }
+                },
+                plugins: plugins
+            });
+        }
+        
+        // Inizializza al caricamento
+        window.onload = function() {
+            createCharts('default');
+            // Seleziona il primo bottone
+            document.querySelector('button').classList.add('active');
+        };
+    </script>
+</body>
+</html>

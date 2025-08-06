@@ -1,0 +1,361 @@
+// Main Help System Styles
+// This file contains global styles that apply to the entire help system
+
+@use './HelpTooltip.scss';
+@use './HelpTour.scss';
+@use './HelpPanel.scss';
+@use './HelpTrigger.scss';
+
+// Global help system variables
+:root {
+  --help-primary-color: #007acc;
+  --help-primary-dark: #005c99;
+  --help-secondary-color: #4CAF50;
+  --help-background: #ffffff;
+  --help-surface: #f8f9fa;
+  --help-border: #e0e0e0;
+  --help-text: #333333;
+  --help-text-secondary: #666666;
+  --help-text-muted: #888888;
+  --help-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --help-shadow-large: 0 8px 24px rgba(0, 0, 0, 0.2);
+  --help-border-radius: 6px;
+  --help-border-radius-small: 3px;
+  --help-animation-duration: 0.3s;
+  --help-z-index-tooltip: 10000;
+  --help-z-index-tour: 10001;
+  --help-z-index-overlay: 9999;
+}
+
+// Global help system classes
+.help-system {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  
+  // Accessibility improvements
+  *:focus {
+    outline: 2px solid var(--help-primary-color);
+    outline-offset: 2px;
+  }
+
+  // Animation classes
+  .help-fade-in {
+    animation: helpFadeIn var(--help-animation-duration) ease-out;
+  }
+
+  .help-slide-up {
+    animation: helpSlideUp var(--help-animation-duration) ease-out;
+  }
+
+  .help-bounce-in {
+    animation: helpBounceIn 0.6s ease-out;
+  }
+}
+
+// Keyframe animations
+@keyframes helpFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes helpSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes helpBounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// Utility classes for help system
+.help-hidden {
+  display: none !important;
+}
+
+.help-sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.help-text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.help-scrollable {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+// Interactive elements
+.help-interactive {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--help-shadow);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// Status indicators
+.help-status {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: var(--help-border-radius-small);
+  font-size: 12px;
+  font-weight: 500;
+  
+  &.help-status-new {
+    background: #e3f2fd;
+    color: #1976d2;
+  }
+  
+  &.help-status-updated {
+    background: #f3e5f5;
+    color: #7b1fa2;
+  }
+  
+  &.help-status-popular {
+    background: #fff3e0;
+    color: #f57c00;
+  }
+}
+
+// Help content formatting
+.help-content {
+  line-height: 1.6;
+  color: var(--help-text);
+  
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--help-text);
+    margin: 1.5em 0 0.5em 0;
+    
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+  
+  p {
+    margin: 0 0 1em 0;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  
+  ul, ol {
+    margin: 1em 0;
+    padding-left: 1.5em;
+    
+    li {
+      margin-bottom: 0.5em;
+    }
+  }
+  
+  blockquote {
+    border-left: 4px solid var(--help-primary-color);
+    background: var(--help-surface);
+    margin: 1em 0;
+    padding: 1em;
+    color: var(--help-text-secondary);
+    font-style: italic;
+  }
+  
+  code {
+    background: var(--help-surface);
+    border: 1px solid var(--help-border);
+    border-radius: var(--help-border-radius-small);
+    padding: 0.2em 0.4em;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 0.9em;
+  }
+  
+  pre {
+    background: var(--help-surface);
+    border: 1px solid var(--help-border);
+    border-radius: var(--help-border-radius);
+    padding: 1em;
+    overflow-x: auto;
+    margin: 1em 0;
+    
+    code {
+      background: none;
+      border: none;
+      padding: 0;
+    }
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1em 0;
+    
+    th, td {
+      border: 1px solid var(--help-border);
+      padding: 0.5em;
+      text-align: left;
+    }
+    
+    th {
+      background: var(--help-surface);
+      font-weight: 600;
+    }
+  }
+}
+
+// Loading states
+.help-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2em;
+  
+  .help-spinner {
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--help-border);
+    border-top-color: var(--help-primary-color);
+    border-radius: 50%;
+    animation: helpSpin 1s linear infinite;
+  }
+}
+
+@keyframes helpSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Error states
+.help-error {
+  background: #ffebee;
+  border: 1px solid #ffcdd2;
+  border-radius: var(--help-border-radius);
+  padding: 1em;
+  margin: 1em 0;
+  color: #c62828;
+  
+  .help-error-title {
+    font-weight: 600;
+    margin-bottom: 0.5em;
+  }
+  
+  .help-error-message {
+    margin: 0;
+  }
+}
+
+// Empty states
+.help-empty {
+  text-align: center;
+  padding: 3em 1em;
+  color: var(--help-text-muted);
+  
+  .help-empty-icon {
+    font-size: 3em;
+    opacity: 0.5;
+    margin-bottom: 0.5em;
+  }
+  
+  .help-empty-title {
+    font-size: 1.2em;
+    font-weight: 600;
+    margin-bottom: 0.5em;
+    color: var(--help-text-secondary);
+  }
+  
+  .help-empty-message {
+    margin: 0;
+  }
+}
+
+// Responsive behavior
+@media (max-width: 768px) {
+  .help-system {
+    font-size: 14px;
+  }
+  
+  .help-content {
+    h1 { font-size: 1.5em; }
+    h2 { font-size: 1.3em; }
+    h3 { font-size: 1.2em; }
+    h4 { font-size: 1.1em; }
+    h5 { font-size: 1em; }
+    h6 { font-size: 0.9em; }
+  }
+}
+
+// Print styles
+@media print {
+  .help-system {
+    .help-trigger,
+    .help-tour,
+    .help-panel {
+      display: none !important;
+    }
+    
+    .help-content {
+      color: black !important;
+      background: white !important;
+    }
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  :root {
+    --help-primary-color: #0066cc;
+    --help-primary-dark: #004499;
+    --help-border: #333333;
+    --help-text: #000000;
+    --help-text-secondary: #333333;
+    --help-text-muted: #666666;
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .help-system {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}

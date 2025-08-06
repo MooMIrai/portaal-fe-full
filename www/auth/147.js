@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkportaal_mfe_auth=self.webpackChunkportaal_mfe_auth||[]).push([[147],{2147:(e,t,u)=>{function o(){return{menuItems:[{id:10,text:"Gestione Ruoli",level:0,route:"/role",iconKey:"lockIcon",permissions:["READ_ROLES"]}]}}u.r(t),u.d(t,{default:()=>o})}}]);
+//# sourceMappingURL=147.js.map

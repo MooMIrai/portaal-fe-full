@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkportaal_mfe_reports=self.webpackChunkportaal_mfe_reports||[]).push([[147],{2147:(e,r,t)=>{function o(){return{menuItems:[{id:15,text:"Report",level:0,route:"/reports",iconKey:"fileReportIcon",permissions:["READ_REPORTS"]}]}}t.r(r),t.d(r,{default:()=>o})}}]);
+//# sourceMappingURL=147.js.map

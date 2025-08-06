@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard Test</title>
+</head>
+<body>
+    <h1>Dashboard Module Test</h1>
+    <p>Testing module federation connections...</p>
+    
+    <h2>Module Status:</h2>
+    <ul>
+        <li>Core: <span id="core-status">Checking...</span></li>
+        <li>Common: <span id="common-status">Checking...</span></li>
+        <li>Auth: <span id="auth-status">Checking...</span></li>
+        <li>Dashboard: <span id="dashboard-status">Checking...</span></li>
+    </ul>
+    
+    <h2>Quick Links:</h2>
+    <ul>
+        <li><a href="http://localhost:3000" target="_blank">Main App (Login)</a></li>
+        <li><a href="http://localhost:3000/dashboard" target="_blank">Dashboard (requires login)</a></li>
+        <li><a href="http://localhost:3014" target="_blank">Dashboard Direct</a></li>
+    </ul>
+    
+    <script>
+        // Check module status
+        async function checkModule(url, elementId) {
+            try {
+                const response = await fetch(url);
+                document.getElementById(elementId).textContent = response.ok ? '✅ Running' : '❌ Not responding';
+            } catch (error) {
+                document.getElementById(elementId).textContent = '❌ Not running';
+            }
+        }
+        
+        checkModule('http://localhost:3000', 'core-status');
+        checkModule('http://localhost:3003', 'common-status');
+        checkModule('http://localhost:3006', 'auth-status');
+        checkModule('http://localhost:3014', 'dashboard-status');
+    </script>
+</body>
+</html>

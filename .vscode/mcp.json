@@ -1,0 +1,22 @@
+{
+  "servers": {
+    "browser-mcp": {
+      "command": "/home/mverde/.nvm/versions/node/v22.16.0/bin/npx",
+      "args": ["--package=browser-mcp", "browser-mcp"],
+      "env": {
+        "PATH": "/home/mverde/.nvm/versions/node/v22.16.0/bin:/usr/bin:/bin"
+      }
+    },
+    "browser-tools2": {
+      "command": "/home/mverde/.nvm/versions/node/v22.16.0/bin/npx",
+      "args": ["@agentdeskai/browser-tools-mcp@1.2.0"],
+      "env": {
+        "PATH": "/home/mverde/.nvm/versions/node/v22.16.0/bin:/usr/bin:/bin"
+      }
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest"]
+    }
+  }
+}

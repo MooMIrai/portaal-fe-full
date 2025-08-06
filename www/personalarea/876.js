@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkportaal_mfe_auth=self.webpackChunkportaal_mfe_auth||[]).push([[876],{876:(e,t,a)=>{a.r(t),a.d(t,{default:()=>r});var u=a(914),n=a.n(u),l=a(697);const r=function(){return n().createElement(l.Routes,null)}}}]);

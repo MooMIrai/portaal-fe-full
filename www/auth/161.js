@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkportaal_mfe_auth=self.webpackChunkportaal_mfe_auth||[]).push([[161],{161:(e,t,a)=>{a.r(t),a.d(t,{default:()=>m});var l=a(4914),n=a.n(l),r=a(6141),s=a.n(r),u=a(1751),p=a(383);function m(){return n().createElement(s(),{data:[{path:"profile",element:n().createElement(u.A,null),permissions:[]},{path:"/role",element:n().createElement(p.Y,null),permissions:["READ_ROLES"]}]})}}}]);
+//# sourceMappingURL=161.js.map

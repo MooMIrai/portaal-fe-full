@@ -1,0 +1,23 @@
+IMPORTANT: Path Configuration Notes
+===================================
+
+When using these configuration files in a new project:
+
+1. The selector-agent.md file must be available as a subagent in Claude's agent system.
+   It is NOT included in this custom folder because it's part of the main agents collection.
+
+2. These files assume that Claude has access to all the subagents mentioned in settings.json.
+   The agents are referenced by name, not by file path, so they must be available in Claude's
+   agent system.
+
+3. Directory structure after copying to your project:
+   your-project/
+   ├── CLAUDE.md                    # Project configuration
+   ├── agent-selection-policy.md    # Documentation (optional)
+   └── .claude/
+       └── settings.json           # Claude settings
+
+4. The actual agent files (selector-agent.md, python-pro.md, etc.) remain in Claude's
+   main agent directory and are accessed by name when Claude uses the Task tool.
+
+5. If you need to verify available agents, ask Claude: "What agents are available?"

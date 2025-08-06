@@ -1,0 +1,146 @@
+.help-trigger {
+  position: relative;
+  display: inline-block;
+}
+
+.help-trigger-button {
+  &.help-mode-active {
+    box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.3);
+    animation: helpModeGlow 2s infinite;
+  }
+}
+
+@keyframes helpModeGlow {
+  0%, 100% {
+    box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(0, 122, 204, 0.5);
+  }
+}
+
+.help-mode-indicator {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: linear-gradient(135deg, #007acc 0%, #005c99 100%);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  animation: slideIn 0.3s ease-out;
+
+  .help-mode-text {
+    margin: 0;
+  }
+
+  .help-mode-close {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .k-icon {
+      font-size: 10px;
+    }
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// Help menu dropdown styles
+.k-animation-container {
+  .k-popup {
+    .k-menu-group {
+      .k-menu-item {
+        &.help-menu-category {
+          font-weight: 600;
+          color: #007acc;
+          background: #f8f9fa;
+          border-bottom: 1px solid #e0e0e0;
+          
+          &:hover {
+            background: #e3f2fd;
+          }
+        }
+
+        .k-menu-link {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px 12px;
+
+          .k-icon {
+            width: 16px;
+            height: 16px;
+            opacity: 0.7;
+          }
+
+          &:hover .k-icon {
+            opacity: 1;
+          }
+        }
+
+        .k-menu-group {
+          .k-menu-item {
+            padding-left: 24px;
+            font-size: 13px;
+
+            .k-menu-link {
+              padding: 6px 12px;
+            }
+          }
+        }
+      }
+
+      .k-separator {
+        margin: 4px 0;
+        border-color: #e0e0e0;
+      }
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .help-mode-indicator {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    left: auto;
+    transform: none;
+  }
+
+  .help-trigger-button {
+    .k-button-text {
+      display: none;
+    }
+  }
+}

@@ -1,0 +1,13 @@
+// Export all structured widget components
+export { GanttWidget } from './GanttWidget';
+export { PieWidget } from './PieWidget';
+export { BarWidget } from './BarWidget';
+export { LineWidget } from './LineWidget';
+export { AreaWidget } from './AreaWidget';
+export { DonutWidget } from './DonutWidget';
+export { TableWidget } from './TableWidget';
+export { KPIWidget } from './KPIWidget';
+export { GaugeWidget } from './GaugeWidget';
+export { ScatterWidget } from './ScatterWidget';
+export { HeatmapWidget } from './HeatmapWidget';
+export { TimelineWidget } from './TimelineWidget';

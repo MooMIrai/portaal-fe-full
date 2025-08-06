@@ -1,0 +1,98 @@
+import React from 'react';
+import { Card, CardHeader, CardBody } from '@progress/kendo-react-layout';
+import { Chart, ChartSeries, ChartSeriesItem, ChartCategoryAxis, ChartCategoryAxisItem, ChartValueAxis, ChartValueAxisItem, ChartLegend, ChartTooltip } from '@progress/kendo-react-charts';
+import { WidgetProps } from '../../../types/widgetConfig.types';
+import { LineConfig } from '../../../types/widgetConfig.types';
+
+export const LineWidget: React.FC<WidgetProps<LineConfig>> = ({ data, config }) => {
+  // Handle multiple value fields
+  const valueFields = Array.isArray(config.valueField) ? config.valueField : [config.valueField];
+  const colors = Array.isArray(config.color) ? config.color : [config.color || '#3498db'];
+  
+  // Extract categories
+  const categories = data.map((item: any) => {
+    const value = item[config.categoryField || 'category'];
+    // If it's a date string, format it
+    if (value && value.includes('-') && config.categoryField?.toLowerCase().includes('date')) {
+      const date = new Date(value);
+      return date.toLocaleDateString('it-IT', { day: '2-digit', month: 'short' });
+    }
+    return value;
+  });
+  
+  // Handle multiple y-axes if configured
+  const yAxes = config.yAxis || valueFields.map((field, index) => ({
+    field,
+    title: field,
+    position: index === 0 ? 'left' : 'right'
+  }));
+  
+  return (
+    <Card style={{ width: '100%', height: '100%' }}>
+      <CardHeader className="bg-gray-50 px-4 py-3">
+        <h3 className="text-lg font-semibold">{config.title}</h3>
+        {config.description && (
+          <p className="text-sm text-gray-600 mt-1">{config.description}</p>
+        )}
+      </CardHeader>
+      <CardBody className="p-4">
+        <Chart style={{ height: '100%' }}>
+          <ChartCategoryAxis>
+            <ChartCategoryAxisItem 
+              categories={categories}
+              labels={{
+                rotation: -45,
+                margin: { top: 5 }
+              }}
+            />
+          </ChartCategoryAxis>
+          <ChartValueAxis>
+            {Array.isArray(config.yAxis) ? (
+              config.yAxis.map((axis, index) => (
+                <ChartValueAxisItem
+                  key={axis.field}
+                  name={axis.field}
+                  title={{ text: axis.title }}
+                  labels={{
+                    format: config.valueFormat || '{0}'
+                  }}
+                />
+              ))
+            ) : (
+              <ChartValueAxisItem
+                labels={{
+                  format: config.valueFormat || '{0}'
+                }}
+              />
+            )}
+          </ChartValueAxis>
+          <ChartSeries>
+            {valueFields.map((field, index) => (
+              <ChartSeriesItem
+                key={field}
+                type="line"
+                data={data.map((item: any) => item[field])}
+                color={colors[index] || colors[0]}
+                style={config.smooth ? 'smooth' : 'normal'}
+                markers={{
+                  visible: config.markers !== false,
+                  size: config.markerSize || 4
+                }}
+                missingValues={config.missingValues || 'gap'}
+                name={Array.isArray(config.yAxis) ? config.yAxis[index]?.title : field}
+                axis={Array.isArray(config.yAxis) ? field : undefined}
+              />
+            ))}
+          </ChartSeries>
+          {valueFields.length > 1 && (
+            <ChartLegend 
+              position="bottom"
+              orientation="horizontal"
+            />
+          )}
+          <ChartTooltip />
+        </Chart>
+      </CardBody>
+    </Card>
+  );
+};

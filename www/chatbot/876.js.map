@@ -1,0 +1,1 @@
+{"version":3,"file":"876.js","mappings":"4KAUA,QARY,WAEV,OAAOA,IAAAA,cAAAA,IAAAA,SAAA,KACT,C","sources":["webpack://portaal-mfe-chatbot/./src/App.tsx"],"sourcesContent":["import React from \"react\";\n\nconst App = () => {\n\n  return <></>\n};\n\n\n\n\nexport default App;\n"],"names":["React"],"sourceRoot":""}

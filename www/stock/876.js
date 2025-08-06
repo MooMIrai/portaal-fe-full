@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkportaal_mfe_stock=self.webpackChunkportaal_mfe_stock||[]).push([[876],{6876:(e,t,a)=>{a.r(t),a.d(t,{default:()=>u});var n=a(4914),l=a.n(n),r=a(1755),s=a(6141),c=a.n(s);function u(){return l().createElement(c(),{data:[{path:"/device",element:l().createElement(r.A,null),permissions:["READ_STOCK"]}]})}}}]);
+//# sourceMappingURL=876.js.map

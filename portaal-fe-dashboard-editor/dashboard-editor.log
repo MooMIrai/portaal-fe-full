@@ -1,0 +1,224 @@
+yarn run v1.22.22
+$ webpack serve --mode development
+<i> [webpack-dev-server] Project is running at:
+<i> [webpack-dev-server] Loopback: http://localhost:3022/
+<i> [webpack-dev-server] On Your Network (IPv4): http://192.168.1.246:3022/
+<i> [webpack-dev-server] Content not from webpack is served from '/home/mverde/src/taal/portaal-fe-full/portaal-fe-dashboard-editor/public' directory
+<i> [webpack-dev-server] 404s will fallback to '/index.html'
+assets by chunk 3.86 MiB (id hint: vendors) 27 assets
+asset src_bootstrap_tsx-data_image_png_base64_iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs_9AAAACXBIW-bdbd6e.js 117 KiB [emitted] [minimized] 2 related assets
+asset remoteEntry.js 115 KiB [emitted] [minimized] (name: dashboardeditor) 2 related assets
+asset main.js 112 KiB [emitted] [minimized] (name: main) 2 related assets
+asset src_components_Help_index_ts-src_constants_ts.js 94.5 KiB [emitted] [minimized] 2 related assets
+asset src_pages_EditorPage_component_tsx-src_pages_PreviewPage_component_tsx-src_pages_TemplatesPag-b807ca.js 22.7 KiB [emitted] [minimized] 2 related assets
+asset src_components_WidgetConfigurator_component_tsx.js 19.6 KiB [emitted] [minimized] 2 related assets
+asset src_components_WidgetPreview_component_tsx.js 9.96 KiB [emitted] [minimized] 2 related assets
+asset node_modules_babel_runtime_helpers_esm_toConsumableArray_js-src_components_WidgetTypeSelector-c5df43.js 7.83 KiB [emitted] [minimized] 2 related assets
+asset node_modules_progress_kendo-react-labels_index_mjs-_efa60.js 6.55 KiB [emitted] [minimized] 2 related assets
+asset node_modules_progress_kendo-react-labels_index_mjs-_efa61.js 6.55 KiB [emitted] [minimized] 2 related assets
+asset src_VisibleRoutes_tsx.js 1.19 KiB [emitted] [minimized] 2 related assets
+asset node_modules_babel_runtime_helpers_esm_unsupportedIterableToArray_js.js 1.08 KiB [emitted] [minimized] 2 related assets
+asset src_MfeInit_ts.js 699 bytes [emitted] [minimized] 2 related assets
+asset index.html 444 bytes [emitted]
+runtime modules 147 KiB 36 modules
+orphan modules 802 bytes [orphan] 3 modules
+modules by path ./node_modules/ 6.2 MiB 1048 modules
+modules by path ./src/ 299 KiB 38 modules
+provide-module modules 1010 bytes 24 modules
+consume-shared-module modules 1010 bytes
+  modules by path consume shared module (default) @progress/ 798 bytes 19 modules
+  + 5 modules
+asset modules 13.8 KiB
+  modules by mime type image/svg+xml 1.23 KiB 5 modules
+  modules by mime type image/png 12.5 KiB 2 modules
+container entry 42 bytes [built] [code generated]
+remote common/Routes 6 bytes (remote) 6 bytes (share-init) [built] [code generated]
+external "common@http://localhost:3003/remoteEntry.js" 42 bytes [built] [code generated]
+webpack 5.101.0 compiled successfully in 7255 ms
+assets by status 4.05 MiB [cached] 38 assets
+assets by path . 328 KiB
+  assets by path *.js 328 KiB
+    assets by info 6.41 KiB [immutable]
+      asset src_components_Help_index_ts-src_constants_ts.f9831f8b77a5f0566507.hot-update.js 6.03 KiB [emitted] [immutable] [hmr] [minimized] 2 related assets
+      asset dashboardeditor.f9831f8b77a5f0566507.hot-update.js 205 bytes [emitted] [immutable] [hmr] [minimized] (name: dashboardeditor) 1 related asset
+      asset main.f9831f8b77a5f0566507.hot-update.js 183 bytes [emitted] [immutable] [hmr] [minimized] (name: main) 1 related asset
+    asset remoteEntry.js 115 KiB [emitted] [minimized] (name: dashboardeditor) 2 related assets
+    asset main.js 112 KiB [emitted] [minimized] (name: main) 2 related assets
+    asset src_components_Help_index_ts-src_constants_ts.js 94.5 KiB [emitted] [minimized] 2 related assets
+  assets by path *.json 163 bytes
+    asset dashboardeditor.f9831f8b77a5f0566507.hot-update.json 87 bytes [emitted] [immutable] [hmr]
+    asset main.f9831f8b77a5f0566507.hot-update.json 76 bytes [emitted] [immutable] [hmr]
+Entrypoint main 112 KiB (308 KiB) = main.js 112 KiB main.f9831f8b77a5f0566507.hot-update.js 183 bytes 2 auxiliary assets
+Entrypoint dashboardeditor 116 KiB (317 KiB) = remoteEntry.js 115 KiB dashboardeditor.f9831f8b77a5f0566507.hot-update.js 205 bytes 2 auxiliary assets
+cached modules 6.47 MiB (javascript) 1010 bytes (share-init) 1010 bytes (consume-shared) 6 bytes (remote) [cached] 1145 modules
+runtime modules 147 KiB 36 modules
+javascript modules 35.1 KiB
+  ./src/components/Help/HelpPanel.tsx 9.87 KiB [built] [code generated]
+  ./node_modules/css-loader/dist/cjs.js!./node_modules/postcss-loader/dist/cjs.js!./src/tailwind.css 25.2 KiB [built]
+webpack 5.101.0 compiled successfully in 1031 ms
+assets by status 4.36 MiB [cached] 41 assets
+cached modules 6.48 MiB (javascript) 1010 bytes (share-init) 1010 bytes (consume-shared) 6 bytes (remote) 147 KiB (runtime) [cached] 1182 modules
+./node_modules/css-loader/dist/cjs.js!./node_modules/postcss-loader/dist/cjs.js!./src/tailwind.css 25.2 KiB [built]
+webpack 5.101.0 compiled successfully in 153 ms
+assets by status 4.14 MiB [cached] 38 assets
+assets by path . 230 KiB
+  assets by path *.js 230 KiB
+    assets by info 1.58 KiB [immutable]
+      asset src_VisibleRoutes_tsx.20682a043be479793dd6.hot-update.js 1.2 KiB [emitted] [immutable] [hmr] [minimized] 2 related assets
+      asset dashboardeditor.20682a043be479793dd6.hot-update.js 205 bytes [emitted] [immutable] [hmr] [minimized] (name: dashboardeditor) 1 related asset
+      asset main.20682a043be479793dd6.hot-update.js 183 bytes [emitted] [immutable] [hmr] [minimized] (name: main) 1 related asset
+    asset remoteEntry.js 115 KiB [emitted] [minimized] (name: dashboardeditor) 2 related assets
+    asset main.js 112 KiB [emitted] [minimized] (name: main) 2 related assets
+    asset src_VisibleRoutes_tsx.js 1.19 KiB [emitted] [minimized] 2 related assets
+  assets by path *.json 91 bytes
+    asset dashboardeditor.20682a043be479793dd6.hot-update.json 63 bytes [emitted] [immutable] [hmr]
+    asset main.20682a043be479793dd6.hot-update.json 28 bytes [emitted] [immutable] [hmr]
+Entrypoint main 112 KiB (308 KiB) = main.js 112 KiB main.20682a043be479793dd6.hot-update.js 183 bytes 2 auxiliary assets
+Entrypoint dashboardeditor 116 KiB (317 KiB) = remoteEntry.js 115 KiB dashboardeditor.20682a043be479793dd6.hot-update.js 205 bytes 2 auxiliary assets
+cached modules 6.48 MiB (javascript) 1010 bytes (share-init) 1010 bytes (consume-shared) 6 bytes (remote) [cached] 1145 modules
+runtime modules 147 KiB 36 modules
+javascript modules 26.6 KiB
+  ./src/VisibleRoutes.tsx 1.44 KiB [built] [code generated]
+  ./node_modules/css-loader/dist/cjs.js!./node_modules/postcss-loader/dist/cjs.js!./src/tailwind.css 25.2 KiB [built]
+webpack 5.101.0 compiled successfully in 872 ms
+<i> [webpack-dev-middleware] wait until bundle finished: /remoteEntry.js
+assets by status 4.05 MiB [cached] 38 assets
+assets by path . 323 KiB
+  assets by path *.js 323 KiB
+    assets by info 1.49 KiB [immutable]
+      asset src_components_Help_index_ts-src_constants_ts.e387affe99eb36e27e5c.hot-update.js 1.11 KiB [emitted] [immutable] [hmr] [minimized] 2 related assets
+      asset dashboardeditor.e387affe99eb36e27e5c.hot-update.js 205 bytes [emitted] [immutable] [hmr] [minimized] (name: dashboardeditor) 1 related asset
+      asset main.e387affe99eb36e27e5c.hot-update.js 183 bytes [emitted] [immutable] [hmr] [minimized] (name: main) 1 related asset
+    asset remoteEntry.js 115 KiB [emitted] [minimized] (name: dashboardeditor) 2 related assets
+    asset main.js 112 KiB [emitted] [minimized] (name: main) 2 related assets
+    asset src_components_Help_index_ts-src_constants_ts.js 94.6 KiB [emitted] [minimized] 2 related assets
+  assets by path *.json 163 bytes
+    asset dashboardeditor.e387affe99eb36e27e5c.hot-update.json 87 bytes [emitted] [immutable] [hmr]
+    asset main.e387affe99eb36e27e5c.hot-update.json 76 bytes [emitted] [immutable] [hmr]
+Entrypoint main 112 KiB (308 KiB) = main.js 112 KiB main.e387affe99eb36e27e5c.hot-update.js 183 bytes 2 auxiliary assets
+Entrypoint dashboardeditor 116 KiB (317 KiB) = remoteEntry.js 115 KiB dashboardeditor.e387affe99eb36e27e5c.hot-update.js 205 bytes 2 auxiliary assets
+cached modules 6.48 MiB (javascript) 1010 bytes (share-init) 1010 bytes (consume-shared) 6 bytes (remote) [cached] 1145 modules
+runtime modules 147 KiB 36 modules
+javascript modules 26.2 KiB
+  ./src/components/Help/HelpSystem.tsx 990 bytes [built] [code generated]
+  ./node_modules/css-loader/dist/cjs.js!./node_modules/postcss-loader/dist/cjs.js!./src/tailwind.css 25.2 KiB [built]
+webpack 5.101.0 compiled successfully in 876 ms
+assets by status 4.14 MiB [cached] 38 assets
+assets by path . 229 KiB
+  assets by path *.js 229 KiB
+    assets by info 988 bytes [immutable]
+      asset src_MfeInit_ts.3e9f8d9fd07b1c32f247.hot-update.js 600 bytes [emitted] [immutable] [hmr] [minimized] 2 related assets
+      asset dashboardeditor.3e9f8d9fd07b1c32f247.hot-update.js 205 bytes [emitted] [immutable] [hmr] [minimized] (name: dashboardeditor) 1 related asset
+      asset main.3e9f8d9fd07b1c32f247.hot-update.js 183 bytes [emitted] [immutable] [hmr] [minimized] (name: main) 1 related asset
+    asset remoteEntry.js 115 KiB [emitted] [minimized] (name: dashboardeditor) 2 related assets
+    asset main.js 112 KiB [emitted] [minimized] (name: main) 2 related assets
+    asset src_MfeInit_ts.js 593 bytes [emitted] [minimized] 2 related assets
+  assets by path *.json 84 bytes
+    asset dashboardeditor.3e9f8d9fd07b1c32f247.hot-update.json 56 bytes [emitted] [immutable] [hmr]
+    asset main.3e9f8d9fd07b1c32f247.hot-update.json 28 bytes [emitted] [immutable] [hmr]
+Entrypoint main 112 KiB (308 KiB) = main.js 112 KiB main.3e9f8d9fd07b1c32f247.hot-update.js 183 bytes 2 auxiliary assets
+Entrypoint dashboardeditor 116 KiB (317 KiB) = remoteEntry.js 115 KiB dashboardeditor.3e9f8d9fd07b1c32f247.hot-update.js 205 bytes 2 auxiliary assets
+cached modules 6.48 MiB (javascript) 1010 bytes (share-init) 1010 bytes (consume-shared) 6 bytes (remote) [cached] 1145 modules
+runtime modules 147 KiB 36 modules
+javascript modules 25.8 KiB
+  ./src/MfeInit.ts 640 bytes [built] [code generated]
+  ./node_modules/css-loader/dist/cjs.js!./node_modules/postcss-loader/dist/cjs.js!./src/tailwind.css 25.2 KiB [built]
+webpack 5.101.0 compiled successfully in 905 ms
+assets by status 4.14 MiB [cached] 38 assets
+assets by path . 229 KiB
+  assets by path *.js 229 KiB
+    assets by info 1.07 KiB [immutable]
+      asset src_MfeInit_ts.50108e8a19dfc33b562e.hot-update.js 706 bytes [emitted] [immutable] [hmr] [minimized] 2 related assets
+      asset dashboardeditor.50108e8a19dfc33b562e.hot-update.js 205 bytes [emitted] [immutable] [hmr] [minimized] (name: dashboardeditor) 1 related asset
+      asset main.50108e8a19dfc33b562e.hot-update.js 183 bytes [emitted] [immutable] [hmr] [minimized] (name: main) 1 related asset
+    asset remoteEntry.js 115 KiB [emitted] [minimized] (name: dashboardeditor) 2 related assets
+    asset main.js 112 KiB [emitted] [minimized] (name: main) 2 related assets
+    asset src_MfeInit_ts.js 699 bytes [emitted] [minimized] 2 related assets
+  assets by path *.json 84 bytes
+    asset dashboardeditor.50108e8a19dfc33b562e.hot-update.json 56 bytes [emitted] [immutable] [hmr]
+    asset main.50108e8a19dfc33b562e.hot-update.json 28 bytes [emitted] [immutable] [hmr]
+Entrypoint main 112 KiB (308 KiB) = main.js 112 KiB main.50108e8a19dfc33b562e.hot-update.js 183 bytes 2 auxiliary assets
+Entrypoint dashboardeditor 116 KiB (317 KiB) = remoteEntry.js 115 KiB dashboardeditor.50108e8a19dfc33b562e.hot-update.js 205 bytes 2 auxiliary assets
+cached modules 6.48 MiB (javascript) 1010 bytes (share-init) 1010 bytes (consume-shared) 6 bytes (remote) [cached] 1145 modules
+runtime modules 147 KiB 36 modules
+javascript modules 25.8 KiB
+  ./src/MfeInit.ts 627 bytes [built] [code generated]
+  ./node_modules/css-loader/dist/cjs.js!./node_modules/postcss-loader/dist/cjs.js!./src/tailwind.css 25.2 KiB [built]
+webpack 5.101.0 compiled successfully in 781 ms
+assets by status 4.36 MiB [cached] 41 assets
+cached modules 6.48 MiB (javascript) 1010 bytes (share-init) 1010 bytes (consume-shared) 6 bytes (remote) 147 KiB (runtime) [cached] 1182 modules
+./node_modules/css-loader/dist/cjs.js!./node_modules/postcss-loader/dist/cjs.js!./src/tailwind.css 25.2 KiB [built]
+webpack 5.101.0 compiled successfully in 162 ms
+assets by status 4.36 MiB [cached] 41 assets
+cached modules 6.48 MiB (javascript) 1010 bytes (share-init) 1010 bytes (consume-shared) 6 bytes (remote) 147 KiB (runtime) [cached] 1182 modules
+./node_modules/css-loader/dist/cjs.js!./node_modules/postcss-loader/dist/cjs.js!./src/tailwind.css 25.2 KiB [built]
+webpack 5.101.0 compiled successfully in 130 ms
+assets by status 4.14 MiB [cached] 38 assets
+assets by path . 229 KiB
+  assets by path *.js 229 KiB
+    assets by info 1.04 KiB [immutable]
+      asset src_MfeInit_ts.f38b40656c39e40a3dbc.hot-update.js 680 bytes [emitted] [immutable] [hmr] [minimized] 2 related assets
+      asset dashboardeditor.f38b40656c39e40a3dbc.hot-update.js 205 bytes [emitted] [immutable] [hmr] [minimized] (name: dashboardeditor) 1 related asset
+      asset main.f38b40656c39e40a3dbc.hot-update.js 183 bytes [emitted] [immutable] [hmr] [minimized] (name: main) 1 related asset
+    asset remoteEntry.js 115 KiB [emitted] [minimized] (name: dashboardeditor) 2 related assets
+    asset main.js 112 KiB [emitted] [minimized] (name: main) 2 related assets
+    asset src_MfeInit_ts.js 673 bytes [emitted] [minimized] 2 related assets
+  assets by path *.json 84 bytes
+    asset dashboardeditor.f38b40656c39e40a3dbc.hot-update.json 56 bytes [emitted] [immutable] [hmr]
+    asset main.f38b40656c39e40a3dbc.hot-update.json 28 bytes [emitted] [immutable] [hmr]
+Entrypoint main 112 KiB (308 KiB) = main.js 112 KiB main.f38b40656c39e40a3dbc.hot-update.js 183 bytes 2 auxiliary assets
+Entrypoint dashboardeditor 116 KiB (317 KiB) = remoteEntry.js 115 KiB dashboardeditor.f38b40656c39e40a3dbc.hot-update.js 205 bytes 2 auxiliary assets
+cached modules 6.48 MiB (javascript) 1010 bytes (share-init) 1010 bytes (consume-shared) 6 bytes (remote) [cached] 1145 modules
+runtime modules 147 KiB 36 modules
+javascript modules 25.8 KiB
+  ./src/MfeInit.ts 664 bytes [built] [code generated]
+  ./node_modules/css-loader/dist/cjs.js!./node_modules/postcss-loader/dist/cjs.js!./src/tailwind.css 25.2 KiB [built]
+webpack 5.101.0 compiled successfully in 820 ms
+assets by status 4 MiB [cached] 36 assets
+assets by path . 418 KiB
+  assets by path *.js 418 KiB
+    assets by info 50.3 KiB [immutable]
+      asset dashboardeditor.06978cbbc743d643842b.hot-update.js 20.4 KiB [emitted] [immutable] [hmr] [minimized] (name: dashboardeditor) 2 related assets
+      asset main.06978cbbc743d643842b.hot-update.js 17.8 KiB [emitted] [immutable] [hmr] [minimized] (name: main) 2 related assets
+      + 2 assets
+    asset src_bootstrap_tsx-data_image_png_base64_iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs_9AAAACXBIW-bdbd6e.js 128 KiB [emitted] [minimized] 2 related assets
+    asset remoteEntry.js 115 KiB [emitted] [minimized] (name: dashboardeditor) 2 related assets
+    asset main.js 112 KiB [emitted] [minimized] (name: main) 2 related assets
+    asset src_pages_PreviewPage_component_tsx-src_pages_TemplatesPage_component_tsx.js 12 KiB [emitted] [minimized] 2 related assets
+    asset src_VisibleRoutes_tsx.js 1.04 KiB [emitted] [minimized] 2 related assets
+  assets by path *.json 436 bytes
+    asset main.06978cbbc743d643842b.hot-update.json 233 bytes [emitted] [immutable] [hmr]
+    asset dashboardeditor.06978cbbc743d643842b.hot-update.json 203 bytes [emitted] [immutable] [hmr]
+Entrypoint main 129 KiB (343 KiB) = main.js 112 KiB main.06978cbbc743d643842b.hot-update.js 17.8 KiB 2 auxiliary assets
+Entrypoint dashboardeditor 136 KiB (360 KiB) = remoteEntry.js 115 KiB dashboardeditor.06978cbbc743d643842b.hot-update.js 20.4 KiB 2 auxiliary assets
+cached modules 6.47 MiB (javascript) 1010 bytes (share-init) 1010 bytes (consume-shared) 6 bytes (remote) [cached] 1142 modules
+runtime modules 147 KiB 36 modules
+javascript modules 36.7 KiB
+  built modules 26.4 KiB [built]
+    ./src/VisibleRoutes.tsx 1.21 KiB [built] [code generated]
+    ./node_modules/css-loader/dist/cjs.js!./node_modules/postcss-loader/dist/cjs.js!./src/tailwind.css 25.2 KiB [built]
+  ./src/index.ts 22 bytes [code generated]
+  container entry 42 bytes [code generated]
+  ./src/pages/EditorPage/component.tsx 10.2 KiB [code generated]
+webpack 5.101.0 compiled successfully in 1053 ms
+assets by status 4.14 MiB [cached] 38 assets
+assets by path . 230 KiB
+  assets by path *.js 230 KiB
+    assets by info 1.43 KiB [immutable]
+      asset src_VisibleRoutes_tsx.d285d4c0ac32264bd408.hot-update.js 1.05 KiB [emitted] [immutable] [hmr] [minimized] 2 related assets
+      asset dashboardeditor.d285d4c0ac32264bd408.hot-update.js 205 bytes [emitted] [immutable] [hmr] [minimized] (name: dashboardeditor) 1 related asset
+      asset main.d285d4c0ac32264bd408.hot-update.js 183 bytes [emitted] [immutable] [hmr] [minimized] (name: main) 1 related asset
+    asset remoteEntry.js 115 KiB [emitted] [minimized] (name: dashboardeditor) 2 related assets
+    asset main.js 112 KiB [emitted] [minimized] (name: main) 2 related assets
+    asset src_VisibleRoutes_tsx.js 1.04 KiB [emitted] [minimized] 2 related assets
+  assets by path *.json 91 bytes
+    asset dashboardeditor.d285d4c0ac32264bd408.hot-update.json 63 bytes [emitted] [immutable] [hmr]
+    asset main.d285d4c0ac32264bd408.hot-update.json 28 bytes [emitted] [immutable] [hmr]
+Entrypoint main 112 KiB (308 KiB) = main.js 112 KiB main.d285d4c0ac32264bd408.hot-update.js 183 bytes 2 auxiliary assets
+Entrypoint dashboardeditor 116 KiB (317 KiB) = remoteEntry.js 115 KiB dashboardeditor.d285d4c0ac32264bd408.hot-update.js 205 bytes 2 auxiliary assets
+cached modules 6.48 MiB (javascript) 1010 bytes (share-init) 1010 bytes (consume-shared) 6 bytes (remote) [cached] 1145 modules
+runtime modules 147 KiB 36 modules
+javascript modules 26.4 KiB
+  ./src/VisibleRoutes.tsx 1.21 KiB [built] [code generated]
+  ./node_modules/css-loader/dist/cjs.js!./node_modules/postcss-loader/dist/cjs.js!./src/tailwind.css 25.2 KiB [built]
+webpack 5.101.0 compiled successfully in 816 ms

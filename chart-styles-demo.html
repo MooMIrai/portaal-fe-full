@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chart.js Style Gallery - Demo Interattiva</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .controls {
+            text-align: center;
+            margin-bottom: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .style-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+        
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-glass {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: #333;
+        }
+        
+        .btn-neon {
+            background: #000;
+            color: #0ff;
+            border: 2px solid #0ff;
+            box-shadow: 0 0 10px #0ff, inset 0 0 10px rgba(0,255,255,0.2);
+        }
+        
+        .btn-material {
+            background: #4285F4;
+            color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.26);
+        }
+        
+        .btn-neumorphism {
+            background: #e0e5ec;
+            color: #333;
+            box-shadow: 9px 9px 16px #a3b1c6, -9px -9px 16px #ffffff;
+        }
+        
+        .btn-minimal {
+            background: white;
+            color: #333;
+            border: 2px solid #333;
+        }
+        
+        .btn-dark {
+            background: #1a1a1a;
+            color: #fff;
+            border: 1px solid #444;
+        }
+        
+        .btn-rounded {
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            color: white;
+            border-radius: 25px;
+        }
+        
+        .btn-reset {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .active {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+        
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .chart-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+        
+        .chart-container h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 1.3rem;
+        }
+        
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
+        }
+        
+        .info {
+            text-align: center;
+            color: white;
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .current-style {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 20px;
+            margin-top: 10px;
+            font-weight: bold;
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            button {
+                padding: 10px 16px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎨 Chart.js Style Gallery</h1>
+        <p>Clicca sui pulsanti per vedere diversi stili applicati ai grafici</p>
+    </div>
+    
+    <div class="controls">
+        <h3>Seleziona uno Stile:</h3>
+        <div class="style-buttons">
+            <button class="btn-gradient" onclick="applyStyle('gradient', this)">Gradient</button>
+            <button class="btn-glass" onclick="applyStyle('glassmorphism', this)">Glassmorphism</button>
+            <button class="btn-neon" onclick="applyStyle('neon', this)">Neon Glow</button>
+            <button class="btn-material" onclick="applyStyle('material', this)">Material</button>
+            <button class="btn-neumorphism" onclick="applyStyle('neumorphism', this)">Neumorphism</button>
+            <button class="btn-minimal" onclick="applyStyle('minimal', this)">Minimal</button>
+            <button class="btn-dark" onclick="applyStyle('dark', this)">Dark Mode</button>
+            <button class="btn-rounded" onclick="applyStyle('rounded', this)">Rounded</button>
+            <button class="btn-reset" onclick="applyStyle('default', this)">Default</button>
+        </div>
+        <div class="current-style" id="currentStyle">Stile Attuale: Default</div>
+    </div>
+    
+    <div class="charts-grid">
+        <div class="chart-container">
+            <h3>📊 Bar Chart</h3>
+            <div class="chart-wrapper">
+                <canvas id="barChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="chart-container">
+            <h3>📈 Line Chart</h3>
+            <div class="chart-wrapper">
+                <canvas id="lineChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="chart-container">
+            <h3>🥧 Pie Chart</h3>
+            <div class="chart-wrapper">
+                <canvas id="pieChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="chart-container">
+            <h3>🍩 Doughnut Chart</h3>
+            <div class="chart-wrapper">
+                <canvas id="doughnutChart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <div class="info">
+        <p>💡 <strong>Suggerimento:</strong> Ogni stile può essere personalizzato ulteriormente con colori, animazioni e plugin aggiuntivi.</p>
+        <p>📱 Tutti gli stili sono responsive e si adattano a diversi dispositivi.</p>
+    </div>
+
+    <script>
+        // Dati di esempio
+        const sampleData = {
+            labels: ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno'],
+            datasets: [{
+                label: 'Vendite 2024',
+                data: [65, 59, 80, 81, 56, 85],
+            }]
+        };
+        
+        const pieData = {
+            labels: ['Rosso', 'Blu', 'Giallo', 'Verde', 'Viola'],
+            datasets: [{
+                data: [12, 19, 3, 5, 2],
+            }]
+        };
+        
+        // Riferimenti ai grafici
+        let barChart, lineChart, pieChart, doughnutChart;
+        let currentStyleName = 'default';
+        
+        // Plugin per ombre 3D
+        const shadowPlugin = {
+            id: 'customShadow',
+            beforeDraw: (chart, args, options) => {
+                const { ctx } = chart;
+                ctx.save();
+                ctx.shadowColor = options.shadowColor || 'rgba(0, 0, 0, 0.2)';
+                ctx.shadowBlur = options.shadowBlur || 10;
+                ctx.shadowOffsetX = options.shadowOffsetX || 5;
+                ctx.shadowOffsetY = options.shadowOffsetY || 5;
+            },
+            afterDraw: (chart) => {
+                chart.ctx.restore();
+            }
+        };
+        
+        // Definizione degli stili
+        const styles = {
+            default: {
+                bar: {
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1,
+                },
+                line: {
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    tension: 0.1,
+                },
+                pie: {
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.5)',
+                        'rgba(54, 162, 235, 0.5)',
+                        'rgba(255, 206, 86, 0.5)',
+                        'rgba(75, 192, 192, 0.5)',
+                        'rgba(153, 102, 255, 0.5)',
+                    ],
+                    borderWidth: 1,
+                },
+                options: {}
+            },
+            
+            gradient: {
+                bar: {
+                    backgroundColor: (context) => {
+                        const chart = context.chart;
+                        const {ctx, chartArea} = chart;
+                        if (!chartArea) return 'rgba(54, 162, 235, 0.5)';
+                        
+                        const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+                        gradient.addColorStop(0, 'rgba(54, 162, 235, 0.1)');
+                        gradient.addColorStop(0.5, 'rgba(54, 162, 235, 0.5)');
+                        gradient.addColorStop(1, 'rgba(54, 162, 235, 0.9)');
+                        return gradient;
+                    },
+                    borderWidth: 0,
+                    borderRadius: 5,
+                },
+                line: {
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: (context) => {
+                        const chart = context.chart;
+                        const {ctx, chartArea} = chart;
+                        if (!chartArea) return 'rgba(75, 192, 192, 0.2)';
+                        
+                        const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+                        gradient.addColorStop(0, 'rgba(75, 192, 192, 0)');
+                        gradient.addColorStop(1, 'rgba(75, 192, 192, 0.6)');
+                        return gradient;
+                    },
+                    fill: true,
+                    tension: 0.4,
+                },
+                pie: {
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.8)',
+                        'rgba(54, 162, 235, 0.8)',
+                        'rgba(255, 206, 86, 0.8)',
+                        'rgba(75, 192, 192, 0.8)',
+                        'rgba(153, 102, 255, 0.8)',
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#fff',
+                },
+                options: {}
+            },
+            
+            glassmorphism: {
+                bar: {
+                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                    borderColor: 'rgba(255, 255, 255, 0.8)',
+                    borderWidth: 2,
+                    borderRadius: 10,
+                },
+                line: {
+                    borderColor: 'rgba(255, 255, 255, 0.8)',
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                },
+                pie: {
+                    backgroundColor: [
+                        'rgba(255, 255, 255, 0.2)',
+                        'rgba(255, 255, 255, 0.3)',
+                        'rgba(255, 255, 255, 0.4)',
+                        'rgba(255, 255, 255, 0.5)',
+                        'rgba(255, 255, 255, 0.6)',
+                    ],
+                    borderColor: 'rgba(255, 255, 255, 0.8)',
+                    borderWidth: 2,
+                },
+                options: {
+                    plugins: {
+                        customShadow: {
+                            shadowColor: 'rgba(255, 255, 255, 0.5)',
+                            shadowBlur: 20,
+                            shadowOffsetX: 0,
+                            shadowOffsetY: 0,
+                        }
+                    }
+                }
+            },
+            
+            neon: {
+                bar: {
+                    backgroundColor: 'rgba(0, 255, 255, 0.3)',
+                    borderColor: '#00ffff',
+                    borderWidth: 2,
+                    borderRadius: 5,
+                },
+                line: {
+                    borderColor: '#00ff00',
+                    backgroundColor: 'rgba(0, 255, 0, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    shadowOffsetX: 0,
+                    shadowOffsetY: 0,
+                    shadowBlur: 10,
+                    shadowColor: '#00ff00',
+                },
+                pie: {
+                    backgroundColor: [
+                        'rgba(255, 0, 255, 0.5)',
+                        'rgba(0, 255, 255, 0.5)',
+                        'rgba(255, 255, 0, 0.5)',
+                        'rgba(0, 255, 0, 0.5)',
+                        'rgba(255, 0, 0, 0.5)',
+                    ],
+                    borderColor: [
+                        '#ff00ff',
+                        '#00ffff',
+                        '#ffff00',
+                        '#00ff00',
+                        '#ff0000',
+                    ],
+                    borderWidth: 2,
+                },
+                options: {
+                    plugins: {
+                        customShadow: {
+                            shadowColor: '#00ffff',
+                            shadowBlur: 20,
+                            shadowOffsetX: 0,
+                            shadowOffsetY: 0,
+                        }
+                    }
+                }
+            },
+            
+            material: {
+                bar: {
+                    backgroundColor: [
+                        '#4285F4',
+                        '#DB4437',
+                        '#F4B400',
+                        '#0F9D58',
+                        '#AB47BC',
+                        '#00ACC1',
+                    ],
+                    borderWidth: 0,
+                    borderRadius: 4,
+                },
+                line: {
+                    borderColor: '#4285F4',
+                    backgroundColor: 'rgba(66, 133, 244, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4,
+                },
+                pie: {
+                    backgroundColor: [
+                        '#4285F4',
+                        '#DB4437',
+                        '#F4B400',
+                        '#0F9D58',
+                        '#AB47BC',
+                    ],
+                    borderWidth: 0,
+                },
+                options: {
+                    plugins: {
+                        customShadow: {
+                            shadowColor: 'rgba(0, 0, 0, 0.2)',
+                            shadowBlur: 6,
+                            shadowOffsetX: 0,
+                            shadowOffsetY: 3,
+                        }
+                    }
+                }
+            },
+            
+            neumorphism: {
+                bar: {
+                    backgroundColor: '#e0e5ec',
+                    borderWidth: 0,
+                    borderRadius: 10,
+                },
+                line: {
+                    borderColor: '#a3b1c6',
+                    backgroundColor: 'rgba(163, 177, 198, 0.2)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                },
+                pie: {
+                    backgroundColor: [
+                        '#e0e5ec',
+                        '#cbd5e0',
+                        '#b8c6db',
+                        '#a3b1c6',
+                        '#9baacf',
+                    ],
+                    borderWidth: 0,
+                },
+                options: {
+                    plugins: {
+                        customShadow: {
+                            shadowColor: 'rgba(163, 177, 198, 0.5)',
+                            shadowBlur: 15,
+                            shadowOffsetX: 10,
+                            shadowOffsetY: 10,
+                        }
+                    }
+                }
+            },
+            
+            minimal: {
+                bar: {
+                    backgroundColor: '#000000',
+                    borderWidth: 0,
+                    borderRadius: 0,
+                    barThickness: 2,
+                },
+                line: {
+                    borderColor: '#000000',
+                    backgroundColor: 'transparent',
+                    borderWidth: 1,
+                    fill: false,
+                    tension: 0,
+                    pointRadius: 0,
+                },
+                pie: {
+                    backgroundColor: [
+                        '#000000',
+                        '#333333',
+                        '#666666',
+                        '#999999',
+                        '#cccccc',
+                    ],
+                    borderWidth: 5,
+                    borderColor: '#ffffff',
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: false
+                        },
+                        y: {
+                            display: false
+                        }
+                    }
+                }
+            },
+            
+            dark: {
+                bar: {
+                    backgroundColor: [
+                        'rgba(139, 92, 246, 0.8)',
+                        'rgba(236, 72, 153, 0.8)',
+                        'rgba(59, 130, 246, 0.8)',
+                        'rgba(16, 185, 129, 0.8)',
+                        'rgba(245, 158, 11, 0.8)',
+                        'rgba(239, 68, 68, 0.8)',
+                    ],
+                    borderColor: [
+                        'rgb(139, 92, 246)',
+                        'rgb(236, 72, 153)',
+                        'rgb(59, 130, 246)',
+                        'rgb(16, 185, 129)',
+                        'rgb(245, 158, 11)',
+                        'rgb(239, 68, 68)',
+                    ],
+                    borderWidth: 2,
+                    borderRadius: 8,
+                },
+                line: {
+                    borderColor: 'rgb(139, 92, 246)',
+                    backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4,
+                },
+                pie: {
+                    backgroundColor: [
+                        'rgba(139, 92, 246, 0.8)',
+                        'rgba(236, 72, 153, 0.8)',
+                        'rgba(59, 130, 246, 0.8)',
+                        'rgba(16, 185, 129, 0.8)',
+                        'rgba(245, 158, 11, 0.8)',
+                    ],
+                    borderColor: '#1a1a1a',
+                    borderWidth: 2,
+                },
+                options: {}
+            },
+            
+            rounded: {
+                bar: {
+                    backgroundColor: (context) => {
+                        const colors = [
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(255, 159, 64, 0.8)',
+                            'rgba(255, 206, 86, 0.8)',
+                            'rgba(75, 192, 192, 0.8)',
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(153, 102, 255, 0.8)',
+                        ];
+                        return colors[context.dataIndex % colors.length];
+                    },
+                    borderWidth: 0,
+                    borderRadius: {
+                        topLeft: 20,
+                        topRight: 20,
+                        bottomLeft: 20,
+                        bottomRight: 20,
+                    },
+                    borderSkipped: false,
+                    barPercentage: 0.6,
+                },
+                line: {
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.5,
+                    pointRadius: 8,
+                    pointHoverRadius: 12,
+                    pointBackgroundColor: 'white',
+                    pointBorderWidth: 3,
+                },
+                pie: {
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.8)',
+                        'rgba(255, 159, 64, 0.8)',
+                        'rgba(255, 206, 86, 0.8)',
+                        'rgba(75, 192, 192, 0.8)',
+                        'rgba(153, 102, 255, 0.8)',
+                    ],
+                    borderWidth: 5,
+                    borderColor: '#fff',
+                    hoverOffset: 10,
+                },
+                options: {
+                    plugins: {
+                        customShadow: {
+                            shadowColor: 'rgba(0, 0, 0, 0.2)',
+                            shadowBlur: 15,
+                            shadowOffsetX: 0,
+                            shadowOffsetY: 10,
+                        }
+                    }
+                }
+            }
+        };
+        
+        // Funzione per applicare uno stile
+        function applyStyle(styleName, buttonElement) {
+            currentStyleName = styleName;
+            document.getElementById('currentStyle').textContent = `Stile Attuale: ${styleName.charAt(0).toUpperCase() + styleName.slice(1)}`;
+            
+            // Aggiorna tutti i bottoni
+            document.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+            if (buttonElement) {
+                buttonElement.classList.add('active');
+            }
+            
+            const style = styles[styleName] || styles.default;
+            
+            // Aggiorna Bar Chart
+            barChart.data.datasets[0] = {...barChart.data.datasets[0], ...style.bar};
+            barChart.options = {
+                ...barChart.options,
+                ...(style.options || {}),
+                plugins: {
+                    ...barChart.options.plugins,
+                    ...(style.options?.plugins || {}),
+                }
+            };
+            if (style.options?.scales) {
+                barChart.options.scales = style.options.scales;
+            }
+            barChart.update();
+            
+            // Aggiorna Line Chart
+            lineChart.data.datasets[0] = {...lineChart.data.datasets[0], ...style.line};
+            lineChart.options = {
+                ...lineChart.options,
+                ...(style.options || {}),
+                plugins: {
+                    ...lineChart.options.plugins,
+                    ...(style.options?.plugins || {}),
+                }
+            };
+            if (style.options?.scales) {
+                lineChart.options.scales = style.options.scales;
+            }
+            lineChart.update();
+            
+            // Aggiorna Pie Chart
+            pieChart.data.datasets[0] = {...pieChart.data.datasets[0], ...style.pie};
+            pieChart.options = {
+                ...pieChart.options,
+                ...(style.options || {}),
+                plugins: {
+                    ...pieChart.options.plugins,
+                    ...(style.options?.plugins || {}),
+                    legend: {
+                        ...pieChart.options.plugins.legend,
+                        ...(style.options?.plugins?.legend || {}),
+                    }
+                }
+            };
+            pieChart.update();
+            
+            // Aggiorna Doughnut Chart
+            doughnutChart.data.datasets[0] = {...doughnutChart.data.datasets[0], ...style.pie};
+            doughnutChart.options = {
+                ...doughnutChart.options,
+                ...(style.options || {}),
+                plugins: {
+                    ...doughnutChart.options.plugins,
+                    ...(style.options?.plugins || {}),
+                    legend: {
+                        ...doughnutChart.options.plugins.legend,
+                        ...(style.options?.plugins?.legend || {}),
+                    }
+                }
+            };
+            doughnutChart.update();
+        }
+        
+        // Inizializzazione dei grafici
+        window.onload = function() {
+            // Bar Chart
+            const barCtx = document.getElementById('barChart').getContext('2d');
+            barChart = new Chart(barCtx, {
+                type: 'bar',
+                data: JSON.parse(JSON.stringify(sampleData)),
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                        },
+                        title: {
+                            display: false,
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                },
+                plugins: [shadowPlugin]
+            });
+            
+            // Line Chart
+            const lineCtx = document.getElementById('lineChart').getContext('2d');
+            lineChart = new Chart(lineCtx, {
+                type: 'line',
+                data: JSON.parse(JSON.stringify(sampleData)),
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                        },
+                        title: {
+                            display: false,
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                },
+                plugins: [shadowPlugin]
+            });
+            
+            // Pie Chart
+            const pieCtx = document.getElementById('pieChart').getContext('2d');
+            pieChart = new Chart(pieCtx, {
+                type: 'pie',
+                data: JSON.parse(JSON.stringify(pieData)),
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'right',
+                        },
+                        title: {
+                            display: false,
+                        }
+                    }
+                },
+                plugins: [shadowPlugin]
+            });
+            
+            // Doughnut Chart
+            const doughnutCtx = document.getElementById('doughnutChart').getContext('2d');
+            doughnutChart = new Chart(doughnutCtx, {
+                type: 'doughnut',
+                data: JSON.parse(JSON.stringify(pieData)),
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'right',
+                        },
+                        title: {
+                            display: false,
+                        }
+                    }
+                },
+                plugins: [shadowPlugin]
+            });
+            
+            // Applica stile default
+            applyStyle('default', document.querySelector('.btn-reset'));
+        };
+    </script>
+</body>
+</html>

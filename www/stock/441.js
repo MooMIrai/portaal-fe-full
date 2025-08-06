@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkportaal_mfe_stock=self.webpackChunkportaal_mfe_stock||[]).push([[441],{3441:(e,t,o)=>{function s(){return{menuItems:[{id:99,text:"Approvvigionamenti",level:0,route:"/device",iconKey:"tablePropertiesIcon",permissions:["READ_STOCK"]}]}}o.r(t),o.d(t,{default:()=>s})}}]);
+//# sourceMappingURL=441.js.map
