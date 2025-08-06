@@ -1,0 +1,105 @@
+{
+  "version": "1.0",
+  "project": {
+    "name": "Portaal.be",
+    "type": "module-federation-frontend",
+    "description": "Enterprise frontend application with 15+ microservices"
+  },
+  "agents": {
+    "default": "portaal-fe-specialist",
+    "priority": [
+      "portaal-fe-specialist",
+      "selector-agent"
+    ],
+    "directory": ".claude/agents/"
+  },
+  "autoDetect": {
+    "enabled": true,
+    "patterns": [
+      {
+        "match": ["module federation", "microservices", "portaal", "PM2"],
+        "agent": "portaal-fe-specialist"
+      },
+      {
+        "match": ["portaal-fe-*", "*.tsx", "MfeInit.tsx"],
+        "agent": "portaal-fe-specialist"
+      },
+      {
+        "match": ["ecosystem.config.js", "mfeConfig.ts", "ENABLED_MFES"],
+        "agent": "portaal-fe-specialist"
+      }
+    ]
+  },
+  "context": {
+    "includeFiles": [
+      ".env.development",
+      "ecosystem.config.js",
+      "package.json",
+      "portaal-fe-core/src/config/mfeConfig.ts"
+    ],
+    "excludePatterns": [
+      "node_modules/**",
+      "dist/**",
+      "build/**",
+      ".git/**"
+    ]
+  },
+  "workflows": {
+    "newComponent": {
+      "agents": ["portaal-fe-specialist", "frontend-developer"],
+      "steps": [
+        "Identify target microservice",
+        "Check existing patterns",
+        "Generate component code",
+        "Add to module exports if needed",
+        "Create tests"
+      ]
+    },
+    "newMicroservice": {
+      "agents": ["portaal-fe-specialist", "architect-reviewer"],
+      "steps": [
+        "Clone existing microservice structure",
+        "Update ecosystem.config.js",
+        "Configure webpack with Module Federation",
+        "Add to mfeConfig.ts",
+        "Create MfeInit.tsx",
+        "Test integration"
+      ]
+    },
+    "debugging": {
+      "agents": ["portaal-fe-specialist", "debugger"],
+      "tools": ["mcp__playwright", "mcp__browser-tools"],
+      "steps": [
+        "Identify affected microservice",
+        "Check PM2 logs",
+        "Use browser dev tools",
+        "Analyze network requests",
+        "Check Module Federation loading"
+      ]
+    }
+  },
+  "commands": {
+    "dev": "yarn start:dev",
+    "prod": "yarn start:live",
+    "logs": "yarn logs",
+    "stop": "yarn stop",
+    "test": "yarn test",
+    "build": "yarn build:all"
+  },
+  "settings": {
+    "typescript": {
+      "strict": true,
+      "target": "ES2020"
+    },
+    "react": {
+      "version": "18",
+      "preferHooks": true
+    },
+    "testing": {
+      "framework": "jest",
+      "coverage": {
+        "threshold": 80
+      }
+    }
+  }
+}

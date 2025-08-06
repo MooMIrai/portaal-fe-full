@@ -4,6 +4,7 @@
 repos=(
     "portaal-fe-common"
     "portaal-fe-core"
+    "portaal-fe-dashboard"
     "portaal-fe-hr"
     "portaal-fe-lookUps"
     "portaal-fe-personalarea"

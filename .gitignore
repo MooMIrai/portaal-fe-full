@@ -6,3 +6,12 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 logs
+dist
+# Claude AI configuration
+.claude/cache/
+.claude/logs/
+# Keep configuration files
+!.claude/agents/
+!.claude/project-config.md
+!.claude/init-prompt.md
+!.claude.json
