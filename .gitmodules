@@ -1,3 +1,39 @@
 [submodule "portaal-fe-dashboard"]
 	path = portaal-fe-dashboard
 	url = taal@vs-ssh.visualstudio.com:v3/taal/Portaal.js/portaal-fe-dashboard
+[submodule "portaal-fe-auth"]
+	path = portaal-fe-auth
+	url = taal@vs-ssh.visualstudio.com:v3/taal/Portaal.js/portaal-fe-auth
+[submodule "portaal-fe-chatbot"]
+	path = portaal-fe-chatbot
+	url = taal@vs-ssh.visualstudio.com:v3/taal/Portaal.js/portaal-fe-chatbot
+[submodule "portaal-fe-common"]
+	path = portaal-fe-common
+	url = taal@vs-ssh.visualstudio.com:v3/taal/Portaal.js/portaal-fe-common
+[submodule "portaal-fe-core"]
+	path = portaal-fe-core
+	url = taal@vs-ssh.visualstudio.com:v3/taal/Portaal.js/portaal-fe-core
+[submodule "portaal-fe-hr"]
+	path = portaal-fe-hr
+	url = taal@vs-ssh.visualstudio.com:v3/taal/Portaal.js/portaal-fe-hr
+[submodule "portaal-fe-lookUps"]
+	path = portaal-fe-lookUps
+	url = taal@vs-ssh.visualstudio.com:v3/taal/Portaal.js/portaal-fe-lookUps
+[submodule "portaal-fe-notifications"]
+	path = portaal-fe-notifications
+	url = taal@vs-ssh.visualstudio.com:v3/taal/Portaal.js/portaal-fe-notifications
+[submodule "portaal-fe-personalarea"]
+	path = portaal-fe-personalarea
+	url = taal@vs-ssh.visualstudio.com:v3/taal/Portaal.js/portaal-fe-personalarea
+[submodule "portaal-fe-recruiting"]
+	path = portaal-fe-recruiting
+	url = taal@vs-ssh.visualstudio.com:v3/taal/Portaal.js/portaal-fe-recruiting
+[submodule "portaal-fe-reports"]
+	path = portaal-fe-reports
+	url = taal@vs-ssh.visualstudio.com:v3/taal/Portaal.js/portaal-fe-reports
+[submodule "portaal-fe-sales"]
+	path = portaal-fe-sales
+	url = taal@vs-ssh.visualstudio.com:v3/taal/Portaal.js/portaal-fe-sales
+[submodule "portaal-fe-stock"]
+	path = portaal-fe-stock
+	url = taal@vs-ssh.visualstudio.com:v3/taal/Portaal.js/portaal-fe-stock
