@@ -9,7 +9,9 @@
     "default": "portaal-fe-specialist",
     "priority": [
       "portaal-fe-specialist",
-      "selector-agent"
+      "selector-agent",
+      "context-checkpoint-agent",
+      "css-microservices-subagent"
     ],
     "directory": ".claude/agents/"
   },
