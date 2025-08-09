@@ -118,26 +118,14 @@ La soluzione è basata su **Module Federation** di Webpack e utilizza una archit
 ### 1. Gestione con PM2
 
 La soluzione utilizza **PM2** come process manager per gestire tutti i microservizi:
+## Per avviare seguire la procedura## 
+# 1. Stop di tutti i servizi
+pm2 stop portaal-fe
+# 2. Cancellare tutti i servizi
+pm2 delete portaal-fe
+# 3 Start di tutti i servizi
+pm2 start ecosystem.config.js
 
-```bash
-# Avvio in modalità development
-yarn start:dev
-
-# Avvio in modalità production
-yarn start:live
-
-# Stop di tutti i servizi
-yarn stop
-
-# Restart di tutti i servizi
-yarn restart
-
-# Rimozione dei servizi da PM2
-yarn delete
-
-# Visualizzazione log
-yarn logs
-```
 
 ### 2. File di Configurazione Principale
 
