@@ -188,6 +188,8 @@ function UploadSingleFileComponent(props: CustomUploadProps) {
         
       });
   }
+
+  const fileExists = props.existingFile?.[0] && Object.keys(props.existingFile[0]).length > 0;
   
 
   return (
@@ -214,7 +216,7 @@ function UploadSingleFileComponent(props: CustomUploadProps) {
         multiple={props.multiple}
       />
       <div className={styles.fileInfoContainer}>
-        {props.existingFile && !selectedFileName && !deletingFile && (
+        {fileExists && !selectedFileName && !deletingFile && (
           <p>
             File caricato: <strong><small>{props.existingFile?.[0]?.name}</small></strong>
           </p>
@@ -227,7 +229,7 @@ function UploadSingleFileComponent(props: CustomUploadProps) {
 
           </div>
         )}
-        {props.onDownload && props.existingFile && !selectedFile && !deletingFile && !selectedLink && (
+        {props.onDownload && fileExists && !selectedFile && !deletingFile && !selectedLink && (
           <div style={{display: "flex", gap: "10px"}}>
 
             <Button
