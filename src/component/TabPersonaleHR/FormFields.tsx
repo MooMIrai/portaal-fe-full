@@ -145,8 +145,11 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
                 return !value ? "Il campo seniority è obbligatorio":"";
             })
         },
+    };
 
-        attachment: {
+    if (!(type === "view" || isViewOnly)) {
+
+        fields.attachment = {
             name: "attachment",
             options: { property_name: "Person.files" },
             label: "Carica CV",
@@ -160,8 +163,9 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             :undefined,
             //onDownload: download && name_attachment ? handleDownload : undefined,
             multiple: false,
-        },
-        generaInputAi: {
+        };
+    
+        fields.generaInputAi = {
             name: "generaInputAi",
             label: "Genera Input AI",
             showLabel: false,
@@ -171,7 +175,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             conditions: (formD) => formD.attachment && (formD.attachment.create?.length > 0 || formD.attachment.length > 0),
             onClick: () => handleFileUpload(formData.attachment),
             disabled: (type === "view" || isViewOnly),
-        }
+        };
     }
 
     fields.residenza = {
