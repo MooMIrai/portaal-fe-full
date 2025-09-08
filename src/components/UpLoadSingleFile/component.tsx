@@ -189,7 +189,7 @@ function UploadSingleFileComponent(props: CustomUploadProps) {
       });
   }
 
-  const fileExists = props.existingFile?.[0] && Object.keys(props.existingFile[0]).length > 0;
+  const fileExists = props.existingFile?.[0]?.id;
   
 
   return (
