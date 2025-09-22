@@ -401,7 +401,7 @@ export const getFormTrattamentoEconomicoFields = (
             type: "date",
             required: true,
             valueOnChange: valueOnChange,
-            disabled: (type === "view") || !(isFirstTreatment || isFirstTreatmentUpdate) || isViewOnly,
+            disabled: (type === "view") || isViewOnly,//|| !(isFirstTreatment || isFirstTreatmentUpdate),
             value: formData?.dataAssunzione,
             validator: dataAssunzioneValidator,
         },
