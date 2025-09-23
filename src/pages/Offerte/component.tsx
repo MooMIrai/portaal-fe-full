@@ -171,6 +171,7 @@ export default function OffertePage() {
   return (
     <GridTable
       writePermissions={["WRITE_SALES_OFFER"]}
+      className={"text-align-center"}
       filterable={true}
       sortable={true}
       getData={loadData}
