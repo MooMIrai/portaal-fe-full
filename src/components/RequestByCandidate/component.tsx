@@ -65,6 +65,7 @@ export function RequestByCandidate(props:{idCandidate:number,requests:Array<any>
                 
                 filterable={true}
                 sortable={true}
+                className={"text-align-center"}
                 getData={loadData}
                 columns={columns}
                 resizableWindow={true}

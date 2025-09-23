@@ -75,6 +75,7 @@ export default function RequestPage(){
         return <>
           {!id && <GridTable
             writePermissions={["WRITE_RECRUITING_REQUEST"]}
+            className={"text-align-center"}
             pageable={true}
             filterable={true}
             sortable={true}

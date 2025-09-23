@@ -8,6 +8,7 @@ import {fileIcon, myspaceIcon} from 'common/icons';
 import fileService from 'common/services/FileService'
 import Button from 'common/Button';
 import { RequestByCandidate } from "../../components/RequestByCandidate/component";
+import styles from "./style.module.scss";
 
 export default function CandidatePage() {
 
@@ -25,8 +26,8 @@ export default function CandidatePage() {
       }
       return <td></td>
     }},
-    { key: "id", label: "Richieste", type: "custom", sortable: false, filter: false, render:(rowData)=><td>
-                  <Button size="small" svgIcon={myspaceIcon}
+    { key: "id", label: "Richieste", width: 160, type: "custom", sortable: false, filter: false, render:(rowData)=><td>
+                  <Button className={styles.associatedRequestsButton} size="small" svgIcon={myspaceIcon}
                   disabled = {!rowData.RecruitingAssignments || !rowData.RecruitingAssignments.length}
                    onClick={() => {
                       setRecruitingAssignments(rowData.RecruitingAssignments);
@@ -39,7 +40,7 @@ export default function CandidatePage() {
     
     { key: "CandidateProfile.description", label: "Mansione", type: "string", sortable: true, filter: "text" },
     {
-      key: "Person.PersonSkillAreas.SkillArea.name", label: "Skills", type: "custom", sortable: false, filter: "text", width: 250, render: (row) => {
+      key: "Person.PersonSkillAreas.SkillArea.name", label: "Skills", type: "custom", sortable: false, filter: "text", width: 200, render: (row) => {
 
         if (row?.Person?.PersonSkillAreas == null || row.Person.PersonSkillAreas.length == 0)
           return <td></td>;
@@ -59,7 +60,7 @@ export default function CandidatePage() {
     },
   //  { key: "last_update_assignment", label: "Data Ultima Azione", type: "date", sortable: true, filter: "date", width: 270 },
   {
-    key: "last_update_assignment", label: "Data Ultima Azione", type: "custom", sortable: true, filter: "date", width: 270, render: (row) => {
+    key: "last_update_assignment", label: "Data Ultima Azione", type: "custom", sortable: true, filter: "date", width: 150, render: (row) => {
 
       if (row.last_update_assignment == null || row.last_update_assignment == undefined)
         return <td></td>;
@@ -118,6 +119,7 @@ export default function CandidatePage() {
     <>
       <GridTable
         writePermissions={["WRITE_RECRUITING_CANDIDATE"]}
+        className={"text-align-center"}
         /*customToolBarComponent={() => {
           return <Button themeColor={"info"} disabled={false} onClick={() => { setShowModal(true) }}>Prova Modale</Button>
         }}*/
