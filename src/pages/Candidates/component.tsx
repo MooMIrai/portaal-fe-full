@@ -8,7 +8,6 @@ import {fileIcon, myspaceIcon} from 'common/icons';
 import fileService from 'common/services/FileService'
 import Button from 'common/Button';
 import { RequestByCandidate } from "../../components/RequestByCandidate/component";
-import styles from "./style.module.scss";
 
 export default function CandidatePage() {
 
@@ -26,8 +25,8 @@ export default function CandidatePage() {
       }
       return <td></td>
     }},
-    { key: "id", label: "Richieste", width: 160, type: "custom", sortable: false, filter: false, render:(rowData)=><td>
-                  <Button className={styles.associatedRequestsButton} size="small" svgIcon={myspaceIcon}
+    { key: "id", label: "Richieste", width: 210, type: "custom", sortable: false, filter: false, render:(rowData)=><td>
+                  <Button size="small" svgIcon={myspaceIcon}
                   disabled = {!rowData.RecruitingAssignments || !rowData.RecruitingAssignments.length}
                    onClick={() => {
                       setRecruitingAssignments(rowData.RecruitingAssignments);
@@ -58,18 +57,6 @@ export default function CandidatePage() {
         </td>;
       }
     },
-  //  { key: "last_update_assignment", label: "Data Ultima Azione", type: "date", sortable: true, filter: "date", width: 270 },
-  {
-    key: "last_update_assignment", label: "Data Ultima Azione", type: "custom", sortable: true, filter: "date", width: 150, render: (row) => {
-
-      if (row.last_update_assignment == null || row.last_update_assignment == undefined)
-        return <td></td>;
-
-      let date_action = new Date(row.last_update_assignment).toLocaleDateString();
-
-      return <td>{date_action}</td>;
-    }
-  },
   ];
 
   const loadData = (
@@ -79,35 +66,6 @@ export default function CandidatePage() {
   ) => {
 
     return candidatoService.search(pagination.currentPage, pagination.pageSize, filter, sorting, undefined, true)
-  }
-
-  // REMOVE ???
-  const getMaxDateLog = (assignment: any): Date | null => {
-
-    let maxDate: Date | null = null;
-
-    const updateMaxDate = (date?: Date) => {
-      if (date && (!maxDate || date > maxDate)) {
-        maxDate = date;
-      }
-    };
-
-    assignment.forEach(item => {
-      updateMaxDate(item?.RecruitingContact?.date_log);
-
-      if (item?.RecruitingInterview) {
-        item.RecruitingInterview?.forEach(interview => {
-          updateMaxDate(interview.date_log);
-        });
-      }
-
-      updateMaxDate(item?.RecruitingSendContract?.date_log);
-      updateMaxDate(item?.RecruitingOffer?.date_log);
-      updateMaxDate(item?.RecruitingSendCv?.date_log);
-      updateMaxDate(item?.RecruitingFinalEvaluation?.date_log);
-    });
-
-    return maxDate;
   }
 
   let title = "";
