@@ -368,7 +368,7 @@ export const dataAdapter = (row: Record<string, any>) => {
     trasformazioni: row.trattamentoEconomico.trasformazioni,
     ccnl: row.trattamentoEconomico.ccnl,
     ral: row.trattamentoEconomico.ral,
-    trasferta: row.trattamentoEconomico.trasfert,
+    trasferta: row.trattamentoEconomico.trasferta,
     buoniPasto: row.trattamentoEconomico.buoniPasto,
     nettoMese: row.trattamentoEconomico.nettoMese,
     costoAnnuale: row.trattamentoEconomico.costoAnnuale,
@@ -428,6 +428,17 @@ type CompanyApiResponse = {
     total: number;
   };
 };
+
+type ContractTypeApiResponse = {
+  data: Array<{
+    id: number;
+    description: string;
+  }>;
+  meta: {
+    total: number;
+  };
+};
+
 type ActivityTypeApiResponse = {
   data: Array<{
     id: number;
@@ -505,6 +516,11 @@ export type companyOption = {
   address?: string;
 };
 
+export type contractTypeOption = {
+  label: string;
+  value: number;
+};
+
 export type countryOption = {
   label: string;
   value: number;
@@ -531,6 +547,10 @@ export const companyAdapter = (
     value: role.id,
     name: role.address,
   }));
+};
+
+export const contractTypeAdapter = (apiResponse: ContractTypeApiResponse) : contractTypeOption[] => {
+  return apiResponse.data.map(type => ({label: type.description, value: type.id}));
 };
 
 export const permessiAdapter = (
