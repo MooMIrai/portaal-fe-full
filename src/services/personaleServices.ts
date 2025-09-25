@@ -48,13 +48,15 @@ class CrudGenericServiceC {
     resourceType: string,
     pageNum?: number,
     pageSize?: number,
-    include?: boolean
+    include?: boolean,
+    term?: string
   ) => {
     try {
       const params = {
         pageNum,
         pageSize,
         include,
+        term
       };
 
       const response = await client.get(`api/v1/crud/${resourceType}`, {

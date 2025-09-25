@@ -85,7 +85,9 @@ export interface RapportinoCalendarProps {
 }
 
 export default function RapportinoCalendar(props: RapportinoCalendarProps) {
-  const defaultPerson = props.forcePerson || { id: 0, name: '(Me)' };
+
+  const tokenData = authService.getData();
+  const defaultPerson = props.forcePerson || { id: 0, name: `${tokenData.fullname} (${tokenData.email})` };
 
   const [date, setDate] = useState<Date>(props.forceDate || new Date());
   const [data, setData] = useState<any>([]);
@@ -97,6 +99,7 @@ export default function RapportinoCalendar(props: RapportinoCalendarProps) {
   const [isFinalized, setIsFinalized] = useState<boolean | undefined>(undefined);
 
   const [userSelected, setUserSelected] = useState<{ id: number, name: string }>(defaultPerson);
+  const [tempUserInput, setTempUserInput] = useState<{ id: number, name: string }>();
 
   const [error,setError] = useState<boolean>(false);
   const [previousDate, setPreviousDate] = useState<Date>();
@@ -209,10 +212,13 @@ export default function RapportinoCalendar(props: RapportinoCalendarProps) {
   };
 
   useEffect(() => {
-    fetchTimesheet();
-    document.addEventListener('CalendarRefreshData', fetchTimesheet);
-    return () => {
-      document.removeEventListener('CalendarRefreshData', fetchTimesheet);
+    if (userSelected.name && userSelected.id !== tempUserInput?.id) {
+      fetchTimesheet();
+      document.addEventListener('CalendarRefreshData', fetchTimesheet);
+      setTempUserInput({...userSelected});
+      return () => {
+        document.removeEventListener('CalendarRefreshData', fetchTimesheet);
+      }
     }
   }, [date, userSelected]);
 
@@ -437,17 +443,22 @@ export default function RapportinoCalendar(props: RapportinoCalendarProps) {
 
   return (
     <>
-      {!props.forcePerson ? <div style={{ display: 'flex', flexDirection: size.width && size.width >= 768 ? 'row' : 'column', justifyContent: "space-between", marginBottom: 10 }}>
+      {!props.forcePerson ? <div style={{ display: 'flex', flexDirection: size.width && size.width >= 768 ? 'row' : 'column', justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
         <p>Tocca una data per inserire le ore di attività o trascina per selezionare più date</p>
         <div style={{ display: 'flex', justifyContent: "space-between", alignItems: 'flex-end', gap: 15 }}>
-          { authService.hasPermission('READ_HR_TIMESHEET_DEAUTH') && !props.forcePerson && <div style={{ width: 300 }}>Utente Selezionato <AutoCompletePerson label="" value={userSelected} onChange={(e) => {
-            if (!e.value) {
-              setUserSelected(defaultPerson)
-            } else {
-              setUserSelected(e.value)
-            }
-          }} />
-          </div>}
+          { authService.hasPermission('READ_HR_TIMESHEET_DEAUTH') && !props.forcePerson && 
+            <div style={{ width: 300 }}>
+              Utente Selezionato <AutoCompletePerson label="" value={userSelected}
+              onFocus={() => setUserSelected({id: 0, name: ""})}
+              onBlur={() => {
+                if (!userSelected.name) setUserSelected(tempUserInput!);
+              }}
+              onChange={(e) => {
+                if (e.value) setUserSelected(e.value);
+              }}
+            />
+            </div>
+          }
           {isFinalized != undefined && authService.hasPermission('WRITE_HR_TIMESHEET') && 
             <Button style={{ maxHeight: 'min-content' }} themeColor="success" 
             onClick={() => {

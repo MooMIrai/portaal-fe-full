@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import GridTable from "common/Table";
-
 import PersonaleSection from "./../../component/TabPersonaleHR/component";
 import { accountsService, CrudGenericService } from "../../services/personaleServices";
 import {
@@ -22,8 +21,9 @@ import NotificationProviderActions from "common/providers/NotificationProvider";
 import AvatarIcon from 'common/AvatarIcon';
 import Typography from 'common/Typography';
 import {passwordIcon} from 'common/icons';
+import styles from "./style.modules.scss";
 
-import styles from "./style.modules.scss"
+
 // Column field mapping
 const columnFieldMap: { [key: string]: string } = {
   company: "Person.CurrentContract.Contract.Company.name",
@@ -83,8 +83,7 @@ const columns: any = [
     key: "ContractType",
     label: "Tipo di Contratto",
     type: "string",
-    sortable: true,
-    filter: "text",
+    sortable: true
   },
   {
     key: "annualCost",
@@ -169,26 +168,30 @@ const PersonalPage = () => {
     const fetchData = async () => {
 
       try {
-        const [rolesResponse, companiesResponse, gendersResponse, activityResponse,skillResponse] = await Promise.all([
+        const [
+          rolesResponse, companiesResponse, gendersResponse, activityResponse,skillResponse] = await Promise.all([
           CrudGenericService.fetchResources("role"),
-          CrudGenericService.fetchResources("Company"),
+          CrudGenericService.fetchResources("Company", 1, 30),
           CrudGenericService.fetchResources("Gender"),
           CrudGenericService.fetchResources("ActivityType"),
           CrudGenericService.getSkillArea(true)
         ]);
-        
+
         const adaptedRoles = roleAdapter(rolesResponse);
         const adaptedCompany = companyAdapter(companiesResponse);
         const adaptedGender = genderAdapter(gendersResponse);
         const adaptedActivities = permessiAdapter(activityResponse);
+
         if (Array.isArray(skillResponse.data)) {
           const adaptedSkillsArea = skillResponse.data.map(r => ({ id: r.id, name: r.name }))
           setSkills(adaptedSkillsArea);
         }
+
         setActivity(adaptedActivities)
         setRoles(adaptedRoles);
         setCompanies(adaptedCompany);
         setGenders(adaptedGender);
+
       } 
       
       
@@ -301,10 +304,27 @@ const PersonalPage = () => {
             label: "Società",
             type: "filter-autocomplete",
             options:{
-              getData:(term:string)=> Promise.resolve(companies).then(res=>{
-                return res.filter(p=>!term || !term.length || p.label.toLowerCase().indexOf(term.toLowerCase())>=0)
-                          .map(c=>({id:c.value,name:c.label}))
-              }),
+              getData: (term:string) => Promise.resolve(
+                CrudGenericService.fetchResources("Company", 1, 30, false, term).then(res => {
+                  if(res) return res.data.map(r => ({id: r.id, name: r.name}));
+                  else return [];
+                })
+              ),
+              getValue:(v:any)=>v?.id
+            },
+          },
+          {
+            name: "Person.CurrentContract.Contract.contractType_id",
+            label: "Tipo contratto",
+            type: "filter-autocomplete",
+            indexPosition: 0,
+            options:{
+              getData: (term:string) => Promise.resolve(
+                CrudGenericService.fetchResources("ContractType", 1, 30, false, term).then(res => {
+                  if(res) return res.data.map(r => ({id: r.id, name: r.description}));
+                  else return [];
+                })
+              ),
               getValue:(v:any)=>v?.id
             },
           }

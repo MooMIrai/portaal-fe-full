@@ -429,16 +429,6 @@ type CompanyApiResponse = {
   };
 };
 
-type ContractTypeApiResponse = {
-  data: Array<{
-    id: number;
-    description: string;
-  }>;
-  meta: {
-    total: number;
-  };
-};
-
 type ActivityTypeApiResponse = {
   data: Array<{
     id: number;
@@ -547,10 +537,6 @@ export const companyAdapter = (
     value: role.id,
     name: role.address,
   }));
-};
-
-export const contractTypeAdapter = (apiResponse: ContractTypeApiResponse) : contractTypeOption[] => {
-  return apiResponse.data.map(type => ({label: type.description, value: type.id}));
 };
 
 export const permessiAdapter = (
