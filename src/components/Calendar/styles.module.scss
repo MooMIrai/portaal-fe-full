@@ -1,3 +1,19 @@
 .MonthScheduler > div[role="toolbar"] > div[role="group"] {
     display: none;
 }
+
+.MonthScheduler :global(.k-scheduler-toolbar) {
+    padding: 10px !important;
+}
+
+.MonthScheduler :global(.k-scheduler-toolbar .k-button-text) {
+    text-transform: capitalize;
+}
+
+:global(.k-calendar .k-calendar-tr .k-link) {
+    text-transform: capitalize;
+}
+
+.MonthScheduler :global(.k-scheduler-footer) {
+    display: none;
+}

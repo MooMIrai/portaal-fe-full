@@ -12,6 +12,7 @@ import "@progress/kendo-date-math/tz/Europe/Rome";
 import CustomWindow from "../Window/component";
 import { CalendarContext } from "./provider";
 import styles from "./styles.module.scss";
+import { ActiveView, CalendarProps, CalendarPropsContext } from "@progress/kendo-react-dateinputs";
 
 interface CustomCalendarProps {
   defaultModalTitle: string;
@@ -65,7 +66,10 @@ export default function CustomCalendar(props: Readonly<CustomCalendarProps>) {
   const { selectedEnd, selectedStart, setEnd, setStart, drag, setHolidays, setUnavailableDays, setDate } = useContext(CalendarContext);
 
 
-
+  const calendarProps = React.useCallback(
+    (calendarProps: CalendarProps) => ({...calendarProps, topView: "year" as ActiveView, bottomView: "year" as ActiveView}),
+    []
+  );
 
   const closeModal = () => {
     setEnd(undefined),
@@ -109,7 +113,7 @@ export default function CustomCalendar(props: Readonly<CustomCalendarProps>) {
   }
 
 
-  return (<>
+  return (<CalendarPropsContext.Provider value={calendarProps}>
 
     <Scheduler
       height={"100%"}
@@ -143,5 +147,5 @@ export default function CustomCalendar(props: Readonly<CustomCalendarProps>) {
       }
     </CustomWindow>}
 
-  </>);
+  </CalendarPropsContext.Provider>);
 }

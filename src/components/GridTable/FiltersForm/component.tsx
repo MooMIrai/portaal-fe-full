@@ -184,8 +184,8 @@ export function FiltersForm(props: {
 
     if (props.addedFilters) {
 
-        const withIndex = props.addedFilters.filter(filter => filter.indexPosition);
-        const noIndex = props.addedFilters.filter(filter => !filter.indexPosition);
+        const withIndex = props.addedFilters.filter(filter => filter.indexPosition === 0 || filter.indexPosition);
+        const noIndex = props.addedFilters.filter(filter => filter.indexPosition !== 0 && !filter.indexPosition);
         withIndex.forEach(filter => fields.splice(filter.indexPosition!, 0, getCustomFilter(filter)));
 
         fields = [...fields, ...noIndex.map(getCustomFilter)];
