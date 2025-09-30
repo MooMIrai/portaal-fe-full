@@ -28,7 +28,7 @@ const App = () => {
       {
         path:"/sal",
         element:<SalPage />,
-        permissions:["READ_SALES_SAL"]
+        permissions:["READ_SALES_SAL", "READ_SALES_BILL"]
       }
     ]}></Routes>
     /*<Routes>

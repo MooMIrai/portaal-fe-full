@@ -8,7 +8,7 @@ export default function () {
         level: 0,
         route: "#",
         iconKey: "cartIcon",
-        permissions:["READ_SALES_CUSTOMER","READ_SALES_OFFER","READ_SALES_PROJECT","READ_SALES_SAL"]
+        permissions:["READ_SALES_CUSTOMER","READ_SALES_OFFER","READ_SALES_PROJECT","READ_SALES_SAL", "READ_SALES_BILL"]
       },
       {
         parentId: 6,
@@ -44,7 +44,7 @@ export default function () {
         text: "Sal",
         route: "/sal",
         iconKey: "dollarIcon",
-        permissions:["READ_SALES_SAL"]
+        permissions:["READ_SALES_SAL", "READ_SALES_BILL"]
       },
     ],
   };
