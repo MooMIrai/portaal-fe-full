@@ -212,7 +212,7 @@ export default function RapportinoCalendar(props: RapportinoCalendarProps) {
   };
 
   useEffect(() => {
-    if (userSelected.name && userSelected.id !== tempUserInput?.id) {
+    if (userSelected.name && ((userSelected.id !== tempUserInput?.id)) || date?.getTime() != previousDate?.getTime()) {
       fetchTimesheet();
       document.addEventListener('CalendarRefreshData', fetchTimesheet);
       setTempUserInput({...userSelected});
