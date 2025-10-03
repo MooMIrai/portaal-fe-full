@@ -53,7 +53,7 @@ export const SalDraft = React.memo(() => {
 
   const renderExpand = useCallback((rowProps) => (
     <SalProjectDraft customer={rowProps.dataItem} refreshParent={tableRef.current?.refreshTable}  />
-  ), [tableRef.current]);
+  ), []);
 
   return (
     <GridTable

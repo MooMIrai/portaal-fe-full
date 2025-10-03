@@ -14,6 +14,7 @@ function formatNumber(num) {
 }
 export const SalDraftItem = React.memo((props: PropsWithChildren<{ project: any, refreshParent:()=>void, person:any }>) => {
 
+  const tableRef= useRef<any>();
   const { filters } = useContext(SalContext);
   const columns = [
     {
@@ -44,6 +45,7 @@ export const SalDraftItem = React.memo((props: PropsWithChildren<{ project: any,
   const [rows, setRows] = useState<Array<any>>();
 
   const updateToBilling = (id)=>{
+
     return new Promise((ok,ko)=>{
       NotificationActions.openConfirm('Sei sicuro di spostare il Sal in stato "A FATTURARE" ?',
         () => {
@@ -80,6 +82,7 @@ export const SalDraftItem = React.memo((props: PropsWithChildren<{ project: any,
 
       <GridTable
         writePermissions={["WRITE_SALES_SAL"]}
+        className={"text-align-center"}
         filterable={true}
         sortable={true}
         getData={loadData}
@@ -109,6 +112,7 @@ export const SalDraftItem = React.memo((props: PropsWithChildren<{ project: any,
             </>
           )
         }}
+        ref={tableRef}
       />
     </>
   );

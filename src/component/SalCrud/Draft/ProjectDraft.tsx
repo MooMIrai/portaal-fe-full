@@ -1,4 +1,5 @@
 import React, { PropsWithChildren, useCallback, useContext, useEffect, useRef } from "react";
+import { isEmpty } from "lodash";
 import { salService } from "../../../services/salService";
 import GridTable from "common/Table";
 import { SalDraftItem } from "./SalDraftItem";
@@ -39,6 +40,9 @@ export const SalProjectDraft = React.memo((props: PropsWithChildren<{ customer: 
   const { addOpen, removeOpen, draft, filters } = useContext(SalContext);
 
   const loadData = useCallback(async (pagination, filter, sorting) => {
+
+    if (isEmpty(sorting)) sorting = [{field: "Offer.name", dir: "asc"}];
+
     const include = true;
     const tableResponse = await salService.getProjectsWithSal(
       props.customer.id,
@@ -61,13 +65,15 @@ export const SalProjectDraft = React.memo((props: PropsWithChildren<{ customer: 
 
 
   const renderExpand = useCallback((rowProps) => (
-    <SalDraftItem project={rowProps.dataItem} refreshParent={props.refreshParent} person={undefined} />
+    <SalDraftItem project={rowProps.dataItem} refreshParent={tableRef.current?.refreshTable} person={undefined} />
   ), []);
 
   return (
     <>
     <p>Progetti di {props.customer.name}</p>
     <GridTable
+      className={"text-align-center"}
+      initialPagination={{currentPage: 1, pageSize: 50}}
       expand={{
         enabled: true,
         render: renderExpand,
