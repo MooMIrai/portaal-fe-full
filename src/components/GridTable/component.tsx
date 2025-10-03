@@ -166,6 +166,7 @@ const MyPager = (props: PagerProps) => (
       previousNext={true}
       type="numeric"
       pageSizes={props.pageSizes}
+      pageSizeValue={props.pageSizeValue}
     />
   </div>
 );
@@ -250,6 +251,7 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
         }
         return item;
       });
+
       setData(newData);
     }
   };
@@ -641,7 +643,8 @@ const GenericGridC = forwardRef<any, TablePaginatedProps>((props, ref) => {
         pager={(pagerProps) => (
           <MyPager
             {...pagerProps}
-            pageSizes={props.pageSizeOptions || [5, 10, 15, 20, 30, "ALL"]}
+            pageSizeValue={pagination.pageSize}
+            pageSizes={props.pageSizeOptions || [10, 20, 30, 50]}
           />
         )}
       >
