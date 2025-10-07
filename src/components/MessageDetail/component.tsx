@@ -29,13 +29,13 @@ export function MessageDetail(props:PropsWithRef<{
             if(props.id) {
 
                 const res = await notificationServiceHttp.getDetail(props.id);
-                setData(res);
 
                 if(!props.isSent && res.notificationStatus ==='SENT') {
                     await notificationServiceHttp.updateStatus(props.id,"VIEWED");
                     await notificationServiceHttp.getMyUnreadCount();
                 }
                 
+                setData(res);
             }
         
             else {
