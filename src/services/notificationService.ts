@@ -64,7 +64,6 @@ class NotificationServiceC extends BaseHttpService {
       const managerEvent = new CustomEvent("AddBadgeMenu", { detail: {id:122,value:res.managerList ||0}});
       const inboxEvent = new CustomEvent("AddBadgeMenu", { detail: {id:121,value:res.myList ||0}});
       const notificationEvent = new CustomEvent("AddBadgeMenu", { detail: {id:12,value:(res.myList ||0) + (res.managerList ||0)}});
-      console.log(res);
       window.dispatchEvent(managerEvent);
       window.dispatchEvent(inboxEvent);
       window.dispatchEvent(notificationEvent);
