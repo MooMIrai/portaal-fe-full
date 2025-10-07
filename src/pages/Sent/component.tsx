@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 //@ts-ignore
 import styles from './style.module.scss';
 import Typography from 'common/Typography';
@@ -14,7 +14,7 @@ import { MessageSentDetail } from "../../components/MessageSentDetail/component"
 import Switch from 'common/Switch';
 import {trashIcon} from 'common/icons';
 
-export function SentPage(){
+export function SentPage() {
 
     
     const [notification, setNotification] = useState<any>();
@@ -44,26 +44,30 @@ export function SentPage(){
         { key: "content.title", label: "Titolo", type: "custom",  render:(n)=><td>
             {n.content.title} - {n.content.sub_title}
         </td> },
-        { key: "id", label: "", type: "custom",  render:(n)=><td className={styles.dateColumn}>
+        { key: "id", label: "", type: "custom", width: 100,  render:(n)=><td className={styles.dateColumn}>
             {new Date(n.date_start).toLocaleDateString()}
         </td>},
         { key: "id", label: "Status", type: "custom",  render:(n)=>{
-            const statusCount = n.NotificationDetail.filter(p=>p.NotificationStatus.notificationStatus==='RESPONDED').reduce((acc, item) => {
+
+            const statusCount = n.NotificationDetail.filter(p=>p.NotificationStatus.notificationStatus==='RESPONDED')
+            .reduce((acc, item) => {
                 const status = item.NotificationStatus.description; // Usa "description" invece di "notificationStatus"
                 acc[status] = (acc[status] || 0) + 1;
                 return acc;
             }, {});
-            return <td className={Object.keys(statusCount).length?styles.statusColumn:''}>
-            
-            {Object.keys(statusCount).map((k)=><span>{k}<span className={styles.statusBadge}>{statusCount[k]}</span></span>)}
-        </td>}},
+
+            return (
+                <td className={Object.keys(statusCount).length ? styles.statusColumn: ''}>
+                    {Object.keys(statusCount).map((k)=><span>{k}<span className={styles.statusBadge}>{statusCount[k]}</span></span>)}
+                </td>
+            );
+        }},
         { key: "id", label: "Destinatari", type: "custom",  render:(n)=><td className={styles.dateColumn}>
         {
             n.isGlobal?'Tutti i dipendenti':
             n.NotificationDetail.map(nd=>nd.Account.Person.firstName + ' ' + nd.Account.Person.lastName).join(', ')
-        },
-        
-        </td>} ,
+        }
+        </td>},
         { key: "id", label: "", type: "custom",  render:(n)=><td className={styles.btnTrash}>
             <Button svgIcon={trashIcon} themeColor={'error'} fillMode='link' onClick={()=>{
 
@@ -169,4 +173,3 @@ export function SentPage(){
             />
   </div>
 }
-

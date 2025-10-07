@@ -34,9 +34,12 @@
         }
     }
 
+    & :global(.k-grid-norecords) {
+        width: unset !important;
+    }
+
     & .dateColumn {
-        text-align: right;
-        padding-right: 20px;
+        text-align: start;
     }
 }
 
@@ -86,12 +89,12 @@
 }
 
 .statusColumn {
-    display: table-cell;
-    align-items: center;
-    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-    gap: 5px;
 
-    &>span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    & > span {
         border-radius: var(--kendo-border-radius-md);
         background-color: var(--kendo-color-primary);
         inline-size: max-content;

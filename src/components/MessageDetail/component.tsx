@@ -11,7 +11,6 @@ import AvatarIcon from 'common/AvatarIcon';
 import { MessageResponseView } from "../MessageResponse/view";
 import NotificationProviderActions from "common/providers/NotificationProvider";
 import authService from 'common/services/AuthService';
-
 import styles from './style.module.scss';
 
 export function MessageDetail(props:PropsWithRef<{
@@ -21,21 +20,32 @@ export function MessageDetail(props:PropsWithRef<{
 }>){
 
     const [data,setData] = useState<any>();
-    //const [firstName, setFirstName]
     const [modalData,setModalData] = useState<any>();
 
-    const updateData = useCallback(()=>{
-        if(props.id ){
-            
-            notificationServiceHttp.getDetail(props.id).then(res=>{
+    const updateData = useCallback(()=> {
+
+        async function update () {
+
+            if(props.id) {
+
+                const res = await notificationServiceHttp.getDetail(props.id);
                 setData(res);
-                if(!props.isSent && res.notificationStatus ==='SENT')
-                    notificationServiceHttp.updateStatus(props.id,"VIEWED");
-            });
-        }else{
-            setData(undefined)
+
+                if(!props.isSent && res.notificationStatus ==='SENT') {
+                    await notificationServiceHttp.updateStatus(props.id,"VIEWED");
+                    await notificationServiceHttp.getMyUnreadCount();
+                }
+                
+            }
+        
+            else {
+                setData(undefined);
+            }
         }
-    },[props.id])
+
+        update();
+        
+    }, [props.id]);
 
     useEffect(()=>{
        updateData();
