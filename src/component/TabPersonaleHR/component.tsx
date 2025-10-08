@@ -1,19 +1,11 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import Tab from "common/Tab";
-import { TabStripSelectEventArguments } from "@progress/kendo-react-layout";
 import Form from "common/Form";
 import Window from "common/Window";
 import styles from "./style.module.scss";
-import {
-  getFormAnagraficaFields,
-  getFormTrattamentoEconomicoFields,
-  getFormRuoliFields,
-  getFormPermessiFields,
-  getFormRuoliFieldsFromRole,
-  getFormPermissionFieldsFromPermission,
-} from "./FormFields";
+import {getFormAnagraficaFields,getFormTrattamentoEconomicoFields,getFormRuoliFieldsFromRole,getFormPermissionFieldsFromPermission} from "./FormFields";
 import { AnagraficaData, TrattamentoEconomicoData, RuoliData, PermessiData } from "./modelForms";
-import { ActivityTypeOption, anagraficaAiButtonAdapter, cityTypeOption, companyOption, dataAdapter, genderOption, MappedSkill, reverseAdapter, reverseAdapterUpdate, RoleOption } from "../../adapters/personaleAdapters";
+import { ActivityTypeOption, anagraficaAiButtonAdapter, companyOption, dataAdapter, genderOption, MappedSkill, reverseAdapter, reverseAdapterUpdate, RoleOption } from "../../adapters/personaleAdapters";
 import { CrudGenericService } from "../../services/personaleServices";
 import Button from "common/Button";
 import { formFields } from "./customfields";
@@ -120,7 +112,6 @@ const PersonaleSection: React.FC<PersonaleSectionProps & {
   const [localCompanies, setLocalCompanies] = useState<companyOption[]>(companies);
   const [localGenders, setLocalGenders] = useState<genderOption[]>(genders);
   const [localActivity, setLocalActivity] = useState<ActivityTypeOption[]>([]);
-  const [city, setCity] = useState<cityTypeOption[]>([]);
   const [dataAssunzione, setDataAssunzione] = useState(formTrattamentoEconomicoData.dataAssunzione)
   const [dataRecesso, setDataRecesso] = useState(formTrattamentoEconomicoData.dataRecesso)
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -129,12 +120,10 @@ const PersonaleSection: React.FC<PersonaleSectionProps & {
   const [today, setToday] = useState<Date>(new Date());
   const [alert, setAlert] = useState<boolean>(false)
   const [isScadenzaEffettivaDisabled, setIsScadenzaEffettivaDisabled] = useState<boolean>(false);
-  const [download, setDownload] = useState<boolean>(false)
   const [modifiedFields, setModifiedFields] = useState<Record<string, any>>({})
   const [newFormTrattamentoUpdate, setNewFormTrattamentoUpdate] = useState<boolean>(false)
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [isrowDataReady, setIsrowDataReady] = useState(true);
-  const [exstingFile, setExstingFile] = useState<any>()
   const [localSkills, setLocalSkills] = useState<MappedSkill[] | undefined>()
   //Ref
   const formAnagrafica = useRef<HTMLFormElement>(null);
@@ -284,7 +273,8 @@ const PersonaleSection: React.FC<PersonaleSectionProps & {
       setStoricoTrattamentoData([...storicoTrattamentoData, formTrattamentoEconomicoData]);
     }
   }, [newForm]);
-  const handleSelect = (e: TabStripSelectEventArguments) => {
+  
+  const handleSelect = (e: any) => {
     setSelected(e.selected);
   };
 
@@ -517,7 +507,7 @@ const PersonaleSection: React.FC<PersonaleSectionProps & {
     );
   };
 
-  const handleContractTypeChange = (name, value) => {
+  const handleContractTypeChange = (_, value) => {
     if (value && value.name === "Tempo Indeterminato") {
       setIsScadenzaEffettivaDisabled(true);
     } else {
@@ -525,38 +515,34 @@ const PersonaleSection: React.FC<PersonaleSectionProps & {
     }
   };
 
-  const handleDownloadChange = (name, files) => {
-    if (files === undefined || files.length === 0) {
-      setDownload(false);
-      /* if (formAnagrafica.current) {
-        setAttachmentNameState(formAnagrafica.current.values.attachment.name)
-      } */
-    } else {
-      //const attachmentName = files[0].name;
-      //setAttachmentNameState(attachmentName);
-      setDownload(false)
-    }
-  };
-
   const scadenzaEffettivaValidator = useMemo(() => {
+
     return (value: any, valueGetter: (name: string) => any) => {
-        if (!value) return "";
-        const selectedDate = new Date(value);
-        const noparseHireDate = valueGetter("dataAssunzione");
-        const hireDate= noparseHireDate ? new Date(noparseHireDate): null;
-        const noparsestartDate= valueGetter("dataInizioTrattamento")
-        const startDate = noparsestartDate ? new Date(noparsestartDate): null;
 
-        if (hireDate && selectedDate <= hireDate) {
-            return "La Scadenza Effettiva non può essere lo stesso giorno o prima della Data di Assunzione";
-        }
-        if (startDate && selectedDate <= startDate) {
-            return "La Scadenza Effettiva non può essere lo stesso giorno o prima della Data di Inizio del Trattamento";
-        }
+      if (!value) return "";
+      
+      const selectedDate = new Date(value);
+      const noparseHireDate = valueGetter("dataAssunzione");
+      const hireDate= noparseHireDate ? new Date(noparseHireDate): null;
+      const noparsestartDate= valueGetter("dataInizioTrattamento")
+      const startDate = noparsestartDate ? new Date(noparsestartDate): null;
 
-        return "";
+      const contractType = valueGetter('tipologiaContratto_autocomplete');
+
+      if (hireDate && selectedDate <= hireDate) {
+          return "La Scadenza Effettiva non può essere lo stesso giorno o prima della Data di Assunzione";
+      }
+      if (startDate && selectedDate <= startDate) {
+          return "La Scadenza Effettiva non può essere lo stesso giorno o prima della Data di Inizio del Trattamento";
+      }
+
+      if (contractType?.name === 'Tempo Inderminato') {
+        return "Un contratto a tempo indeterminato non può avere una scadenza.";
+      }
+
+      return "";
     };
-}, []);
+  }, []);
 
 const dataAssunzioneValidator = useMemo(() => {
   return (value: any, valueGetter: (name: string) => any) => {
@@ -625,13 +611,6 @@ const dataInizioTrattamentoValidator = useMemo(() => {
 
   // Definisce la classe CSS dinamica in base alla presenza di storici
   const trattamentoEconomicoClass = sortedStoricoTrattamentoData.length > 0 ? styles.trattamentoEconomicoConStorici : styles.trattamentoEconomicoSenzaStorici;
-  const combinedValueOnChange = (name: string, value: any) => {
-
-    handleDownloadChange(name, value);
-
-
-    handleFieldChange(name, value);
-  };
 
   const combinedValueOnChangeContractType = (name: string, value: any) => {
     handleContractTypeChange(name, value);
