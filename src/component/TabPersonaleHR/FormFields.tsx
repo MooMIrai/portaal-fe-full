@@ -73,10 +73,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             value: formData.nome,
             required: true,
             disabled: (type === "view" || isViewOnly),
-            valueOnChange: valueOnChange,
-            validator: createValidator(type === "view" || isViewOnly, (value: any) =>
-                value ? onlyLettersValidator(value) : "Il campo Nome è obbligatorio"
-            ),
+            valueOnChange: valueOnChange
         },
         cognome: {
             name: "cognome",
@@ -85,10 +82,7 @@ export const getFormAnagraficaFields = (formData: AnagraficaData, gender: gender
             value: formData.cognome,
             disabled: (type === "view" || isViewOnly),
             required: true,
-            valueOnChange: valueOnChange,
-            validator: createValidator(type === "view" || isViewOnly, (value: any) =>
-                value ? onlyLettersValidator(value) : "Il campo Cognome è obbligatorio"
-            ),
+            valueOnChange: valueOnChange
         },
         email: {
             name: "email",
