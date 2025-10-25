@@ -1,0 +1,136 @@
+import React, { Fragment, Suspense, useEffect, useState } from "react";
+import Drawer from "common/Drawer";
+import Theme from "common/Theme";
+import authService from "common/services/AuthService";
+import { GlobalRouting, LoginRouting, mfeInitMenu } from "./mfeInit";
+import { Route, Routes } from "react-router-dom";
+import { Spinner } from "./components/Spinner/component";
+import { isMobile } from "react-device-detect";
+import "./App.css";
+
+export const App = () => {
+  const [routes, setRoutes] = useState<Array<any>>([]);
+  const [loaded, setLoaded] = useState<boolean>(false);
+  const [token, setToken] = useState<string>();
+  const [showLoader, setShowLoader] = useState(true);
+
+  const [addedRoutes,setAddedRoutes] = useState<Array<any>>([]);
+
+  useEffect(() => {
+    if (isMobile) document.body?.classList.add("mobileBody");
+  }, []);
+
+  useEffect(() => {
+
+    try {
+
+      setTimeout(() => {
+        setShowLoader(false);
+      }, 3 * 1000);
+
+      if (!loaded) {
+        setToken(authService.getToken());
+      }
+
+    }
+
+    catch(e) {
+      
+    }
+    
+    finally {
+      setLoaded(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    const handleAddMenuItems = (ev: any) => {
+      if (ev?.detail) {
+        setAddedRoutes((prevRoutes) => [...prevRoutes, ...ev.detail]);
+      }
+    };
+
+    window.addEventListener("AddMenuItems", handleAddMenuItems);
+
+    return () => {
+      window.removeEventListener("AddMenuItems", handleAddMenuItems);
+    };
+  }, []);
+
+  useEffect(() => {
+    
+    if (loaded) {
+      if (token) {
+        if(location.pathname == '/login'){
+          location.href = "/";
+        }else{
+        
+
+        mfeInitMenu().then((menus) => {
+          
+          setRoutes([...menus, ...addedRoutes.map(ar=>ar.menu)]);
+        });
+
+
+        window.addEventListener(
+          "LOGOUT",
+          () => {
+            setToken(undefined);
+          },
+          { once: true }
+        );
+      }
+      } else if(location.pathname != '/login' && location.pathname!='/auth-success'){
+        
+        //navigate("/login", { replace: true });
+        location.href = "/login";
+      }
+
+      
+    }
+  }, [token, loaded,addedRoutes]);
+
+
+
+ if(!loaded){
+  return <Spinner />
+ }
+
+if (!token) {
+  return(
+    <>
+      <Theme>
+        <LoginRouting />
+      </Theme>
+      {showLoader && <Spinner />}
+    </>
+  );
+}
+
+
+
+return (
+  <>
+    <Theme>
+      {
+        window.opener?<>
+          <GlobalRouting />
+          {
+            addedRoutes && addedRoutes.length ?<Routes>{addedRoutes.map((ar,index)=><Fragment key={'addedR_'+index}>{ar.route}</Fragment>)}</Routes> :null
+          }
+        </>:
+        <Drawer items={routes}>
+          <GlobalRouting />
+          {
+            addedRoutes && addedRoutes.length ?<Routes>{addedRoutes.map((ar,index)=><Fragment key={'addedR_'+index}>{ar.route}</Fragment>)}</Routes> :null
+          }
+        </Drawer>
+      }
+      
+    </Theme>
+    {showLoader && <Spinner />}
+  </>
+);
+
+  
+};
