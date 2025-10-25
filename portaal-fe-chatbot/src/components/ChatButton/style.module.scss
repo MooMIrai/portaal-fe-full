@@ -1,0 +1,78 @@
+.container{
+    position: fixed;
+    bottom:20px;
+    right:20px;
+    z-index: 99;
+
+    & > button{
+        aspect-ratio: 1;
+        padding:0px;
+    }
+    
+    & > button > span{
+        //height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        & img{
+
+            width: 50px;
+            height: auto;
+        }
+    }
+}
+
+.chatbotContainer{
+    position: fixed;
+    bottom:20px;
+    right:20px;
+    width: 500px;
+    z-index: 99;
+    background-color:var(--kendo-color-app-surface, #ffffff);
+
+    border:1px solid var(--kendo-color-border, #cacaca);
+}
+
+.chatbotHeader{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    & > h5{
+        padding-left: 10px;
+    }
+}
+
+/*
+
+.chatbot{
+    border:none;
+    border-width: 0 !important;
+    margin:0px !important;
+    height: 65vh !important;
+}
+
+.avatarContainer{
+    width: 150px;
+    height: 150px;
+    overflow: hidden; 
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    overflow: hidden;
+    border-radius: 50%;
+    margin-left:auto;
+    margin-right: auto;
+    
+    & > img {
+        object-fit: cover;
+        height: 165px;
+       
+    }
+}
+
+.statusContainer{
+    margin-left:auto;
+    margin-right: auto;
+    text-align: center;
+}*/
