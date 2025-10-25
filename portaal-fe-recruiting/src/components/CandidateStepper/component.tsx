@@ -1,0 +1,148 @@
+import React, { useEffect, useState } from "react";
+import Stepper from 'common/Stepper'
+import { Candidateinterviews } from "../CandidateInterviews/component";
+import { CandidateContact } from "../CandidateContact/component";
+import { CandidateOffer } from "../CandidateOffer/component";
+import { CandidateSendCv } from "../CandidateSendCv/component";
+import { CandidateSendContract } from "../CandidateSendContract/component";
+import CandidateCreateAccount from "../CandidateCreateAccount/component";
+import { isEmpty } from "lodash";
+import { CandidateFinalEvaluation } from "../CandidateFinalEvaluation/component";
+
+export function CandidateStepper(props) {
+
+    const [step, setStep] = useState(0);
+    const [data, setData] = useState<any>(props.data);
+    const [steps, setSteps] = useState<Array<any>>([]);
+
+    const addClassName = (steps: {isValid: boolean, className?: string}[]) => steps.map(step => {
+        if (step.isValid) step.className = "successStep";
+        else step.className = "errorStep";
+        return step;
+    });
+
+    useEffect(() => {
+
+        if (data) {
+
+            if (data.Candidate) {
+
+                const steps = [
+                    { label: 'Contatto', isValid: data.RecruitingContact.length},
+                    { label: 'Colloqui', isValid: data.RecruitingInterview.length},
+                    { label: 'Valutazione finale', isValid: data.RecruitingFinalEvaluation },
+                    { label: 'Proposta economica', isValid: data.RecruitingOffer },
+                    { label: 'Invio CV', isValid: data.RecruitingSendCv },
+                    { label: 'Contratto', isValid: data.RecruitingSendContract },
+                    { label: "Creazione account", isValid: !isEmpty(data.Candidate.Person.Accounts)}
+                ];
+
+                setSteps(addClassName(steps));
+            } 
+            
+            else {
+
+                const steps = [
+                    { label: 'Contatto', isValid: data.RecruitingContact.length },
+                    { label: 'Invio CV', isValid: data.RecruitingSendCv }
+                ];
+                setSteps(addClassName(steps));
+            }
+        }
+
+    }, [data]);
+
+    const handleChange = (e: any) => {
+
+        setStep(e.value);
+    };
+
+    const handleContactChange = (contacts) => {
+        setData((prevData) => {
+            return { ...prevData, RecruitingContact: contacts }
+        })
+    }
+
+    const handleInterviewChange = (interviews) => {
+        setData((prevData) => {
+            return { ...prevData, RecruitingInterview: interviews }
+        })
+    }
+
+    const handleFinalEvaluationChange = (finalEvaluation) => {
+        setData((prevData) => {
+            return { ...prevData, RecruitingFinalEvaluation: finalEvaluation }
+        })
+    };
+
+    const handleOfferChange = (interviews) => {
+        setData((prevData) => {
+            return { ...prevData, RecruitingOffer: interviews }
+        })
+    }
+
+    const handleSendCvChange = (interviews) => {
+        setData((prevData) => {
+            return { ...prevData, RecruitingSendCv: interviews }
+        })
+    }
+
+    const handleSendContractChange = (interviews) => {
+        setData((prevData) => {
+            return { ...prevData, RecruitingSendContract: interviews }
+        })
+    }
+
+    const handleCreateAccountChange = (account) => {
+        setData((prevData) => ({
+            ...prevData, 
+            Candidate: {
+                ...prevData.Candidate, 
+                Person: {
+                    ...prevData.Candidate.Person, 
+                    Accounts: [...(prevData.Candidate.Person?.Accounts || []), account]
+                }
+            }
+        }));
+    };
+
+    return <>
+        <Stepper items={steps} value={step} onChange={handleChange}/>
+        <div>
+            {
+                data.Candidate ? <>
+                    {
+                        step === 0 && <CandidateContact onChange={handleContactChange} currentData={data.RecruitingContact} assignmentId={props.data.id} />
+                    }
+                    {
+                        step === 1 && <Candidateinterviews onChange={handleInterviewChange} currentInterviews={data.RecruitingInterview} assignmentId={props.data.id} />
+                    }
+                    {
+                        step === 2 && <CandidateFinalEvaluation onChange={handleFinalEvaluationChange} currentData={data.RecruitingFinalEvaluation} assignmentId={props.data.id} />
+                    }
+                    {
+                        step === 3 && <CandidateOffer onChange={handleOfferChange} currentData={data.RecruitingOffer} assignmentId={props.data.id} />
+                    }
+                    {
+                        step === 4 && <CandidateSendCv onChange={handleSendCvChange} currentData={data.RecruitingSendCv} assignmentId={props.data.id} />
+                    }
+                    {
+                        step === 5 && <CandidateSendContract onChange={handleSendContractChange} currentData={data.RecruitingSendContract} assignmentId={props.data.id} />
+                    }
+                    {
+                        step === 6 && <CandidateCreateAccount onChange={handleCreateAccountChange} currentData={data.Candidate.Person?.Accounts?.[0]} person_id={data.Candidate.person_id}/>
+                    }
+                </> : <>
+                    {
+                        step === 0 && <CandidateContact onChange={handleContactChange} currentData={data.RecruitingContact} assignmentId={props.data.id} />
+                    }
+                    {
+                        step === 1 && <CandidateSendCv onChange={handleSendCvChange} currentData={data.RecruitingSendCv} assignmentId={props.data.id} />
+                    }
+
+                </>
+            }
+
+        </div>
+    </>
+}

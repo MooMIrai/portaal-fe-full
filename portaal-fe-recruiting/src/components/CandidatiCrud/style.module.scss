@@ -1,0 +1,25 @@
+.formContainer{
+    position: relative;
+    & > form > fieldset {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap:10px;
+        & > div[class*="residenza-input"], & > div[class*="sede-input"], & > div[class*="note-input"]{
+            grid-column-start: 1;
+            grid-column-end: 4;
+        }
+    }
+
+    & :global(.notes-input), & :global(.skills-input),
+     & :global(.languageSkills-input),
+     & :global(.files-input){
+        grid-column: 1 / span 3;
+    }
+
+    & :global(.continuative-input){
+        align-self: center;
+        padding-top: 15px;
+    }
+
+    
+}
