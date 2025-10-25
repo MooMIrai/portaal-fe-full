@@ -1,0 +1,15 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    gap:10px;
+}
+
+.btnContainer{
+    display:flex;
+    justify-content: space-between;
+    gap:10px;
+    & > button{
+        flex:1;
+        
+    }
+}

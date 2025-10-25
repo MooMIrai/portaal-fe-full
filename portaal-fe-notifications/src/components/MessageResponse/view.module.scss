@@ -1,0 +1,41 @@
+.container {
+    margin-top: 20px;
+    margin-right: 20px;
+    padding: 16px;
+    
+  }
+  
+  .grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .item {
+    padding: 12px;
+    border-bottom: 1px solid var(--kendo-color-border);
+  }
+  
+  .item:last-child {
+    border-bottom: none;
+  }
+  
+  .label-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .label {
+    font-weight: 600;
+    font-size: 14px;
+  }
+  
+
+  
+  .value {
+    //color: var(--kendo-color-secondary);
+    font-size: 14px;
+    margin-top: 4px;
+  }
+  

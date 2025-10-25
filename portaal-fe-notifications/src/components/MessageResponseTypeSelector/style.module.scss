@@ -1,0 +1,32 @@
+
+.listItem{
+    padding: 10px;
+    
+    display: flex;
+    gap: 15px;
+    flex-direction: row;
+    align-items: flex-end;
+    padding-left: 2%;
+    border-bottom: 1px solid var(--kendo-color-border);
+    transition: all ease .5s;
+    cursor:pointer;
+
+    & > span {
+        margin-top:3px
+    }
+    &:hover{
+        background: var(--kendo-color-base-subtle-hover);
+    }
+    &.active{
+        background: var(--kendo-color-base-subtle-active);
+    }
+}
+.buttonContainer{
+    justify-self: flex-end;
+    margin-top:100px;
+}
+
+
+.typographyLabel {
+    font-size: 16px; /* Dimensione del testo */
+}

@@ -1,0 +1,88 @@
+.container{
+    position: absolute;
+    top:0;
+    bottom:0;
+    left:100%;
+    right:0;
+    background-color: var(--kendo-color-app-surface);
+    transition: all ease 0.5s;
+    border-radius: 20px;
+    z-index: 3;
+   
+    &.opened{
+        left:0;
+    }
+
+    & > .header{
+        height: 30px;
+        position: sticky;
+        border-bottom: 1px solid #dedede;
+        display: flex;
+        align-items: center;
+        height: 60px;
+        justify-content: space-between;
+        
+    }
+
+
+}
+
+.icon{
+    cursor: pointer;
+    transition: .5s ease all;
+    margin:auto;
+    padding: 5px;
+    width: 25px !important;
+    height: 25px !important;
+    &:hover{
+        background-color: #dedede;
+
+        border-radius: 50%;
+    }
+    margin-right:20px
+}
+
+.body{
+    padding-left:20px;
+    background-color: var(--kendo-color-app-surface);
+    &.hasResponse{
+        padding-top:20px;
+        padding-bottom:20px;
+        border-radius: var(--kendo-border-radius-md);
+        margin: 50px;
+        margin-bottom:100px;
+        border:1px solid var(--kendo-color-border);
+    }
+}
+
+.bodyContainer{
+    overflow: auto;
+    display: grid;
+    grid-template-columns: 100%;
+    column-gap: 20px;
+    height: 100%;
+     & div.separator{
+        background: var(--kendo-color-border);
+        height: 100%;
+     }
+}
+
+.nameContainer{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap:15px;
+    padding-top: 10px;
+}
+
+.responseContainer{
+    padding-top:20px;
+    padding-left:20px;
+}
+
+.confirmContainer{
+    padding-left:20px;
+    padding-right:20px;
+    display: flex;
+    justify-content: flex-end;
+}
