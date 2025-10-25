@@ -1,0 +1,133 @@
+.parentButtonHamburgerText {
+  display: flex;
+  align-items: center;
+  margin: 20px;
+}
+
+.sidebarContainer {
+
+  :global(.k-drawer-item) {
+    user-select: none !important;
+  }
+  :global(.k-drawer-item .k-icon) {
+    font-size: 20px !important;
+  }
+ /*  :global(.k-drawer-content) {
+   
+    & > div{
+      position: relative;
+
+    }
+
+  } */
+
+  :global(.page-container) {
+    padding:10px;
+
+  }
+  :global(.k-drawer-item.sub-item) {
+    padding-left: 20px !important;
+  }
+}
+
+.titleContainer{
+  padding: 10px 5px;
+  padding-left: 40px;
+  //background-color: #fff;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  & > h4{
+    margin:40px;
+    //color: var(--kendo-color-app-surface);
+
+  }
+}
+
+.borderBottom{
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(248, 147, 28, 1) 0%, rgba(120, 122, 125, 1) 50%, rgba(0, 174, 239, 1) 100%);
+
+}
+
+
+
+.childItem {
+  margin-left: 2rem;
+}
+
+.drawerContent {
+  border-radius: 5px !important;
+  padding: 0.5rem 0.5rem 0rem 0.5rem;
+  position: relative;
+  //background: rgb(248,147,28);
+  //background: linear-gradient(90deg, rgba(248,147,28,0.1) 0%, rgba(120,122,125,0.1) 50%, rgba(0,174,239,0.1) 100%);
+
+}
+
+.popoverContainer{
+  display: flex;
+  flex-direction: column;
+  gap:5px;
+}
+/* #3e719938 #a2cfe54d  #b3d7ff5c #B3D7FF #b3d7ff2b #b3d7ff3d*/
+
+.toolbarContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  //position: sticky;
+
+  width: fit-content;
+  position: absolute;
+  right: 20px;
+  z-index: 2;
+  
+
+}
+
+
+.autoComplete{
+  width:36%
+}
+
+.buttonToolBar{
+  display:flex;
+  justify-content: space-around;
+  margin-top:20px;
+  align-items: center;
+  width:350px;
+}
+
+.page{
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  background-color: #dedede;
+  
+}
+
+.navbar{
+  position: relative !important;
+  z-index: 2;
+  background-color: #fff !important;
+}
+
+.sideBarDrawer {
+
+  & :global(.k-drawer) {
+    height: 90vh !important;
+    overflow: auto !important;
+  }
+
+}
+
+.drawerContainer{
+  position: relative;
+  z-index: 1;
+  height: 100%;
+}
+
+.btnAvatar{
+  background-color: #fff !important;
+}

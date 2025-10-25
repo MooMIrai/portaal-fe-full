@@ -1,0 +1,19 @@
+.recruitingStepper {
+
+    & .k-step:hover {
+        background-color: revert-layer !important;
+    }
+
+    & svg {
+        fill: white;
+    }
+
+    & .errorStep > a > span:first-child {
+        background-color: orangered !important;
+    }
+    
+    & .successStep > a > span:first-child {
+        background-color: green !important;
+    }
+
+}

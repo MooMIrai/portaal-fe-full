@@ -1,0 +1,188 @@
+*{
+  margin:0;
+  padding: 0;
+}
+
+.k-dialog-wrapper.k-scheduler-edit-dialog {
+    position: absolute !important;
+  }
+  
+  
+  body{
+    margin:0 !important;
+    overflow: hidden !important;
+    background: #f7f8fd !important;
+  }
+
+
+
+  
+
+/* body::before{
+  content:'' ;
+  position: absolute !important;
+  top:0 !important;
+  right:0 !important;
+  bottom:60% !important;
+  left:0 !important;
+  background: linear-gradient(87deg, var(--kendo-color-primary) 40%, var(--kendo-color-tertiary) 100%)  !important;
+  -webkit-box-shadow: inset -2px -50px 41px -9px var(--kendo-color-app-surface); 
+  box-shadow: inset -2px -50px 41px -9px var(--kendo-color-app-surface);
+} */
+
+td{
+  border:none !important;
+}
+.k-header{
+  border-bottom:none !important;
+}
+
+.k-grid{
+  border-radius: var(--kendo-border-radius-md) !important;
+}
+
+.k-grid-aria-root{
+  border-radius: var(--kendo-border-radius-md, 20px);
+}
+
+.k-grid .k-cell-inner{
+  justify-content: center !important;
+}
+
+.k-drawer-container{
+  position: absolute !important;
+  background: none !important;
+  top:0px !important;
+  bottom:30px !important;
+  left:0 !important;
+  right: 0px !important;
+}
+
+/* .k-drawer{
+  margin:20px !important;
+  margin-top:0 !important;
+  border-radius:20px !important;
+  padding:30px 15px !important;
+  border:none !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
+} */
+
+.k-table{
+  width: 100%!important;
+}
+
+.k-drawer > .k-drawer-wrapper{
+  padding-top:30px
+}
+
+.k-drawer .k-drawer-logo{
+  margin-left:30px
+}
+
+/*.k-drawer .k-drawer-items{
+  gap:10px !important;
+}
+
+.k-drawer .k-drawer-logo{
+  margin:auto !important;
+  margin-bottom:20px !important;
+}
+
+.k-drawer .k-drawer-item{
+  border-radius:20px !important;
+}
+
+.k-drawer-content{
+  margin-right: 20px !important;
+  height: 100% !important;
+  margin-top:30px;
+}
+
+.k-drawer-container{
+  padding-top:50px !important;
+  
+}
+ */
+.page-container{
+  
+  background-color: var(--kendo-color-app-surface) !important; 
+ 
+  margin:40px !important;
+  padding:16px 12px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
+  border-radius: 5px;
+ /* position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 55px;
+  top: 0;*/
+  overflow: auto;
+  margin-top:0px !important;
+  max-height: calc( 100vh - 200px );
+}
+.k-grid, .k-pager,.k-grid-toolbar{
+  border:none !important;
+  background-color: var(--kendo-color-app-surface) !important;
+}
+
+.k-toolbar {
+  padding-bottom: 25px !important;
+  position: sticky !important;
+  top:0 !important;
+}
+
+.k-grid > div:last-of-type{
+  position: sticky !important;
+  bottom:0 !important;
+}
+
+.k-paragraph{
+  margin:0 !important;
+}
+
+::-webkit-scrollbar {
+  width: 8px!important; /* Larghezza della scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: transparent!important;
+
+  margin: 20px 20px 20px 0 !important; /* Sposta la scrollbar più a sinistra */
+}
+
+::-webkit-scrollbar-thumb {
+  background: gray!important;
+  border-radius: 4px!important;
+  box-shadow: -10px 0 0 white !important;
+}
+
+.k-paragraph,
+.k-h1,
+.k-h2,
+.k-h3,
+.k-h4,
+.k-h5,
+.k-h6
+{
+    margin: 0 !important;
+}
+
+.k-editor{
+  border-radius:var(--kendo-border-radius-md, 20px) !important
+}
+
+.k-form .k-form-legend{
+  display: none !important;
+}
+
+.k-form-fieldset{
+  align-items: center;
+}
+
+.k-notification-content {
+  font-size: 18px;
+}
+
+.k-grid-header, .k-grid-container {
+  padding: 5px !important;
+}

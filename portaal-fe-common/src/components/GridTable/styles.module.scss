@@ -1,0 +1,51 @@
+/* .gridContainer {
+  height: 900px; 
+  max-height: 900px;
+} */
+
+.text-align-center td {
+  text-align: center !important;
+}
+
+.text-align-center label {
+  text-align: initial !important;
+}
+
+.center-align-th thead th {
+  vertical-align: middle !important;
+}
+
+.no-justify-th > div > :global(.k-grid-header) thead th :global(.k-link) {
+  justify-content: flex-start !important;
+}
+
+.grid {
+  height: 100%;
+  padding: 0.5rem;
+}
+
+.commandButtons {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+}
+
+.columnGrid {
+  min-width: 200px;
+}
+
+/* .toolBarContainer {
+ // border-radius: 5px;
+} */
+
+.commandCustomButtons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+div:has(> .gridNoRecordsCell) {
+  border: 0;
+  margin: 0;
+  flex-grow: 1;
+}

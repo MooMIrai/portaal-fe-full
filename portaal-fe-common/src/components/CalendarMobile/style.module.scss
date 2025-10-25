@@ -1,0 +1,63 @@
+.calendarContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+ 
+}
+
+.container {
+  width: 100% !important;
+  :global(.k-calendar-view.k-vstack.k-calendar-monthview) {
+    box-shadow: none !important;
+    padding-block: 0px;
+    padding-inline: 0px;
+    margin: 0px;
+    width: 100%;
+    height: 50vh;
+  }
+
+  :global(.k-calendar-infinite.k-calendar-view::after) {
+    box-shadow: none !important;
+  }
+
+  :global(.k-link) {
+    font-size: 16px !important;
+  }
+
+  :global(.k-calendar-navigation) {
+    display: none !important;
+  }
+
+  :global(.k-calendar-caption) {
+    //display: none !important;
+    padding-top: 5px;
+    font-size: 16 !important;
+  }
+
+  :global(.k-calendar-th) {
+    width: 64px;
+    height: 38px;
+    inline-size: none !important;
+  }
+
+  :global(.k-calendar-monthview .k-calendar-td) {
+    width: 64px;
+    height: 38px;
+    inline-size: none !important;
+    block-size: var(--INTERNAL--kendo-calendar-cell-size, 38px);
+  }
+
+  .eventDot {
+    width: 5px;
+    height: 5px;
+    background-color: red;
+    border-radius: 100%;
+    margin-top: 1px;
+  }
+
+  .calendarDay {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}

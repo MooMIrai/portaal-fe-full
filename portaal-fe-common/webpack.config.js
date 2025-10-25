@@ -1,0 +1,204 @@
+const HtmlWebPackPlugin = require("html-webpack-plugin");
+const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
+const Dotenv = require("dotenv-webpack");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+const deps = require("./package.json").dependencies;
+const { FederatedTypesPlugin } = require("@module-federation/typescript");
+const webpack = require("webpack");
+const CopyPlugin = require('copy-webpack-plugin');
+const path = require('path');
+
+const mfeConfig = {
+  name: "common",
+  filename: "remoteEntry.js",
+  remotes: {},
+  exposes: {
+    "./Drawer": "./src/components/Sidebar/component",
+    "./Theme": "./src/components/Theme/component",
+    "./Tab": "./src/components/Tab/component",
+    "./Form": "./src/components/DynamicForm/component",
+    "./InputText": "./src/components/InputText/component",
+    "./Table": "./src/components/GridTable/component",
+    "./Calendar": "./src/components/Calendar/component",
+    "./CalendarMobile": "./src/components/CalendarMobile/component",
+    "./InlineEditTable": "./src/components/InlineEditTable/component",
+    "./Window": "./src/components/Window/component",
+    "./Button": "./src/components/Button/component",
+    "./CustomListView": "./src/components/CustomListView/component",
+    "./AutoComplete": "./src/components/AutoComplete/component",
+    "./CountrySelector": "./src/components/CountrySelector/component",
+    "./AvatarIcon": "./src/components/AvatarIcon/component",
+    "./CustomCard": "./src/components/CustomCard/component",
+    "./CustomChip": "./src/components/CustomChip/component.tsx",
+    "./HoursDaysFilterCell":"./src/components/HoursDaysFilterCell/component.tsx",
+    "./Loader":"./src/components/Loader/component",
+    "./Modal":"./src/components/Modal/component",
+    "./YearMonthPicker":"./src/components/YearMonthPicker/component",
+
+    "./Accordion":"./src/components/Accordion/component",
+    "./TimePicker":"./src/components/TimePicker/component",
+    "./SvgIcon":"./src/components/SvgIcon/component",
+    "./Fields":"./src/components/DynamicForm/fieldComponents",
+    "./UploadMultiple":"./src/components/UploadMultiple/component",
+    "./Switch":"./src/components/Switch/component",
+
+    "./SignDocumentScanner" : "./src/components/SignDocument/component",
+
+    "./AiBox":"./src/components/AiBox/component",
+    "./AiChat":"./src/components/AiChat/component",
+    "./Route":"./src/components/ProtectedRoute/component",
+    "./Routes":"./src/components/ProtectedRoutes/component",
+
+    "./Stepper" : "./src/components/Stepper/component",
+    "./Timeline": "./src/components/Timeline/component",
+    "./Typography": "./src/components/Typography/component",
+    "./HtmlParser": "./src/components/HtmlParser/component",
+    "./HtmlEditor": "./src/components/HtmlEditor/component",
+    "./MultiSelect": "./src/components/MultiSelect/component",
+
+    "./services/AuthService": "./src/services/AuthService",
+    "./services/BEService": "./src/services/BEService",
+    "./services/BaseHTTPService": "./src/services/BaseHTTPService",
+    "./services/FileService": "./src/services/FileService",
+
+    "./providers/NotificationProvider":
+    "./src/components/Notification/provider",
+
+    "./hoc/Field": "./src/hoc/Field",
+    "./hoc/AutoComplete": "./src/hoc/AutoComplete",
+    "./hoc/SchedulerItem": "./src/hoc/SchedulerItemHoc",
+    "./hoc/AiBox": "./src/hoc/AiBox",
+
+    "./gof/Adapter": "./src/adapters/baseAdapter",
+
+    "./icons": "@progress/kendo-svg-icons",
+
+    "./xlsx": "xlsx"
+  },
+  shared: {
+    ...deps,
+    react: {
+      singleton: true,
+      requiredVersion: deps.react,
+    },
+    "react-dom": {
+      singleton: true,
+      requiredVersion: deps["react-dom"],
+    },
+  },
+};
+
+module.exports = (_, argv) => {
+  require("dotenv").config({ path: "./.env." + argv.mode });
+
+  return {
+    output: {
+      publicPath: process.env.RELEASE_PATH,
+      clean: true,
+    },
+    devtool: "source-map",
+    resolve: {
+      extensions: [".tsx", ".ts", ".jsx", ".js", ".json"],
+      alias: {
+        "prosemirror-model": require.resolve("prosemirror-model")
+      }
+    },
+    devServer: {
+      port: 3003,
+      historyApiFallback: true,
+    },
+    module: {
+      rules: [
+        {
+          test: /\.(woff|woff2|eot|ttf|otf)$/,
+          use: [
+            {
+              loader: "file-loader",
+              options: {
+                name: "[name].[ext]",
+              },
+            },
+          ],
+        },
+        {
+          test: /\.m?js/,
+          type: "javascript/auto",
+          resolve: {
+            fullySpecified: false,
+          },
+        },
+        {
+          test: /\.(css|s[ac]ss)$/i,
+          use: ["style-loader", "css-loader", "postcss-loader"],
+        },
+        {
+          test: /\.svg$/,
+          use: [
+            {
+              loader: 'file-loader',
+              options: {
+                name: "[name].[ext]"
+              },
+            },
+          ],
+        },
+        {
+          test: /public\/themes\/.(css|s[ac]ss)$/i,
+          use: [
+            {
+              loader: "file-loader",
+              options: {
+                name: "[name].[ext]",
+              },
+            },
+          ],
+        },
+        {
+          test: /\.json$/,
+          type: "json",
+        },
+        {
+          test: /\.(ts|tsx|js|jsx)$/,
+          exclude: /node_modules/,
+          use: {
+            loader: "babel-loader",
+            options: {
+              presets: ["@babel/preset-react", "@babel/preset-env"],
+            },
+          },
+        },
+      ],
+    },
+     optimization: {
+        minimizer: [
+          '...',
+          new CssMinimizerPlugin()
+        ],
+        minimize: true
+      },
+    plugins: [
+      new ModuleFederationPlugin(mfeConfig),
+      //new FederatedTypesPlugin({ federationConfig: mfeConfig }),
+      new HtmlWebPackPlugin({
+        template: "./src/index.html",
+      }),
+      new Dotenv({ path: "./.env." + argv.mode }),
+      ...(argv.mode === "production"
+        ? [
+            new webpack.optimize.LimitChunkCountPlugin({
+              maxChunks: 1,
+            }),
+          ]
+        : []),
+      new CopyPlugin({
+        patterns: [
+          {
+            from: path.resolve(__dirname, 'public/themes'),
+            to: path.resolve(__dirname, 'dist/assets/themes'),
+          },
+        ],
+      }),
+    ],
+
+  };
+};

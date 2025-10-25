@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import './themes/kendo-theme-custom.scss';
+@import "@progress/kendo-font-icons/dist/index.css";
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}

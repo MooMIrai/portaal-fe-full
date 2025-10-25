@@ -1,0 +1,29 @@
+.container{
+    width: 100%;
+    max-height: 200px;
+    transition:max-height ease .5s;
+    border:1px solid var(--kendo-color-border);
+    border-radius: var(--kendo-border-radius-md);
+    //padding:20px;
+
+    & form{
+        width: 100%;
+        padding:10px
+    }
+    & fieldset{
+        display: flex;
+        justify-content: flex-start;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+}
+
+.closed{
+    max-height: 0px;
+    overflow: hidden;
+    border:none;
+}
+
+.btn{
+    margin-left:auto;
+}
