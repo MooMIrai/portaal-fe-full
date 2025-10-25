@@ -1,0 +1,14 @@
+
+.listItem{
+    display: flex;
+    align-content: center;
+    gap:15px;
+
+    & > span {
+        margin-top:3px
+    }
+}
+.buttonContainer{
+    justify-self: flex-end;
+    margin-top:100px;
+}

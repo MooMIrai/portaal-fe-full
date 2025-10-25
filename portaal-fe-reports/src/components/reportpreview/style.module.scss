@@ -1,0 +1,5 @@
+.container{
+    & :global(.x-spreadsheet-toolbar){
+        display:none;
+    }
+}

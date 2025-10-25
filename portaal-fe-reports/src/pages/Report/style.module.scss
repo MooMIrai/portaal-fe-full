@@ -1,0 +1,34 @@
+.reportSelector{
+    
+        max-width: 300px;
+        
+    
+}
+
+.container{
+/*     margin-left:14.4%;
+    margin-right:14.4%; */
+    position: relative;
+    margin-top: 30px;
+    border-top: 1px solid #999;
+    padding-top: 30px;
+    
+    & > form > fieldset {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        gap:10px;
+       
+    }
+
+    
+    
+}
+
+.page{
+    background: var(--kendo-color-app-surface);
+    padding: 15px;
+    border-radius: 7px !important;
+    padding-top: 30px !important;
+    padding-bottom: 30px !important;
+    
+}
