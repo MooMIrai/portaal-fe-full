@@ -1,0 +1,22 @@
+
+.input{
+    padding: 10px 5px;
+    border: 1px solid #dedede;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    justify-content: space-between;
+    &:hover{
+        background-color: #dedede;
+    }
+    
+}
+
+.container{
+    position: relative;
+}
+.button{
+    position: sticky !important;
+    bottom:10px;
+    left: 100%;
+}

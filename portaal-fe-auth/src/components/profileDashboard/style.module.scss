@@ -1,0 +1,66 @@
+.container {
+  width: 100%;
+  
+}
+
+.accountName {
+  font-weight: 600;
+}
+
+.accountInfoContainer {
+  display: flex;
+}
+
+.accountInfoText {
+  display: flex;
+  flex-direction: column;
+}
+
+.accountInfoHeaderContainer {
+  border-bottom: none;
+}
+
+.maxContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.personalInfoHeaderContainer {
+  font-weight: bold;
+}
+
+.addressHeaderContainer {
+  font-weight: bold;
+}
+
+.singleInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-weight: 600;
+  text-wrap: nowrap;
+}
+
+.gridInfo {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px 50px;
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .gridInfo {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .gridInfo {
+    display: flex;
+    flex-direction: column;
+  }
+}
