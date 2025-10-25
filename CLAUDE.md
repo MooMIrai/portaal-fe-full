@@ -230,6 +230,88 @@ export default function () {
 
 The core application uses `ErrorBoundary` components to gracefully handle module loading failures. Each microfrontend is wrapped in error boundaries in `mfeInit.tsx`.
 
-## Multi-Repository Setup
+## Monorepo Build System
 
-This is a multi-repository project. The `clone.sh` script clones all modules from Azure DevOps (branch: `develop`). Each module is an independent git repository.
+This repository uses **Yarn Workspaces** for dependency management and custom build scripts for production deployment.
+
+### Quick Commands
+
+```bash
+# Development
+yarn dev              # Start all enabled dev servers
+yarn dev:core         # Start only core
+yarn dev:common       # Start only common library
+
+# Production
+yarn build:prod       # Build all modules → dist/
+yarn preview          # Test production build locally
+
+# Maintenance
+yarn clean            # Remove all dist/ directories
+```
+
+### Module Selection
+
+Configure which modules to build/run via `ENABLED_MFES` in:
+- **Development**: `portaal-fe-core/.env.development`
+- **Production**: `portaal-fe-core/.env.production`
+
+```env
+# Enable specific modules
+ENABLED_MFES=dashboard,sales,hr,recruiting,stock
+
+# Or enable ALL (leave empty)
+ENABLED_MFES=
+```
+
+**Note**: `common` and `auth` are always enabled (required dependencies).
+
+### Production Build Structure
+
+The build system creates a Railway-ready structure:
+
+```
+dist/
+├── index.html          # Core application (RELEASE_PATH=/)
+├── *.js, *.css         # Core assets
+├── common/             # RELEASE_PATH=common/
+│   └── remoteEntry.js
+├── auth/               # RELEASE_PATH=auth/
+├── sales/              # RELEASE_PATH=sales/
+└── ...                 # Other enabled modules
+```
+
+### VS Code Debugging
+
+Pre-configured debug configurations in `.vscode/launch.json`:
+
+- **🎯 Debug Full Application** - All modules with auto-start
+- **🚀 Debug Core Only** - Just the shell application
+- **🔧 Debug Single Module** - Individual module debugging
+
+Press `F5` to start debugging with source maps enabled.
+
+### Railway Deployment
+
+The application is configured for automatic deployment on Railway:
+
+1. **Push to git** → Railway detects changes
+2. **Build**: Runs `yarn railway:build` (builds only enabled modules)
+3. **Deploy**: Serves `dist/` via static server
+
+Configuration files:
+- `railway.json` - Build and deploy settings
+- `.railwayignore` - Files excluded from deployment
+
+See [BUILD.md](./BUILD.md) for detailed documentation.
+
+## Repository Structure
+
+This was originally a multi-repository project, now consolidated into a monorepo:
+
+- **Root**: Workspace configuration and build scripts
+- **`portaal-fe-*`**: Individual modules (previously separate repos)
+- **`scripts/`**: Build automation (`build-all.js`, `dev-all.js`, etc.)
+- **`dist/`**: Production build output (gitignored)
+
+The `clone.sh` script is now legacy (was used to clone separate repos from Azure DevOps).

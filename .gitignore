@@ -28,7 +28,8 @@ lerna-debug.log*
 Thumbs.db
 
 # IDE
-.vscode/
+.vscode/settings.json  # User-specific settings
+.vscode/*.code-workspace
 .idea/
 *.swp
 *.swo

@@ -1,0 +1,83 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "🌐 Debug Core App (Chrome)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}/portaal-fe-core/src",
+      "sourceMapPathOverrides": {
+        "webpack://portaal/*": "${webRoot}/*"
+      },
+      "preLaunchTask": "Start Dev Servers"
+    },
+    {
+      "name": "🔗 Attach to Chrome (All Modules)",
+      "type": "chrome",
+      "request": "attach",
+      "port": 9222,
+      "webRoot": "${workspaceFolder}",
+      "sourceMapPathOverrides": {
+        "webpack://portaal/*": "${workspaceFolder}/portaal-fe-core/src/*",
+        "webpack://common/*": "${workspaceFolder}/portaal-fe-common/src/*",
+        "webpack://auth/*": "${workspaceFolder}/portaal-fe-auth/src/*",
+        "webpack://sales/*": "${workspaceFolder}/portaal-fe-sales/src/*",
+        "webpack://hr/*": "${workspaceFolder}/portaal-fe-hr/src/*"
+      },
+      "urlFilter": "http://localhost:*"
+    },
+    {
+      "name": "🚀 Debug Core Only",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}/portaal-fe-core/src",
+      "runtimeArgs": [
+        "--remote-debugging-port=9222"
+      ]
+    },
+    {
+      "name": "🔧 Debug Single Module: Auth",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3006",
+      "webRoot": "${workspaceFolder}/portaal-fe-auth/src"
+    },
+    {
+      "name": "🔧 Debug Single Module: Sales",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3008",
+      "webRoot": "${workspaceFolder}/portaal-fe-sales/src"
+    },
+    {
+      "name": "🔧 Debug Single Module: HR",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3009",
+      "webRoot": "${workspaceFolder}/portaal-fe-hr/src"
+    },
+    {
+      "name": "📦 Debug Common Library",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3003",
+      "webRoot": "${workspaceFolder}/portaal-fe-common/src"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "🎯 Debug Full Application",
+      "configurations": [
+        "🌐 Debug Core App (Chrome)"
+      ],
+      "preLaunchTask": "Start Dev Servers",
+      "presentation": {
+        "hidden": false,
+        "group": "Full Stack",
+        "order": 1
+      }
+    }
+  ]
+}

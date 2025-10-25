@@ -1,0 +1,31 @@
+{
+  "name": "portaal-fe-full",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Portaal Frontend - Module Federation Monorepo",
+  "workspaces": [
+    "portaal-fe-*"
+  ],
+  "scripts": {
+    "install:all": "yarn install",
+    "dev": "node scripts/dev-all.js",
+    "dev:core": "cd portaal-fe-core && yarn start",
+    "dev:common": "cd portaal-fe-common && yarn start",
+    "build": "node scripts/build-all.js",
+    "build:prod": "yarn build && node scripts/copy-to-dist.js",
+    "preview": "yarn build:prod && npx serve dist -p 3000",
+    "clean": "node scripts/clean-all.js",
+    "railway:build": "yarn install:all && yarn build:prod"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "yarn": ">=1.22.0"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0",
+    "dotenv": "^16.4.5",
+    "fs-extra": "^11.2.0",
+    "serve": "^14.2.0"
+  },
+  "packageManager": "yarn@1.22.22"
+}
