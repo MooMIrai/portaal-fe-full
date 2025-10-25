@@ -1,0 +1,49 @@
+.parentForm:first-child {
+    max-width:none;
+    
+    & > :first-child > * {
+        display: grid;
+        /*grid-template-rows: repeat(6, 1fr);*/
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2% 10%;
+    }
+    & form{
+        max-width: 100% !important;
+    }
+    }
+    @media (max-width: 600px) {
+        .parentForm:first-child {
+          max-width: none;
+      
+          & > :first-child > * {
+            display: flex;
+            flex-direction: column;
+          }
+          & form {
+            max-width: 100% !important;
+          }
+        }
+    
+      
+    
+      }
+      
+      .formDelete{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap:20px;
+        align-items: center;
+        font-size: 20px;
+        
+         & > div {
+            display: flex;
+            gap:20px;
+         }
+     }
+    
+.parentForm{
+  & :global(.sede-input){
+    grid-column: span 3;
+  }
+}
