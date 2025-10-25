@@ -1,0 +1,186 @@
+import React, { PropsWithRef, useEffect, useRef, useState } from "react";
+import { customFieldsSal, getFormFields } from "./form";
+import Form from 'common/Form';
+import { salService } from "../../services/salService";
+import NotificationActions from 'common/providers/NotificationProvider';
+import Button from 'common/Button';
+import {fileAddIcon, stampIcon} from 'common/icons';
+
+type SalCrudProps = {
+    project:any,
+    otherSal?:Array<any>,
+    row: any;
+    type: string;
+    closeModalCallback: () => void;
+    refreshTable: () => void;
+    onNext:()=>Promise<any>
+  };
+
+  const getDateFromData= (year?:number,month?:number)=>{
+    if(year && month){
+        return new Date(year,month-1,1)
+    }
+    return null
+}
+export function SalCrud(props:PropsWithRef<SalCrudProps>){
+
+    const formSal = useRef<any>();
+    const [formSalData,setFormSalData] = useState<any>(props.row);
+
+    const onChange = (fieldName:string,val:any)=>{
+      setFormSalData((prev)=>{
+        return {...prev,[fieldName]:val}
+      });
+    }
+
+    const handleSubmit = () => {
+
+        let action= Promise.resolve();
+
+        const mappedObj = {
+          year:formSal.current.values.monthyear.getFullYear(),
+          month:formSal.current.values.monthyear.getMonth()+1,
+          notes:formSal.current.values.notes,
+          project_id:props.project.id,
+          amount:formSal.current.values.money.finalAmount,
+          actualDays:formSal.current.values.money.effectiveDays,
+          SalState:'PENDING'
+        };
+
+        if(props.type==='create'){
+          action = salService.createResource(mappedObj);
+        } 
+        
+        else if(props.type==='edit'){
+
+          const billData= {
+            amount: formSal.current.values.amount ? parseFloat(formSal.current.values.amount) : undefined,
+            billing_date: formSal.current.values.billing_date,
+            billing_number: formSal.current.values.billing_number,
+            advancePayment: formSal.current.values.advancePayment,
+            acronyms: formSal.current.values.money.acronyms,
+            baf_number: formSal.current.values.baf_number,
+            sal_id:formSalData.id
+          };
+
+          if(formSalData.SalState==='BILLING_OK'){
+            if(!formSalData.Bill) action = salService.createBill(billData);
+            else action = salService.updateBill(formSalData.Bill.id,billData);
+          }
+          
+          else if (formSalData.SalState === "BILLED") {
+            billData.amount = formSal.current.values.amountBill ? parseFloat(formSal.current.values.amountBill) : undefined;
+            action = salService.updateBill(formSalData.Bill.id, billData);
+          }
+
+          else if (formSalData.SalState === "PENDING") {
+            action = salService.updateResource(formSalData.id, mappedObj);
+          }
+          
+        }
+
+        return action.then(res=>{
+          NotificationActions.openModal(
+            { icon: true, style: "success" },
+            "Operazione avvenuta con successo "
+          );
+        })
+    }
+
+    useEffect(()=>{
+      if(props.type==='delete'){
+        if (formSalData.SalState === "BILLED") {
+          NotificationActions.openConfirm('Sei sicuro di rimuovere la fattura?',
+            () => {
+             salService.deleteBill(props.row.Bill.id).then(()=>{
+                NotificationActions.openModal(
+                  { icon: true, style: "success" },
+                  "Operazione avvenuta con successo "
+                );
+                props.closeModalCallback();
+                props.refreshTable();
+              })
+      
+            },
+            'Cancella fattura'
+          );
+        }
+        else {
+          const message = formSalData.SalState === "BILLING_OK" 
+            ? "Sei sicuro di voler revocare l'ok a fatturare?"
+            : 'Sei sicuro di rimuovere il SAL?'
+          ;
+          NotificationActions.openConfirm(message,
+            () => {
+             salService.deleteResource(props.row.id).then(()=>{
+                NotificationActions.openModal(
+                  { icon: true, style: "success" },
+                  "Operazione avvenuta con successo "
+                );
+                props.closeModalCallback();
+                props.refreshTable();
+              })
+      
+            },
+            'Cancella SAL'
+          );
+        }
+      }
+    },[props.type])
+
+    const mappedData = {
+      ...formSalData,
+      money:formSalData,
+      amountBill: formSalData.Bill?.amount,
+      billToPerson: formSalData.Bill?.BillToPerson?.map(billToPerson => billToPerson.Person.billAcronym).join(", "),
+      advancePayment: formSalData.Bill?.advancePayment,
+      billing_number: formSalData.Bill?.billing_number,
+      billing_date: formSalData.Bill?.billing_date,
+      baf_number: formSalData.Bill?.baf_number
+    }
+
+    if(!mappedData.monthyear){
+      if( mappedData.year && mappedData.month){
+        mappedData.monthyear=getDateFromData(mappedData.year,mappedData.month);
+      } else if(props.project.lastSal){
+        const d=  new Date(props.project.lastSal);
+
+        mappedData.monthyear =getDateFromData(d.getFullYear(),d.getMonth()+2);
+      }else if(props.project.start_date){
+        const d=  new Date(props.project.start_date);
+
+        mappedData.monthyear =getDateFromData(d.getFullYear(),d.getMonth()+1);
+      }
+    }
+
+    
+
+    return <>{
+      props.type!='delete'?<><Form
+              ref={formSal}
+              addedFields={customFieldsSal}
+              fields={getFormFields(mappedData,onChange,props.type,props.project,props.otherSal)}
+              formData={mappedData}
+              onSubmit={()=>handleSubmit().then(()=>{
+                props.refreshTable();
+                props.closeModalCallback();
+              })}
+              submitText="Salva"
+              showSubmit={props.type!='view' && formSalData.SalState !== "BILLING_OK"}
+          />
+          {
+            props.type!=='create' && props.type!='delete' && props.type!='view' && <div style={{display:'flex',justifyContent:'flex-end',marginTop:10}}>
+              <Button disabled={props.row.SalState==='BILLED'} svgIcon={
+                props.row.SalState==='PENDING'?fileAddIcon:stampIcon
+              } onClick={()=>{
+                handleSubmit().then(props.onNext).then(()=>{
+                  props.refreshTable();
+                  props.closeModalCallback();
+                });
+              }}>{props.row.SalState==='PENDING'?'Invia a fatturare':props.row.SalState==='BILLING_OK'?'Conferma Fattura':'Fatturato'}</Button>
+              </div>
+          }
+          </>
+          :<div>delete</div>}
+          </>
+}

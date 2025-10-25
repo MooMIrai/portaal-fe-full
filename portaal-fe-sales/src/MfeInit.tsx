@@ -1,0 +1,51 @@
+
+export default function () {
+  return {
+    menuItems: [
+      {
+        id: 6,
+        text: "Vendite",
+        level: 0,
+        route: "#",
+        iconKey: "cartIcon",
+        permissions:["READ_SALES_CUSTOMER","READ_SALES_OFFER","READ_SALES_PROJECT","READ_SALES_SAL", "READ_SALES_BILL"]
+      },
+      {
+        parentId: 6,
+        id: 62,
+        level: 2,
+        text: "Clienti",
+        route: "/clienti",
+        iconKey: "myspaceIcon",
+        permissions:["READ_SALES_CUSTOMER"]
+      },
+      {
+        parentId: 6,
+        id: 63,
+        level: 2,
+        text: "Offerte",
+        route: "/offerte",
+        iconKey: "fileFooterIcon",
+        permissions:["READ_SALES_OFFER"]
+      },
+      {
+        parentId: 6,
+        id: 64,
+        level: 2,
+        text: "Commessa",
+        route: "/progetti",
+        iconKey: "inboxIcon",
+        permissions:["READ_SALES_PROJECT"]
+      },
+      {
+        parentId: 6,
+        id: 65,
+        level: 2,
+        text: "Sal",
+        route: "/sal",
+        iconKey: "dollarIcon",
+        permissions:["READ_SALES_SAL", "READ_SALES_BILL"]
+      },
+    ],
+  };
+}
