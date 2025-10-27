@@ -88,7 +88,7 @@ module.exports = (_, argv) => {
       new HtmlWebPackPlugin({
         template: "./src/index.html",
       }),
-      new Dotenv({ path: "./.env." + argv.mode }),
+      new Dotenv({ path: "./.env." + argv.mode, systemvars: true }),
     ],
   };
 };

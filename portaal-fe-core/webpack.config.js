@@ -141,7 +141,7 @@ module.exports = (_, argv) => {
       new HtmlWebPackPlugin({
         template: "./src/index.html",
       }),
-      new Dotenv({ path: "./.env." + argv.mode }),
+      new Dotenv({ path: "./.env." + argv.mode, systemvars: true }),
       new webpack.DefinePlugin({
         'process.env.REMOTES_MFE': JSON.stringify(Object.keys(mfeConfig(process.env.REMOTE_PATH, argv.mode).remotes)),
       }),
