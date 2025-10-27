@@ -1,5 +1,5 @@
 {
-  "name": "portaal-mfe-auth",
+  "name": "portaal-mfe-personalarea",
   "version": "1.0.0",
   "scripts": {
     "build": "webpack --mode production",
