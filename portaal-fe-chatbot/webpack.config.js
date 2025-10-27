@@ -39,7 +39,7 @@ module.exports = (_, argv) => {
   return {
     devtool: "source-map",
     output: {
-      publicPath: process.env.RELEASE_PATH,
+      publicPath: 'chatbot/',
       clean: true,
     },
     resolve: {

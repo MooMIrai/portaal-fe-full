@@ -1,0 +1,14 @@
+{
+  "timestamp": "2025-10-26T11:39:17.763Z",
+  "summary": {
+    "total404s": 0,
+    "totalFailed": 0,
+    "totalConsoleErrors": 33
+  },
+  "failed404s": [],
+  "allFailedRequests": [],
+  "consoleErrors": [
+    "Unexpected token '<'",
+    "Loading chunk 696 failed.\n(missing: http://localhost:3000/696.js)"
+  ]
+}

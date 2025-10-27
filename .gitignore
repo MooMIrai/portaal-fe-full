@@ -46,3 +46,10 @@ Thumbs.db
 # Package manager
 .yarn/
 .pnpm-debug.log*
+
+# Playwright/Debug
+test-results/
+playwright-report/
+debug/screenshots/
+debug/*.png
+debug/*.jpg

@@ -93,7 +93,7 @@ module.exports = (_, argv) => {
 
   return {
     output: {
-      publicPath: process.env.RELEASE_PATH,
+      publicPath: 'common/',
       clean: true,
     },
     devtool: "source-map",

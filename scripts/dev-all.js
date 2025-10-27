@@ -16,18 +16,16 @@ if (enabledMfesEnv && enabledMfesEnv.trim() !== '') {
   console.log('📋 ENABLED_MFES is empty - starting ALL modules');
 }
 
-// Always start common and core
-const requiredModules = ['portaal-fe-common', 'portaal-fe-core'];
+// Always start common, core, and auth (required modules)
+const requiredModules = ['portaal-fe-common', 'portaal-fe-core', 'portaal-fe-auth'];
 
 // Map of all available modules
 const moduleMap = {
-  'auth': 'portaal-fe-auth',
   'chatbot': 'portaal-fe-chatbot',
   'dashboard': 'portaal-fe-dashboard',
   'hr': 'portaal-fe-hr',
   'lookups': 'portaal-fe-lookUps',
   'notification': 'portaal-fe-notifications',
-  'personalarea': 'portaal-fe-personalarea',
   'recruiting': 'portaal-fe-recruiting',
   'reports': 'portaal-fe-reports',
   'sales': 'portaal-fe-sales',
