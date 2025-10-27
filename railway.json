@@ -12,7 +12,7 @@
     ]
   },
   "deploy": {
-    "startCommand": "npx serve dist -l 0.0.0.0:$PORT -s",
+    "startCommand": "HOST=0.0.0.0 npx serve dist -p $PORT -s",
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10
   }
