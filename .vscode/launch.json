@@ -64,6 +64,50 @@
       "request": "launch",
       "url": "http://localhost:3003",
       "webRoot": "${workspaceFolder}/portaal-fe-common/src"
+    },
+    {
+      "name": "🎬 Debug Production Preview (with build)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}",
+      "sourceMapPathOverrides": {
+        "webpack://core/*": "${workspaceFolder}/portaal-fe-core/src/*",
+        "webpack://common/*": "${workspaceFolder}/portaal-fe-common/src/*",
+        "webpack://auth/*": "${workspaceFolder}/portaal-fe-auth/src/*",
+        "webpack://sales/*": "${workspaceFolder}/portaal-fe-sales/src/*",
+        "webpack://hr/*": "${workspaceFolder}/portaal-fe-hr/src/*",
+        "webpack://stock/*": "${workspaceFolder}/portaal-fe-stock/src/*",
+        "webpack://lookups/*": "${workspaceFolder}/portaal-fe-lookUps/src/*",
+        "webpack://recruiting/*": "${workspaceFolder}/portaal-fe-recruiting/src/*",
+        "webpack://notification/*": "${workspaceFolder}/portaal-fe-notifications/src/*",
+        "webpack://reports/*": "${workspaceFolder}/portaal-fe-reports/src/*",
+        "webpack://chatbot/*": "${workspaceFolder}/portaal-fe-chatbot/src/*",
+        "webpack://personalarea/*": "${workspaceFolder}/portaal-fe-personalarea/src/*"
+      },
+      "preLaunchTask": "Preview Production Build"
+    },
+    {
+      "name": "⚡ Debug Production Preview (serve only)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}",
+      "sourceMapPathOverrides": {
+        "webpack://core/*": "${workspaceFolder}/portaal-fe-core/src/*",
+        "webpack://common/*": "${workspaceFolder}/portaal-fe-common/src/*",
+        "webpack://auth/*": "${workspaceFolder}/portaal-fe-auth/src/*",
+        "webpack://sales/*": "${workspaceFolder}/portaal-fe-sales/src/*",
+        "webpack://hr/*": "${workspaceFolder}/portaal-fe-hr/src/*",
+        "webpack://stock/*": "${workspaceFolder}/portaal-fe-stock/src/*",
+        "webpack://lookups/*": "${workspaceFolder}/portaal-fe-lookUps/src/*",
+        "webpack://recruiting/*": "${workspaceFolder}/portaal-fe-recruiting/src/*",
+        "webpack://notification/*": "${workspaceFolder}/portaal-fe-notifications/src/*",
+        "webpack://reports/*": "${workspaceFolder}/portaal-fe-reports/src/*",
+        "webpack://chatbot/*": "${workspaceFolder}/portaal-fe-chatbot/src/*",
+        "webpack://personalarea/*": "${workspaceFolder}/portaal-fe-personalarea/src/*"
+      },
+      "preLaunchTask": "Serve Production Build"
     }
   ],
   "compounds": [

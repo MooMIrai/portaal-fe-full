@@ -154,6 +154,15 @@ Railway assegna dinamicamente la porta tramite `$PORT` e mappa automaticamente 4
 
 3. Verifica i log su Railway dashboard per confermare il successo
 
+## Debug
+
+Per informazioni dettagliate su come debuggare l'applicazione in tutte le modalità disponibili (dev mode, preview mode, VSCode breakpoints, ecc.), consulta la **[Guida al Debug](./DEBUGGING.md)**.
+
+Modalità principali:
+- **Dev Mode**: `yarn dev` - Hot reload, sviluppo rapido
+- **Preview Mode**: `yarn preview` - Simula produzione locale, breakpoint VSCode funzionanti
+- **Debug VSCode**: Configurazioni già pronte in `.vscode/launch.json`
+
 ## Script Disponibili
 
 | Script | Descrizione |

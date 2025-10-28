@@ -75,6 +75,27 @@
       "problemMatcher": []
     },
     {
+      "label": "Serve Production Build",
+      "type": "shell",
+      "command": "npx serve dist -p 3000 -s",
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "^.*$"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "Accepting connections",
+          "endsPattern": "Accepting connections"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "serve"
+      }
+    },
+    {
       "label": "Clean All",
       "type": "shell",
       "command": "yarn clean",
