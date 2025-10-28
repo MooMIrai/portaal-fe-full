@@ -114,6 +114,8 @@ Builda il progetto e lo serve su http://localhost:3000 usando `serve`.
 
 ## Deploy
 
+Per informazioni dettagliate su come verificare, configurare e troubleshootare i deploy su Railway, consulta la **[Guida Deploy Railway](./RAILWAY_DEPLOY.md)**.
+
 ### Railway
 
 Il progetto è configurato per il deploy automatico su Railway tramite il file `railway.json`.

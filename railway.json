@@ -8,7 +8,8 @@
       "portaal-fe-*/webpack.config.js",
       "portaal-fe-*/.env.production",
       "scripts/**",
-      "package.json"
+      "package.json",
+      "railway.json"
     ]
   },
   "deploy": {
