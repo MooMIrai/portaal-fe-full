@@ -39,7 +39,10 @@ function RapportinoInput(props: PropsWithChildren<{
     value: number,
     onChange: (value: number) => void,
     type: "H" | "D",
-    disabled: boolean
+    disabled: boolean,
+    hasOnCallAllowance?: boolean,
+    oncallValue?: number,
+    onCallOnChange?: (value: number) => void
 }>) {
 
     useEffect(() => {
@@ -51,21 +54,42 @@ function RapportinoInput(props: PropsWithChildren<{
 
     return <div className={styles.rapportinoContainer}>
         <p>{props.description}</p>
-        {props.type === 'H' ? <InputText style={{width: "65px"}} disabled={props.disabled} value={props.value} clearable onChange={(e) => {
-            if (e.value.length)
-                props.onChange(parseInt(e.value))
-            else
-                props.onChange(0)
-        }} /> :
-            <input type='checkbox' disabled={props.disabled} style={{ width: 20, height: 20 }} checked={props.value === 8} onChange={(ev) => {
-                if (ev.target.checked) {
-                    props.onChange(8)
-                } else {
-                    props.onChange(0)
-                }
-            }}></input>
-
-        }
+        <div style={{display: "flex", gap: "10px", alignItems: "center"}}>
+            {props.type === 'H' ? (
+                <>
+                    <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+                        <label style={{fontSize: "12px", marginBottom: "2px"}}>Ore</label>
+                        <InputText style={{width: "65px"}} disabled={props.disabled} value={props.value} clearable onChange={(e) => {
+                            if (e.value.length)
+                                props.onChange(parseInt(e.value))
+                            else
+                                props.onChange(0)
+                        }} />
+                    </div>
+                    {props.hasOnCallAllowance && (
+                        <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+                            <label style={{fontSize: "12px", marginBottom: "2px"}}>Reperibilità</label>
+                            <InputText style={{width: "65px"}} disabled={props.disabled} value={props.oncallValue || 0} clearable onChange={(e) => {
+                                if (props.onCallOnChange) {
+                                    if (e.value.length)
+                                        props.onCallOnChange(parseInt(e.value))
+                                    else
+                                        props.onCallOnChange(0)
+                                }
+                            }} />
+                        </div>
+                    )}
+                </>
+            ) : (
+                <input type='checkbox' disabled={props.disabled} style={{ width: 20, height: 20 }} checked={props.value === 8} onChange={(ev) => {
+                    if (ev.target.checked) {
+                        props.onChange(8)
+                    } else {
+                        props.onChange(0)
+                    }
+                }}></input>
+            )}
+        </div>
     </div>
 
 }
@@ -75,6 +99,7 @@ export default function RapportinoCrud(props: RapportinoCrudProps) {
 
     const [data, setData] = useState<Record<string, any>>();
     const [values, setValues] = useState<Record<number, number>>({});
+    const [oncallValues, setOncallValues] = useState<Record<number, number>>({});
     const [personActivityvalues, setPersonActivityValues] = useState<Record<number, number>>({});
     const [personActivityNotes, setPersonActivityNotes] = useState<string>();
     const [holidayDetails, setHolidayDetails] = useState<number[]>([]);
@@ -143,7 +168,7 @@ export default function RapportinoCrud(props: RapportinoCrudProps) {
             setErrors(validatorsMessage);
         }
 
-    }, [values])
+    }, [values, oncallValues])
 
 
 
@@ -157,15 +182,34 @@ export default function RapportinoCrud(props: RapportinoCrudProps) {
         setPersonActivityValues(newValuesPA);
     }
 
+    const onOncallInputChange = (activityId: number, hours: number) => {
+        const newValues = JSON.parse(JSON.stringify(oncallValues));
+        newValues[activityId] = hours;
+        setOncallValues(newValues);
+    }
+
     const validateMaxHours = () => {
-        if (MAX_HOURS && !disableExcept) {
-            let sum = 0;
+        const DAILY_LIMIT = 13; // 13 hours total (normal + oncall)
+
+        if (!disableExcept) {
+            let normalSum = 0;
+            let oncallSum = 0;
+
             if (values) {
-                Object.keys(values).forEach((key) => sum += values[key]);
+                Object.keys(values).forEach((key) => normalSum += values[key]);
+            }
+            if (oncallValues) {
+                Object.keys(oncallValues).forEach((key) => oncallSum += oncallValues[key]);
             }
 
-            if (sum > parseInt(MAX_HOURS)) {
-                return "\n Hai superato il limite massimo di " + MAX_HOURS + " proseguendo registrerai degli straordinari.";
+            const totalHours = normalSum + oncallSum;
+
+            if (totalHours > DAILY_LIMIT) {
+                return `\n Hai superato il limite massimo giornaliero di ${DAILY_LIMIT} ore (ore normali: ${normalSum}, ore reperibilità: ${oncallSum}). Riduci le ore per salvare.`;
+            }
+
+            if (MAX_HOURS && normalSum > parseInt(MAX_HOURS)) {
+                return "\n Hai superato il limite massimo di " + MAX_HOURS + " ore normali, proseguendo registrerai degli straordinari.";
             }
         }
         return "";
@@ -185,6 +229,8 @@ export default function RapportinoCrud(props: RapportinoCrudProps) {
                     activity_id: parseInt(key),
                     hours: values[key],
                     minutes: 0,
+                    oncall_hours: oncallValues[key] || 0,
+                    oncall_minutes: 0,
                     notes: holidayDetails.includes(parseInt(key)) ? personActivityNotes : undefined
                 }
             }),
@@ -249,6 +295,7 @@ export default function RapportinoCrud(props: RapportinoCrudProps) {
                     !data.productive || !data.productive.length ? <p>Nessun attività produttiva assegnata per il range di date selezionate</p>
                         : <div style={{display: "flex", flexDirection: "column", gap: "10px"}}>
                             {data.productive.map((res) => {
+                                const hasOnCallAllowance = res.Activity.onCallAllowance && res.Activity.onCallAllowance > 0;
                                 return <RapportinoInput
                                     type='H'
                                     disabled={!!props.editLocked || (!!disableExcept && disableExcept !== res.Activity.id)}
@@ -258,6 +305,11 @@ export default function RapportinoCrud(props: RapportinoCrudProps) {
                                     description={res.Activity.description + addOfferName(res.Activity.Project?.Offer?.name)}
                                     onChange={(value) => {
                                         onInputChange(res.Activity.id, value,res.id)
+                                    }}
+                                    hasOnCallAllowance={hasOnCallAllowance}
+                                    oncallValue={oncallValues ? oncallValues[res.Activity.id] : 0}
+                                    onCallOnChange={(value) => {
+                                        onOncallInputChange(res.Activity.id, value)
                                     }}
                                 />
                             })}

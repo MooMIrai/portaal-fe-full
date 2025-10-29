@@ -136,6 +136,7 @@ interface ActivityProject {
   project_id: number;
   activityType_id: number;
   activityManager_id: number;
+  onCallAllowance: number;
   date_created: string;
   date_modified: string;
   user_created: string;

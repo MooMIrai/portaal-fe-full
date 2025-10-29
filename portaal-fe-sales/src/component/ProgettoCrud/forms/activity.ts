@@ -65,6 +65,17 @@ export const activityForm = {
       "showLabel": true,
       "readOnly": false
     },
+    "onCallAllowance": {
+      "name": "onCallAllowance",
+      "type": "number",
+      "label": "Indennità Reperibilità Giornaliera",
+      "value": 0,
+      "disabled": false,
+      "required": false,
+      "options": [],
+      "showLabel": true,
+      "readOnly": false
+    },
     /* "project_id": {
       "name": "project_id",
       "type": "number",
@@ -76,7 +87,7 @@ export const activityForm = {
       "showLabel": true,
       "readOnly": false
     }, */
-    
-    
-   
+
+
+
   };
