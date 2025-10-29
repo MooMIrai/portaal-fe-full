@@ -6,21 +6,24 @@ const deps = require("./package.json").dependencies;
 const { FederatedTypesPlugin } = require("@module-federation/typescript");
 const webpack = require("webpack");
 
-const mfeConfig = (path, pathHr, mode) => ({
-  name: "sales",
-  filename: "remoteEntry.js",
-  remotes: {
+const mfeConfig = (path, mode) => {
+  let remotes = {
     common:
       "common@" +
       path +
       (mode === "production" ? "/common" : "") +
       "/remoteEntry.js",
-    hr:
-      "hr@" +
-      pathHr +
-      (mode === "production" ? "/hr" : "") +
-      "/remoteEntry.js",
-  },
+    hr: "hr@http://localhost:3009/remoteEntry.js",
+  };
+
+  if (mode === "production") {
+    remotes.hr = "hr@hr/remoteEntry.js";
+  }
+
+  return {
+    name: "sales",
+    filename: "remoteEntry.js",
+    remotes: remotes,
   exposes: {
     "./Index": "./src/MfeInit",
     "./Routes": "./src/App",
@@ -39,7 +42,8 @@ const mfeConfig = (path, pathHr, mode) => ({
       requiredVersion: deps["react-dom"],
     },
   },
-});
+  };
+};
 
 module.exports = (_, argv) => {
   require("dotenv").config({ path: "./.env." + argv.mode });
@@ -86,7 +90,7 @@ module.exports = (_, argv) => {
       minimize: true
     },
     plugins: [
-      new ModuleFederationPlugin(mfeConfig(process.env.REMOTE_PATH, process.env.REMOTE_PATH_HR, argv.mode)),
+      new ModuleFederationPlugin(mfeConfig(process.env.REMOTE_PATH, argv.mode)),
       //new FederatedTypesPlugin({ federationConfig: mfeConfig }),
       new HtmlWebPackPlugin({
         template: "./src/index.html",
