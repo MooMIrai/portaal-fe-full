@@ -91,7 +91,7 @@ console.log('📊 BUILD SUMMARY');
 console.log('='.repeat(60));
 
 const successful = buildResults.filter(r => r.success);
-const failed = buildResults.filter(r => !r.succe ss);
+const failed = buildResults.filter(r => !r.success);
 
 console.log(`✅ Successful: ${successful.length}/${modulesToBuild.length}`);
 if (failed.length > 0) {
