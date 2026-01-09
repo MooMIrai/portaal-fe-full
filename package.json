@@ -14,6 +14,7 @@
     "portaal-fe-*"
   ],
   "scripts": {
+    "postinstall": "npx kendo-ui-license activate",
     "start:dev": "pm2 start ecosystem.config.js --env development",
     "start:live": "pm2 start ecosystem.config.js --env live",
     "stop": "pm2 stop ecosystem.config.js",
